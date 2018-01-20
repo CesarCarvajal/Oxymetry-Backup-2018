@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/">
+        <file>laboratory.ico</file>
+    </qresource>
+    <qresource prefix="/polarimeter">
+		<file>Help.ico</file>
+		<file>Run.ico</file>
+		<file>Configure.ico</file>
+		<file>Calibrate.ico</file>
+		<file>Load.ico</file>
+		<file>PDF.ico</file>
+    </qresource>
+    <qresource prefix="/fluidic">
+        <file>colorbar_flush.png</file>
+        <file>colorbar_sample.png</file>
+    </qresource>
+</RCC>

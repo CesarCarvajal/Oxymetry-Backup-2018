@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PanelPolHelp</class>
+ <widget class="QDialog" name="PanelPolHelp">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>500</width>
+    <height>400</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="sizeIncrement">
+   <size>
+    <width>0</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Polarimeter Tab Help</string>
+  </property>
+  <widget class="QPushButton" name="button_polhelp_close">
+   <property name="geometry">
+    <rect>
+     <x>400</x>
+     <y>360</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Close</string>
+   </property>
+   <property name="flat">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_title">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>20</y>
+     <width>181</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Polarimeter Tab Help</string>
+   </property>
+  </widget>
+  <widget class="QPlainTextEdit" name="plainTextEdit_changelog">
+   <property name="geometry">
+    <rect>
+     <x>14</x>
+     <y>80</y>
+     <width>471</width>
+     <height>271</height>
+    </rect>
+   </property>
+   <property name="horizontalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="readOnly">
+    <bool>true</bool>
+   </property>
+   <property name="plainText">
+    <string>Welcome to Polarimeter Measurement Tab!
+
+1. How do I start the Calibration?
+
+There are two different ways to perform the calibration, one is with a loaded configuration file (see 2) and the other is just a default settings calibration.
+
+Go to the &quot;Calibrate&quot; button and select option &quot;Yes&quot; in case to load a configuration file or &quot;No&quot; to use default values.
+
+Changes during the calibration will affect the loaded configuration according to the user modifications, also will be used for the further &quot;Start Measurement&quot; option. (See 3)
+
+2. How do I load a configuration?
+
+Go to the button &quot;Configure&quot; and load a configuration file .txt or create your own measurement profile.
+
+3. How I do perform a measurement?
+
+First load a configuration file (see 2), then press the &quot;Start Measurement&quot; and wait for each data processing. 
+
+The resulting saved Raw data is located in the same directory than the configuration file, and the resulting FFT data is located in &quot;/bin/data_polarimeter/FFT Polarimeter Measurements&quot; with a folder named with the date of the measurment.
+
+4. How do I save the data?
+
+You could save a Raw Data file and/or the FFT Data file.
+
+Select one or both options in the check boxes &quot; Raw Data&quot; and/or &quot;FFT Profiles&quot;.
+
+5. How do I set a parameter for the calibration?
+
+Click the parameter's label and select or write the new value.
+
+The Calibration process is restarted after every change to apply them in the system.
+
+For the frequency and number of spectra, the key &quot;Enter&quot; is needed to accept the changes.
+
+6. Can I change manually the time and name of files for the measurement profile?
+
+No directly, to do that, you'll have to load a new configuration file.
+
+However, changes during the calibration could be reflected on this settings. (i. e. Integration time changes).
+
+7. How long are the intervals in between measurements during the calibration?
+
+It depends on the actual settings, it can go up to minutes for large integration times, number of spectra or number of averages.
+
+8. How to auto adjust the integration time?
+
+Just click the corresponding label.
+
+9. How do I know which spectrometer is currently in use?
+
+It is shown in the spectrometer list in polarimeter tab. Also, it's the first checked spectrometer from the Preview Tab List.
+
+10. How do I load Data?
+
+You can load FFT data or Raw data to be analyzed. Press &quot;Load Data&quot; and then select &quot;Raw Data&quot; or &quot;FFT Data&quot; to load the file.
+
+Remember that raw data has the form XXC1_XXC2_XXms_XXHz_XX.CS/.TXT and the FFT data has the form   XXC1_XXC2_XXms_XXHz_XX_FFT.txt.
+
+11. Why is there a Temp.tmp file in my folder data_polarimeter?
+
+This file collects the data from the calibration but it is not preserved since it can become large in disk space.
+
+12. What is Clear All?
+
+It cleans all the plots in the tab, as well to restart everything to the default values. Also removes any loaded configuration.
+
+13. When can I vary the parameters?
+
+Only during the calibration phase, this to avoid changes for example when the measurement is running automatically.
+
+14. How to save a graph?
+
+Click on &quot;Save Graphs&quot; and select the folder where the PDF files will be saved. One per each plot of Compensation and FFT profile.
+
+15. Why the software is not responding?
+
+It might be that you are trying to load a corrupt file type, for example an empty file txt for loading data or configuration. Also, it may happens when the spectrometer is overloaded.
+
+This is avoided, in general warnings are shown to the user that a file is not correct, and the spectrometer is usually stoped when the load is to high.
+
+16. What I'm saving when choosing &quot;FFT Profiles&quot; box?
+
+The amplitudes of the components DC, W, 2W and the ratio W/2W.Also their corresponding wavelengths.
+
+17. How can I change the wavelength of the FFT plot?
+
+Just click the label of the wavelength number and select the desired one. This change will remain during all the calibration or measurements.
+
+18. How do I change the frequency where the FFT is extracted?
+
+Click in the box with the frequency number in the table with the column &quot;Frequency&quot;, then write the desired frequency, press the key &quot;Enter&quot; and wait for the changes to be applied.
+
+* Same applies for changing the number of spectra.
+
+19. Why it takes too long to measure the FFT?
+
+The Spectrometer needs certain amount of time to collect the data from the probe and save it as a temporal file during the calibration. Furthermore, this data is analyzed by the FFT and plotted in real time.
+
+The length of this time depends on (IntTime * Number of Averages * Number of Spectra). So for large values of any of this three variables, the system will take some time to process the data.
+
+20. Why I can see the Live Raw data only a few seconds?
+
+It can be seen for approximatelly 7 seconds. This time is short in order to also reduce the total real time processing of data. 
+
+Thus the real data time processing consists of the time of raw data + the time of spectra measurement + time of data processing and ploting.
+
+21. Why the plots are disturbed sometimes after stopping the calibration?
+
+Sometimes it happens when the calibration is stopped and the spectrometer was busy measuring.</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
