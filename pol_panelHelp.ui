@@ -34,6 +34,9 @@
      <height>23</height>
     </rect>
    </property>
+   <property name="toolTip">
+    <string>Close Help Dialog</string>
+   </property>
    <property name="text">
     <string>Close</string>
    </property>

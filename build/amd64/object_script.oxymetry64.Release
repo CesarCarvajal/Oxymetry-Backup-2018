@@ -40,6 +40,8 @@ INPUT(
 ./release\.obj\pol_panelItem.o
 ./release\.obj\pol_panel.o
 ./release\.obj\pol_plot.o
+./release\.obj\pol_measurements.o
+./release\.obj\pol_externConf.o
 ./release\.obj\qrc_icons.o
 ./release\.obj\moc_application.o
 ./release\.obj\moc_spectrometer_config.o
@@ -71,4 +73,6 @@ INPUT(
 ./release\.obj\moc_pol_panelItem.o
 ./release\.obj\moc_pol_panel.o
 ./release\.obj\moc_pol_plot.o
+./release\.obj\moc_pol_measurements.o
+./release\.obj\moc_pol_externConf.o
 );

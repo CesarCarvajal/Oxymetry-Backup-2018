@@ -24,6 +24,8 @@
 #include <QWidget>
 #include <QList>
 #include <QStringList>
+#include <QSignalMapper>
+#include "pol_externConf.h"
 
 namespace Ui {
 class configurePolMeasure;
@@ -40,15 +42,19 @@ public:
     /* Constructor */
     explicit configurePolMeasure(QWidget *parent = 0);
 
+    /* Create the connection to extern software */
+    Pol_ExternConf *externSoftware = nullptr;
+
     /* Configurable Variables */
     int numSpectra;
     float integrationTime;
     int numberOfAverages;
     int freqToMeasure;
     QList<double> timePoint;
+    int NrMeasurements;
 
     /* Save if there was a configuration loaded */
-    bool configured = false;
+    bool configured;
 
     /* Path for Store to RAM */
     QString path;
@@ -59,6 +65,20 @@ public:
     /* Clean all the loaded configuration */
     void cleanAll(void);
 
+    /* Get configuration data */
+    void GetConfigurationData(void);
+
+    /* Load configuration file */
+    void loadConfiguration(void);
+
+    /* User interface */
+    Ui::configurePolMeasure *ui;
+
+    QSignalMapper *signalMapperC;
+
+    /* Do you want to load a configuration? or not? */
+    bool Conf_canceled;
+
     /* Destructor */
     ~configurePolMeasure(void);
 
@@ -66,9 +86,16 @@ private slots:
     /* Select path */
     void selectPath(void);
 
+    /* Configure polarimeter */
+    void configurePolarimeter(void);
+
+    /* The user decide to cancel the load of a configuration */
+    void cancel(void);
+
+    /* Handle click events */
+    void handleClickEvent(QWidget *widget);
+
 private:
-    /* User interface */
-    Ui::configurePolMeasure *ui;
 
     /* Abort run if set to FALSE */
     bool bRunTimePattern = false;

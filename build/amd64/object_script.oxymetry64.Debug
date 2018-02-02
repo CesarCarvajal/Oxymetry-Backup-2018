@@ -40,6 +40,8 @@ C:\Users\OpLaSens-1\Desktop\Cesar\Software\oxymetry\build\amd64\debug\.obj\oxyme
 ./debug\.obj\pol_panelItem.o
 ./debug\.obj\pol_panel.o
 ./debug\.obj\pol_plot.o
+./debug\.obj\pol_measurements.o
+./debug\.obj\pol_externConf.o
 ./debug\.obj\qrc_icons.o
 ./debug\.obj\moc_application.o
 ./debug\.obj\moc_spectrometer_config.o
@@ -71,4 +73,6 @@ C:\Users\OpLaSens-1\Desktop\Cesar\Software\oxymetry\build\amd64\debug\.obj\oxyme
 ./debug\.obj\moc_pol_panelItem.o
 ./debug\.obj\moc_pol_panel.o
 ./debug\.obj\moc_pol_plot.o
+./debug\.obj\moc_pol_measurements.o
+./debug\.obj\moc_pol_externConf.o
 );

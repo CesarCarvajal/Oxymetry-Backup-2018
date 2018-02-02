@@ -28,6 +28,18 @@
 Pol_Plot::Pol_Plot()
 {
 
+    /* Plot Average, range of time plotting */
+    time_plot=300;
+
+    /* Running time of Averages */
+    counts_average_time = 0;
+
+    /* Max value for plotting Y axis in Averages */
+    maxYValue = 2000;
+
+    /* Max value for plotting X axis in Averages */
+    maxXtime = 150;
+
     /* Dc, W and 2w Averages */
     Average_DC_Signal = new QwtPlotCurve("DC");
     Average_DC_Signal->setPen(QPen("magenta"));
@@ -60,17 +72,6 @@ Pol_Plot::Pol_Plot()
     predictionSignal->setPen(QPen("black"));
     predictionSignal->setItemAttribute(QwtPlotItem::Legend, false);
 
-    /* Reference prediction */
-    QVector<double> linearR;
-
-    /* Expected curve of prediction */
-    for(int j=0; j< 6; j++){
-        linearR.append(j*100);
-    }
-
-    /* Set expected curve of prediction */
-    predictionSignal->setSamples(linearR, linearR);
-    predictionSignal->setItemAttribute(QwtPlotItem::Legend, false);
 }
 
 /**
@@ -86,6 +87,15 @@ void Pol_Plot::Plot_FFT_Graphs(QVector<double> FFTLwavelengths, QVector<double> 
     FFT_DC->setSamples(FFTLwavelengths , FFTLfft_DC);
     FFT_W->setSamples(FFTLwavelengths , FFTLfft_W);
     FFT_2W->setSamples(FFTLwavelengths , FFTLfft_2W);
+
+    /* Expected curve of prediction */
+    for(int j=0; j< 6; j++){
+        linearR.append(j*100);
+    }
+
+    /* Set expected curve of prediction */
+    predictionSignal->setSamples(linearR, linearR);
+    predictionSignal->setItemAttribute(QwtPlotItem::Legend, false);
 
     /* Assign values to plot */
     Compensation_Signal->setSamples(FFTLwavelengths , FFTLfft_Compensation_Signal);
@@ -131,7 +141,7 @@ void Pol_Plot::plotAverages(bool dataloaded, QVector<double> FFTLfft_DC, QVector
         AverageDC.append(average_DC/FFTLwavelengths.length());
         AverageW.append(average_W/FFTLwavelengths.length());
         Average2W.append(average_2W/FFTLwavelengths.length());
-        max =  ceil(*std::max_element(AverageDC.begin(), AverageDC.end()));
+        maxYValue =  ceil(*std::max_element(AverageDC.begin(), AverageDC.end()));
     }
 
     /* The signal is ploted every defined time, so run it's own timer for plotting */
@@ -146,7 +156,7 @@ void Pol_Plot::plotAverages(bool dataloaded, QVector<double> FFTLfft_DC, QVector
     Average_2W_Signal->setSamples(averaged_Signal_time, Average2W);
 
     /* Whats the maximum time reached on the vector until now? */
-    maxtime = *std::max_element(averaged_Signal_time.begin(), averaged_Signal_time.end());
+    maxXtime = *std::max_element(averaged_Signal_time.begin(), averaged_Signal_time.end());
 
 }
 

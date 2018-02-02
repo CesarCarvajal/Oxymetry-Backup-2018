@@ -50,11 +50,11 @@ public:
     void clean_AllPlots(void);
 
     /* Averages Plot time */
-    int counts_average_time = 0;
+    int counts_average_time;
 
     /* Polarimetry curves */
     QwtPlotCurve *FFT_oneWave, *predictionSignal;
-    QwtPlotCurve *FFT_DC, *FFT_W, *FFT_2W = nullptr;
+    QwtPlotCurve *FFT_DC, *FFT_W, *FFT_2W;
     QwtPlotCurve *Compensation_Signal;
     QwtPlotCurve *Average_DC_Signal, *Average_W_Signal, *Average_2W_Signal;
 
@@ -63,10 +63,16 @@ public:
     QVector<double> AverageDC, AverageW, Average2W;
 
     /* Maximum value on Y axis */
-    int max = 2000;
+    int maxYValue;
 
     /* Maximum value on X axis of average plot */
-    double maxtime = 150;
+    double maxXtime;
+
+    /* Variables to count time and plot the real time averages */
+    int time_plot;
+
+    /* Reference prediction */
+    QVector<double> linearR;
 
     /* Destructor */
     ~Pol_Plot(void);

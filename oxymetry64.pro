@@ -66,7 +66,9 @@ SOURCES += \
     pol_panelHelp.cpp \
     pol_panelItem.cpp \
     pol_panel.cpp \
-    pol_plot.cpp
+    pol_plot.cpp \
+    pol_measurements.cpp \
+    pol_externConf.cpp
 
 HEADERS += \
     application.h \
@@ -107,7 +109,9 @@ HEADERS += \
     pol_panelHelp.h \
     pol_panelItem.h \
     pol_panel.h \
-    pol_plot.h
+    pol_plot.h \
+    pol_measurements.h \
+    pol_externConf.h
 
 FORMS += \
     initial_setup.ui \

@@ -84,7 +84,9 @@ SOURCES       = ..\..\main.cpp \
 		..\..\pol_panelHelp.cpp \
 		..\..\pol_panelItem.cpp \
 		..\..\pol_panel.cpp \
-		..\..\pol_plot.cpp release\.rcc\qrc_icons.cpp \
+		..\..\pol_plot.cpp \
+		..\..\pol_measurements.cpp \
+		..\..\pol_externConf.cpp release\.rcc\qrc_icons.cpp \
 		release\.moc\moc_application.cpp \
 		release\.moc\moc_spectrometer_config.cpp \
 		release\.moc\moc_spectrometer_eeprom.cpp \
@@ -114,7 +116,9 @@ SOURCES       = ..\..\main.cpp \
 		release\.moc\moc_pol_panelHelp.cpp \
 		release\.moc\moc_pol_panelItem.cpp \
 		release\.moc\moc_pol_panel.cpp \
-		release\.moc\moc_pol_plot.cpp
+		release\.moc\moc_pol_plot.cpp \
+		release\.moc\moc_pol_measurements.cpp \
+		release\.moc\moc_pol_externConf.cpp
 OBJECTS       = release/.obj/oxymetry_res.o \
 		release/.obj/main.o \
 		release/.obj/application.o \
@@ -156,6 +160,8 @@ OBJECTS       = release/.obj/oxymetry_res.o \
 		release/.obj/pol_panelItem.o \
 		release/.obj/pol_panel.o \
 		release/.obj/pol_plot.o \
+		release/.obj/pol_measurements.o \
+		release/.obj/pol_externConf.o \
 		release/.obj/qrc_icons.o \
 		release/.obj/moc_application.o \
 		release/.obj/moc_spectrometer_config.o \
@@ -186,7 +192,9 @@ OBJECTS       = release/.obj/oxymetry_res.o \
 		release/.obj/moc_pol_panelHelp.o \
 		release/.obj/moc_pol_panelItem.o \
 		release/.obj/moc_pol_panel.o \
-		release/.obj/moc_pol_plot.o
+		release/.obj/moc_pol_plot.o \
+		release/.obj/moc_pol_measurements.o \
+		release/.obj/moc_pol_externConf.o
 
 DIST          = oxymetry.rc ..\..\application.h \
 		..\..\messages.h \
@@ -226,7 +234,9 @@ DIST          = oxymetry.rc ..\..\application.h \
 		..\..\pol_panelHelp.h \
 		..\..\pol_panelItem.h \
 		..\..\pol_panel.h \
-		..\..\pol_plot.h ..\..\main.cpp \
+		..\..\pol_plot.h \
+		..\..\pol_measurements.h \
+		..\..\pol_externConf.h ..\..\main.cpp \
 		..\..\application.cpp \
 		..\..\messages.cpp \
 		..\..\splash.cpp \
@@ -265,7 +275,9 @@ DIST          = oxymetry.rc ..\..\application.h \
 		..\..\pol_panelHelp.cpp \
 		..\..\pol_panelItem.cpp \
 		..\..\pol_panel.cpp \
-		..\..\pol_plot.cpp
+		..\..\pol_plot.cpp \
+		..\..\pol_measurements.cpp \
+		..\..\pol_externConf.cpp
 QMAKE_TARGET  = oxymetry64
 DESTDIR        = ..\..\redist\binary\amd64\ #avoid trailing-slash linebreak
 TARGET         = oxymetry64.exe
@@ -288,11 +300,11 @@ qmake: FORCE
 qmake_all: FORCE
 
 dist:
-	$(ZIP) oxymetry64.zip $(SOURCES) $(DIST) ..\..\..\..\oxymetry64.pro D:\msys64\mingw64\share\qt5\mkspecs\features\spec_pre.prf D:\msys64\mingw64\share\qt5\mkspecs\qdevice.pri D:\msys64\mingw64\share\qt5\mkspecs\features\device_config.prf D:\msys64\mingw64\share\qt5\mkspecs\common\g++-base.conf D:\msys64\mingw64\share\qt5\mkspecs\common\angle.conf D:\msys64\mingw64\share\qt5\mkspecs\common\sanitize.conf D:\msys64\mingw64\share\qt5\mkspecs\common\gcc-base.conf D:\msys64\mingw64\share\qt5\mkspecs\qconfig.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3danimation.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3danimation_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dcore.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dcore_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dextras.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dextras_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dinput.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dinput_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dlogic.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dlogic_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dquick.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dquick_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dquickanimation.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dquickanimation_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dquickextras.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dquickextras_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dquickinput.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dquickinput_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dquickrender.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dquickrender_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dquickscene2d.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dquickscene2d_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3drender.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3drender_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_accessibility_support_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_axbase.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_axbase_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_axcontainer.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_axcontainer_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_axserver.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_axserver_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_bluetooth.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_bluetooth_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_bootstrap_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_charts.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_charts_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_concurrent.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_concurrent_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_core.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_core_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_datavisualization.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_datavisualization_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_dbus.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_dbus_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_designer.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_designer_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_designercomponents_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_devicediscovery_support_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_eventdispatcher_support_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_fb_support_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_fontdatabase_support_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_gamepad.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_gamepad_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_gui.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_gui_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_help.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_help_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_location.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_location_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_multimedia.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_multimedia_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_multimediawidgets.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_multimediawidgets_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_network.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_network_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_networkauth.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_networkauth_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_nfc.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_nfc_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_opengl.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_opengl_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_openglextensions.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_openglextensions_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_packetprotocol_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_platformcompositor_support_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_positioning.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_positioning_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_printsupport.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_printsupport_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_qml.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_qml_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_qmldebug_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_qmldevtools_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_qmltest.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_qmltest_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_qtmultimediaquicktools_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_quick.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_quick_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_quickcontrols2.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_quickcontrols2_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_quickparticles_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_quicktemplates2_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_quickwidgets.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_quickwidgets_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_remoteobjects.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_remoteobjects_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_repparser.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_repparser_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_script.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_script_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_scripttools.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_scripttools_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_scxml.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_scxml_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_sensors.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_sensors_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_serialbus.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_serialbus_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_serialport.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_serialport_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_sql.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_sql_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_svg.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_svg_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_testlib.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_testlib_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_texttospeech.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_texttospeech_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_theme_support_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_uiplugin.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_uitools.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_uitools_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_webchannel.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_webchannel_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_websockets.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_websockets_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_widgets.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_widgets_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_winextras.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_winextras_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_xml.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_xml_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_xmlpatterns.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_xmlpatterns_private.pri D:\msys64\mingw64\share\qt5\mkspecs\features\qt_functions.prf D:\msys64\mingw64\share\qt5\mkspecs\features\qt_config.prf D:\msys64\mingw64\share\qt5\mkspecs\win32-g++\qmake.conf D:\msys64\mingw64\share\qt5\mkspecs\features\spec_post.prf ..\.qmake.stash D:\msys64\mingw64\share\qt5\mkspecs\features\exclusive_builds.prf D:\msys64\mingw64\share\qt5\mkspecs\features\toolchain.prf D:\msys64\mingw64\share\qt5\mkspecs\features\default_pre.prf D:\msys64\mingw64\share\qt5\mkspecs\features\win32\default_pre.prf D:\msys64\mingw64\share\qt5\mkspecs\features\resolve_config.prf D:\msys64\mingw64\share\qt5\mkspecs\features\exclusive_builds_post.prf D:\msys64\mingw64\share\qt5\mkspecs\features\default_post.prf D:\msys64\mingw64\share\qt5\mkspecs\features\build_pass.prf D:\msys64\mingw64\share\qt5\mkspecs\features\qwtconfig.pri D:\msys64\mingw64\share\qt5\mkspecs\features\qwtfunctions.pri D:\msys64\mingw64\share\qt5\mkspecs\features\qwt.prf D:\msys64\mingw64\share\qt5\mkspecs\features\precompile_header.prf D:\msys64\mingw64\share\qt5\mkspecs\features\warn_on.prf D:\msys64\mingw64\share\qt5\mkspecs\features\qt.prf D:\msys64\mingw64\share\qt5\mkspecs\features\resources.prf D:\msys64\mingw64\share\qt5\mkspecs\features\moc.prf D:\msys64\mingw64\share\qt5\mkspecs\features\win32\opengl.prf D:\msys64\mingw64\share\qt5\mkspecs\features\uic.prf D:\msys64\mingw64\share\qt5\mkspecs\features\qmake_use.prf D:\msys64\mingw64\share\qt5\mkspecs\features\file_copies.prf D:\msys64\mingw64\share\qt5\mkspecs\features\win32\windows.prf D:\msys64\mingw64\share\qt5\mkspecs\features\testcase_targets.prf D:\msys64\mingw64\share\qt5\mkspecs\features\exceptions.prf D:\msys64\mingw64\share\qt5\mkspecs\features\yacc.prf D:\msys64\mingw64\share\qt5\mkspecs\features\lex.prf ..\..\oxymetry64.pro ..\..\icons.qrc   ..\..\icons.qrc D:\msys64\mingw64\share\qt5\mkspecs\features\data\dummy.cpp ..\..\application.h ..\..\messages.h ..\..\splash.h ..\..\spectrometer.h ..\..\spectrometer_config.h ..\..\spectrometer_eeprom.h ..\..\clickablelabel.h ..\..\plot.h ..\..\measurementstable.h ..\..\initial_setup.h ..\..\panel.h ..\..\panel_about.h ..\..\panel_item.h ..\..\panel_change_averages.h ..\..\panel_change_time.h ..\..\panel_legend.h ..\..\panel_storetoram.h ..\..\panel_timepattern.h ..\..\iad_configure.h ..\..\iad_configure_page01.h ..\..\iad_configure_page02.h ..\..\iad_calibrate.h ..\..\iad_calibrate_page01.h ..\..\iad_calibrate_page02.h ..\..\iad_calibrate_page03.h ..\..\iad_measure.h ..\..\iad_panel.h ..\..\math_helper.h ..\..\timer.h ..\..\fluidic_connect.h ..\..\fluidic_control.h ..\..\light_control.h ..\..\pol_configureMeasurement.h ..\..\pol_fft.h ..\..\pol_changeWave_FFT.h ..\..\pol_panelHelp.h ..\..\pol_panelItem.h ..\..\pol_panel.h ..\..\pol_plot.h ..\..\main.cpp ..\..\application.cpp ..\..\messages.cpp ..\..\splash.cpp ..\..\spectrometer.cpp ..\..\spectrometer_config.cpp ..\..\spectrometer_eeprom.cpp ..\..\clickablelabel.cpp ..\..\plot.cpp ..\..\measurementstable.cpp ..\..\initial_setup.cpp ..\..\panel.cpp ..\..\panel_about.cpp ..\..\panel_item.cpp ..\..\panel_change_averages.cpp ..\..\panel_change_time.cpp ..\..\panel_legend.cpp ..\..\panel_storetoram.cpp ..\..\panel_timepattern.cpp ..\..\iad_configure.cpp ..\..\iad_configure_page01.cpp ..\..\iad_configure_page02.cpp ..\..\iad_calibrate.cpp ..\..\iad_calibrate_page01.cpp ..\..\iad_calibrate_page02.cpp ..\..\iad_calibrate_page03.cpp ..\..\iad_measure.cpp ..\..\iad_panel.cpp ..\..\math_helper.cpp ..\..\timer.cpp ..\..\fluidic_connect.cpp ..\..\fluidic_control.cpp ..\..\light_control.cpp ..\..\pol_configureMeasurement.cpp ..\..\pol_fft.cpp ..\..\pol_changeWave_FFT.cpp ..\..\pol_panelHelp.cpp ..\..\pol_panelItem.cpp ..\..\pol_panel.cpp ..\..\pol_plot.cpp ..\..\initial_setup.ui ..\..\panel.ui ..\..\panel_about.ui ..\..\panel_item.ui ..\..\panel_change_averages.ui ..\..\panel_change_time.ui ..\..\panel_legend.ui ..\..\panel_storetoram.ui ..\..\panel_timepattern.ui ..\..\spectrometer_config.ui ..\..\spectrometer_eeprom.ui ..\..\iad_configure_page01.ui ..\..\iad_configure_page02.ui ..\..\iad_calibrate_page01.ui ..\..\iad_calibrate_page02.ui ..\..\iad_calibrate_page03.ui ..\..\iad_panel.ui ..\..\fluidic_connect.ui ..\..\fluidic_control.ui ..\..\light_control.ui ..\..\pol_configureMeasurement.ui ..\..\pol_changeWave_FFT.ui ..\..\pol_panelHelp.ui ..\..\pol_panelItem.ui ..\..\pol_panel.ui    
+	$(ZIP) oxymetry64.zip $(SOURCES) $(DIST) ..\..\..\..\oxymetry64.pro D:\msys64\mingw64\share\qt5\mkspecs\features\spec_pre.prf D:\msys64\mingw64\share\qt5\mkspecs\qdevice.pri D:\msys64\mingw64\share\qt5\mkspecs\features\device_config.prf D:\msys64\mingw64\share\qt5\mkspecs\common\g++-base.conf D:\msys64\mingw64\share\qt5\mkspecs\common\angle.conf D:\msys64\mingw64\share\qt5\mkspecs\common\sanitize.conf D:\msys64\mingw64\share\qt5\mkspecs\common\gcc-base.conf D:\msys64\mingw64\share\qt5\mkspecs\qconfig.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3danimation.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3danimation_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dcore.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dcore_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dextras.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dextras_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dinput.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dinput_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dlogic.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dlogic_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dquick.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dquick_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dquickanimation.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dquickanimation_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dquickextras.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dquickextras_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dquickinput.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dquickinput_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dquickrender.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dquickrender_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dquickscene2d.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3dquickscene2d_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3drender.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_3drender_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_accessibility_support_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_axbase.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_axbase_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_axcontainer.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_axcontainer_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_axserver.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_axserver_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_bluetooth.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_bluetooth_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_bootstrap_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_charts.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_charts_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_concurrent.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_concurrent_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_core.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_core_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_datavisualization.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_datavisualization_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_dbus.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_dbus_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_designer.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_designer_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_designercomponents_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_devicediscovery_support_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_eventdispatcher_support_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_fb_support_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_fontdatabase_support_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_gamepad.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_gamepad_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_gui.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_gui_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_help.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_help_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_location.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_location_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_multimedia.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_multimedia_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_multimediawidgets.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_multimediawidgets_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_network.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_network_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_networkauth.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_networkauth_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_nfc.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_nfc_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_opengl.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_opengl_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_openglextensions.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_openglextensions_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_packetprotocol_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_platformcompositor_support_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_positioning.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_positioning_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_printsupport.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_printsupport_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_qml.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_qml_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_qmldebug_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_qmldevtools_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_qmltest.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_qmltest_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_qtmultimediaquicktools_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_quick.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_quick_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_quickcontrols2.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_quickcontrols2_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_quickparticles_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_quicktemplates2_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_quickwidgets.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_quickwidgets_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_remoteobjects.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_remoteobjects_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_repparser.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_repparser_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_script.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_script_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_scripttools.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_scripttools_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_scxml.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_scxml_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_sensors.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_sensors_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_serialbus.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_serialbus_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_serialport.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_serialport_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_sql.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_sql_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_svg.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_svg_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_testlib.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_testlib_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_texttospeech.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_texttospeech_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_theme_support_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_uiplugin.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_uitools.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_uitools_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_webchannel.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_webchannel_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_websockets.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_websockets_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_widgets.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_widgets_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_winextras.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_winextras_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_xml.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_xml_private.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_xmlpatterns.pri D:\msys64\mingw64\share\qt5\mkspecs\modules\qt_lib_xmlpatterns_private.pri D:\msys64\mingw64\share\qt5\mkspecs\features\qt_functions.prf D:\msys64\mingw64\share\qt5\mkspecs\features\qt_config.prf D:\msys64\mingw64\share\qt5\mkspecs\win32-g++\qmake.conf D:\msys64\mingw64\share\qt5\mkspecs\features\spec_post.prf ..\.qmake.stash D:\msys64\mingw64\share\qt5\mkspecs\features\exclusive_builds.prf D:\msys64\mingw64\share\qt5\mkspecs\features\toolchain.prf D:\msys64\mingw64\share\qt5\mkspecs\features\default_pre.prf D:\msys64\mingw64\share\qt5\mkspecs\features\win32\default_pre.prf D:\msys64\mingw64\share\qt5\mkspecs\features\resolve_config.prf D:\msys64\mingw64\share\qt5\mkspecs\features\exclusive_builds_post.prf D:\msys64\mingw64\share\qt5\mkspecs\features\default_post.prf D:\msys64\mingw64\share\qt5\mkspecs\features\build_pass.prf D:\msys64\mingw64\share\qt5\mkspecs\features\qwtconfig.pri D:\msys64\mingw64\share\qt5\mkspecs\features\qwtfunctions.pri D:\msys64\mingw64\share\qt5\mkspecs\features\qwt.prf D:\msys64\mingw64\share\qt5\mkspecs\features\precompile_header.prf D:\msys64\mingw64\share\qt5\mkspecs\features\warn_on.prf D:\msys64\mingw64\share\qt5\mkspecs\features\qt.prf D:\msys64\mingw64\share\qt5\mkspecs\features\resources.prf D:\msys64\mingw64\share\qt5\mkspecs\features\moc.prf D:\msys64\mingw64\share\qt5\mkspecs\features\win32\opengl.prf D:\msys64\mingw64\share\qt5\mkspecs\features\uic.prf D:\msys64\mingw64\share\qt5\mkspecs\features\qmake_use.prf D:\msys64\mingw64\share\qt5\mkspecs\features\file_copies.prf D:\msys64\mingw64\share\qt5\mkspecs\features\win32\windows.prf D:\msys64\mingw64\share\qt5\mkspecs\features\testcase_targets.prf D:\msys64\mingw64\share\qt5\mkspecs\features\exceptions.prf D:\msys64\mingw64\share\qt5\mkspecs\features\yacc.prf D:\msys64\mingw64\share\qt5\mkspecs\features\lex.prf ..\..\oxymetry64.pro ..\..\icons.qrc   ..\..\icons.qrc D:\msys64\mingw64\share\qt5\mkspecs\features\data\dummy.cpp ..\..\application.h ..\..\messages.h ..\..\splash.h ..\..\spectrometer.h ..\..\spectrometer_config.h ..\..\spectrometer_eeprom.h ..\..\clickablelabel.h ..\..\plot.h ..\..\measurementstable.h ..\..\initial_setup.h ..\..\panel.h ..\..\panel_about.h ..\..\panel_item.h ..\..\panel_change_averages.h ..\..\panel_change_time.h ..\..\panel_legend.h ..\..\panel_storetoram.h ..\..\panel_timepattern.h ..\..\iad_configure.h ..\..\iad_configure_page01.h ..\..\iad_configure_page02.h ..\..\iad_calibrate.h ..\..\iad_calibrate_page01.h ..\..\iad_calibrate_page02.h ..\..\iad_calibrate_page03.h ..\..\iad_measure.h ..\..\iad_panel.h ..\..\math_helper.h ..\..\timer.h ..\..\fluidic_connect.h ..\..\fluidic_control.h ..\..\light_control.h ..\..\pol_configureMeasurement.h ..\..\pol_fft.h ..\..\pol_changeWave_FFT.h ..\..\pol_panelHelp.h ..\..\pol_panelItem.h ..\..\pol_panel.h ..\..\pol_plot.h ..\..\pol_measurements.h ..\..\pol_externConf.h ..\..\main.cpp ..\..\application.cpp ..\..\messages.cpp ..\..\splash.cpp ..\..\spectrometer.cpp ..\..\spectrometer_config.cpp ..\..\spectrometer_eeprom.cpp ..\..\clickablelabel.cpp ..\..\plot.cpp ..\..\measurementstable.cpp ..\..\initial_setup.cpp ..\..\panel.cpp ..\..\panel_about.cpp ..\..\panel_item.cpp ..\..\panel_change_averages.cpp ..\..\panel_change_time.cpp ..\..\panel_legend.cpp ..\..\panel_storetoram.cpp ..\..\panel_timepattern.cpp ..\..\iad_configure.cpp ..\..\iad_configure_page01.cpp ..\..\iad_configure_page02.cpp ..\..\iad_calibrate.cpp ..\..\iad_calibrate_page01.cpp ..\..\iad_calibrate_page02.cpp ..\..\iad_calibrate_page03.cpp ..\..\iad_measure.cpp ..\..\iad_panel.cpp ..\..\math_helper.cpp ..\..\timer.cpp ..\..\fluidic_connect.cpp ..\..\fluidic_control.cpp ..\..\light_control.cpp ..\..\pol_configureMeasurement.cpp ..\..\pol_fft.cpp ..\..\pol_changeWave_FFT.cpp ..\..\pol_panelHelp.cpp ..\..\pol_panelItem.cpp ..\..\pol_panel.cpp ..\..\pol_plot.cpp ..\..\pol_measurements.cpp ..\..\pol_externConf.cpp ..\..\initial_setup.ui ..\..\panel.ui ..\..\panel_about.ui ..\..\panel_item.ui ..\..\panel_change_averages.ui ..\..\panel_change_time.ui ..\..\panel_legend.ui ..\..\panel_storetoram.ui ..\..\panel_timepattern.ui ..\..\spectrometer_config.ui ..\..\spectrometer_eeprom.ui ..\..\iad_configure_page01.ui ..\..\iad_configure_page02.ui ..\..\iad_calibrate_page01.ui ..\..\iad_calibrate_page02.ui ..\..\iad_calibrate_page03.ui ..\..\iad_panel.ui ..\..\fluidic_connect.ui ..\..\fluidic_control.ui ..\..\light_control.ui ..\..\pol_configureMeasurement.ui ..\..\pol_changeWave_FFT.ui ..\..\pol_panelHelp.ui ..\..\pol_panelItem.ui ..\..\pol_panel.ui    
 
 clean: compiler_clean 
-	-$(DEL_FILE) release\.obj\oxymetry_res.o release\.obj\main.o release\.obj\application.o release\.obj\messages.o release\.obj\splash.o release\.obj\spectrometer.o release\.obj\spectrometer_config.o release\.obj\spectrometer_eeprom.o release\.obj\clickablelabel.o release\.obj\plot.o release\.obj\measurementstable.o release\.obj\initial_setup.o release\.obj\panel.o release\.obj\panel_about.o release\.obj\panel_item.o release\.obj\panel_change_averages.o release\.obj\panel_change_time.o release\.obj\panel_legend.o release\.obj\panel_storetoram.o release\.obj\panel_timepattern.o release\.obj\iad_configure.o release\.obj\iad_configure_page01.o release\.obj\iad_configure_page02.o release\.obj\iad_calibrate.o release\.obj\iad_calibrate_page01.o release\.obj\iad_calibrate_page02.o release\.obj\iad_calibrate_page03.o release\.obj\iad_measure.o release\.obj\iad_panel.o release\.obj\math_helper.o release\.obj\timer.o release\.obj\fluidic_connect.o release\.obj\fluidic_control.o release\.obj\light_control.o release\.obj\pol_configureMeasurement.o release\.obj\pol_fft.o release\.obj\pol_changeWave_FFT.o release\.obj\pol_panelHelp.o release\.obj\pol_panelItem.o release\.obj\pol_panel.o release\.obj\pol_plot.o release\.obj\qrc_icons.o release\.obj\moc_application.o release\.obj\moc_spectrometer_config.o release\.obj\moc_spectrometer_eeprom.o release\.obj\moc_clickablelabel.o release\.obj\moc_plot.o release\.obj\moc_measurementstable.o release\.obj\moc_initial_setup.o release\.obj\moc_panel.o release\.obj\moc_panel_about.o release\.obj\moc_panel_item.o release\.obj\moc_panel_change_averages.o release\.obj\moc_panel_change_time.o release\.obj\moc_panel_legend.o release\.obj\moc_panel_storetoram.o release\.obj\moc_panel_timepattern.o release\.obj\moc_iad_configure_page01.o release\.obj\moc_iad_configure_page02.o release\.obj\moc_iad_calibrate_page01.o release\.obj\moc_iad_calibrate_page02.o release\.obj\moc_iad_calibrate_page03.o release\.obj\moc_iad_panel.o release\.obj\moc_fluidic_connect.o release\.obj\moc_fluidic_control.o
-	-$(DEL_FILE) release\.obj\moc_light_control.o release\.obj\moc_pol_configureMeasurement.o release\.obj\moc_pol_changeWave_FFT.o release\.obj\moc_pol_panelHelp.o release\.obj\moc_pol_panelItem.o release\.obj\moc_pol_panel.o release\.obj\moc_pol_plot.o
+	-$(DEL_FILE) release\.obj\oxymetry_res.o release\.obj\main.o release\.obj\application.o release\.obj\messages.o release\.obj\splash.o release\.obj\spectrometer.o release\.obj\spectrometer_config.o release\.obj\spectrometer_eeprom.o release\.obj\clickablelabel.o release\.obj\plot.o release\.obj\measurementstable.o release\.obj\initial_setup.o release\.obj\panel.o release\.obj\panel_about.o release\.obj\panel_item.o release\.obj\panel_change_averages.o release\.obj\panel_change_time.o release\.obj\panel_legend.o release\.obj\panel_storetoram.o release\.obj\panel_timepattern.o release\.obj\iad_configure.o release\.obj\iad_configure_page01.o release\.obj\iad_configure_page02.o release\.obj\iad_calibrate.o release\.obj\iad_calibrate_page01.o release\.obj\iad_calibrate_page02.o release\.obj\iad_calibrate_page03.o release\.obj\iad_measure.o release\.obj\iad_panel.o release\.obj\math_helper.o release\.obj\timer.o release\.obj\fluidic_connect.o release\.obj\fluidic_control.o release\.obj\light_control.o release\.obj\pol_configureMeasurement.o release\.obj\pol_fft.o release\.obj\pol_changeWave_FFT.o release\.obj\pol_panelHelp.o release\.obj\pol_panelItem.o release\.obj\pol_panel.o release\.obj\pol_plot.o release\.obj\pol_measurements.o release\.obj\pol_externConf.o release\.obj\qrc_icons.o release\.obj\moc_application.o release\.obj\moc_spectrometer_config.o release\.obj\moc_spectrometer_eeprom.o release\.obj\moc_clickablelabel.o release\.obj\moc_plot.o release\.obj\moc_measurementstable.o release\.obj\moc_initial_setup.o release\.obj\moc_panel.o release\.obj\moc_panel_about.o release\.obj\moc_panel_item.o release\.obj\moc_panel_change_averages.o release\.obj\moc_panel_change_time.o release\.obj\moc_panel_legend.o release\.obj\moc_panel_storetoram.o release\.obj\moc_panel_timepattern.o release\.obj\moc_iad_configure_page01.o release\.obj\moc_iad_configure_page02.o release\.obj\moc_iad_calibrate_page01.o release\.obj\moc_iad_calibrate_page02.o release\.obj\moc_iad_calibrate_page03.o release\.obj\moc_iad_panel.o
+	-$(DEL_FILE) release\.obj\moc_fluidic_connect.o release\.obj\moc_fluidic_control.o release\.obj\moc_light_control.o release\.obj\moc_pol_configureMeasurement.o release\.obj\moc_pol_changeWave_FFT.o release\.obj\moc_pol_panelHelp.o release\.obj\moc_pol_panelItem.o release\.obj\moc_pol_panel.o release\.obj\moc_pol_plot.o release\.obj\moc_pol_measurements.o release\.obj\moc_pol_externConf.o
 	-$(DEL_FILE) C:\Users\OpLaSens-1\Desktop\Cesar\Software\oxymetry\build\amd64\release\.obj\oxymetry_res.o
 
 distclean: clean 
@@ -331,9 +343,9 @@ compiler_moc_predefs_clean:
 release/.moc/moc_predefs.h: D:/msys64/mingw64/share/qt5/mkspecs/features/data/dummy.cpp
 	g++ -fno-keep-inline-dllexport -march=nocona -mtune=core2 -Wa,-mbig-obj -pipe -m64 -static-libgcc -static-libstdc++ -O2 -Wextra -Wall -W -dM -E -o release\.moc\moc_predefs.h D:\msys64\mingw64\share\qt5\mkspecs\features\data\dummy.cpp
 
-compiler_moc_header_make_all: release/.moc/moc_application.cpp release/.moc/moc_spectrometer_config.cpp release/.moc/moc_spectrometer_eeprom.cpp release/.moc/moc_clickablelabel.cpp release/.moc/moc_plot.cpp release/.moc/moc_measurementstable.cpp release/.moc/moc_initial_setup.cpp release/.moc/moc_panel.cpp release/.moc/moc_panel_about.cpp release/.moc/moc_panel_item.cpp release/.moc/moc_panel_change_averages.cpp release/.moc/moc_panel_change_time.cpp release/.moc/moc_panel_legend.cpp release/.moc/moc_panel_storetoram.cpp release/.moc/moc_panel_timepattern.cpp release/.moc/moc_iad_configure_page01.cpp release/.moc/moc_iad_configure_page02.cpp release/.moc/moc_iad_calibrate_page01.cpp release/.moc/moc_iad_calibrate_page02.cpp release/.moc/moc_iad_calibrate_page03.cpp release/.moc/moc_iad_panel.cpp release/.moc/moc_fluidic_connect.cpp release/.moc/moc_fluidic_control.cpp release/.moc/moc_light_control.cpp release/.moc/moc_pol_configureMeasurement.cpp release/.moc/moc_pol_changeWave_FFT.cpp release/.moc/moc_pol_panelHelp.cpp release/.moc/moc_pol_panelItem.cpp release/.moc/moc_pol_panel.cpp release/.moc/moc_pol_plot.cpp
+compiler_moc_header_make_all: release/.moc/moc_application.cpp release/.moc/moc_spectrometer_config.cpp release/.moc/moc_spectrometer_eeprom.cpp release/.moc/moc_clickablelabel.cpp release/.moc/moc_plot.cpp release/.moc/moc_measurementstable.cpp release/.moc/moc_initial_setup.cpp release/.moc/moc_panel.cpp release/.moc/moc_panel_about.cpp release/.moc/moc_panel_item.cpp release/.moc/moc_panel_change_averages.cpp release/.moc/moc_panel_change_time.cpp release/.moc/moc_panel_legend.cpp release/.moc/moc_panel_storetoram.cpp release/.moc/moc_panel_timepattern.cpp release/.moc/moc_iad_configure_page01.cpp release/.moc/moc_iad_configure_page02.cpp release/.moc/moc_iad_calibrate_page01.cpp release/.moc/moc_iad_calibrate_page02.cpp release/.moc/moc_iad_calibrate_page03.cpp release/.moc/moc_iad_panel.cpp release/.moc/moc_fluidic_connect.cpp release/.moc/moc_fluidic_control.cpp release/.moc/moc_light_control.cpp release/.moc/moc_pol_configureMeasurement.cpp release/.moc/moc_pol_changeWave_FFT.cpp release/.moc/moc_pol_panelHelp.cpp release/.moc/moc_pol_panelItem.cpp release/.moc/moc_pol_panel.cpp release/.moc/moc_pol_plot.cpp release/.moc/moc_pol_measurements.cpp release/.moc/moc_pol_externConf.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) release\.moc\moc_application.cpp release\.moc\moc_spectrometer_config.cpp release\.moc\moc_spectrometer_eeprom.cpp release\.moc\moc_clickablelabel.cpp release\.moc\moc_plot.cpp release\.moc\moc_measurementstable.cpp release\.moc\moc_initial_setup.cpp release\.moc\moc_panel.cpp release\.moc\moc_panel_about.cpp release\.moc\moc_panel_item.cpp release\.moc\moc_panel_change_averages.cpp release\.moc\moc_panel_change_time.cpp release\.moc\moc_panel_legend.cpp release\.moc\moc_panel_storetoram.cpp release\.moc\moc_panel_timepattern.cpp release\.moc\moc_iad_configure_page01.cpp release\.moc\moc_iad_configure_page02.cpp release\.moc\moc_iad_calibrate_page01.cpp release\.moc\moc_iad_calibrate_page02.cpp release\.moc\moc_iad_calibrate_page03.cpp release\.moc\moc_iad_panel.cpp release\.moc\moc_fluidic_connect.cpp release\.moc\moc_fluidic_control.cpp release\.moc\moc_light_control.cpp release\.moc\moc_pol_configureMeasurement.cpp release\.moc\moc_pol_changeWave_FFT.cpp release\.moc\moc_pol_panelHelp.cpp release\.moc\moc_pol_panelItem.cpp release\.moc\moc_pol_panel.cpp release\.moc\moc_pol_plot.cpp
+	-$(DEL_FILE) release\.moc\moc_application.cpp release\.moc\moc_spectrometer_config.cpp release\.moc\moc_spectrometer_eeprom.cpp release\.moc\moc_clickablelabel.cpp release\.moc\moc_plot.cpp release\.moc\moc_measurementstable.cpp release\.moc\moc_initial_setup.cpp release\.moc\moc_panel.cpp release\.moc\moc_panel_about.cpp release\.moc\moc_panel_item.cpp release\.moc\moc_panel_change_averages.cpp release\.moc\moc_panel_change_time.cpp release\.moc\moc_panel_legend.cpp release\.moc\moc_panel_storetoram.cpp release\.moc\moc_panel_timepattern.cpp release\.moc\moc_iad_configure_page01.cpp release\.moc\moc_iad_configure_page02.cpp release\.moc\moc_iad_calibrate_page01.cpp release\.moc\moc_iad_calibrate_page02.cpp release\.moc\moc_iad_calibrate_page03.cpp release\.moc\moc_iad_panel.cpp release\.moc\moc_fluidic_connect.cpp release\.moc\moc_fluidic_control.cpp release\.moc\moc_light_control.cpp release\.moc\moc_pol_configureMeasurement.cpp release\.moc\moc_pol_changeWave_FFT.cpp release\.moc\moc_pol_panelHelp.cpp release\.moc\moc_pol_panelItem.cpp release\.moc\moc_pol_panel.cpp release\.moc\moc_pol_plot.cpp release\.moc\moc_pol_measurements.cpp release\.moc\moc_pol_externConf.cpp
 release/.moc/moc_application.cpp: ../../include/avaspec.h \
 		../../include/type.h \
 		../../include/extcode.h \
@@ -423,11 +435,11 @@ release/.moc/moc_panel.cpp: ../../include/qwt_plot_curve.h \
 		../../panel_item.h \
 		../../iad_panel.h \
 		../../pol_panel.h \
+		../../math_helper.h \
 		../../pol_plot.h \
 		../../pol_panelItem.h \
 		../../pol_configureMeasurement.h \
 		release/.ui/ui_pol_panel.h \
-		../../clickablelabel.h \
 		../../plot.h \
 		../../include/qwt_plot.h \
 		../../include/qwt_plot_dict.h \
@@ -444,8 +456,12 @@ release/.moc/moc_panel.cpp: ../../include/qwt_plot_curve.h \
 		../../include/qwt_plot_grid.h \
 		../../include/qwt_legend.h \
 		../../include/qwt_abstract_legend.h \
+		../../clickablelabel.h \
 		../../pol_fft.h \
 		../../include/fftw3.h \
+		../../pol_panelHelp.h \
+		../../pol_measurements.h \
+		../../timer.h \
 		../../panel.h \
 		release/.moc/moc_predefs.h \
 		D:/msys64/mingw64/bin/moc.exe
@@ -619,11 +635,11 @@ release/.moc/moc_pol_panel.cpp: ../../include/qwt_plot_curve.h \
 		../../include/qwt_point_polar.h \
 		../../include/qwt_math.h \
 		../../include/qwt_series_store.h \
+		../../math_helper.h \
 		../../pol_plot.h \
 		../../pol_panelItem.h \
 		../../pol_configureMeasurement.h \
 		release/.ui/ui_pol_panel.h \
-		../../clickablelabel.h \
 		../../plot.h \
 		../../include/qwt_plot.h \
 		../../include/qwt_plot_dict.h \
@@ -640,8 +656,12 @@ release/.moc/moc_pol_panel.cpp: ../../include/qwt_plot_curve.h \
 		../../include/qwt_plot_grid.h \
 		../../include/qwt_legend.h \
 		../../include/qwt_abstract_legend.h \
+		../../clickablelabel.h \
 		../../pol_fft.h \
 		../../include/fftw3.h \
+		../../pol_panelHelp.h \
+		../../pol_measurements.h \
+		../../timer.h \
 		../../pol_panel.h \
 		release/.moc/moc_predefs.h \
 		D:/msys64/mingw64/bin/moc.exe
@@ -667,6 +687,17 @@ release/.moc/moc_pol_plot.cpp: ../../include/qwt_plot_curve.h \
 		release/.moc/moc_predefs.h \
 		D:/msys64/mingw64/bin/moc.exe
 	D:\msys64\mingw64\bin\moc.exe $(DEFINES) --include C:/Users/OpLaSens-1/Desktop/Cesar/Software/oxymetry/./build/amd64/release/.moc/moc_predefs.h -ID:/msys64/mingw64/share/qt5/mkspecs/win32-g++ -IC:/Users/OpLaSens-1/Desktop/Cesar/Software/oxymetry -IC:/Users/OpLaSens-1/Desktop/Cesar/Software/oxymetry -IC:/Users/OpLaSens-1/Desktop/Cesar/Software/oxymetry/include -I/mingw64/include/qwt -ID:/msys64/mingw64/include/QtSvg -ID:/msys64/mingw64/include/QtWidgets -ID:/msys64/mingw64/include/QtGui -ID:/msys64/mingw64/include/QtSerialPort -ID:/msys64/mingw64/include/QtCore -I. -ID:/msys64/mingw64/include/c++/7.2.0 -ID:/msys64/mingw64/include/c++/7.2.0/x86_64-w64-mingw32 -ID:/msys64/mingw64/include/c++/7.2.0/backward -ID:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/7.2.0/include -ID:/msys64/mingw64/include -ID:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/7.2.0/include-fixed -ID:/msys64/mingw64/x86_64-w64-mingw32/include ..\..\pol_plot.h -o release\.moc\moc_pol_plot.cpp
+
+release/.moc/moc_pol_measurements.cpp: ../../timer.h \
+		../../pol_measurements.h \
+		release/.moc/moc_predefs.h \
+		D:/msys64/mingw64/bin/moc.exe
+	D:\msys64\mingw64\bin\moc.exe $(DEFINES) --include C:/Users/OpLaSens-1/Desktop/Cesar/Software/oxymetry/./build/amd64/release/.moc/moc_predefs.h -ID:/msys64/mingw64/share/qt5/mkspecs/win32-g++ -IC:/Users/OpLaSens-1/Desktop/Cesar/Software/oxymetry -IC:/Users/OpLaSens-1/Desktop/Cesar/Software/oxymetry -IC:/Users/OpLaSens-1/Desktop/Cesar/Software/oxymetry/include -I/mingw64/include/qwt -ID:/msys64/mingw64/include/QtSvg -ID:/msys64/mingw64/include/QtWidgets -ID:/msys64/mingw64/include/QtGui -ID:/msys64/mingw64/include/QtSerialPort -ID:/msys64/mingw64/include/QtCore -I. -ID:/msys64/mingw64/include/c++/7.2.0 -ID:/msys64/mingw64/include/c++/7.2.0/x86_64-w64-mingw32 -ID:/msys64/mingw64/include/c++/7.2.0/backward -ID:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/7.2.0/include -ID:/msys64/mingw64/include -ID:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/7.2.0/include-fixed -ID:/msys64/mingw64/x86_64-w64-mingw32/include ..\..\pol_measurements.h -o release\.moc\moc_pol_measurements.cpp
+
+release/.moc/moc_pol_externConf.cpp: ../../pol_externConf.h \
+		release/.moc/moc_predefs.h \
+		D:/msys64/mingw64/bin/moc.exe
+	D:\msys64\mingw64\bin\moc.exe $(DEFINES) --include C:/Users/OpLaSens-1/Desktop/Cesar/Software/oxymetry/./build/amd64/release/.moc/moc_predefs.h -ID:/msys64/mingw64/share/qt5/mkspecs/win32-g++ -IC:/Users/OpLaSens-1/Desktop/Cesar/Software/oxymetry -IC:/Users/OpLaSens-1/Desktop/Cesar/Software/oxymetry -IC:/Users/OpLaSens-1/Desktop/Cesar/Software/oxymetry/include -I/mingw64/include/qwt -ID:/msys64/mingw64/include/QtSvg -ID:/msys64/mingw64/include/QtWidgets -ID:/msys64/mingw64/include/QtGui -ID:/msys64/mingw64/include/QtSerialPort -ID:/msys64/mingw64/include/QtCore -I. -ID:/msys64/mingw64/include/c++/7.2.0 -ID:/msys64/mingw64/include/c++/7.2.0/x86_64-w64-mingw32 -ID:/msys64/mingw64/include/c++/7.2.0/backward -ID:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/7.2.0/include -ID:/msys64/mingw64/include -ID:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/7.2.0/include-fixed -ID:/msys64/mingw64/x86_64-w64-mingw32/include ..\..\pol_externConf.h -o release\.moc\moc_pol_externConf.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -821,11 +852,11 @@ release/.obj/main.o: ../../main.cpp ../../application.h \
 		../../panel_item.h \
 		../../iad_panel.h \
 		../../pol_panel.h \
+		../../math_helper.h \
 		../../pol_plot.h \
 		../../pol_panelItem.h \
 		../../pol_configureMeasurement.h \
 		release/.ui/ui_pol_panel.h \
-		../../clickablelabel.h \
 		../../plot.h \
 		../../include/qwt_plot.h \
 		../../include/qwt_plot_dict.h \
@@ -842,8 +873,12 @@ release/.obj/main.o: ../../main.cpp ../../application.h \
 		../../include/qwt_plot_grid.h \
 		../../include/qwt_legend.h \
 		../../include/qwt_abstract_legend.h \
+		../../clickablelabel.h \
 		../../pol_fft.h \
 		../../include/fftw3.h \
+		../../pol_panelHelp.h \
+		../../pol_measurements.h \
+		../../timer.h \
 		../../splash.h \
 		../../initial_setup.h \
 		../../fluidic_control.h \
@@ -1020,7 +1055,6 @@ release/.obj/panel.o: ../../panel.cpp ../../include/avaspec.h \
 		../../pol_panelItem.h \
 		../../pol_configureMeasurement.h \
 		release/.ui/ui_pol_panel.h \
-		../../clickablelabel.h \
 		../../plot.h \
 		../../include/qwt_plot.h \
 		../../include/qwt_plot_dict.h \
@@ -1037,8 +1071,11 @@ release/.obj/panel.o: ../../panel.cpp ../../include/avaspec.h \
 		../../include/qwt_plot_grid.h \
 		../../include/qwt_legend.h \
 		../../include/qwt_abstract_legend.h \
+		../../clickablelabel.h \
 		../../pol_fft.h \
 		../../include/fftw3.h \
+		../../pol_panelHelp.h \
+		../../pol_measurements.h \
 		../../panel_about.h \
 		../../panel_change_averages.h \
 		../../panel_change_time.h \
@@ -1095,11 +1132,11 @@ release/.obj/panel_legend.o: ../../panel_legend.cpp ../../spectrometer.h \
 		../../panel_item.h \
 		../../iad_panel.h \
 		../../pol_panel.h \
+		../../math_helper.h \
 		../../pol_plot.h \
 		../../pol_panelItem.h \
 		../../pol_configureMeasurement.h \
 		release/.ui/ui_pol_panel.h \
-		../../clickablelabel.h \
 		../../plot.h \
 		../../include/qwt_plot.h \
 		../../include/qwt_plot_dict.h \
@@ -1116,8 +1153,12 @@ release/.obj/panel_legend.o: ../../panel_legend.cpp ../../spectrometer.h \
 		../../include/qwt_plot_grid.h \
 		../../include/qwt_legend.h \
 		../../include/qwt_abstract_legend.h \
+		../../clickablelabel.h \
 		../../pol_fft.h \
 		../../include/fftw3.h \
+		../../pol_panelHelp.h \
+		../../pol_measurements.h \
+		../../timer.h \
 		../../panel_legend.h \
 		release/.ui/ui_panel_legend.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\.obj\panel_legend.o ..\..\panel_legend.cpp
@@ -1574,49 +1615,23 @@ release/.obj/pol_configureMeasurement.o: ../../pol_configureMeasurement.cpp ../.
 release/.obj/pol_fft.o: ../../pol_fft.cpp ../../messages.h \
 		../../pol_fft.h \
 		../../include/fftw3.h \
-		release/.ui/ui_panel.h \
-		../../plot.h \
-		../../include/qwt_plot.h \
+		../../spectrometer.h \
+		../../include/qwt_plot_curve.h \
 		../../include/qwt_global.h \
-		../../include/qwt_text.h \
-		../../include/qwt_plot_dict.h \
+		../../include/qwt_plot_seriesitem.h \
 		../../include/qwt_plot_item.h \
+		../../include/qwt_text.h \
 		../../include/qwt_legend_data.h \
 		../../include/qwt_graphic.h \
 		../../include/qwt_null_paintdevice.h \
-		../../include/qwt_scale_map.h \
-		../../include/qwt_transform.h \
-		../../include/qwt_interval.h \
-		../../include/qwt_plot_curve.h \
-		../../include/qwt_plot_seriesitem.h \
 		../../include/qwt_scale_div.h \
+		../../include/qwt_interval.h \
 		../../include/qwt_series_data.h \
 		../../include/qwt_samples.h \
 		../../include/qwt_point_3d.h \
 		../../include/qwt_point_polar.h \
 		../../include/qwt_math.h \
 		../../include/qwt_series_store.h \
-		../../include/qwt_plot_zoomer.h \
-		../../include/qwt_plot_picker.h \
-		../../include/qwt_picker.h \
-		../../include/qwt_event_pattern.h \
-		../../include/qwt_plot_panner.h \
-		../../include/qwt_panner.h \
-		../../include/qwt_plot_canvas.h \
-		../../include/qwt_plot_renderer.h \
-		../../include/qwt_plot_grid.h \
-		../../include/qwt_legend.h \
-		../../include/qwt_abstract_legend.h \
-		../../panel.h \
-		../../panel_item.h \
-		../../iad_panel.h \
-		../../pol_panel.h \
-		../../pol_plot.h \
-		../../pol_panelItem.h \
-		../../pol_configureMeasurement.h \
-		release/.ui/ui_pol_panel.h \
-		../../clickablelabel.h \
-		../../spectrometer.h \
 		../../include/avaspec.h \
 		../../include/type.h \
 		../../include/extcode.h
@@ -1643,8 +1658,6 @@ release/.obj/pol_panel.o: ../../pol_panel.cpp ../../include/qwt_plot_renderer.h 
 		../../include/extcode.h \
 		../../messages.h \
 		../../timer.h \
-		../../pol_fft.h \
-		../../include/fftw3.h \
 		../../math_helper.h \
 		../../pol_plot.h \
 		../../include/qwt_plot_curve.h \
@@ -1662,13 +1675,8 @@ release/.obj/pol_panel.o: ../../pol_panel.cpp ../../include/qwt_plot_renderer.h 
 		../../include/qwt_point_polar.h \
 		../../include/qwt_math.h \
 		../../include/qwt_series_store.h \
-		../../panel_change_averages.h \
-		../../panel_change_time.h \
-		../../pol_changeWave_FFT.h \
-		../../pol_panelItem.h \
-		release/.ui/ui_pol_panelItem.h \
-		../../clickablelabel.h \
 		../../pol_panel.h \
+		../../pol_panelItem.h \
 		../../pol_configureMeasurement.h \
 		release/.ui/ui_pol_panel.h \
 		../../plot.h \
@@ -1686,10 +1694,19 @@ release/.obj/pol_panel.o: ../../pol_panel.cpp ../../include/qwt_plot_renderer.h 
 		../../include/qwt_plot_grid.h \
 		../../include/qwt_legend.h \
 		../../include/qwt_abstract_legend.h \
+		../../clickablelabel.h \
+		../../pol_fft.h \
+		../../include/fftw3.h \
+		../../pol_panelHelp.h \
+		../../pol_measurements.h \
+		../../pol_changeWave_FFT.h \
+		../../panel_change_averages.h \
+		../../panel_change_time.h \
 		../../panel.h \
 		../../panel_item.h \
 		../../iad_panel.h \
-		../../pol_panelHelp.h \
+		release/.ui/ui_pol_panelItem.h \
+		release/.ui/ui_pol_configureMeasurement.h \
 		../../spectrometer.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\.obj\pol_panel.o ..\..\pol_panel.cpp
 
@@ -1711,6 +1728,14 @@ release/.obj/pol_plot.o: ../../pol_plot.cpp ../../pol_plot.h \
 		../../include/qwt_math.h \
 		../../include/qwt_series_store.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\.obj\pol_plot.o ..\..\pol_plot.cpp
+
+release/.obj/pol_measurements.o: ../../pol_measurements.cpp ../../pol_measurements.h \
+		../../timer.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\.obj\pol_measurements.o ..\..\pol_measurements.cpp
+
+release/.obj/pol_externConf.o: ../../pol_externConf.cpp ../../pol_externConf.h \
+		../../messages.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\.obj\pol_externConf.o ..\..\pol_externConf.cpp
 
 release/.obj/qrc_icons.o: release/.rcc/qrc_icons.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\.obj\qrc_icons.o release\.rcc\qrc_icons.cpp
@@ -1804,6 +1829,12 @@ release/.obj/moc_pol_panel.o: release/.moc/moc_pol_panel.cpp
 
 release/.obj/moc_pol_plot.o: release/.moc/moc_pol_plot.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\.obj\moc_pol_plot.o release\.moc\moc_pol_plot.cpp
+
+release/.obj/moc_pol_measurements.o: release/.moc/moc_pol_measurements.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\.obj\moc_pol_measurements.o release\.moc\moc_pol_measurements.cpp
+
+release/.obj/moc_pol_externConf.o: release/.moc/moc_pol_externConf.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\.obj\moc_pol_externConf.o release\.moc\moc_pol_externConf.cpp
 
 ####### Install
 

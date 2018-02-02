@@ -22,6 +22,9 @@
      <height>22</height>
     </rect>
    </property>
+   <property name="toolTip">
+    <string>Set Wavelength</string>
+   </property>
    <property name="text">
     <string>Set</string>
    </property>
@@ -34,6 +37,9 @@
      <width>91</width>
      <height>22</height>
     </rect>
+   </property>
+   <property name="toolTip">
+    <string>Choose a Wavelength</string>
    </property>
   </widget>
   <widget class="QLabel" name="label">

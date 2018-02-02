@@ -124,6 +124,9 @@
    <property name="cursor">
     <cursorShape>PointingHandCursor</cursorShape>
    </property>
+   <property name="toolTip">
+    <string>Change Integration Time</string>
+   </property>
    <property name="text">
     <string>&lt;value&gt;</string>
    </property>
@@ -147,6 +150,9 @@
    </property>
    <property name="cursor">
     <cursorShape>PointingHandCursor</cursorShape>
+   </property>
+   <property name="toolTip">
+    <string>Change Number of Averages</string>
    </property>
    <property name="text">
     <string>&lt;value&gt;</string>
@@ -175,6 +181,9 @@
      <weight>75</weight>
      <bold>true</bold>
     </font>
+   </property>
+   <property name="toolTip">
+    <string>Spectrometer Name</string>
    </property>
    <property name="text">
     <string>&lt;name&gt;</string>
@@ -206,6 +215,9 @@
    <property name="cursor">
     <cursorShape>PointingHandCursor</cursorShape>
    </property>
+   <property name="toolTip">
+    <string>Auto Adjust Integration Time</string>
+   </property>
    <property name="text">
     <string>Auto Adjust</string>
    </property>
@@ -221,6 +233,9 @@
      <width>251</width>
      <height>16</height>
     </rect>
+   </property>
+   <property name="toolTip">
+    <string>Which spectrometer is active?</string>
    </property>
    <property name="text">
     <string>Active</string>

@@ -47,10 +47,6 @@
 #include <fftw3.h>
 #include <complex.h>
 
-/* Panel */
-#include "ui_panel.h"
-#include "panel.h"
-
 /* Spectrometer control */
 #include "spectrometer.h"
 
@@ -546,4 +542,12 @@ void fft::saveFFTtoFile(QFileInfo FileDetails)
 
     /* Free pointer */
     fileFFT = nullptr;
+}
+
+/**
+ * @brief Destructor of 'fft' class
+ */
+fft::~fft(void)
+{
+
 }

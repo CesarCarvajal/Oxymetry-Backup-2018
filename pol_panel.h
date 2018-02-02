@@ -33,7 +33,6 @@
 #include <QTimer>
 #include <QLineEdit>
 #include <QCloseEvent>
-#include <QElapsedTimer>
 
 /* Panel stuff */
 #include <QWidget>
@@ -41,8 +40,6 @@
 /* Qwt library */
 #include "qwt_plot_curve.h"
 #include "math_helper.h"
-#include "timer.h"
-
 
 /*
  * Internal includes
@@ -55,6 +52,7 @@
 #include "ui_pol_panel.h"
 #include "pol_fft.h"
 #include "pol_panelHelp.h"
+#include "pol_measurements.h"
 
 /*
  * Other stuff
@@ -99,9 +97,6 @@ private slots:
     /* Open help dialog */
     void help(void);
 
-    /* Restart important calibration parameters */
-    void restart_CalibrationPol(void);
-
     /* Change Nr of averages during calibration */
     void change_NrAveragesPol(void);
 
@@ -131,6 +126,9 @@ private slots:
 
     /* Do calibration routine */
     void Pol_Calibrate(void);
+
+    /* Do Measurement routine */
+    void Pol_Measure(void);
 
     /* Initialize a calibration without a configuration file loaded */
     void initializeDefaultCalibration(void);
@@ -192,6 +190,12 @@ private slots:
     /* Plot Averages */
     void plotAverage(void);
 
+    /* Adjust the polarimeter tab running start */
+    void AdjustRunStart(short int typeRun);
+
+    /* Adjust the polarimeter tab running End */
+    void AdjustRunEnd(short int typeRunn);
+
 private:
 
     QSignalMapper *signalMapper;
@@ -208,11 +212,8 @@ private:
     /* Was there data loaded? */
     bool dataloaded = false;
 
-    /* Stop the calibration in the right time */
-    bool delayStop, delayedStop = false;
-
-    /* Stop calibration and restart it after any change */
-    bool change = false;
+    /* Get current path to executable */
+    QString current;
 
     /* FFT Object */
     fft FFTL;
@@ -220,50 +221,24 @@ private:
     /* Plot Objetct */
     Pol_Plot *pol_plot = nullptr;
 
-    /* Variables to count time and plot the real time averages */
-    int time_plot=300;
-
-    /* General Timer in seconds */
-    int time_seconds=0;
-
-    /* Time busy with FFT */
-    int doliveFFT = 0;
-
     /* Range of Wavelengths */
     double minWavelength = 400.0, maxWavelength = 1000.0;
-
-    /* Show raw signal also when long term measuring running */
-    bool showRaw = false;
-    double maxCounts = -1;
 
     QString greenButton = "color: rgb(0,128,0)", RedButton = "color: rgb(250,0,0)", grayButton = "color: rgb(211,211,211)";
 
     /* Saves old values of frequency or Nr Spectra from labels in calibration */
     QString OldFreqValue, OldSpectraValue = "";
 
-    /* Local Timer */
-    QElapsedTimer timer;
+    /* Index of configured waiting time in measurements */
+    unsigned int Timeindex = 0;
 
 public:
 
     QList<PanelItem_Pol *> devices2;
     QList<QwtPlotCurve *> curves_Pol;
 
-    /* Are we measuring or calibrating? */
-    bool PolMeasurementRunning = false;
-    bool PolCalibrationRunning = false;
-
     /* The number of the spectrometer in use for polarimeter */
     int SpectrometerNumber = 0;
-
-    /* Was there a configuration profile for the measurement loaded? */
-    bool measurement_Pol_profileLoaded = false;
-
-    /* When calibrating we don't need to save all this data, so just use a temporal file deleted at the end of the calibration */
-    QString TempFileName;
-
-    /* When doing changes, we have to know when it's busy doing the live FFT */
-    bool doingLiveFFT = false;
 
     /* The user modifies this when calibrating */
     QLineEdit *ColumnSpectra = new QLineEdit();
@@ -275,11 +250,11 @@ public:
     /* If this changes, then quit everything */
     bool abort_everything = false;
 
-    /* Calibration progress */
-    int Cal_progress = 0;
-
     /* Help Dialog object */
     PanelPolHelp* helpDialog;
+
+    /* Measurements Object */
+    Pol_Measurements *Runner = nullptr;
 
 public slots:
 

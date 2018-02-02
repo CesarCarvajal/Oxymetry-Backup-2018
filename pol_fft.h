@@ -26,6 +26,7 @@
 /* Qt library */
 #include <QString>
 #include <QFileDialog>
+#include "qobject.h"
 
 /*
  * Internal includes
@@ -37,7 +38,7 @@
 /**
  * @brief The 'FFT' class
  */
-class fft
+class fft : public QObject
 {
 
 public:
@@ -79,13 +80,14 @@ public:
     /* The position in the array of FFT to show by default */
     int SelectedWaveL=404;
 
-private:
-
     /* OutputFFT */
     fftw_complex *outputFFT = nullptr;
 
     /* Read info from file */
     void ReadFileName(QString ExtractInfoName, QString FilePath, bool isTXT);
+
+    /* Destructor */
+    ~fft(void);
 
 };
 
