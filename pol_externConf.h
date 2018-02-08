@@ -43,6 +43,7 @@ public:
     int NrSpectra;
     int Frequency;
     float IntegrationTime;
+    int NrAverages;
 
     /* Refilling Times */
     int fillRefill;
@@ -66,17 +67,23 @@ public:
     /* Path to save configuration file */
     QString pathFile;
 
-    /* Save configuration to file */
-    void SaveConfToFile(void);
-
     /* Open Nemesys Pump Software */
     void openPumpSoftware(void);
 
     /* Generate pump files */
-    void GeneratePumpScripts(void);
+    void GenerateGlucosePumpScript(void);
+
+    /* Generate Spectrometer configuration */
+    void GenerateSpectrometerConfiguration(QVector<double> GlucoseConcentration, QVector<double> Impurity1Concentration);
 
     /* Replaces the function of matlab */
     void pumpsPatternCalculator(void);
+
+    /* Write pump files sequence */
+    void writePumpFile(FILE* pumpFile);
+
+    /* Returns the correlation coefficient */
+    float correlationCoefficient(QVector <double> X, QVector <double> Y, int N);
 
     /* Destructor */
     ~Pol_ExternConf(void);

@@ -65,7 +65,7 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     connect(signalMapperC, SIGNAL(mapped(QWidget *)), this, SLOT(handleClickEvent(QWidget *)));
 
     /* Set window flags */
-    this->setWindowFlags(Qt::Dialog | Qt::WindowTitleHint | Qt::WindowStaysOnTopHint);
+    this->setWindowFlags(Qt::Dialog | Qt::WindowTitleHint | Qt::WindowStaysOnTopHint  | Qt::WindowCloseButtonHint);
 
     /* Connect buttons to signal mapper */
     connect(ui->pushButton_select, SIGNAL(clicked()), this, SLOT(selectPath()));
@@ -98,7 +98,6 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     connect(ui->lineEdit_ShortBreak, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
     connect(ui->lineEdit_LongBreak, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
     connect(ui->lineEdit_AbsFlow, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
-    connect(ui->lineEdit_Idle, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
     connect(ui->lineEdit_NSteps, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
     connect(ui->lineEdit_FillingTime, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
     connect(ui->lineEdit_FillSyringe, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
@@ -132,7 +131,6 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     signalMapperC->setMapping(ui->lineEdit_ShortBreak, ui->lineEdit_ShortBreak);
     signalMapperC->setMapping(ui->lineEdit_LongBreak, ui->lineEdit_LongBreak);
     signalMapperC->setMapping(ui->lineEdit_AbsFlow, ui->lineEdit_AbsFlow);
-    signalMapperC->setMapping(ui->lineEdit_Idle, ui->lineEdit_Idle);
     signalMapperC->setMapping(ui->lineEdit_NSteps, ui->lineEdit_NSteps);
     signalMapperC->setMapping(ui->lineEdit_FillingTime, ui->lineEdit_FillingTime);
     signalMapperC->setMapping(ui->lineEdit_FillSyringe, ui->lineEdit_FillSyringe);
@@ -149,9 +147,6 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
 
     /* Not configuration loaded */
     configured = false;
-
-    /* Get Default Data */
-    GetConfigurationData();
 
 }
 
@@ -437,51 +432,42 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
                             ui->lineEdit_AbsFlow->setText("18.75");
                         }
                     }else
-                        /* The user decide to change the Idle */
-                        if(LineLabel == ui->lineEdit_Idle && ui->lineEdit_Idle->text().toInt(&ok) >= 0){
+                        /* The user decide to change the Nr Steps */
+                        if(LineLabel == ui->lineEdit_NSteps && ui->lineEdit_NSteps->text().toInt(&ok) >= 0){
 
                             /* Is there a valid number */
                             if(!ok){
                                 /* Set back default value */
-                                ui->lineEdit_Idle->setText("0");
+                                ui->lineEdit_NSteps->setText("5");
                             }
                         }else
-                            /* The user decide to change the Nr Steps */
-                            if(LineLabel == ui->lineEdit_NSteps && ui->lineEdit_NSteps->text().toInt(&ok) >= 0){
+                            /* The user decide to change the Filling Time */
+                            if(LineLabel == ui->lineEdit_FillingTime && ui->lineEdit_FillingTime->text().toInt(&ok) >= 0){
 
                                 /* Is there a valid number */
                                 if(!ok){
                                     /* Set back default value */
-                                    ui->lineEdit_NSteps->setText("5");
+                                    ui->lineEdit_FillingTime->setText("80");
                                 }
                             }else
-                                /* The user decide to change the Filling Time */
-                                if(LineLabel == ui->lineEdit_FillingTime && ui->lineEdit_FillingTime->text().toInt(&ok) >= 0){
+                                /* The user decide to change the Syringe Filling Time */
+                                if(LineLabel == ui->lineEdit_FillSyringe && ui->lineEdit_FillSyringe->text().toInt(&ok) >= 0){
 
                                     /* Is there a valid number */
                                     if(!ok){
                                         /* Set back default value */
-                                        ui->lineEdit_FillingTime->setText("80");
+                                        ui->lineEdit_FillSyringe->setText("80");
                                     }
                                 }else
-                                    /* The user decide to change the Syringe Filling Time */
-                                    if(LineLabel == ui->lineEdit_FillSyringe && ui->lineEdit_FillSyringe->text().toInt(&ok) >= 0){
+                                    /* The user decide to change the Cuvette Flushing */
+                                    if(LineLabel == ui->lineEdit_CuvetteFlush && ui->lineEdit_CuvetteFlush->text().toInt(&ok) >= 0){
 
                                         /* Is there a valid number */
                                         if(!ok){
                                             /* Set back default value */
-                                            ui->lineEdit_FillSyringe->setText("80");
+                                            ui->lineEdit_CuvetteFlush->setText("80");
                                         }
-                                    }else
-                                        /* The user decide to change the Cuvette Flushing */
-                                        if(LineLabel == ui->lineEdit_CuvetteFlush && ui->lineEdit_CuvetteFlush->text().toInt(&ok) >= 0){
-
-                                            /* Is there a valid number */
-                                            if(!ok){
-                                                /* Set back default value */
-                                                ui->lineEdit_CuvetteFlush->setText("80");
-                                            }
-                                        }
+                                    }
 
         /* File name preview */
         ui->lineEdit_BFileNamePrev->setText("0C1_0C2_" + QString::number(ui->lineEdit_BIntTime->text().toFloat()) + "ms_"
@@ -501,25 +487,25 @@ void configurePolMeasure::configurePolarimeter(void)
     GetConfigurationData();
 
     /* Get path to save configuration file */
-    externSoftware->pathFile = QFileDialog::getSaveFileName(this, tr("Polarimeter Configuration File"), "", "Text files (*.txt)");
-    path = externSoftware->pathFile;
+    path = QFileDialog::getSaveFileName(this, tr("Save Configuration File"), "spectrometer_skript", "Text files (*.txt)");
 
-    /* Calculate the needed scripts for the measurements */
-    externSoftware->pumpsPatternCalculator();
+    if(!path.isEmpty()){
 
-    /* Load saved file */
-    //  loadConfiguration();
+        /* Get path to create configuration file */
+        externSoftware->pathFile = path;
 
-    /* Save that a configuration file was loaded */
-    //     configured = true;
+        /* Calculate the needed scripts for the measurements */
+        externSoftware->pumpsPatternCalculator();
 
-    /* Run pumps software */
-    //     externSoftware->openPumpSoftware();
+        /* Load saved file */
+        loadConfiguration();
 
-    /* Finish the window */
-    //      accept();
-    //}
+        /* Save that a configuration file was loaded */
+        configured = true;
 
+        /* Finish the window */
+        accept();
+    }
 }
 
 /**
@@ -630,7 +616,7 @@ void configurePolMeasure::cancel(void)
     /* The user aborted the load of a configuration, so don't adjust GUI */
     Conf_canceled = true;
 
-    /* Close dialog */
+   /* Close dialog */
     reject();
 }
 
@@ -654,42 +640,43 @@ void configurePolMeasure::GetConfigurationData(void)
 
     /* Get Number of Averages */
     numberOfAverages = ui->lineEdit_BNAve->text().toInt();
+    externSoftware->NrAverages = numberOfAverages;
 
     /* Get Number of Measurements */
     NrMeasurements = ui->lineEdit_BNMeas->text().toInt();
     externSoftware->NConcentrations = NrMeasurements;
 
     /* Get Refilling Times */
-    externSoftware->fillRefill = ui->lineEdit_FillingTime->text().toInt() / ui->lineEdit_NSteps->text().toInt();
-    externSoftware->refillSyringe = ui->lineEdit_FillSyringe->text().toInt() / ui->lineEdit_NSteps->text().toInt();
-    externSoftware->flushingCuvette = ui->lineEdit_CuvetteFlush->text().toInt() / ui->lineEdit_NSteps->text().toInt();
+    externSoftware->fillRefill = ui->lineEdit_FillingTime->text().toDouble() / ui->lineEdit_NSteps->text().toDouble();
+    externSoftware->refillSyringe = ui->lineEdit_FillSyringe->text().toDouble() / ui->lineEdit_NSteps->text().toDouble();
+    externSoftware->flushingCuvette = ui->lineEdit_CuvetteFlush->text().toDouble() / ui->lineEdit_NSteps->text().toDouble();
 
     /* Get Flows */
     externSoftware->absoluteFlow = ui->lineEdit_AbsFlow->text().toDouble();
-    externSoftware->idle = ui->lineEdit_Idle->text().toInt();
+    externSoftware->idle =ui->checkBox->isChecked();
 
     /* Break Times */
-    externSoftware->shortBreak = ui->lineEdit_ShortBreak->text().toInt();
-    externSoftware->longBreak = ui->lineEdit_LongBreak->text().toInt();
+    externSoftware->shortBreak = ui->lineEdit_ShortBreak->text().toDouble();
+    externSoftware->longBreak = ui->lineEdit_LongBreak->text().toDouble();
 
     /* Stock Solutions */
-    externSoftware->stockSolutions.append(ui->lineEdit_StockWater->text().toInt());
-    externSoftware->stockSolutions.append(ui->lineEdit_StockGluc->text().toInt());
-    externSoftware->stockSolutions.append(ui->lineEdit_StockImp1->text().toInt());
-    externSoftware->stockSolutions.append(ui->lineEdit_StockImp2->text().toInt());
+    externSoftware->stockSolutions.replace(0,ui->lineEdit_StockWater->text().toDouble());
+    externSoftware->stockSolutions.replace(1,ui->lineEdit_StockGluc->text().toDouble());
+    externSoftware->stockSolutions.replace(2,ui->lineEdit_StockImp1->text().toDouble());
+    externSoftware->stockSolutions.replace(3,ui->lineEdit_StockImp2->text().toDouble());
 
     /* Minimum Concentrations */
-    externSoftware->minConcentrations.append(ui->lineEdit_Mingluc->text().toInt());
-    externSoftware->minConcentrations.append(ui->lineEdit_MinImp1->text().toInt());
-    externSoftware->minConcentrations.append(ui->lineEdit_MinImp2->text().toInt());
+    externSoftware->minConcentrations.replace(0,ui->lineEdit_Mingluc->text().toDouble());
+    externSoftware->minConcentrations.replace(1,ui->lineEdit_MinImp1->text().toDouble());
+    externSoftware->minConcentrations.replace(2,ui->lineEdit_MinImp2->text().toDouble());
 
     /* Maximum Concentrations */
-    externSoftware->maxConcentrations.append(ui->lineEdit_MaxGluc->text().toInt());
-    externSoftware->maxConcentrations.append(ui->lineEdit_MaxImp1->text().toInt());
-    externSoftware->maxConcentrations.append(ui->lineEdit_MaxImp2->text().toInt());
+    externSoftware->maxConcentrations.replace(0,ui->lineEdit_MaxGluc->text().toDouble());
+    externSoftware->maxConcentrations.replace(1,ui->lineEdit_MaxImp1->text().toDouble());
+    externSoftware->maxConcentrations.replace(2,ui->lineEdit_MaxImp2->text().toDouble());
 
     /* Get additional time for intervals */
-    externSoftware->TimeIntervals = ui->lineEdit_BtimeInterval->text().toInt();
+    externSoftware->TimeIntervals = ui->lineEdit_BtimeInterval->text().toDouble();
 
     /* Very long Int Time? */
     if(integrationTime > 200){

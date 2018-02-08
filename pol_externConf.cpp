@@ -26,12 +26,18 @@
 #include "messages.h"
 #include "qdebug.h"
 #include "stdlib.h"
+#include <math.h>
 
 /**
  * @brief Constructor of 'Pol_ExternConf' class
  */
 Pol_ExternConf::Pol_ExternConf()
 {
+
+    /* Set size of vectors */
+    stockSolutions.reserve(4);
+    maxConcentrations.reserve(3);
+    minConcentrations.reserve(3);
 
 }
 
@@ -81,91 +87,190 @@ void Pol_ExternConf::openPumpSoftware(void){
  */
 void Pol_ExternConf::pumpsPatternCalculator(void){
 
+    /* Get gaps between concentrations */
     double gapGlucose, gapImpurity1, gapImpurity2;
 
+    /* Concentrations */
     QVector <double> GlucoseConcentration(NConcentrations);
     QVector <double> Impurity1Concentration(NConcentrations);
     QVector <double> Impurity2Concentration(NConcentrations);
 
+    /* Flows */
     QVector <double> WaterFlow(NConcentrations);
     QVector <double> GlucoseFlow(NConcentrations);
     QVector <double> Impurity1Flow(NConcentrations);
     QVector <double> Impurity2Flow(NConcentrations);
 
-    for(int index= 0; index < 1000; index++){
+    /* Measurements vector */
+    QVector <double> Nmeasurements(NConcentrations);
 
-        /* Gap between concentrations */
-        gapGlucose = (maxConcentrations.at(1) - minConcentrations.at(1))/(NConcentrations-1);
-        gapImpurity1 = (maxConcentrations.at(2) - minConcentrations.at(2))/(NConcentrations-1);
-        gapImpurity2 = (maxConcentrations.at(3) - minConcentrations.at(3))/(NConcentrations-1);
+    /* Gap between concentrations */
+    gapGlucose = (maxConcentrations.at(0) - minConcentrations.at(0))/(NConcentrations-1);
+    gapImpurity1 = (maxConcentrations.at(1) - minConcentrations.at(1))/(NConcentrations-1);
+    gapImpurity2 = (maxConcentrations.at(2) - minConcentrations.at(2))/(NConcentrations-1);
 
-        /* Create vectors with indexes and solution concentrations */
-        for(int k =0; k < NConcentrations; k++){
+    /* Create vectors with indexes and solution concentrations */
+    for(int k =0; k < NConcentrations; k++){
 
-            /* Concentrations */
-            GlucoseConcentration.append(minConcentrations.at(1) + k*gapGlucose);
-            Impurity1Concentration.append(minConcentrations.at(2) + k*gapImpurity1);
-            Impurity2Concentration.append(minConcentrations.at(3) + k*gapImpurity2);
-        }
+        /* Concentrations */
+        GlucoseConcentration.replace(k,(minConcentrations.at(0)) + (k*gapGlucose));
+        Impurity1Concentration.replace(k,minConcentrations.at(1) + k*gapImpurity1);
+        Impurity2Concentration.replace(k,minConcentrations.at(2) + k*gapImpurity2);
+        Nmeasurements.replace(k, k);
+
+    }
+
+    /* Check correlation factor */
+    while(true){
+
+        /* Correlation factors */
+        float corrcoeffImpurities = 1, corrcoeffTime = 1;
 
         /* Random Indexes */
         std::random_shuffle(GlucoseConcentration.begin(), GlucoseConcentration.end());
         std::random_shuffle(Impurity1Concentration.begin(), Impurity1Concentration.end());
         std::random_shuffle(Impurity2Concentration.begin(), Impurity2Concentration.end());
 
-        /* Flow Calculation */
-        for(int k =0; k < NConcentrations; k++){
+        /* Correlation? */
+        corrcoeffImpurities = correlationCoefficient(GlucoseConcentration, Impurity1Concentration, NConcentrations);
+        corrcoeffTime = correlationCoefficient(Nmeasurements, GlucoseConcentration, NConcentrations);
 
-            /* Concentrations */
-            GlucoseFlow.append((GlucoseConcentration.at(k))/(stockSolutions.at(2)*absoluteFlow));
-            Impurity1Flow.append((Impurity1Concentration.at(k))/(stockSolutions.at(3)*absoluteFlow));
-            Impurity2Flow.append((Impurity2Concentration.at(k))/(stockSolutions.at(4)*absoluteFlow));
-
-            /* Water Flow */
-            WaterFlow.append(absoluteFlow - (GlucoseFlow.at(k) + Impurity1Flow.at(k) + Impurity2Flow.at(k)));
+        /* If no correlation, then stop doing random order */
+        if(corrcoeffImpurities <= 0.05 && corrcoeffTime <= 0.05 ){
+            break;
         }
-
-
     }
 
-    /* Create the pump scripts */
-    GeneratePumpScripts();
+    /* Flow Calculation */
+    for(int i =0; i < NConcentrations; i++){
 
-}
+        /* Concentrations */
+        GlucoseFlow.replace(i,(GlucoseConcentration.at(i))/(stockSolutions.at(1)*absoluteFlow));
+        Impurity1Flow.replace(i,(Impurity1Concentration.at(i))/(stockSolutions.at(2)*absoluteFlow));
+        Impurity2Flow.replace(i,(Impurity2Concentration.at(i))/(stockSolutions.at(3)*absoluteFlow));
 
-/**
- * @brief Save Configuration to file
- */
-void Pol_ExternConf::SaveConfToFile(void){
+        /* Water Flow */
+        WaterFlow.replace(i,absoluteFlow - (GlucoseFlow.at(i) + Impurity1Flow.at(i) + Impurity2Flow.at(i)));
+    }
 
-    /* Did user select a path? */
-    //   if (!path.isEmpty())
-    //   {
+    /* Create the Glucose pump script */
+    GenerateGlucosePumpScript();
 
-    //      FILE *file = fopen(path.toLatin1().data(), "wt");
-
-    //      for(int k = 1 ; k < NrMeasurements+1; k++){
-
-    //       QString line = QString::number(k*TimeIntervals*1000) + ";" + "0C1_0C2_"
-    //               + QString::number(integrationTime) + "ms_" + QString::number(freqToMeasure) + "Hz_" + QString::number(k) + ";" + QString::number(numSpectra) +
-    //               ";" + QString::number(integrationTime) + ";" + QString::number(numberOfAverages) + ";" + QString::number(freqToMeasure) + "\n";
-
-    //        fprintf(file, "%s", line.toLatin1().data());
-    //    }
-
-    /* Close file */
-    //     fclose(file);
-    //     file = nullptr;
-    //  }
+    /* Create the Spectrometer Script */
+    GenerateSpectrometerConfiguration(GlucoseConcentration, Impurity1Concentration);
 }
 
 /**
  * @brief Generate Pump Scripts
  */
-void Pol_ExternConf::GeneratePumpScripts(void){
+void Pol_ExternConf::GenerateGlucosePumpScript(void){
 
+    /* Get folder information */
+    QFileInfo folder(pathFile);
+
+    QString glucoseSciptPath = folder.absolutePath() + "/GlucosePumpScript.nfp";
+
+    /* Open the file */
+    FILE *Glucosefile = fopen(glucoseSciptPath.toLatin1().data(), "wt");
+
+    /* Write in file */
+    fprintf(Glucosefile, "%s", "ml/min \n");
+
+    /* Flow Calculation */
+    for(int k =0; k < NConcentrations; k++){
+
+        /* Write in file */
+        writePumpFile(Glucosefile);
+
+    }
+
+    /* Close file */
+    fclose(Glucosefile);
+    Glucosefile = nullptr;
 
 }
+
+/**
+ * @brief Generate Spectrometer configuration
+ */
+void Pol_ExternConf::GenerateSpectrometerConfiguration(QVector <double> GlucoseConcentration, QVector <double> Impurity1Concentration){
+
+    /* Open the file */
+    FILE *file = fopen(pathFile.toLatin1().data(), "wt");
+
+    /* Write measurement configuration for each concentration */
+    for(int j = 0 ; j < NConcentrations; j++){
+
+        /* Time intervals between measurements */
+        int startTime = (10*fillRefill + 20*shortBreak + 7) + TimeIntervals*j;
+
+        /* Configuration line */
+        QString line = QString::number(startTime*1000) + ";" + QString::number(GlucoseConcentration.at(j)) + "C1_" + QString::number(Impurity1Concentration.at(j)) + "C2_"
+                + QString::number(IntegrationTime) + "ms_" + QString::number(Frequency) + "Hz_" + QString::number(j+1) + ";" + QString::number(NrSpectra) +
+                ";" + QString::number(IntegrationTime) + ";" + QString::number(NrAverages) + ";" + QString::number(Frequency) + "\n";
+
+        /* Write in file */
+        fprintf(file, "%s", line.toLatin1().data());
+    }
+
+    /* Close file */
+    fclose(file);
+    file = nullptr;
+
+}
+
+/**
+ * @brief Write Pump File
+ */
+void Pol_ExternConf::writePumpFile(FILE *pumpFile){
+
+    /* fprintf(pumpFile, "%s", (QString::number(0) + "\t" + QString::number(0) + "\t" + QString::number(0) + "\n").toLatin1().data());
+    fprintf(pumpFile, "%s", (QString::number(1) + "\t" + QString::number(0) + "\t" + QString::number(0) + "\n").toLatin1().data());
+    fprintf(pumpFile, "%s", (QString::number(2) + "\t" + QString::number(0) + "\t" + QString::number(0) + "\n").toLatin1().data());
+    fprintf(pumpFile, "%s", (QString::number(3) + "\t" + QString::number(0) + "\t" + QString::number(0) + "\n").toLatin1().data());
+    fprintf(pumpFile, "%s", (QString::number(4) + "\t" + QString::number(0) + "\t" + QString::number(0) + "\n").toLatin1().data());
+    fprintf(pumpFile, "%s", (QString::number(5) + "\t" + QString::number(0) + "\t" + QString::number(0) + "\n").toLatin1().data());
+    fprintf(pumpFile, "%s", (QString::number(6) + "\t" + QString::number(0) + "\t" + QString::number(0) + "\n").toLatin1().data());
+    fprintf(pumpFile, "%s", (QString::number(7) + "\t" + QString::number(0) + "\t" + QString::number(0) + "\n").toLatin1().data());
+    fprintf(pumpFile, "%s", (QString::number(8) + "\t" + QString::number(0) + "\t" + QString::number(0) + "\n").toLatin1().data());
+    fprintf(pumpFile, "%s", (QString::number(9) + "\t" + QString::number(0) + "\t" + QString::number(0) + "\n").toLatin1().data());
+    fprintf(pumpFile, "%s", (QString::number(10) + "\t" + QString::number(0) + "\t" + QString::number(0) + "\n").toLatin1().data());
+    fprintf(pumpFile, "%s", (QString::number(11) + "\t" + QString::number(0) + "\t" + QString::number(0) + "\n").toLatin1().data());
+    fprintf(pumpFile, "%s", (QString::number(12) + "\t" + QString::number(0) + "\t" + QString::number(0) + "\n").toLatin1().data());
+    fprintf(pumpFile, "%s", (QString::number(13) + "\t" + QString::number(0) + "\t" + QString::number(0) + "\n").toLatin1().data());
+    fprintf(pumpFile, "%s", (QString::number(14) + "\t" + QString::number(0) + "\t" + QString::number(0) + "\n").toLatin1().data());
+    fprintf(pumpFile, "%s", (QString::number(15) + "\t" + QString::number(0) + "\t" + QString::number(0) + "\n").toLatin1().data());*/
+}
+
+/**
+ * @brief Calculate the correlation coefficient
+ */
+float Pol_ExternConf::correlationCoefficient(QVector <double> X, QVector <double> Y, int N){
+
+    /* Variables to calculate the correlation factor */
+    double sumX=0, sumY = 0, sumX2 = 0, sumY2 = 0, sumXY = 0;
+
+    /* Sum through the vectors */
+    for(int i = 0; i < N; i++){
+
+        /* Sum of vector values */
+        sumX = sumX + X.at(i);
+        sumY= sumY + Y.at(i);
+
+        /* Sum of squares of vectors*/
+        sumX2 = sumX2 + (X.at(i)*X.at(i));
+        sumY2 = sumY2 + (Y.at(i)*Y.at(i));
+
+        /* Sum of multiplication of vectors */
+        sumXY = sumXY + (X.at(i) * Y.at(i));
+    }
+
+    /* Get the correlation coefficient */
+    float corrcoeff = abs(((N*sumXY) - (sumX*sumY))/(sqrt(((N*sumX2) - (sumX*sumX))*((N*sumY2) - (sumY*sumY)))));
+
+    return corrcoeff;
+}
+
 
 /**
  * @brief Destructor of 'Pol_ExternConf' class

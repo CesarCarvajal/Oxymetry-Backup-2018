@@ -245,7 +245,7 @@ public:
     QLineEdit *ColumnFreq = new QLineEdit();
 
     /* Load configuration class */
-    configurePolMeasure ConfigureMeasurement;
+    configurePolMeasure *ConfigureMeasurement;
 
     /* If this changes, then quit everything */
     bool abort_everything = false;

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>786</width>
-    <height>781</height>
+    <height>797</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -1615,12 +1615,12 @@
              <string>Activating syringe idle to ensure constant temperature 0=normal, 1=idle</string>
             </property>
             <property name="text">
-             <string>Idle:</string>
+             <string>Idle Mode:</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="lineEdit_Idle">
+           <widget class="QCheckBox" name="checkBox">
             <property name="minimumSize">
              <size>
               <width>130</width>
@@ -1633,11 +1633,8 @@
               <height>16777215</height>
              </size>
             </property>
-            <property name="toolTip">
-             <string>Activating syringe idle to ensure constant temperature 0=normal, 1=idle</string>
-            </property>
             <property name="text">
-             <string>0</string>
+             <string/>
             </property>
            </widget>
           </item>
@@ -2018,6 +2015,9 @@
            <width>150</width>
            <height>30</height>
           </size>
+         </property>
+         <property name="toolTip">
+          <string>Generate Configuration File</string>
          </property>
          <property name="text">
           <string>Generate Configuration</string>

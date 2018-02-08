@@ -13,6 +13,7 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
@@ -136,7 +137,7 @@ public:
     QLabel *label_AbsFlow2;
     QSpacerItem *horizontalSpacer_5;
     QLabel *label_Idle;
-    QLineEdit *lineEdit_Idle;
+    QCheckBox *checkBox;
     QSpacerItem *horizontalSpacer_22;
     QLabel *label_NSteps;
     QLineEdit *lineEdit_NSteps;
@@ -169,7 +170,7 @@ public:
     {
         if (configurePolMeasure->objectName().isEmpty())
             configurePolMeasure->setObjectName(QStringLiteral("configurePolMeasure"));
-        configurePolMeasure->resize(786, 781);
+        configurePolMeasure->resize(786, 797);
         gridLayout = new QGridLayout(configurePolMeasure);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         verticalLayout = new QVBoxLayout();
@@ -769,12 +770,12 @@ public:
 
         horizontalLayout_7->addWidget(label_Idle);
 
-        lineEdit_Idle = new QLineEdit(ConfigurationLayout);
-        lineEdit_Idle->setObjectName(QStringLiteral("lineEdit_Idle"));
-        lineEdit_Idle->setMinimumSize(QSize(130, 0));
-        lineEdit_Idle->setMaximumSize(QSize(130, 16777215));
+        checkBox = new QCheckBox(ConfigurationLayout);
+        checkBox->setObjectName(QStringLiteral("checkBox"));
+        checkBox->setMinimumSize(QSize(130, 0));
+        checkBox->setMaximumSize(QSize(130, 16777215));
 
-        horizontalLayout_7->addWidget(lineEdit_Idle);
+        horizontalLayout_7->addWidget(checkBox);
 
         horizontalSpacer_22 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
@@ -1142,11 +1143,8 @@ public:
 #ifndef QT_NO_TOOLTIP
         label_Idle->setToolTip(QApplication::translate("configurePolMeasure", "Activating syringe idle to ensure constant temperature 0=normal, 1=idle", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        label_Idle->setText(QApplication::translate("configurePolMeasure", "Idle:", Q_NULLPTR));
-#ifndef QT_NO_TOOLTIP
-        lineEdit_Idle->setToolTip(QApplication::translate("configurePolMeasure", "Activating syringe idle to ensure constant temperature 0=normal, 1=idle", Q_NULLPTR));
-#endif // QT_NO_TOOLTIP
-        lineEdit_Idle->setText(QApplication::translate("configurePolMeasure", "0", Q_NULLPTR));
+        label_Idle->setText(QApplication::translate("configurePolMeasure", "Idle Mode:", Q_NULLPTR));
+        checkBox->setText(QString());
 #ifndef QT_NO_TOOLTIP
         label_NSteps->setToolTip(QApplication::translate("configurePolMeasure", "Steps of cuvette flushing", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
@@ -1191,6 +1189,9 @@ public:
 #endif // QT_NO_TOOLTIP
         lineEdit_BFileNamePrev->setText(QApplication::translate("configurePolMeasure", "0C1_0C2_6ms_7Hz_1", Q_NULLPTR));
         pushButton_cancel->setText(QApplication::translate("configurePolMeasure", "Cancel", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        pushButton_generate->setToolTip(QApplication::translate("configurePolMeasure", "Generate Configuration File", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         pushButton_generate->setText(QApplication::translate("configurePolMeasure", "Generate Configuration", Q_NULLPTR));
     } // retranslateUi
 
