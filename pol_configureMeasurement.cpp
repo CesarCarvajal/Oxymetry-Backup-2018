@@ -82,7 +82,6 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     connect(ui->lineEdit_BNMeas, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
 
     /* Solutions Concentrations */
-    connect(ui->lineEdit_StockWater, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
     connect(ui->lineEdit_StockGluc, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
     connect(ui->lineEdit_StockImp1, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
     connect(ui->lineEdit_StockImp2, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
@@ -92,6 +91,9 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     connect(ui->lineEdit_MaxGluc, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
     connect(ui->lineEdit_MaxImp1, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
     connect(ui->lineEdit_MaxImp2, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
+    connect(ui->checkBox_Imp2, SIGNAL(clicked()), signalMapperC, SLOT(map()));
+    connect(ui->checkBox_Imp1, SIGNAL(clicked()), signalMapperC, SLOT(map()));
+    connect(ui->checkBox_Glucose, SIGNAL(clicked()), signalMapperC, SLOT(map()));
 
     /* Pump Flow */
     connect(ui->lineEdit_BtimeInterval, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
@@ -99,9 +101,7 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     connect(ui->lineEdit_LongBreak, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
     connect(ui->lineEdit_AbsFlow, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
     connect(ui->lineEdit_NSteps, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
-    connect(ui->lineEdit_FillingTime, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
-    connect(ui->lineEdit_FillSyringe, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
-    connect(ui->lineEdit_CuvetteFlush, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
+    connect(ui->lineEdit_AbsVol, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
 
     /* Map of connections */
     signalMapperC->setMapping(ui->label_load, ui->label_load);
@@ -115,7 +115,6 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     signalMapperC->setMapping(ui->lineEdit_BNMeas, ui->lineEdit_BNMeas);
 
     /* Solutions Concentrations */
-    signalMapperC->setMapping(ui->lineEdit_StockWater, ui->lineEdit_StockWater);
     signalMapperC->setMapping(ui->lineEdit_StockGluc, ui->lineEdit_StockGluc);
     signalMapperC->setMapping(ui->lineEdit_StockImp1, ui->lineEdit_StockImp1);
     signalMapperC->setMapping(ui->lineEdit_StockImp2, ui->lineEdit_StockImp2);
@@ -125,6 +124,9 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     signalMapperC->setMapping(ui->lineEdit_MaxGluc, ui->lineEdit_MaxGluc);
     signalMapperC->setMapping(ui->lineEdit_MaxImp1, ui->lineEdit_MaxImp1);
     signalMapperC->setMapping(ui->lineEdit_MaxImp2, ui->lineEdit_MaxImp2);
+    signalMapperC->setMapping(ui->checkBox_Imp2, ui->checkBox_Imp2);
+    signalMapperC->setMapping(ui->checkBox_Imp1, ui->checkBox_Imp1);
+    signalMapperC->setMapping(ui->checkBox_Glucose, ui->checkBox_Glucose);
 
     /* Pump Flow */
     signalMapperC->setMapping(ui->lineEdit_BtimeInterval, ui->lineEdit_BtimeInterval);
@@ -132,9 +134,7 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     signalMapperC->setMapping(ui->lineEdit_LongBreak, ui->lineEdit_LongBreak);
     signalMapperC->setMapping(ui->lineEdit_AbsFlow, ui->lineEdit_AbsFlow);
     signalMapperC->setMapping(ui->lineEdit_NSteps, ui->lineEdit_NSteps);
-    signalMapperC->setMapping(ui->lineEdit_FillingTime, ui->lineEdit_FillingTime);
-    signalMapperC->setMapping(ui->lineEdit_FillSyringe, ui->lineEdit_FillSyringe);
-    signalMapperC->setMapping(ui->lineEdit_CuvetteFlush, ui->lineEdit_CuvetteFlush);
+    signalMapperC->setMapping(ui->lineEdit_AbsVol, ui->lineEdit_AbsVol);
 
     /* Connect Button of configuration */
     connect(ui->pushButton_generate, SIGNAL(clicked()), this, SLOT(configurePolarimeter()));
@@ -205,6 +205,7 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
 {
     QLabel *label = qobject_cast<QLabel *>(widget);
     QLineEdit *LineLabel = qobject_cast<QLineEdit *>(widget);
+    QCheckBox *checkBox = qobject_cast<QCheckBox *>(widget);
     bool ok;
 
     /* Hide / Show GUI Elements */
@@ -301,42 +302,33 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
 
         /* Solutions Concentrations Settings */
 
-        /* The user decide to change the stock water */
-        if(LineLabel == ui->lineEdit_StockWater && ui->lineEdit_StockWater->text().toInt(&ok) >= 0){
+        /* The user decide to change the stock glucose */
+        if(LineLabel == ui->lineEdit_StockGluc && ui->lineEdit_StockGluc->text().toInt(&ok) >= 0){
 
             /* Is there a valid number */
             if(!ok){
                 /* Set back default value */
-                ui->lineEdit_StockWater->setText("20000");
+                ui->lineEdit_StockGluc->setText("1000");
             }
         }else
-            /* The user decide to change the stock glucose */
-            if(LineLabel == ui->lineEdit_StockGluc && ui->lineEdit_StockGluc->text().toInt(&ok) >= 0){
+            /* The user decide to change the stock Impurity 1 */
+            if(LineLabel == ui->lineEdit_StockImp1 && ui->lineEdit_StockImp1->text().toInt(&ok) >= 0){
 
                 /* Is there a valid number */
                 if(!ok){
                     /* Set back default value */
-                    ui->lineEdit_StockGluc->setText("1000");
+                    ui->lineEdit_StockImp1->setText("4");
                 }
             }else
-                /* The user decide to change the stock Impurity 1 */
-                if(LineLabel == ui->lineEdit_StockImp1 && ui->lineEdit_StockImp1->text().toInt(&ok) >= 0){
+                /* The user decide to change the stock Impurity 2 */
+                if(LineLabel == ui->lineEdit_StockImp2 && ui->lineEdit_StockImp2->text().toInt(&ok) >= 0){
 
                     /* Is there a valid number */
                     if(!ok){
                         /* Set back default value */
-                        ui->lineEdit_StockImp1->setText("4");
+                        ui->lineEdit_StockImp2->setText("0");
                     }
-                }else
-                    /* The user decide to change the stock Impurity 2 */
-                    if(LineLabel == ui->lineEdit_StockImp2 && ui->lineEdit_StockImp2->text().toInt(&ok) >= 0){
-
-                        /* Is there a valid number */
-                        if(!ok){
-                            /* Set back default value */
-                            ui->lineEdit_StockImp2->setText("0");
-                        }
-                    }
+                }
 
         /* The user decide to change the minimum glucose concentration */
         if(LineLabel == ui->lineEdit_Mingluc && ui->lineEdit_Mingluc->text().toDouble(&ok) >= 0){
@@ -442,32 +434,14 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
                             }
                         }else
                             /* The user decide to change the Filling Time */
-                            if(LineLabel == ui->lineEdit_FillingTime && ui->lineEdit_FillingTime->text().toInt(&ok) >= 0){
+                            if(LineLabel == ui->lineEdit_AbsVol && ui->lineEdit_AbsVol->text().toInt(&ok) >= 0){
 
                                 /* Is there a valid number */
                                 if(!ok){
                                     /* Set back default value */
-                                    ui->lineEdit_FillingTime->setText("80");
+                                    ui->lineEdit_AbsVol->setText("25");
                                 }
-                            }else
-                                /* The user decide to change the Syringe Filling Time */
-                                if(LineLabel == ui->lineEdit_FillSyringe && ui->lineEdit_FillSyringe->text().toInt(&ok) >= 0){
-
-                                    /* Is there a valid number */
-                                    if(!ok){
-                                        /* Set back default value */
-                                        ui->lineEdit_FillSyringe->setText("80");
-                                    }
-                                }else
-                                    /* The user decide to change the Cuvette Flushing */
-                                    if(LineLabel == ui->lineEdit_CuvetteFlush && ui->lineEdit_CuvetteFlush->text().toInt(&ok) >= 0){
-
-                                        /* Is there a valid number */
-                                        if(!ok){
-                                            /* Set back default value */
-                                            ui->lineEdit_CuvetteFlush->setText("80");
-                                        }
-                                    }
+                            }
 
         /* File name preview */
         ui->lineEdit_BFileNamePrev->setText("0C1_0C2_" + QString::number(ui->lineEdit_BIntTime->text().toFloat()) + "ms_"
@@ -476,6 +450,75 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
         /* Update Data */
         GetConfigurationData();
     }
+
+    /* Check the impurity 2 */
+    if(checkBox == ui->checkBox_Imp2){
+
+            /* Show/Hide Impurity 2 values */
+            ui->lineEdit_StockImp2->setEnabled(ui->checkBox_Imp2->isChecked());
+            ui->label_StockImp2->setEnabled(ui->checkBox_Imp2->isChecked());
+            ui->label_StockImp2_2->setEnabled(ui->checkBox_Imp2->isChecked());
+            ui->lineEdit_MaxImp2->setEnabled(ui->checkBox_Imp2->isChecked());
+            ui->label_MaxImp2->setEnabled(ui->checkBox_Imp2->isChecked());
+            ui->label_MaxImp2_2->setEnabled(ui->checkBox_Imp2->isChecked());
+            ui->lineEdit_MinImp2->setEnabled(ui->checkBox_Imp2->isChecked());
+            ui->label_MinImp2->setEnabled(ui->checkBox_Imp2->isChecked());
+            ui->label_MinImp2_2->setEnabled(ui->checkBox_Imp2->isChecked());
+
+    }else
+        /* Check impurity 1 */
+        if(checkBox == ui->checkBox_Imp1){
+
+            /* Show/Hide Impurity 1 values */
+            ui->lineEdit_StockImp1->setEnabled(ui->checkBox_Imp1->isChecked());
+            ui->label_StockImp1->setEnabled(ui->checkBox_Imp1->isChecked());
+            ui->label_StockImp1_2->setEnabled(ui->checkBox_Imp1->isChecked());
+            ui->lineEdit_MaxImp1->setEnabled(ui->checkBox_Imp1->isChecked());
+            ui->label_MaxImp1->setEnabled(ui->checkBox_Imp1->isChecked());
+            ui->label_MaxImp1_2->setEnabled(ui->checkBox_Imp1->isChecked());
+            ui->lineEdit_MinImp1->setEnabled(ui->checkBox_Imp1->isChecked());
+            ui->label_MinImp1->setEnabled(ui->checkBox_Imp1->isChecked());
+            ui->label_MinImp1_2->setEnabled(ui->checkBox_Imp1->isChecked());
+
+        }else
+            /* Check Glucose */
+            if(checkBox == ui->checkBox_Glucose){
+
+                /* Show/Hide Glucose values */
+                ui->lineEdit_StockGluc->setEnabled(ui->checkBox_Glucose->isChecked());
+                ui->label_StockGluc->setEnabled(ui->checkBox_Glucose->isChecked());
+                ui->label_StockGluc2->setEnabled(ui->checkBox_Glucose->isChecked());
+                ui->lineEdit_MaxGluc->setEnabled(ui->checkBox_Glucose->isChecked());
+                ui->label_MaxGluc->setEnabled(ui->checkBox_Glucose->isChecked());
+                ui->label_MaxGluc2->setEnabled(ui->checkBox_Glucose->isChecked());
+                ui->lineEdit_Mingluc->setEnabled(ui->checkBox_Glucose->isChecked());
+                ui->label_MinGluc->setEnabled(ui->checkBox_Glucose->isChecked());
+                ui->label_MinGluc2->setEnabled(ui->checkBox_Glucose->isChecked());
+
+            }
+
+    /* Are there substances left? */
+    if(!ui->checkBox_Glucose->isChecked() && !ui->checkBox_Imp1->isChecked() && !ui->checkBox_Imp2->isChecked()){
+
+        /* Show critical */
+        showCritical("At least one kind of substance has to be selected!", "");
+
+        /* Check glucose by default */
+        ui->checkBox_Glucose->setChecked(true);
+
+        /* Enable glucose by default */
+        ui->lineEdit_StockGluc->setEnabled(true);
+        ui->label_StockGluc->setEnabled(true);
+        ui->label_StockGluc2->setEnabled(true);
+        ui->lineEdit_MaxGluc->setEnabled(true);
+        ui->label_MaxGluc->setEnabled(true);
+        ui->label_MaxGluc2->setEnabled(true);
+        ui->lineEdit_Mingluc->setEnabled(true);
+        ui->label_MinGluc->setEnabled(true);
+        ui->label_MinGluc2->setEnabled(true);
+
+    }
+
 }
 
 /**
@@ -616,7 +659,7 @@ void configurePolMeasure::cancel(void)
     /* The user aborted the load of a configuration, so don't adjust GUI */
     Conf_canceled = true;
 
-   /* Close dialog */
+    /* Close dialog */
     reject();
 }
 
@@ -646,24 +689,24 @@ void configurePolMeasure::GetConfigurationData(void)
     NrMeasurements = ui->lineEdit_BNMeas->text().toInt();
     externSoftware->NConcentrations = NrMeasurements;
 
-    /* Get Refilling Times */
-    externSoftware->fillRefill = ui->lineEdit_FillingTime->text().toDouble() / ui->lineEdit_NSteps->text().toDouble();
-    externSoftware->refillSyringe = ui->lineEdit_FillSyringe->text().toDouble() / ui->lineEdit_NSteps->text().toDouble();
-    externSoftware->flushingCuvette = ui->lineEdit_CuvetteFlush->text().toDouble() / ui->lineEdit_NSteps->text().toDouble();
+    /* Get Number of Steps */
+    externSoftware->NSteps = ui->lineEdit_NSteps->text().toInt();
 
     /* Get Flows */
     externSoftware->absoluteFlow = ui->lineEdit_AbsFlow->text().toDouble();
     externSoftware->idle =ui->checkBox->isChecked();
 
+    /* Get Refilling Times */
+    externSoftware->fillRefill = (((ui->lineEdit_AbsVol->text().toDouble()/externSoftware->absoluteFlow)*60) / externSoftware->NSteps)*1000;
+
     /* Break Times */
-    externSoftware->shortBreak = ui->lineEdit_ShortBreak->text().toDouble();
-    externSoftware->longBreak = ui->lineEdit_LongBreak->text().toDouble();
+    externSoftware->shortBreak = (ui->lineEdit_ShortBreak->text().toDouble())*1000;
+    externSoftware->longBreak = (ui->lineEdit_LongBreak->text().toDouble())*1000 + (externSoftware->IntegrationTime*externSoftware->NrSpectra);
 
     /* Stock Solutions */
-    externSoftware->stockSolutions.replace(0,ui->lineEdit_StockWater->text().toDouble());
-    externSoftware->stockSolutions.replace(1,ui->lineEdit_StockGluc->text().toDouble());
-    externSoftware->stockSolutions.replace(2,ui->lineEdit_StockImp1->text().toDouble());
-    externSoftware->stockSolutions.replace(3,ui->lineEdit_StockImp2->text().toDouble());
+    externSoftware->stockSolutions.replace(0,ui->lineEdit_StockGluc->text().toDouble());
+    externSoftware->stockSolutions.replace(1,ui->lineEdit_StockImp1->text().toDouble());
+    externSoftware->stockSolutions.replace(2,ui->lineEdit_StockImp2->text().toDouble());
 
     /* Minimum Concentrations */
     externSoftware->minConcentrations.replace(0,ui->lineEdit_Mingluc->text().toDouble());
@@ -676,7 +719,7 @@ void configurePolMeasure::GetConfigurationData(void)
     externSoftware->maxConcentrations.replace(2,ui->lineEdit_MaxImp2->text().toDouble());
 
     /* Get additional time for intervals */
-    externSoftware->TimeIntervals = ui->lineEdit_BtimeInterval->text().toDouble();
+    externSoftware->TimeIntervals = (ui->lineEdit_BtimeInterval->text().toDouble())*1000;
 
     /* Very long Int Time? */
     if(integrationTime > 200){

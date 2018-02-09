@@ -47,8 +47,9 @@ public:
 
     /* Refilling Times */
     int fillRefill;
-    int refillSyringe;
-    int flushingCuvette;
+
+    /* Number of steps */
+    int NSteps;
 
     /* Pump variables */
     double absoluteFlow;
@@ -71,7 +72,7 @@ public:
     void openPumpSoftware(void);
 
     /* Generate pump files */
-    void GenerateGlucosePumpScript(void);
+    void GeneratePumpScripts(QString filetype, QVector<double> FlowVector);
 
     /* Generate Spectrometer configuration */
     void GenerateSpectrometerConfiguration(QVector<double> GlucoseConcentration, QVector<double> Impurity1Concentration);
@@ -80,7 +81,13 @@ public:
     void pumpsPatternCalculator(void);
 
     /* Write pump files sequence */
-    void writePumpFile(FILE* pumpFile);
+    void writePumpFile(FILE* pumpFile, QString filetype, QVector<double> FlowVector);
+
+    /* Write Flushing pattern */
+    void writeFlushing(FILE *pFile, QString filetype);
+
+    /* Write Filling pattern */
+    void writeFilling(FILE *pFile, QVector <double> FlowVector, int k);
 
     /* Returns the correlation coefficient */
     float correlationCoefficient(QVector <double> X, QVector <double> Y, int N);

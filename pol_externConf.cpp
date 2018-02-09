@@ -35,7 +35,7 @@ Pol_ExternConf::Pol_ExternConf()
 {
 
     /* Set size of vectors */
-    stockSolutions.reserve(4);
+    stockSolutions.reserve(3);
     maxConcentrations.reserve(3);
     minConcentrations.reserve(3);
 
@@ -145,48 +145,51 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
     for(int i =0; i < NConcentrations; i++){
 
         /* Concentrations */
-        GlucoseFlow.replace(i,(GlucoseConcentration.at(i))/(stockSolutions.at(1)*absoluteFlow));
-        Impurity1Flow.replace(i,(Impurity1Concentration.at(i))/(stockSolutions.at(2)*absoluteFlow));
-        Impurity2Flow.replace(i,(Impurity2Concentration.at(i))/(stockSolutions.at(3)*absoluteFlow));
+        GlucoseFlow.replace(i,GlucoseConcentration.at(i)*((absoluteFlow)/(stockSolutions.at(0))));
+        Impurity1Flow.replace(i,Impurity1Concentration.at(i)*((absoluteFlow)/(stockSolutions.at(1))));
+        Impurity2Flow.replace(i,Impurity2Concentration.at(i)*((absoluteFlow)/(stockSolutions.at(2))));
 
         /* Water Flow */
-        WaterFlow.replace(i,absoluteFlow - (GlucoseFlow.at(i) + Impurity1Flow.at(i) + Impurity2Flow.at(i)));
+        WaterFlow.replace(i,absoluteFlow - (GlucoseFlow.at(i) + Impurity1Flow.at(i)));
     }
-
-    /* Create the Glucose pump script */
-    GenerateGlucosePumpScript();
 
     /* Create the Spectrometer Script */
     GenerateSpectrometerConfiguration(GlucoseConcentration, Impurity1Concentration);
+
+    /* Create the Glucose pump script */
+    GeneratePumpScripts("/GlucosePumpScript.nfp", GlucoseFlow);
+
+    /* Create the Impurity 1 pump script */
+    GeneratePumpScripts("/Impurity1PumpScript.nfp", Impurity1Flow);
+
+    /* Create the Water pump script */
+    GeneratePumpScripts("/WaterPumpScript.nfp", WaterFlow);
+
 }
 
 /**
  * @brief Generate Pump Scripts
  */
-void Pol_ExternConf::GenerateGlucosePumpScript(void){
+void Pol_ExternConf::GeneratePumpScripts(QString filetype, QVector <double> FlowVector){
 
     /* Get folder information */
     QFileInfo folder(pathFile);
 
-    QString glucoseSciptPath = folder.absolutePath() + "/GlucosePumpScript.nfp";
+    QString ScriptPath = folder.absolutePath() + filetype;
 
     /* Open the file */
-    FILE *Glucosefile = fopen(glucoseSciptPath.toLatin1().data(), "wt");
+    FILE *Sfile = fopen(ScriptPath.toLatin1().data(), "wt");
 
     /* Write in file */
-    fprintf(Glucosefile, "%s", "ml/min \n");
+    fprintf(Sfile, "%s", "ml/min \n");
+    fprintf(Sfile, "%s", "1 \n");
 
-    /* Flow Calculation */
-    for(int k =0; k < NConcentrations; k++){
-
-        /* Write in file */
-        writePumpFile(Glucosefile);
-
-    }
+    /* Write in file */
+    writePumpFile(Sfile, filetype, FlowVector);
 
     /* Close file */
-    fclose(Glucosefile);
-    Glucosefile = nullptr;
+    fclose(Sfile);
+    Sfile = nullptr;
 
 }
 
@@ -202,10 +205,10 @@ void Pol_ExternConf::GenerateSpectrometerConfiguration(QVector <double> GlucoseC
     for(int j = 0 ; j < NConcentrations; j++){
 
         /* Time intervals between measurements */
-        int startTime = (10*fillRefill + 20*shortBreak + 7) + TimeIntervals*j;
+        int startTime = (10*fillRefill + 20*shortBreak + 7000) + TimeIntervals*j;
 
         /* Configuration line */
-        QString line = QString::number(startTime*1000) + ";" + QString::number(GlucoseConcentration.at(j)) + "C1_" + QString::number(Impurity1Concentration.at(j)) + "C2_"
+        QString line = QString::number(startTime) + ";" + QString::number(GlucoseConcentration.at(j)) + "C1_" + QString::number(Impurity1Concentration.at(j)) + "C2_"
                 + QString::number(IntegrationTime) + "ms_" + QString::number(Frequency) + "Hz_" + QString::number(j+1) + ";" + QString::number(NrSpectra) +
                 ";" + QString::number(IntegrationTime) + ";" + QString::number(NrAverages) + ";" + QString::number(Frequency) + "\n";
 
@@ -222,24 +225,113 @@ void Pol_ExternConf::GenerateSpectrometerConfiguration(QVector <double> GlucoseC
 /**
  * @brief Write Pump File
  */
-void Pol_ExternConf::writePumpFile(FILE *pumpFile){
+void Pol_ExternConf::writePumpFile(FILE *pumpFile, QString filetype, QVector <double> FlowVector){
 
-    /* fprintf(pumpFile, "%s", (QString::number(0) + "\t" + QString::number(0) + "\t" + QString::number(0) + "\n").toLatin1().data());
-    fprintf(pumpFile, "%s", (QString::number(1) + "\t" + QString::number(0) + "\t" + QString::number(0) + "\n").toLatin1().data());
-    fprintf(pumpFile, "%s", (QString::number(2) + "\t" + QString::number(0) + "\t" + QString::number(0) + "\n").toLatin1().data());
-    fprintf(pumpFile, "%s", (QString::number(3) + "\t" + QString::number(0) + "\t" + QString::number(0) + "\n").toLatin1().data());
-    fprintf(pumpFile, "%s", (QString::number(4) + "\t" + QString::number(0) + "\t" + QString::number(0) + "\n").toLatin1().data());
-    fprintf(pumpFile, "%s", (QString::number(5) + "\t" + QString::number(0) + "\t" + QString::number(0) + "\n").toLatin1().data());
-    fprintf(pumpFile, "%s", (QString::number(6) + "\t" + QString::number(0) + "\t" + QString::number(0) + "\n").toLatin1().data());
-    fprintf(pumpFile, "%s", (QString::number(7) + "\t" + QString::number(0) + "\t" + QString::number(0) + "\n").toLatin1().data());
-    fprintf(pumpFile, "%s", (QString::number(8) + "\t" + QString::number(0) + "\t" + QString::number(0) + "\n").toLatin1().data());
-    fprintf(pumpFile, "%s", (QString::number(9) + "\t" + QString::number(0) + "\t" + QString::number(0) + "\n").toLatin1().data());
-    fprintf(pumpFile, "%s", (QString::number(10) + "\t" + QString::number(0) + "\t" + QString::number(0) + "\n").toLatin1().data());
-    fprintf(pumpFile, "%s", (QString::number(11) + "\t" + QString::number(0) + "\t" + QString::number(0) + "\n").toLatin1().data());
-    fprintf(pumpFile, "%s", (QString::number(12) + "\t" + QString::number(0) + "\t" + QString::number(0) + "\n").toLatin1().data());
-    fprintf(pumpFile, "%s", (QString::number(13) + "\t" + QString::number(0) + "\t" + QString::number(0) + "\n").toLatin1().data());
-    fprintf(pumpFile, "%s", (QString::number(14) + "\t" + QString::number(0) + "\t" + QString::number(0) + "\n").toLatin1().data());
-    fprintf(pumpFile, "%s", (QString::number(15) + "\t" + QString::number(0) + "\t" + QString::number(0) + "\n").toLatin1().data());*/
+    /* Flow Calculation */
+    for(int k =0; k < NConcentrations; k++){
+
+        /* Write flushing pattern */
+        writeFlushing(pumpFile, filetype);
+
+        /* Write Filling pattern */
+        writeFilling(pumpFile, FlowVector, k);
+
+    }
+
+    /* Write flushing pattern for cleaning the cuvette at the end */
+    writeFlushing(pumpFile, filetype);
+
+}
+
+/**
+ * @brief Write Flushing pattern to File
+ */
+void Pol_ExternConf::writeFlushing(FILE *pFile, QString filetype){
+
+    /* Use comas instead of dots */
+    setlocale(LC_NUMERIC, "French_Canada.1252");
+
+    /* Write the flusing pattern */
+    for(int j = 0; j < 5; j++){
+
+        /* Is it water? */
+        if(filetype == "/WaterPumpScript.nfp"){
+
+            /* 7 flushing cuvette fill */
+            fprintf(pFile, "%d\t%.4f\t%d\n", fillRefill, absoluteFlow, 0);
+
+        }else{
+
+            /* 7 flushing cuvette fill */
+            fprintf(pFile, "%d\t%d\t%d\n", fillRefill, 0, 0);
+
+        }
+
+        /* 8 stop after filling valve refill */
+        fprintf(pFile, "%d\t%d\t%d\n", shortBreak, 0, 0);
+
+        /* 9 stop after refilling valve fill */
+        fprintf(pFile, "%d\t%d\t%d\n", shortBreak, 0, 1);
+
+        /* Is it water? */
+        if(filetype == "/WaterPumpScript.nfp"){
+
+            /* 10 flushing cuvette fill */
+            fprintf(pFile, "%d\t%.4f\t%d\n", fillRefill, -absoluteFlow, 1);
+
+        }else{
+
+            /* 10 flushing cuvette fill */
+            fprintf(pFile, "%d\t%d\t%d\n", fillRefill, 0, 1);
+        }
+
+        /* 11 stop after refilling valve fill */
+        fprintf(pFile, "%d\t%d\t%d\n", shortBreak, 0, 1);
+
+        /* 12 stop after refilling valve refill */
+        fprintf(pFile, "%d\t%d\t%d\n", shortBreak, 0, 0);
+    }
+}
+
+/**
+ * @brief Write Filling Pattern to File
+ */
+void Pol_ExternConf::writeFilling(FILE *pFile, QVector <double> FlowVector, int k){
+
+    /* Use comas instead of dots */
+    setlocale(LC_NUMERIC, "French_Canada.1252");
+
+    /*  Write the filling patterns */
+    for(int i = 1; i <= NSteps; i++){
+
+        /* i-th FILLING */
+        /* 1 Filling cuvette with solution valve fill */
+        fprintf(pFile, "%d\t%.4f\t%d\n", fillRefill, FlowVector.at(k), 0);
+
+        /* 2 Stop after filling valve fill */
+        fprintf(pFile, "%d\t%d\t%d\n", shortBreak, 0, 0);
+
+        /* 3 Stop after filling valve refill */
+        fprintf(pFile, "%d\t%d\t%d\n", shortBreak, 0, 1);
+
+        /* 4 Refill after filling valve refill */
+        fprintf(pFile, "%d\t%.4f\t%d\n", fillRefill, -FlowVector.at(k), 1);
+
+        /* Is it the last refill pattern? */
+        if(i == NSteps){
+
+            /* 5 stop for MEASUREMENT during this block valve refill Last Refill */
+            fprintf(pFile, "%d\t%d\t%d\n", longBreak, 0, 1);
+
+        }else{
+
+            /* 5 stop for MEASUREMENT during this block valve refill */
+            fprintf(pFile, "%d\t%d\t%d\n", shortBreak, 0, 1);
+        }
+
+        /* 6 Stop after measurement valve fill */
+        fprintf(pFile, "%d\t%d\t%d\n", shortBreak, 0, 0);
+    }
 }
 
 /**
