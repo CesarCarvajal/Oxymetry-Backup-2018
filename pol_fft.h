@@ -51,7 +51,7 @@ public:
     void InitializeFFTArrays();
 
     /* Save FFT to a file */
-    void saveFFTtoFile(QFileInfo FileDetails);
+    void saveFFTtoFile(QFileInfo FileDetails, bool userSaving);
 
     /* Calculate the FFT from the Data */
     void CalculateFFT(int N, QVector<double> Data);

@@ -196,6 +196,12 @@ private slots:
     /* Adjust the polarimeter tab running End */
     void AdjustRunEnd(short int typeRunn);
 
+    /* Adjust the folder where the measurments data is going to be saved */
+    void AdjustMeasurementsSavingFolder(void);
+
+    /* Process the received data from the spectrometer */
+    void ProcessReceivedDataPol(QString Path);
+
 private:
 
     QSignalMapper *signalMapper;
@@ -228,6 +234,9 @@ private:
 
     /* Saves old values of frequency or Nr Spectra from labels in calibration */
     QString OldFreqValue, OldSpectraValue = "";
+
+    /* Folder Name to save the data */
+    QString folder;
 
     /* Index of configured waiting time in measurements */
     unsigned int Timeindex = 0;

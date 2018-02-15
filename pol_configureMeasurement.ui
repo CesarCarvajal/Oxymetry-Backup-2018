@@ -390,7 +390,7 @@
              <string>Insert Modulation Frequency</string>
             </property>
             <property name="text">
-             <string>7</string>
+             <string>4</string>
             </property>
            </widget>
           </item>
@@ -614,6 +614,9 @@
               <height>16777215</height>
              </size>
             </property>
+            <property name="toolTip">
+             <string>Include/Remove Glucose</string>
+            </property>
             <property name="layoutDirection">
              <enum>Qt::LeftToRight</enum>
             </property>
@@ -658,6 +661,9 @@
               <height>16777215</height>
              </size>
             </property>
+            <property name="toolTip">
+             <string>Include/Remove Impurity 1</string>
+            </property>
             <property name="text">
              <string>Impurity 1</string>
             </property>
@@ -696,6 +702,9 @@
               <height>16777215</height>
              </size>
             </property>
+            <property name="toolTip">
+             <string>Include/Remove Impurity 2</string>
+            </property>
             <property name="text">
              <string>Impurity 2</string>
             </property>
@@ -733,7 +742,7 @@
              </size>
             </property>
             <property name="toolTip">
-             <string>How many ml of Glucose is in stock?</string>
+             <string>Which concentration of glucose is in stock?</string>
             </property>
             <property name="text">
              <string>Stock Glucose:</string>
@@ -755,7 +764,7 @@
              </size>
             </property>
             <property name="toolTip">
-             <string>ml of Glucose in Stock</string>
+             <string>Concentration of Glucose in Stock</string>
             </property>
             <property name="text">
              <string>1000</string>
@@ -797,7 +806,7 @@
              </size>
             </property>
             <property name="toolTip">
-             <string>How many ml of Impurity 1 is in stock?</string>
+             <string>Which concentration of impurity 1 is in stock?</string>
             </property>
             <property name="text">
              <string>Stock Impurity 1:</string>
@@ -819,7 +828,7 @@
              </size>
             </property>
             <property name="toolTip">
-             <string>ml of Impurity 1 in Stock</string>
+             <string>Concentration of Impurity 1 in Stock</string>
             </property>
             <property name="text">
              <string>4</string>
@@ -864,7 +873,7 @@
              </size>
             </property>
             <property name="toolTip">
-             <string>How many ml of Impurity 2 is in stock?</string>
+             <string>Which concentration of impurity 2 is in stock?</string>
             </property>
             <property name="text">
              <string>Stock Impurity 2:</string>
@@ -889,7 +898,7 @@
              </size>
             </property>
             <property name="toolTip">
-             <string>ml of Impurity 2 in Stock</string>
+             <string>Concentration of Impurity 2 in Stock</string>
             </property>
             <property name="text">
              <string>0</string>
@@ -1468,7 +1477,7 @@
              </size>
             </property>
             <property name="toolTip">
-             <string>Fill Refill Absolut Time</string>
+             <string>Fill Refill Absolute Volume</string>
             </property>
             <property name="text">
              <string>Absolute Volume: </string>
@@ -1490,7 +1499,7 @@
              </size>
             </property>
             <property name="toolTip">
-             <string>Fill Refill Absolut Time</string>
+             <string>Fill Refill Absolut Volume</string>
             </property>
             <property name="text">
              <string>25</string>
@@ -1818,6 +1827,9 @@
               <width>130</width>
               <height>16777215</height>
              </size>
+            </property>
+            <property name="toolTip">
+             <string>Activating syringe idle to ensure constant temperature 0=normal, 1=idle</string>
             </property>
             <property name="text">
              <string/>

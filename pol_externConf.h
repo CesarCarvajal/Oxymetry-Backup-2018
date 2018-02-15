@@ -53,7 +53,7 @@ public:
 
     /* Pump variables */
     double absoluteFlow;
-    double idle;
+    int idle;
     int TimeIntervals;
 
     /* Time Breaks */

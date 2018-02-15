@@ -966,7 +966,7 @@ public:
 #ifndef QT_NO_TOOLTIP
         lineEdit_BFreq->setToolTip(QApplication::translate("configurePolMeasure", "Insert Modulation Frequency", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        lineEdit_BFreq->setText(QApplication::translate("configurePolMeasure", "7", Q_NULLPTR));
+        lineEdit_BFreq->setText(QApplication::translate("configurePolMeasure", "4", Q_NULLPTR));
         label_BFreq2->setText(QApplication::translate("configurePolMeasure", "Hz", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         label_BNSpec->setToolTip(QApplication::translate("configurePolMeasure", "How many spectra?", Q_NULLPTR));
@@ -985,33 +985,42 @@ public:
 #endif // QT_NO_TOOLTIP
         lineEdit_BNAve->setText(QApplication::translate("configurePolMeasure", "1", Q_NULLPTR));
         label_SolConc->setText(QApplication::translate("configurePolMeasure", "Solutions Concentration:", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        checkBox_Glucose->setToolTip(QApplication::translate("configurePolMeasure", "Include/Remove Glucose", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         checkBox_Glucose->setText(QApplication::translate("configurePolMeasure", "Glucose", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        checkBox_Imp1->setToolTip(QApplication::translate("configurePolMeasure", "Include/Remove Impurity 1", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         checkBox_Imp1->setText(QApplication::translate("configurePolMeasure", "Impurity 1", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        checkBox_Imp2->setToolTip(QApplication::translate("configurePolMeasure", "Include/Remove Impurity 2", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         checkBox_Imp2->setText(QApplication::translate("configurePolMeasure", "Impurity 2", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        label_StockGluc->setToolTip(QApplication::translate("configurePolMeasure", "How many ml of Glucose is in stock?", Q_NULLPTR));
+        label_StockGluc->setToolTip(QApplication::translate("configurePolMeasure", "Which concentration of glucose is in stock?", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_StockGluc->setText(QApplication::translate("configurePolMeasure", "Stock Glucose:", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        lineEdit_StockGluc->setToolTip(QApplication::translate("configurePolMeasure", "ml of Glucose in Stock", Q_NULLPTR));
+        lineEdit_StockGluc->setToolTip(QApplication::translate("configurePolMeasure", "Concentration of Glucose in Stock", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         lineEdit_StockGluc->setText(QApplication::translate("configurePolMeasure", "1000", Q_NULLPTR));
         label_StockGluc2->setText(QApplication::translate("configurePolMeasure", "mg/dl", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        label_StockImp1->setToolTip(QApplication::translate("configurePolMeasure", "How many ml of Impurity 1 is in stock?", Q_NULLPTR));
+        label_StockImp1->setToolTip(QApplication::translate("configurePolMeasure", "Which concentration of impurity 1 is in stock?", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_StockImp1->setText(QApplication::translate("configurePolMeasure", "Stock Impurity 1:", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        lineEdit_StockImp1->setToolTip(QApplication::translate("configurePolMeasure", "ml of Impurity 1 in Stock", Q_NULLPTR));
+        lineEdit_StockImp1->setToolTip(QApplication::translate("configurePolMeasure", "Concentration of Impurity 1 in Stock", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         lineEdit_StockImp1->setText(QApplication::translate("configurePolMeasure", "4", Q_NULLPTR));
         label_StockImp1_2->setText(QApplication::translate("configurePolMeasure", "mg/dl", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        label_StockImp2->setToolTip(QApplication::translate("configurePolMeasure", "How many ml of Impurity 2 is in stock?", Q_NULLPTR));
+        label_StockImp2->setToolTip(QApplication::translate("configurePolMeasure", "Which concentration of impurity 2 is in stock?", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_StockImp2->setText(QApplication::translate("configurePolMeasure", "Stock Impurity 2:", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        lineEdit_StockImp2->setToolTip(QApplication::translate("configurePolMeasure", "ml of Impurity 2 in Stock", Q_NULLPTR));
+        lineEdit_StockImp2->setToolTip(QApplication::translate("configurePolMeasure", "Concentration of Impurity 2 in Stock", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         lineEdit_StockImp2->setText(QApplication::translate("configurePolMeasure", "0", Q_NULLPTR));
         label_StockImp2_2->setText(QApplication::translate("configurePolMeasure", "mg/dl", Q_NULLPTR));
@@ -1080,11 +1089,11 @@ public:
         lineEdit_AbsFlow->setText(QApplication::translate("configurePolMeasure", "18.75", Q_NULLPTR));
         label_AbsFlow2->setText(QApplication::translate("configurePolMeasure", "ml/min", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        label_AbsVol->setToolTip(QApplication::translate("configurePolMeasure", "Fill Refill Absolut Time", Q_NULLPTR));
+        label_AbsVol->setToolTip(QApplication::translate("configurePolMeasure", "Fill Refill Absolute Volume", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_AbsVol->setText(QApplication::translate("configurePolMeasure", "Absolute Volume: ", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        lineEdit_AbsVol->setToolTip(QApplication::translate("configurePolMeasure", "Fill Refill Absolut Time", Q_NULLPTR));
+        lineEdit_AbsVol->setToolTip(QApplication::translate("configurePolMeasure", "Fill Refill Absolut Volume", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         lineEdit_AbsVol->setText(QApplication::translate("configurePolMeasure", "25", Q_NULLPTR));
         label_AbsVol_2->setText(QApplication::translate("configurePolMeasure", "ml", Q_NULLPTR));
@@ -1127,6 +1136,9 @@ public:
         label_Idle->setToolTip(QApplication::translate("configurePolMeasure", "Activating syringe idle to ensure constant temperature 0=normal, 1=idle", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_Idle->setText(QApplication::translate("configurePolMeasure", "Idle Mode:", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        checkBox->setToolTip(QApplication::translate("configurePolMeasure", "Activating syringe idle to ensure constant temperature 0=normal, 1=idle", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         checkBox->setText(QString());
 #ifndef QT_NO_TOOLTIP
         label_BFileNamePrev->setToolTip(QApplication::translate("configurePolMeasure", "File Name Preview", Q_NULLPTR));

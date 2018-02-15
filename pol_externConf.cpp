@@ -136,7 +136,7 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
         corrcoeffTime = correlationCoefficient(Nmeasurements, GlucoseConcentration, NConcentrations);
 
         /* If no correlation, then stop doing random order */
-        if(corrcoeffImpurities <= 0.05 && corrcoeffTime <= 0.05 ){
+        if((corrcoeffImpurities <= 0.05 && corrcoeffTime <= 0.05) || NConcentrations < 4){
             break;
         }
     }
@@ -258,17 +258,17 @@ void Pol_ExternConf::writeFlushing(FILE *pFile, QString filetype){
         if(filetype == "/WaterPumpScript.nfp"){
 
             /* 7 flushing cuvette fill */
-            fprintf(pFile, "%d\t%.4f\t%d\n", fillRefill, absoluteFlow, 0);
+            fprintf(pFile, "%d\t%.4f\t%d\n", fillRefill, absoluteFlow, idle);
 
         }else{
 
             /* 7 flushing cuvette fill */
-            fprintf(pFile, "%d\t%d\t%d\n", fillRefill, 0, 0);
+            fprintf(pFile, "%d\t%d\t%d\n", fillRefill, 0, idle);
 
         }
 
         /* 8 stop after filling valve refill */
-        fprintf(pFile, "%d\t%d\t%d\n", shortBreak, 0, 0);
+        fprintf(pFile, "%d\t%d\t%d\n", shortBreak, 0, idle);
 
         /* 9 stop after refilling valve fill */
         fprintf(pFile, "%d\t%d\t%d\n", shortBreak, 0, 1);
@@ -289,7 +289,7 @@ void Pol_ExternConf::writeFlushing(FILE *pFile, QString filetype){
         fprintf(pFile, "%d\t%d\t%d\n", shortBreak, 0, 1);
 
         /* 12 stop after refilling valve refill */
-        fprintf(pFile, "%d\t%d\t%d\n", shortBreak, 0, 0);
+        fprintf(pFile, "%d\t%d\t%d\n", shortBreak, 0, idle);
     }
 }
 
@@ -306,10 +306,10 @@ void Pol_ExternConf::writeFilling(FILE *pFile, QVector <double> FlowVector, int 
 
         /* i-th FILLING */
         /* 1 Filling cuvette with solution valve fill */
-        fprintf(pFile, "%d\t%.4f\t%d\n", fillRefill, FlowVector.at(k), 0);
+        fprintf(pFile, "%d\t%.4f\t%d\n", fillRefill, FlowVector.at(k), idle);
 
         /* 2 Stop after filling valve fill */
-        fprintf(pFile, "%d\t%d\t%d\n", shortBreak, 0, 0);
+        fprintf(pFile, "%d\t%d\t%d\n", shortBreak, 0, idle);
 
         /* 3 Stop after filling valve refill */
         fprintf(pFile, "%d\t%d\t%d\n", shortBreak, 0, 1);
@@ -330,7 +330,7 @@ void Pol_ExternConf::writeFilling(FILE *pFile, QVector <double> FlowVector, int 
         }
 
         /* 6 Stop after measurement valve fill */
-        fprintf(pFile, "%d\t%d\t%d\n", shortBreak, 0, 0);
+        fprintf(pFile, "%d\t%d\t%d\n", shortBreak, 0, idle);
     }
 }
 

@@ -32,6 +32,8 @@
 #include <QDir>
 #include <QTime>
 #include <QDate>
+#include <QFileDialog>
+
 
 /*
  * Internal includes
@@ -445,51 +447,25 @@ void fft::CalculateFFT(int N, QVector<double> Data)
 /**
  * @brief Save the FFT Data to a File
  */
-void fft::saveFFTtoFile(QFileInfo FileDetails)
+void fft::saveFFTtoFile(QFileInfo FileDetails, bool userSaving)
 {
-    /* Get current path to executable */
-    QString current = QDir::currentPath();
 
-    /* Remove 'binary/[platform]' part from string */
-    current = current.left(current.lastIndexOf("binary"));
+    QString path;
+    QString fileN = FileDetails.completeBaseName() + "_FFT";
 
-    /* Path to be in the search for the files; is always a subdirectory in the application path */
-    QString pathc(QString("%1%2").arg(current, "data_polarimeter/"));
+    /* The user wants to save the FFT data in an specific folder */
+    if(userSaving){
 
-    /* Create a Date Folder*/
-    QString folder = "FFT Data " + QDate::currentDate().toString("dd MM yyyy") + "_0";
-    QDir(pathc).mkdir(folder);
+        path = QFileDialog::getSaveFileName(0, tr("Save FFT Data"), fileN, "Text files (*.txt)");
 
-    /* Save the file with the same input data name, but adding FFT at the end */
-    QString path = pathc +folder+"/"+ FileDetails.completeBaseName() + "_FFT.txt";
+    }else{
 
-    QFile FFT_File(path);
-    QFileInfo checkFile1(path);
+        /* Create a Date Folder*/
+        QString folder = "FFT Data " + QDate::currentDate().toString("dd MM yyyy");
+        QDir(FileDetails.absolutePath()).mkdir(folder);
 
-    /* Check if file exists */
-    if (checkFile1.exists() && checkFile1.isFile())
-    {
-        /* Create a folder with the same name but add a number to it */
-        int i = 1;
-
-        /* Depending on how many folder are there already, then create the next in the list */
-        while(true){
-
-            /* Change the folder name to don't overwrite or ask the user when saving */
-            folder = "FFT Data " + QDate::currentDate().toString("dd MM yyyy") + "_" + QString::number(i);
-            QDir(pathc).mkdir(folder);
-
-            /* Try again to see if the file exists? */
-            path = pathc + folder+"/"+ FileDetails.completeBaseName() + "_FFT.txt";
-            QFile FFT_File(path);
-            QFileInfo checkFile(path);
-
-           /* The new name doesn't exists, so stop creating folders */
-            if(!checkFile.exists()){break;}
-
-            /* Next folder number */
-            i++;
-        }
+        /* Save the file with the same input data name, but adding FFT at the end */
+        path = FileDetails.absolutePath() +"/" + folder + "/" + fileN + ".txt";
     }
 
     /* Open the file for writing */
