@@ -46,29 +46,31 @@ PanelPolHelp::PanelPolHelp(QWidget *parent) :
     /* Disable resize of elements */
     this->setFixedSize(this->size());
 
-    imageLabel = new QLabel(this);
-    imageLabel2 = new QLabel(this);
+    /* Create Labels for icons */
+    logoOxymetry = new QLabel(this);
+    helpIcon = new QLabel(this);
 
-    /* Create label for icon */
-    imageLabel->setObjectName(QString("imageLabel"));
-    imageLabel->setGeometry(QRect(40, 10, 50, 50));
-    imageLabel->setScaledContents(true);
+    /* Create label for icon Oxymetry */
+    logoOxymetry->setObjectName(QString("imageLabel"));
+    logoOxymetry->setGeometry(QRect(40, 10, 50, 50));
+    logoOxymetry->setScaledContents(true);
 
-    /* Create label for icon */
-    imageLabel2->setObjectName(QString("imageHelpLabel"));
-    imageLabel2->setGeometry(QRect(410, 10, 50, 50));
-    imageLabel2->setScaledContents(true);
+    /* Create label for icon Help */
+    helpIcon->setObjectName(QString("imageHelpLabel"));
+    helpIcon->setGeometry(QRect(410, 10, 50, 50));
+    helpIcon->setScaledContents(true);
 
+    /* Create pixel map of logos */
     QPixmap logo = QPixmap(QString(":/laboratory.ico"));
     QPixmap helplogo = QPixmap(QString(":/polarimeter/Help.ico"));
 
     /* Load and show icon */
     logo.scaled(100, 100);
-    imageLabel->setPixmap(logo);
+    logoOxymetry->setPixmap(logo);
 
     /* Load and show icon */
     helplogo.scaled(100, 100);
-    imageLabel2->setPixmap(helplogo);
+    helpIcon->setPixmap(helplogo);
 
     /* Connect close button signals from different possible sources (Non Modal Window) */
     connect(ui->button_polhelp_close, SIGNAL(clicked(bool)), this, SLOT(close()));
@@ -91,13 +93,13 @@ void PanelPolHelp::close(void)
 PanelPolHelp::~PanelPolHelp(void)
 {
     /* Check handle */
-    if (nullptr != imageLabel)
+    if (nullptr != logoOxymetry)
     {
         /* Free memory */
-        delete imageLabel;
-        imageLabel = nullptr;
-        delete imageLabel2;
-        imageLabel2 = nullptr;
+        delete logoOxymetry;
+        logoOxymetry = nullptr;
+        delete helpIcon;
+        helpIcon = nullptr;
     }
 
     /* Delete user interface */

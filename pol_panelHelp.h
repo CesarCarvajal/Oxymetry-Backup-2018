@@ -52,8 +52,8 @@ private:
     Ui::PanelPolHelp *ui;
 
     /* Label for application icon */
-    QLabel *imageLabel = nullptr;
-    QLabel *imageLabel2 = nullptr;
+    QLabel *logoOxymetry = nullptr;
+    QLabel *helpIcon = nullptr;
 
 };
 

@@ -34,11 +34,10 @@
 Pol_ExternConf::Pol_ExternConf()
 {
 
-    /* Set size of vectors */
+    /* Set size of vectors: there are 3 components */
     stockSolutions.reserve(3);
     maxConcentrations.reserve(3);
     minConcentrations.reserve(3);
-
 }
 
 /**
@@ -135,7 +134,7 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
         corrcoeffImpurities = correlationCoefficient(GlucoseConcentration, Impurity1Concentration, NConcentrations);
         corrcoeffTime = correlationCoefficient(Nmeasurements, GlucoseConcentration, NConcentrations);
 
-        /* If no correlation, then stop doing random order */
+        /* If no correlation or just a few elements, then stop doing random order */
         if((corrcoeffImpurities <= 0.05 && corrcoeffTime <= 0.05) || NConcentrations < 4){
             break;
         }
@@ -175,6 +174,7 @@ void Pol_ExternConf::GeneratePumpScripts(QString filetype, QVector <double> Flow
     /* Get folder information */
     QFileInfo folder(pathFile);
 
+    /* Defines the type of pump script */
     QString ScriptPath = folder.absolutePath() + filetype;
 
     /* Open the file */
@@ -252,7 +252,7 @@ void Pol_ExternConf::writeFlushing(FILE *pFile, QString filetype){
     setlocale(LC_NUMERIC, "French_Canada.1252");
 
     /* Write the flusing pattern */
-    for(int j = 0; j < 5; j++){
+    for(int j = 0; j < NSteps; j++){
 
         /* Is it water? */
         if(filetype == "/WaterPumpScript.nfp"){
@@ -264,7 +264,6 @@ void Pol_ExternConf::writeFlushing(FILE *pFile, QString filetype){
 
             /* 7 flushing cuvette fill */
             fprintf(pFile, "%d\t%d\t%d\n", fillRefill, 0, idle);
-
         }
 
         /* 8 stop after filling valve refill */

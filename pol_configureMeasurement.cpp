@@ -91,6 +91,8 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     connect(ui->lineEdit_MaxGluc, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
     connect(ui->lineEdit_MaxImp1, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
     connect(ui->lineEdit_MaxImp2, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
+
+    /* Select the components */
     connect(ui->checkBox_Imp2, SIGNAL(clicked()), signalMapperC, SLOT(map()));
     connect(ui->checkBox_Imp1, SIGNAL(clicked()), signalMapperC, SLOT(map()));
     connect(ui->checkBox_Glucose, SIGNAL(clicked()), signalMapperC, SLOT(map()));
@@ -532,6 +534,7 @@ void configurePolMeasure::configurePolarimeter(void)
     /* Get path to save configuration file */
     path = QFileDialog::getSaveFileName(this, tr("Save Configuration File"), "spectrometer_skript", "Text files (*.txt)");
 
+    /* Is there a path? */
     if(!path.isEmpty()){
 
         /* Get path to create configuration file */
@@ -556,7 +559,6 @@ void configurePolMeasure::configurePolarimeter(void)
  */
 void configurePolMeasure::loadConfiguration(void)
 {
-
     /* Save rows in file */
     QStringList wordList;
 
@@ -726,7 +728,6 @@ void configurePolMeasure::GetConfigurationData(void)
 
         /* Show warning */
         showWarning("Please consider that large integration times will lead to a larger measurement time!", "");
-
     }
 
     /* Too large number of spectra */

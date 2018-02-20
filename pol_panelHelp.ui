@@ -73,6 +73,9 @@
      <height>271</height>
     </rect>
    </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
    <property name="horizontalScrollBarPolicy">
     <enum>Qt::ScrollBarAlwaysOff</enum>
    </property>
@@ -80,115 +83,225 @@
     <bool>true</bool>
    </property>
    <property name="plainText">
-    <string>Welcome to Polarimeter Measurement Tab!
+    <string>Welcome to the Polarimeter Measurement Tab!
 
-1. How do I start the Calibration?
+CONTENT:
 
-There are two different ways to perform the calibration, one is with a loaded configuration file (see 2) and the other is just a default settings calibration.
+1. INTERFACE
+2. CONFIGURATION
+3. CALIBRATION
+4. MEASUREMENTS
+5. OTHERS
+6. SOFTWARE ISSUES ?
 
-Go to the &quot;Calibrate&quot; button and select option &quot;Yes&quot; in case to load a configuration file or &quot;No&quot; to use default values.
 
-Changes during the calibration will affect the loaded configuration according to the user modifications, also will be used for the further &quot;Start Measurement&quot; option. (See 3)
 
-2. How do I load a configuration?
+-&gt; 1.  INTERFACE
 
-Go to the button &quot;Configure&quot; and load a configuration file .txt or create your own measurement profile.
 
-3. How I do perform a measurement?
+1.1 -&gt; How to select a Spectrometer?
 
-First load a configuration file (see 2), then press the &quot;Start Measurement&quot; and wait for each data processing. 
+Please go to the tab &quot;Preview&quot;, then select the spectrometer to use in the polarimtery tab. The first spectrometer selected on the list will be the use for the polarimetric measurements.
 
-The resulting saved Raw data is located in the same directory than the configuration file, and the resulting FFT data is located in &quot;/bin/data_polarimeter/FFT Polarimeter Measurements&quot; with a folder named with the date of the measurment.
 
-4. How do I save the data?
+1.2 -&gt; Show/Hide GUI elements:
 
-You could save a Raw Data file and/or the FFT Data file.
+When a label is clicked, the corresponding element will be shown or hiden accordingly. For example by clicking the label &quot;Raw Signal&quot;, the corresponding plot will be hidden or shown.
 
-Select one or both options in the check boxes &quot; Raw Data&quot; and/or &quot;FFT Profiles&quot;.
 
-5. How do I set a parameter for the calibration?
+1.3 -&gt; What is &quot;Clear All&quot;?
 
-Click the parameter's label and select or write the new value.
+With this option, any loaded information or configuration will be removed from the interface. Pleasre remember that this option will also remove any configuration changes or loaded data from the user interface.
 
-The Calibration process is restarted after every change to apply them in the system.
 
-For the frequency and number of spectra, the key &quot;Enter&quot; is needed to accept the changes.
+1.4 -&gt; Interface elements by demand:
 
-6. Can I change manually the time and name of files for the measurement profile?
+The user interface will provide some GUI elements when they are required according to the user selection. For example, the plot &quot;Prediction&quot; will be displayed only during the &quot;Measurements&quot; phase of the software. Also, the &quot;Configuration&quot; phase has some additional tables and option shown when required.
 
-No directly, to do that, you'll have to load a new configuration file.
 
-However, changes during the calibration could be reflected on this settings. (i. e. Integration time changes).
 
-7. How long are the intervals in between measurements during the calibration?
+-&gt;  2. CONFIGURATION
 
-It depends on the actual settings, it can go up to minutes for large integration times, number of spectra or number of averages.
 
-8. How to auto adjust the integration time?
+2.1 -&gt; How to load a configuration profile?
 
-Just click the corresponding label.
+Please go to the button &quot;Configure&quot; and click on the button &quot;Load Configuration&quot;. Then select the appropriate configuration file with extension &quot;.txt&quot;.
 
-9. How do I know which spectrometer is currently in use?
 
-It is shown in the spectrometer list in polarimeter tab. Also, it's the first checked spectrometer from the Preview Tab List.
+2.2 -&gt; How to create a configuration file?
 
-10. How do I load Data?
+Please go to the button &quot;Configure&quot;, then fill the form with the label &quot;Create Configuration File&quot; with the appropriate values according to the desired configuration profile. Then click in the button &quot;Generate Configuration&quot;. Here the user can select the name and folder where all the configuration files will be saved.
 
-You can load FFT data or Raw data to be analyzed. Press &quot;Load Data&quot; and then select &quot;Raw Data&quot; or &quot;FFT Data&quot; to load the file.
 
-Remember that raw data has the form XXC1_XXC2_XXms_XXHz_XX.CS/.TXT and the FFT data has the form   XXC1_XXC2_XXms_XXHz_XX_FFT.txt.
+2.3 -&gt; What is created from the option &quot;Generate Configuration&quot;?
 
-11. Why is there a Temp.tmp file in my folder data_polarimeter?
+This option will save in the selected folder the configuration file with the measurement entries and the syringe pumps files to be loaded in the neMESYS User Interface.
 
-This file collects the data from the calibration but it is not preserved since it can become large in disk space.
 
-12. What is Clear All?
+2.4 -&gt; What else is saved in this folder?
 
-It cleans all the plots in the tab, as well to restart everything to the default values. Also removes any loaded configuration.
+This folder also will contain all the measurement results as Raw Data and FFT values. 
+ 
 
-13. When can I vary the parameters?
+2.5 -&gt; What GUI elements are loaded after the configuration?
 
-Only during the calibration phase, this to avoid changes for example when the measurement is running automatically.
+After the configuration is loaded or created, a table with the measurement entries will be displayed, as well as the saving options of Raw Data and FFT Profiles. Additionally, the syringe pumps software neMESYS User Interface will be open automatically.
 
-14. How to save a graph?
+**  Please consider that this option requires a Shortcut Icon in the Desktop named &quot;NEMESYS&quot; or the default name &quot;neMESYS UserInterface&quot;, Otherwise this option might not work properly.
 
-Click on &quot;Save Graphs&quot; and select the folder where the PDF files will be saved. One per each plot of Compensation and FFT profile.
 
-15. Why the software is not responding?
+2.6 -&gt; What the table &quot;Measurement Profile&quot; contains?
 
-It might be that you are trying to load a corrupt file type, for example an empty file txt for loading data or configuration. Also, it may happens when the spectrometer is overloaded.
+This table contains the time intervals between the measurements and the file name saved for each time interval.
 
-This is avoided, in general warnings are shown to the user that a file is not correct, and the spectrometer is usually stoped when the load is to high.
 
-16. What I'm saving when choosing &quot;FFT Profiles&quot; box?
+2.7 -&gt; What saving options are there?
+
+You could save the Raw Data, which means the file that is generated directly from the Spectrometer. Also, you could save the FFT of the data from the spectrometer. Note that you could save also both files for each time interval, however consider the amount of disk space that this option might take for long term measurements. 
+
+** At least one type of file to save has to be selected, otherwise the measurement data could be lost.
+
+
+2.8 -&gt; What I'm saving when choosing &quot;FFT Profiles&quot; box?
 
 The amplitudes of the components DC, W, 2W and the ratio W/2W.Also their corresponding wavelengths.
 
-17. How can I change the wavelength of the FFT plot?
 
-Just click the label of the wavelength number and select the desired one. This change will remain during all the calibration or measurements.
 
-18. How do I change the frequency where the FFT is extracted?
+-&gt;  3. CALIBRATION
 
-Click in the box with the frequency number in the table with the column &quot;Frequency&quot;, then write the desired frequency, press the key &quot;Enter&quot; and wait for the changes to be applied.
 
-* Same applies for changing the number of spectra.
+3.1 -&gt; How to start the calibration?
 
-19. Why it takes too long to measure the FFT?
+Please go to the button &quot;Calibrate&quot;. If no configuration profile is loaded or created (see 2), the interface will ask to run a &quot;Free Calibration&quot; or to &quot;Load Configuration&quot;. Click in the desired type of calibration (See 3.2).
 
-The Spectrometer needs certain amount of time to collect the data from the probe and save it as a temporal file during the calibration. Furthermore, this data is analyzed by the FFT and plotted in real time.
 
-The length of this time depends on (IntTime * Number of Averages * Number of Spectra). So for large values of any of this three variables, the system will take some time to process the data.
+3.2 -&gt; What is a Free Calibration?
 
-20. Why I can see the Live Raw data only a few seconds?
+With this option, default values for the configuration will be loaded and the calibration will allow changes in the spectrometer settings only. This option is just a preview of the actual state of the setup.
 
-It can be seen for approximatelly 7 seconds. This time is short in order to also reduce the total real time processing of data. 
 
-Thus the real data time processing consists of the time of raw data + the time of spectra measurement + time of data processing and ploting.
+3.3 -&gt; What happens if a Configuration is loaded before starting the calibration?
 
-21. Why the plots are disturbed sometimes after stopping the calibration?
+If there is a configuration already loaded in the interface, the calibration will start directly by taking the parameters of the previously  loaded or created configuration.
 
-Sometimes it happens when the calibration is stopped and the spectrometer was busy measuring.</string>
+
+3.4 -&gt; How to change values of the configuration?
+
+This option of only available during the calibration phase. The user can change the spectrometer integration time, number of averages and auto adjust by just doing click in the corresponding label and giving the corresponding desired value. The number of spectra and frequency can be modified by doing click in the corresponding cell of its table and pressing the key &quot;Enter&quot; after doin gthe change. With this action, the changes will be accepted by the interface. If no &quot;Enter&quot; is pressed, then the value will return to its original value automatically.
+
+** The interface will restart the calibration automatically each time a parameter is modified.
+
+
+3.5 -&gt; Is the configuration profile modified during the calibration?
+
+Yes. In this phase the user is free to change parameters of the spectrometer and they will be reflected in the loaded file names. However, for changes in the concentrations and time intervals, a new configuration file will have to be created or loaded.
+
+
+3.6 -&gt; When can I vary the spectrometer parameters?
+
+Only during the calibration phase, this to avoid changes for example when the measurement is running automatically.
+
+
+3.7 -&gt;   How long are the intervals in between the spectrometer measurements during the calibration?
+
+It depends on the actual settings, it can go up to minutes for large integration times, number of spectra or number of averages.
+
+
+3.8 -&gt; How the plots are arranged?
+
+During the calibration phase, first the plot of the raw signal is shown for an interval of time, then the FFT data is calculated and showed after processing. This cycle is repeated until the user stops the calibration.
+
+
+3.9 -&gt; Why is there a Temp.tmp file in my software folder &quot;data_polarimeter&quot;?
+
+This file collects the data from the calibration but it is not preserved since it can become large in disk space.
+
+
+3.10 -&gt; Why it takes some time for the interface to get the FFT?
+
+The Spectrometer needs certain amount of time to collect the data from the probe and save it as a temporal file during the calibration. Furthermore, this data is analyzed by the FFT and plotted in real time. The length of this time depends on (IntTime * Number of Averages * Number of Spectra). So for large values of any of this three variables, the system will take some time to process the data.
+
+** Please consider that in general very large number of spectra or integration time will lead to larger measurement intervals, which could also overload the computer in use.
+
+
+3.11 -&gt; Why I can see the Live Raw data only a few seconds?
+
+It can be seen for approximatelly 7 seconds. This time is short in order to also reduce the total real time processing of data. Thus the real data time processing consists of the time of raw data + the time of spectra measurement + time of data processing and ploting.
+
+
+3.12 -&gt; What are those bars at the bottom when doing the calibration?
+
+There is an information bar, which will inform about the current process of the interface. Also there is a progress bar which will show on which plot the interface is working during the cycles.
+
+
+
+-&gt;  4. MEASUREMENTS
+
+
+4.1 -&gt; Why I can't start a measurement?
+
+Please check that the spectrometer is not in use in another function at that time. Also a configuration profile is required to start the measurements. (See 2).
+
+
+4.2 -&gt; How I do perform a measurement?
+
+Click the button &quot;Start Measurement&quot;, the plots will be loaded automatically as well as the progress bars of the measurements. The resulting data will be saved in the same folder of the configuration file.
+
+
+4.3 -&gt; How do I know on which time interval the measurement is?
+
+The table &quot;Measurement Profile&quot; will highlight the current time interval in process. Also, the total measurement progress bar will show the remaining percentage of measurements to finish the long term measurements.
+
+
+4.4 -&gt; Can I change a parameter of the configuration during the measurements?
+
+No. This changes are only allowed during the calibration phase. This is to prevent the user to accidentally change the configured and tested configurations.
+
+
+4.5 -&gt; What can I see during the measurements?
+
+During this phase, the raw signal is shown for a longer period of time. Then the FFT is performed when the time interval is complete. This is to avoid overloading of the system during the long term measurements. A history of the average signals can be seen in the plot &quot;Average Signal&quot;. Also the plot of &quot;Prediction&quot; will be loaded by demand, which will show after each time interval the correspoding result for the linear regression algorithm.
+
+
+
+-&gt; 5. OTHERS
+
+5.1 -&gt; How can the Data be loaded ?
+
+You can load FFT data or the Raw data to be analyzed. Press the button &quot;Load Data&quot; and then select the desired option &quot;Raw Data&quot; or &quot;FFT Data&quot; to load the file. 
+
+** Remember that raw data has the name form XXC1_XXC2_XXms_XXHz_XX.CS/.TXT and the FFT data has the name form XXC1_XXC2_XXms_XXHz_XX_FFT.txt.
+
+
+5.2 -&gt; How to save a graph to PDF?
+
+Click on &quot;Save Graphs&quot; and select the folder where the PDF files will be saved. One per each plot of Compensation and FFT profile.
+
+
+5.3 -&gt; How can I change the wavelength of the FFT plot?
+
+To change the wavelength in the side panel plot FFT Intensity, click the label of the wavelength number and select the desired one. This change will remain during all the calibration or measurements. This parameter can be changed at any time during the calibrations or the measurements.
+
+
+
+-&gt; 6. SOFTWARE ISSUES ?
+
+
+6.1 -&gt; Why the software is not responding?
+
+It might be that you are trying to load a non compatible file type, for example an empty file &quot;.txt&quot; for loading data or configuration. Also, it may happens when the spectrometer is overloaded with the adjusted parameters. This problems are generally avoided, usually warnings are shown to the user when a file is not appropriate, or when the spectrometer is usually stoped because the load is too high.
+
+
+6.2 -&gt; Why the plots are disturbed sometimes after stopping the calibration?
+
+Sometimes it happens when the calibration is stopped and the spectrometer was busy measuring. This interruption is most of the times catched and fixed. If this happens, you could restart the calibration to re draw the plots or click in the option &quot;Clear All&quot;, remember that this last will also remove any other loaded configuration.</string>
+   </property>
+   <property name="backgroundVisible">
+    <bool>false</bool>
+   </property>
+   <property name="centerOnScroll">
+    <bool>false</bool>
    </property>
   </widget>
  </widget>
