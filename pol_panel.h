@@ -134,10 +134,10 @@ private slots:
     void initializeDefaultCalibration(void);
 
     /* Adjust time plotting in live averages */
-    void Adjust_AveragePlotTime();
+    void Adjust_AveragePlotTime(void);
 
     /* Adjust the Integration Time */
-    void adjustIntegrationTimePol();
+    void adjustIntegrationTimePol(void);
 
     /* Functions for spectrometer items */
     void handleClickEvent(QWidget *widget);
@@ -155,7 +155,7 @@ private slots:
     void writeToFile(FILE *file, double *a_pSpectrum, int WParam);
 
     /* Close any open loop in the polarimeter tab */
-    void quitOxymetry();
+    void quitOxymetry(void);
 
     /* FFT file to load and visualize */
     void LoadFromFFT(void);
@@ -173,7 +173,7 @@ private slots:
     void Run_Polarimetry(short runType);
 
     /* Stop running the spectrometer */
-    void Stop_Run_Polarimetry();
+    void Stop_Run_Polarimetry(void);
 
     /* Select what kind of data should be loaded */
     void toggle_LoadData(void);

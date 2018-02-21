@@ -23,7 +23,7 @@
 
 /**
  * @brief Constructor of 'Pol_Plot' class
- * @param parent Parent widget
+ *
  */
 Pol_Plot::Pol_Plot()
 {
@@ -76,12 +76,14 @@ Pol_Plot::Pol_Plot()
 
 /**
  * @brief Receive the Data to be ploted on the Polarimeter Tab Interface.
+ * @param[in] Vectors with the wavelengths, the plotting frequencies, the FFT transformation, the DC, W and 2W components, and the ratio W/2W.
+ *
  */
-void Pol_Plot::Plot_FFT_Graphs(QVector<double> FFTLwavelengths, QVector<double> FFTLtime, QVector<double> FFTLfft_data, QVector<double> FFTLfft_DC, QVector<double> FFTLfft_W
+void Pol_Plot::Plot_FFT_Graphs(QVector<double> FFTLwavelengths, QVector<double> FFTLfrequencies, QVector<double> FFTLfft_data, QVector<double> FFTLfft_DC, QVector<double> FFTLfft_W
                                , QVector<double> FFTLfft_2W, QVector<double> FFTLfft_Compensation_Signal){
 
     /* Plot The FFT at the default Wavelength first */
-    plotFFTatSelectedWave(FFTLfft_data, FFTLtime);
+    plotFFTatSelectedWave(FFTLfft_data, FFTLfrequencies);
 
     /* Assign the values to the plots */
     FFT_DC->setSamples(FFTLwavelengths , FFTLfft_DC);
@@ -104,15 +106,17 @@ void Pol_Plot::Plot_FFT_Graphs(QVector<double> FFTLwavelengths, QVector<double> 
 
 /**
  * @brief Plot Only the FFT of the Selected Wavelength.
+ * @param[in] Vectors with the FFT transformation and the plotting frequencies.
  */
-void Pol_Plot::plotFFTatSelectedWave(QVector<double> FFTLfft_data, QVector<double> FFTLtime){
+void Pol_Plot::plotFFTatSelectedWave(QVector<double> FFTLfft_data, QVector<double> FFTLfrequencies){
 
     /* Plot the FFT */
-    FFT_oneWave->setSamples(FFTLtime , FFTLfft_data);
+    FFT_oneWave->setSamples(FFTLfrequencies , FFTLfft_data);
 }
 
 /**
  * @brief Plot W, DC and 2W averaged
+ * @param[in] Vectors with the DC, W, 2W and ratio W/2W components, also the wavelengths. The parameter dataloaded prevents mixing of data.
  */
 void Pol_Plot::plotAverages(bool dataloaded, QVector<double> FFTLfft_DC, QVector<double> FFTLfft_W, QVector<double> FFTLfft_2W, QVector<double> FFTLwavelengths){
 
@@ -144,7 +148,7 @@ void Pol_Plot::plotAverages(bool dataloaded, QVector<double> FFTLfft_DC, QVector
         maxYValue =  ceil(*std::max_element(AverageDC.begin(), AverageDC.end()));
     }
 
-    /* The signal is ploted every defined time, so run it's own timer for plotting */
+    /* The signal is plotted every defined time, so run it's own timer for plotting */
     counts_average_time = counts_average_time + 1;
 
     /* Add the time to the x axis of the plot */
@@ -205,14 +209,19 @@ Pol_Plot::~Pol_Plot(void)
     /* Delete all the existing data ploted on the interface */
     delete FFT_DC;
     FFT_DC = nullptr;
+
     delete FFT_W;
     FFT_W = nullptr;
+
     delete FFT_2W;
     FFT_2W = nullptr;
+
     delete Compensation_Signal;
     Compensation_Signal  = nullptr;
+
     delete FFT_oneWave;
     FFT_oneWave= nullptr;
+
     delete predictionSignal;
     predictionSignal = nullptr;
 }

@@ -40,10 +40,10 @@ public:
     void plotAverages(bool dataloaded, QVector<double> FFTLfft_DC, QVector<double> FFTLfft_W, QVector<double> FFTLfft_2W, QVector<double> FFTLwavelengths);
 
     /* The user wants to look the FFT at one specific wavelength */
-    void plotFFTatSelectedWave(QVector<double> FFTLfft_data, QVector<double> FFTLtime);
+    void plotFFTatSelectedWave(QVector<double> FFTLfft_data, QVector<double> FFTLfrequencies);
 
     /* Plot the graphs */
-    void Plot_FFT_Graphs(QVector<double> FFTLwavelengths, QVector<double> FFTLtime, QVector<double> FFTLfft_data, QVector<double> FFTLfft_DC,
+    void Plot_FFT_Graphs(QVector<double> FFTLwavelengths, QVector<double> FFTLfrequencies, QVector<double> FFTLfft_data, QVector<double> FFTLfft_DC,
                          QVector<double> FFTLfft_W, QVector<double> FFTLfft_2W, QVector<double> FFTLfft_Compensation_Signal);
 
     /* Clean all the plots */

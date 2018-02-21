@@ -99,6 +99,8 @@ void Pol_Measurements::RestartTimers(void){
 
 /**
  * @brief Is the measurement running?
+ * @param[in] value TRUE to remember the measurement is running, FALSE to stop it.
+ *
  */
 void Pol_Measurements::setMeasurementRunning(bool runningM){
 
@@ -109,6 +111,7 @@ void Pol_Measurements::setMeasurementRunning(bool runningM){
 
 /**
  * @brief Is the Calibration running?
+ * @param[in] value TRUE to remember the calibration is running, FALSE to stop it.
  */
 void Pol_Measurements::setCalibrationRunning(bool runningC){
 
@@ -119,6 +122,7 @@ void Pol_Measurements::setCalibrationRunning(bool runningC){
 
 /**
  * @brief Is the configuration loaded?
+ * @param[in] value TRUE to remember the interface is configured, FALSE its not configured yet.
  */
 void Pol_Measurements::setConfigured(bool configured){
 

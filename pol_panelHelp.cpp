@@ -79,7 +79,7 @@ PanelPolHelp::PanelPolHelp(QWidget *parent) :
 }
 
 /**
- * @brief Close the pol help dialog
+ * @brief Close the Polarimeter help Dialog
  */
 void PanelPolHelp::close(void)
 {

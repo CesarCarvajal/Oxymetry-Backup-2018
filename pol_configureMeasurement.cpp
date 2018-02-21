@@ -208,7 +208,15 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
     QLabel *label = qobject_cast<QLabel *>(widget);
     QLineEdit *LineLabel = qobject_cast<QLineEdit *>(widget);
     QCheckBox *checkBox = qobject_cast<QCheckBox *>(widget);
+
+    /* Is it a valid number? */
     bool ok;
+
+    /* How many substances are there now? */
+    double NumberOfSubstances = ui->checkBox_Imp2->isChecked()+ ui->checkBox_Imp1->isChecked()+ ui->checkBox_Glucose->isChecked();
+
+    /* Get actual Data */
+    GetConfigurationData();
 
     /* Hide / Show GUI Elements */
     if (label == ui->label_load)
@@ -305,31 +313,52 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
         /* Solutions Concentrations Settings */
 
         /* The user decide to change the stock glucose */
-        if(LineLabel == ui->lineEdit_StockGluc && ui->lineEdit_StockGluc->text().toInt(&ok) >= 0){
+        if(LineLabel == ui->lineEdit_StockGluc && ui->lineEdit_StockGluc->text().toDouble(&ok) >= 0){
 
             /* Is there a valid number */
             if(!ok){
                 /* Set back default value */
                 ui->lineEdit_StockGluc->setText("1000");
             }
+
+            /* Update maximum concentrations */
+            externSoftware->maxConcentrations.replace(0, externSoftware->stockSolutions.at(0)/(NumberOfSubstances));
+
+            /* Adjust the maximum concentration accordingly */
+            ui->lineEdit_MaxGluc->setText(QString::number(externSoftware->maxConcentrations.at(0)));
+
         }else
             /* The user decide to change the stock Impurity 1 */
-            if(LineLabel == ui->lineEdit_StockImp1 && ui->lineEdit_StockImp1->text().toInt(&ok) >= 0){
+            if(LineLabel == ui->lineEdit_StockImp1 && ui->lineEdit_StockImp1->text().toDouble(&ok) >= 0){
 
                 /* Is there a valid number */
                 if(!ok){
                     /* Set back default value */
                     ui->lineEdit_StockImp1->setText("4");
                 }
+
+                /* Update maximum concentrations */
+                externSoftware->maxConcentrations.replace(1, externSoftware->stockSolutions.at(1)/(NumberOfSubstances));
+
+                /* Adjust the maximum concentration accordingly */
+                ui->lineEdit_MaxImp1->setText(QString::number(externSoftware->maxConcentrations.at(1)));
+
             }else
                 /* The user decide to change the stock Impurity 2 */
-                if(LineLabel == ui->lineEdit_StockImp2 && ui->lineEdit_StockImp2->text().toInt(&ok) >= 0){
+                if(LineLabel == ui->lineEdit_StockImp2 && ui->lineEdit_StockImp2->text().toDouble(&ok) >= 0){
 
                     /* Is there a valid number */
                     if(!ok){
                         /* Set back default value */
                         ui->lineEdit_StockImp2->setText("0");
                     }
+
+                    /* Update maximum concentrations */
+                    externSoftware->maxConcentrations.replace(2, externSoftware->stockSolutions.at(2)/(NumberOfSubstances));
+
+                    /* Adjust the maximum concentration accordingly */
+                    ui->lineEdit_MaxImp2->setText(QString::number(externSoftware->maxConcentrations.at(2)));
+
                 }
 
         /* The user decide to change the minimum glucose concentration */
@@ -368,6 +397,13 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
                 /* Set back default value */
                 ui->lineEdit_MaxGluc->setText("1");
             }
+
+            /* Update stock solutions concentrations */
+            externSoftware->stockSolutions.replace(0, externSoftware->maxConcentrations.at(0)*(NumberOfSubstances));
+
+            /* Adjust stock solutions concentration accordingly */
+            ui->lineEdit_StockGluc->setText(QString::number(externSoftware->stockSolutions.at(0)));
+
         }else
             /* The user decide to change the maximum impurity 1 concentration */
             if(LineLabel == ui->lineEdit_MaxImp1 && ui->lineEdit_MaxImp1->text().toDouble(&ok) >= 0){
@@ -377,6 +413,13 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
                     /* Set back default value */
                     ui->lineEdit_MaxImp1->setText("0.1");
                 }
+
+                /* Update stock solutions concentrations */
+                externSoftware->stockSolutions.replace(1, externSoftware->maxConcentrations.at(1)*(NumberOfSubstances));
+
+                /* Adjust stock solutions concentration accordingly */
+                ui->lineEdit_StockImp1->setText(QString::number(externSoftware->stockSolutions.at(1)));
+
             }else
                 /* The user decide to change the maximum impurity 2 concentration */
                 if(LineLabel == ui->lineEdit_MaxImp2 && ui->lineEdit_MaxImp2->text().toDouble(&ok) >= 0){
@@ -386,6 +429,12 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
                         /* Set back default value */
                         ui->lineEdit_MaxImp2->setText("0");
                     }
+
+                    /* Update stock solutions concentrations */
+                    externSoftware->stockSolutions.replace(2, externSoftware->maxConcentrations.at(2)*(NumberOfSubstances));
+
+                    /* Adjust stock solutions concentration accordingly */
+                    ui->lineEdit_StockImp2->setText(QString::number(externSoftware->stockSolutions.at(2)));
                 }
 
         /* Pump Flow */
@@ -454,50 +503,52 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
     }
 
     /* Check the impurity 2 */
-    if(checkBox == ui->checkBox_Imp2){
+    if(checkBox == ui->checkBox_Imp2 || checkBox == ui->checkBox_Imp1 || checkBox == ui->checkBox_Glucose){
 
-            /* Show/Hide Impurity 2 values */
-            ui->lineEdit_StockImp2->setEnabled(ui->checkBox_Imp2->isChecked());
-            ui->label_StockImp2->setEnabled(ui->checkBox_Imp2->isChecked());
-            ui->label_StockImp2_2->setEnabled(ui->checkBox_Imp2->isChecked());
-            ui->lineEdit_MaxImp2->setEnabled(ui->checkBox_Imp2->isChecked());
-            ui->label_MaxImp2->setEnabled(ui->checkBox_Imp2->isChecked());
-            ui->label_MaxImp2_2->setEnabled(ui->checkBox_Imp2->isChecked());
-            ui->lineEdit_MinImp2->setEnabled(ui->checkBox_Imp2->isChecked());
-            ui->label_MinImp2->setEnabled(ui->checkBox_Imp2->isChecked());
-            ui->label_MinImp2_2->setEnabled(ui->checkBox_Imp2->isChecked());
+        /* Show/Hide Impurity 2 values */
+        ui->lineEdit_StockImp2->setEnabled(ui->checkBox_Imp2->isChecked());
+        ui->label_StockImp2->setEnabled(ui->checkBox_Imp2->isChecked());
+        ui->label_StockImp2_2->setEnabled(ui->checkBox_Imp2->isChecked());
+        ui->lineEdit_MaxImp2->setEnabled(ui->checkBox_Imp2->isChecked());
+        ui->label_MaxImp2->setEnabled(ui->checkBox_Imp2->isChecked());
+        ui->label_MaxImp2_2->setEnabled(ui->checkBox_Imp2->isChecked());
+        ui->lineEdit_MinImp2->setEnabled(ui->checkBox_Imp2->isChecked());
+        ui->label_MinImp2->setEnabled(ui->checkBox_Imp2->isChecked());
+        ui->label_MinImp2_2->setEnabled(ui->checkBox_Imp2->isChecked());
 
-    }else
-        /* Check impurity 1 */
-        if(checkBox == ui->checkBox_Imp1){
+        /* Show/Hide Impurity 1 values */
+        ui->lineEdit_StockImp1->setEnabled(ui->checkBox_Imp1->isChecked());
+        ui->label_StockImp1->setEnabled(ui->checkBox_Imp1->isChecked());
+        ui->label_StockImp1_2->setEnabled(ui->checkBox_Imp1->isChecked());
+        ui->lineEdit_MaxImp1->setEnabled(ui->checkBox_Imp1->isChecked());
+        ui->label_MaxImp1->setEnabled(ui->checkBox_Imp1->isChecked());
+        ui->label_MaxImp1_2->setEnabled(ui->checkBox_Imp1->isChecked());
+        ui->lineEdit_MinImp1->setEnabled(ui->checkBox_Imp1->isChecked());
+        ui->label_MinImp1->setEnabled(ui->checkBox_Imp1->isChecked());
+        ui->label_MinImp1_2->setEnabled(ui->checkBox_Imp1->isChecked());
 
-            /* Show/Hide Impurity 1 values */
-            ui->lineEdit_StockImp1->setEnabled(ui->checkBox_Imp1->isChecked());
-            ui->label_StockImp1->setEnabled(ui->checkBox_Imp1->isChecked());
-            ui->label_StockImp1_2->setEnabled(ui->checkBox_Imp1->isChecked());
-            ui->lineEdit_MaxImp1->setEnabled(ui->checkBox_Imp1->isChecked());
-            ui->label_MaxImp1->setEnabled(ui->checkBox_Imp1->isChecked());
-            ui->label_MaxImp1_2->setEnabled(ui->checkBox_Imp1->isChecked());
-            ui->lineEdit_MinImp1->setEnabled(ui->checkBox_Imp1->isChecked());
-            ui->label_MinImp1->setEnabled(ui->checkBox_Imp1->isChecked());
-            ui->label_MinImp1_2->setEnabled(ui->checkBox_Imp1->isChecked());
+        /* Show/Hide Glucose values */
+        ui->lineEdit_StockGluc->setEnabled(ui->checkBox_Glucose->isChecked());
+        ui->label_StockGluc->setEnabled(ui->checkBox_Glucose->isChecked());
+        ui->label_StockGluc2->setEnabled(ui->checkBox_Glucose->isChecked());
+        ui->lineEdit_MaxGluc->setEnabled(ui->checkBox_Glucose->isChecked());
+        ui->label_MaxGluc->setEnabled(ui->checkBox_Glucose->isChecked());
+        ui->label_MaxGluc2->setEnabled(ui->checkBox_Glucose->isChecked());
+        ui->lineEdit_Mingluc->setEnabled(ui->checkBox_Glucose->isChecked());
+        ui->label_MinGluc->setEnabled(ui->checkBox_Glucose->isChecked());
+        ui->label_MinGluc2->setEnabled(ui->checkBox_Glucose->isChecked());
 
-        }else
-            /* Check Glucose */
-            if(checkBox == ui->checkBox_Glucose){
+        /* Update maximum concentrations */
+        for(int l=0; l<3; l++){
+            externSoftware->stockSolutions.replace(l, externSoftware->maxConcentrations.at(l)*(NumberOfSubstances));
+        }
 
-                /* Show/Hide Glucose values */
-                ui->lineEdit_StockGluc->setEnabled(ui->checkBox_Glucose->isChecked());
-                ui->label_StockGluc->setEnabled(ui->checkBox_Glucose->isChecked());
-                ui->label_StockGluc2->setEnabled(ui->checkBox_Glucose->isChecked());
-                ui->lineEdit_MaxGluc->setEnabled(ui->checkBox_Glucose->isChecked());
-                ui->label_MaxGluc->setEnabled(ui->checkBox_Glucose->isChecked());
-                ui->label_MaxGluc2->setEnabled(ui->checkBox_Glucose->isChecked());
-                ui->lineEdit_Mingluc->setEnabled(ui->checkBox_Glucose->isChecked());
-                ui->label_MinGluc->setEnabled(ui->checkBox_Glucose->isChecked());
-                ui->label_MinGluc2->setEnabled(ui->checkBox_Glucose->isChecked());
+        /* Adjust the Stock solutions or maximum concentration accordingly */
+        ui->lineEdit_StockGluc->setText(QString::number(externSoftware->stockSolutions.at(0)));
+        ui->lineEdit_StockImp1->setText(QString::number(externSoftware->stockSolutions.at(1)));
+        ui->lineEdit_StockImp2->setText(QString::number(externSoftware->stockSolutions.at(2)));
 
-            }
+    }
 
     /* Are there substances left? */
     if(!ui->checkBox_Glucose->isChecked() && !ui->checkBox_Imp1->isChecked() && !ui->checkBox_Imp2->isChecked()){
@@ -736,6 +787,11 @@ void configurePolMeasure::GetConfigurationData(void)
         /* Show warning */
         showWarning("Please consider that large number of spectra will lead to a larger measurement time!", "");
     }
+
+    /* Save the actual selected substances */
+    externSoftware->glucoseActive = ui->checkBox_Glucose->isChecked();
+    externSoftware->Imp1Active = ui->checkBox_Imp1->isChecked();
+    externSoftware->Imp2Active = ui->checkBox_Imp2->isChecked();
 
 }
 

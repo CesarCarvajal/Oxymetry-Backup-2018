@@ -96,12 +96,12 @@ public:
 "\n"
 "1.2 -> Show/Hide GUI elements:\n"
 "\n"
-"When a label is clicked, the corresponding element will be shown or hiden accordingly. For example by clicking the label \"Raw Signal\", the corresponding plot will be hidden or shown.\n"
+"When a label is clicked, the corresponding element will be shown or hidden accordingly. For example by clicking the label \"Raw Signal\", the corresponding plot will be hidden or shown.\n"
 "\n"
 "\n"
 "1.3 -> What is \"Clear All\"?\n"
 "\n"
-"With this option, any loaded information or configuration will be removed from the interface. Pleasre remember that this option will also remove any configuration changes or loaded data from the user interface.\n"
+"With this option, any loaded information or configuration will be removed from the interface. Please remember that this option will also remove any configuration changes or loaded data from the user interface.\n"
 "\n"
 "\n"
 "1.4 -> Interface elements by demand:\n"
@@ -296,7 +296,7 @@ public:
 "6.2 -> Why the plots are disturbed sometimes after stopping the calibration?\n"
 "\n"
 "Sometimes it happens when the calibration is stopped and the sp"
-                        "ectrometer was busy measuring.", Q_NULLPTR));
+                        "ectrometer was busy measuring. This interruption is most of the times catched and fixed. If this happens, you could restart the calibration to re draw the plots or click in the option \"Clear All\", remember that this last will also remove any other loaded configuration.", Q_NULLPTR));
     } // retranslateUi
 
 };

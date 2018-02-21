@@ -25,13 +25,11 @@
 #include <QDialog>
 #include <QFileDialog>
 #include <QMessageBox>
-#include "qwt_plot_renderer.h"
 #include <QTimer>
 #include <QApplication>
 #include <QSignalMapper>
 #include <QCloseEvent>
 #include <QSizePolicy>
-#include <qprocess.h>
 #include <QTime>
 #include <QDate>
 
@@ -46,8 +44,10 @@
 #include "messages.h"
 #include "timer.h"
 #include "math_helper.h"
+#include <qprocess.h>
+#include "qwt_plot_renderer.h"
 
-/* Panel stuff */
+/* Polarimeter Panel stuff */
 #include "pol_plot.h"
 #include "pol_panel.h"
 #include "pol_fft.h"
@@ -55,14 +55,15 @@
 #include "pol_ConfigureMeasurement.h"
 #include "pol_changeWave_FFT.h"
 #include "pol_panelItem.h"
-#include "panel_change_averages.h"
-#include "panel_change_time.h"
-#include "panel.h"
 #include "ui_pol_panelItem.h"
 #include "ui_pol_panel.h"
-#include "plot.h"
 #include "pol_measurements.h"
 #include "ui_pol_ConfigureMeasurement.h"
+
+/* Panel stuff */
+#include "panel_change_averages.h"
+#include "panel_change_time.h"
+#include "plot.h"
 
 /* Spectrometer control */
 #include "spectrometer.h"
@@ -344,6 +345,7 @@ void PanelPolarimeter::update()
 
 /**
  * @brief User interface items
+ * @param[in] TRUE means the GUI elements are shown, FALSE the elements are hidden.
  */
 void PanelPolarimeter::showUI_Item(bool UIstatus)
 {
@@ -420,6 +422,7 @@ void PanelPolarimeter::toggle_Pol_Measurement(void)
 
 /**
  * @brief Start to run Polarimeter
+ * @param[in] Type 1 means Measurements, 0 means Calibration
  */
 void PanelPolarimeter::Run_Polarimetry(short int runType) {
 
@@ -499,7 +502,7 @@ void PanelPolarimeter::Run_Polarimetry(short int runType) {
 /**
  * @brief Stop the Calibration of the Spectrometer Settings and the Polarimeter Setup
  */
-void PanelPolarimeter::Stop_Run_Polarimetry() {
+void PanelPolarimeter::Stop_Run_Polarimetry(void) {
 
     /* Is the spectrometer disabled? */
     devices2[0]->setIsEnabled(true);
@@ -605,6 +608,7 @@ void PanelPolarimeter::Stop_Run_Polarimetry() {
 
 /**
  * @brief Adjust the Running Start
+ * @param[in] Type 1 means Measurements, 0 means Calibration
  */
 void PanelPolarimeter::AdjustRunStart(short int typeRun){
 
@@ -666,6 +670,7 @@ void PanelPolarimeter::AdjustRunStart(short int typeRun){
 
 /**
  * @brief Adjust the Running End
+ * @param[in] Type 1 means Measurement, 0 means Calibration.
  */
 void PanelPolarimeter::AdjustRunEnd(short int typeRunn){
 
@@ -1143,6 +1148,7 @@ void PanelPolarimeter::ReceiveDataIsHerePol(int WParam, int LParam)
 
 /**
  * @brief Process the received data from the spectrometer
+ * @param[in] The path where the data will be saved.
  */
 void PanelPolarimeter::ProcessReceivedDataPol(QString Path)
 {
@@ -1508,7 +1514,7 @@ void PanelPolarimeter::handleClickEvent(QWidget *widget)
 /**
  * @brief Automatic adjustment of integration time
  */
-void PanelPolarimeter::adjustIntegrationTimePol()
+void PanelPolarimeter::adjustIntegrationTimePol(void)
 {
     /* Is the spectrometer measuring? */
     if (ptrSpectrometers[SpectrometerNumber]->isMeasuring())
@@ -2180,6 +2186,9 @@ void PanelPolarimeter::LoadFromRawData(void) {
 
 /**
  * @brief Write the Raw Data to a File
+ * @param[in] File where the information will be written.
+ * @param[in] The spectra.
+ * @param[in] W Parameter
  */
 void PanelPolarimeter::writeToFile(FILE *file, double *a_pSpectrum, int WParam) {
 
@@ -2367,7 +2376,7 @@ void PanelPolarimeter::AdjustMeasurementsSavingFolder(void)
 /**
  * @brief Adjust plotting time in live averages.
  */
-void PanelPolarimeter::Adjust_AveragePlotTime(){
+void PanelPolarimeter::Adjust_AveragePlotTime(void){
 
     /* How long does take a measurement? */
     int measuringTime = (ConfigureMeasurement->integrationTime*ConfigureMeasurement->numSpectra*ConfigureMeasurement->numberOfAverages/1000);
@@ -2380,7 +2389,7 @@ void PanelPolarimeter::Adjust_AveragePlotTime(){
 /**
  * @brief Plot FFT.
  */
-void PanelPolarimeter::Plot_FFT(){
+void PanelPolarimeter::Plot_FFT(void){
 
     /* Plot FFT function on object Pol Plot */
     pol_plot->Plot_FFT_Graphs(FFTL.wavelengths, FFTL.time, FFTL.fft_data, FFTL.fft_DC, FFTL.fft_W, FFTL.fft_2W, FFTL.fft_Compensation_Signal);
@@ -2485,7 +2494,7 @@ void PanelPolarimeter::saveGraph_Pol(void) {
 /**
  * @brief Plot W, DC and 2W averaged
  */
-void PanelPolarimeter::plotAverage(){
+void PanelPolarimeter::plotAverage(void){
 
     /* Plot Averages */
     pol_plot->plotAverages(dataloaded, FFTL.fft_DC, FFTL.fft_W, FFTL.fft_2W, FFTL.wavelengths);
@@ -2716,6 +2725,7 @@ void PanelPolarimeter::initializeDefaultCalibration(void){
     FFTL.IntTime = ConfigureMeasurement->integrationTime;
     FFTL.ConcentrationC1 = 0;
     FFTL.ConcentrationC2 = 0;
+    FFTL.ConcentrationC3 = 0;
 }
 
 /**
@@ -2816,6 +2826,7 @@ void PanelPolarimeter::Pol_Calibrate(void){
             FFTL.IntTime = ConfigureMeasurement->integrationTime;
             FFTL.ConcentrationC1 = 0;
             FFTL.ConcentrationC2 = 0;
+            FFTL.ConcentrationC3 = 0;
 
             /* Configure spectrometer */
             ptrSpectrometers[SpectrometerNumber]->setIntegrationTime(ptrSpectrometers[SpectrometerNumber]->getIntegrationTime());
@@ -2905,6 +2916,7 @@ void PanelPolarimeter::SelectedSpectrometer_Polarimeter(void){
 
 /**
  * @brief Enable polarimeter: If there is a selected spectrometer, then it´s added to the list of Polarimeter Tab.
+ * @param[in] If TRUE then the labels and buttons are activated, if FALSE then they are disabled.
  */
 void PanelPolarimeter::enable_Polarimeter_Measurement(bool activate)
 {
@@ -2927,7 +2939,7 @@ void PanelPolarimeter::enable_Polarimeter_Measurement(bool activate)
 /**
  * @brief Closes everything when closing the app
  */
-void PanelPolarimeter::quitOxymetry(){
+void PanelPolarimeter::quitOxymetry(void){
 
     /* Just close all the running loops if the app was closed unexpected */
     if(m_NrDevices > 0 ){
@@ -2939,6 +2951,7 @@ void PanelPolarimeter::quitOxymetry(){
 
 /**
  * @brief Measurement progress routine
+ * @param[in] The variable i is the entry number of the current time interval.
  */
 void PanelPolarimeter::Pol_MeasurementProgress(unsigned int i){
 

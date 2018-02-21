@@ -38,6 +38,11 @@ Pol_ExternConf::Pol_ExternConf()
     stockSolutions.reserve(3);
     maxConcentrations.reserve(3);
     minConcentrations.reserve(3);
+
+    /* Active substances */
+    glucoseActive = false;
+    Imp1Active = false;
+    Imp2Active = false;
 }
 
 /**
@@ -119,25 +124,60 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
 
     }
 
-    /* Check correlation factor */
-    while(true){
+    /* Is there more than 1 substance available? */
+    if(glucoseActive+Imp1Active+Imp2Active > 1){
 
-        /* Correlation factors */
-        float corrcoeffImpurities = 1, corrcoeffTime = 1;
+        /* Check correlation factor */
+        while(true && NConcentrations>4){
 
-        /* Random Indexes */
+            /* Correlation factors */
+            float corrcoeffGlucImp1= 1, corrcoeffTime = 1, corrcoeffImp1Imp2= 1, corrcoeffGlucImp2= 1;
+
+            /* Random Indexes */
+            std::random_shuffle(GlucoseConcentration.begin(), GlucoseConcentration.end());
+            std::random_shuffle(Impurity1Concentration.begin(), Impurity1Concentration.end());
+            std::random_shuffle(Impurity2Concentration.begin(), Impurity2Concentration.end());
+
+            /* correlation of glucose and number of measurements */
+            corrcoeffTime = correlationCoefficient(Nmeasurements, GlucoseConcentration, NConcentrations);
+
+            /* Is the factor ok?, if not start again */
+            if(corrcoeffTime > 0.05){ continue;}
+
+            /* Correlation between Glucose and Impurity 1 */
+            if(glucoseActive && Imp1Active){
+                corrcoeffGlucImp1 = correlationCoefficient(GlucoseConcentration, Impurity1Concentration, NConcentrations);
+
+                /* Is the factor ok?, if not start again */
+                if(corrcoeffGlucImp1 > 0.05){ continue;}
+            }
+
+            /* Correlation between Impurity 1 and Impurity 2 */
+            if(Imp1Active && Imp2Active){
+                corrcoeffImp1Imp2 = correlationCoefficient(Impurity2Concentration, Impurity1Concentration, NConcentrations);
+
+                /* Is the factor ok?, if not start again */
+                if(corrcoeffImp1Imp2 > 0.05){ continue;}
+            }
+
+            /* Correlation between Glucose and Impurity 2 */
+            if(glucoseActive && Imp2Active){
+                corrcoeffGlucImp2 = correlationCoefficient(GlucoseConcentration, Impurity2Concentration, NConcentrations);
+
+                /* Is the factor ok?, if not start again */
+                if(corrcoeffGlucImp2 > 0.05){ continue;}
+            }
+
+            /* If no correlation or just a few elements, then stop doing random order */
+            break;
+        }
+    }else{
+
+        /* Random Indexes if there is only 1 substance */
         std::random_shuffle(GlucoseConcentration.begin(), GlucoseConcentration.end());
         std::random_shuffle(Impurity1Concentration.begin(), Impurity1Concentration.end());
         std::random_shuffle(Impurity2Concentration.begin(), Impurity2Concentration.end());
 
-        /* Correlation? */
-        corrcoeffImpurities = correlationCoefficient(GlucoseConcentration, Impurity1Concentration, NConcentrations);
-        corrcoeffTime = correlationCoefficient(Nmeasurements, GlucoseConcentration, NConcentrations);
-
-        /* If no correlation or just a few elements, then stop doing random order */
-        if((corrcoeffImpurities <= 0.05 && corrcoeffTime <= 0.05) || NConcentrations < 4){
-            break;
-        }
     }
 
     /* Flow Calculation */
@@ -153,13 +193,25 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
     }
 
     /* Create the Spectrometer Script */
-    GenerateSpectrometerConfiguration(GlucoseConcentration, Impurity1Concentration);
+    GenerateSpectrometerConfiguration(GlucoseConcentration, Impurity1Concentration, Impurity2Concentration);
 
-    /* Create the Glucose pump script */
-    GeneratePumpScripts("/GlucosePumpScript.nfp", GlucoseFlow);
+    /* If glucose is active, then generate its pump script */
+    if(glucoseActive){
+        /* Create the Glucose pump script */
+        GeneratePumpScripts("/GlucosePumpScript.nfp", GlucoseFlow);
+    }
 
-    /* Create the Impurity 1 pump script */
-    GeneratePumpScripts("/Impurity1PumpScript.nfp", Impurity1Flow);
+    /* If Impurity 1 is active, then generate its pump script */
+    if(Imp1Active){
+        /* Create the Impurity 1 pump script */
+        GeneratePumpScripts("/Impurity1PumpScript.nfp", Impurity1Flow);
+    }
+
+    /* If impurity 2 is active, then generate its pump script */
+    if(Imp2Active){
+        /* Create the Impurity 2 pump script */
+        GeneratePumpScripts("/Impurity2PumpScript.nfp", Impurity2Flow);
+    }
 
     /* Create the Water pump script */
     GeneratePumpScripts("/WaterPumpScript.nfp", WaterFlow);
@@ -168,6 +220,7 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
 
 /**
  * @brief Generate Pump Scripts
+ * @param[in] The type of file to be generated "Water", "Glucose" or "Impurity", the vector containing the necessary flow.
  */
 void Pol_ExternConf::GeneratePumpScripts(QString filetype, QVector <double> FlowVector){
 
@@ -195,8 +248,9 @@ void Pol_ExternConf::GeneratePumpScripts(QString filetype, QVector <double> Flow
 
 /**
  * @brief Generate Spectrometer configuration
+ * @param[in] Vectors with Glucose and Impurities concentrations
  */
-void Pol_ExternConf::GenerateSpectrometerConfiguration(QVector <double> GlucoseConcentration, QVector <double> Impurity1Concentration){
+void Pol_ExternConf::GenerateSpectrometerConfiguration(QVector <double> GlucoseConcentration, QVector <double> Impurity1Concentration, QVector <double> Impurity2Concentration){
 
     /* Open the file */
     FILE *file = fopen(pathFile.toLatin1().data(), "wt");
@@ -208,8 +262,31 @@ void Pol_ExternConf::GenerateSpectrometerConfiguration(QVector <double> GlucoseC
         int startTime = (10*fillRefill + 20*shortBreak + 7000) + TimeIntervals*j;
 
         /* Configuration line */
-        QString line = QString::number(startTime) + ";" + QString::number(GlucoseConcentration.at(j)) + "C1_" + QString::number(Impurity1Concentration.at(j)) + "C2_"
-                + QString::number(IntegrationTime) + "ms_" + QString::number(Frequency) + "Hz_" + QString::number(j+1) + ";" + QString::number(NrSpectra) +
+        QString line = QString::number(startTime) + ";" ;
+
+        /* If glucose is active call it Concentration 1 or C1 */
+        if(glucoseActive){
+
+            /* Add C1 to the file name */
+            line.append(QString::number(GlucoseConcentration.at(j)) + "C1_");
+        }
+
+        /* If Impurity 1 is active call it Concentration 2 or C2 */
+        if(Imp1Active){
+
+            /* Add C2 to the file name */
+            line.append(QString::number(Impurity1Concentration.at(j)) + "C2_");
+        }
+
+        /* If Impurity 2 is active call it Concentration 3 or C3 */
+        if(Imp2Active){
+
+            /* Add C3 to the file name */
+            line.append(QString::number(Impurity2Concentration.at(j)) + "C3_");
+        }
+
+        /* Complete the file name */
+        line = line + QString::number(IntegrationTime) + "ms_" + QString::number(Frequency) + "Hz_" + QString::number(j+1) + ";" + QString::number(NrSpectra) +
                 ";" + QString::number(IntegrationTime) + ";" + QString::number(NrAverages) + ";" + QString::number(Frequency) + "\n";
 
         /* Write in file */
@@ -224,6 +301,7 @@ void Pol_ExternConf::GenerateSpectrometerConfiguration(QVector <double> GlucoseC
 
 /**
  * @brief Write Pump File
+ * @param[in] The file where the configuration is going to be written. The type of file to be written and the vector containing the flows.
  */
 void Pol_ExternConf::writePumpFile(FILE *pumpFile, QString filetype, QVector <double> FlowVector){
 
@@ -245,6 +323,7 @@ void Pol_ExternConf::writePumpFile(FILE *pumpFile, QString filetype, QVector <do
 
 /**
  * @brief Write Flushing pattern to File
+ * @param[in] The file where the information will be written and the type of file.
  */
 void Pol_ExternConf::writeFlushing(FILE *pFile, QString filetype){
 
@@ -294,6 +373,7 @@ void Pol_ExternConf::writeFlushing(FILE *pFile, QString filetype){
 
 /**
  * @brief Write Filling Pattern to File
+ * @param[in] The file where the information is going to be written, the vector of flows and the corresponding concentration position k.
  */
 void Pol_ExternConf::writeFilling(FILE *pFile, QVector <double> FlowVector, int k){
 
@@ -335,6 +415,8 @@ void Pol_ExternConf::writeFilling(FILE *pFile, QVector <double> FlowVector, int 
 
 /**
  * @brief Calculate the correlation coefficient
+ * @param[in] The vectors X and Y of size N are compared to find the correlation coefficient.
+ * @param[out] Correlation coefficient
  */
 float Pol_ExternConf::correlationCoefficient(QVector <double> X, QVector <double> Y, int N){
 

@@ -73,6 +73,7 @@ public:
     int NrAverages = 0;
     double ConcentrationC1=0;
     double ConcentrationC2=0;
+    double ConcentrationC3=0;
 
     /* Where are we going to extract the components of the FFT */
     int f_w;

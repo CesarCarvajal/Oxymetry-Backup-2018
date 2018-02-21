@@ -106,12 +106,12 @@ Please go to the tab &quot;Preview&quot;, then select the spectrometer to use in
 
 1.2 -&gt; Show/Hide GUI elements:
 
-When a label is clicked, the corresponding element will be shown or hiden accordingly. For example by clicking the label &quot;Raw Signal&quot;, the corresponding plot will be hidden or shown.
+When a label is clicked, the corresponding element will be shown or hidden accordingly. For example by clicking the label &quot;Raw Signal&quot;, the corresponding plot will be hidden or shown.
 
 
 1.3 -&gt; What is &quot;Clear All&quot;?
 
-With this option, any loaded information or configuration will be removed from the interface. Pleasre remember that this option will also remove any configuration changes or loaded data from the user interface.
+With this option, any loaded information or configuration will be removed from the interface. Please remember that this option will also remove any configuration changes or loaded data from the user interface.
 
 
 1.4 -&gt; Interface elements by demand:

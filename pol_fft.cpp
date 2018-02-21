@@ -60,6 +60,7 @@ extern unsigned int m_NrDevices;
 
 /**
  * @brief Get the Data from a FFT File type.
+ * @param[in] Information of the file where the FFT data will be read.
  */
 void fft::getFFTfromFFTData(QFileInfo fileInformation)
 {
@@ -159,6 +160,7 @@ void fft::getFFTfromFFTData(QFileInfo fileInformation)
 
 /**
  * @brief Get the Raw Data from File and Calculate/Plot the FFT.
+ * @param[in] Information of the Raw Data file to be processed, the type of running "calibrating or measuring" and the maximum wavelength in use.
  */
 void fft::getFFTfromRawData(QFileInfo fileInformation, bool Calibrating, double maxWavelength)
 {
@@ -298,12 +300,14 @@ void fft::getFFTfromRawData(QFileInfo fileInformation, bool Calibrating, double 
  * Row 4 has the Spectra Values.
  * Row 3 has the Number of Averages.
  *
+ * @param[in] Name of the file to extract the information, the path of the file and the corresponding file type CS or TXT.
+ *
  */
 void fft::ReadFileName(QString ExtractInfoName, QString FilePath, bool isTXT)
 {
     /* Data to get from the File Name */
     QString Concentration1_File,Concentration2_File, IntTime_File, Frequency_File = "";
-    ConcentrationC1 = IntTime = FrequencyF = ConcentrationC2 = NrAverages = NrSpectra = 0;
+    ConcentrationC1 = IntTime = FrequencyF = ConcentrationC2 = ConcentrationC3 = NrAverages = NrSpectra = 0;
 
     /* Which "_" are we? */
     int l=0;
@@ -410,6 +414,7 @@ void fft::InitializeFFTArrays()
 
 /**
  * @brief Calculate the FFT from incoming Data
+ * @param[in] The Raw Data and the size of the measurements N.
  */
 void fft::CalculateFFT(int N, QVector<double> Data)
 {
@@ -446,6 +451,7 @@ void fft::CalculateFFT(int N, QVector<double> Data)
 
 /**
  * @brief Save the FFT Data to a File
+ * @param[in] Details of the file where the FFT will be saved. Also if the user is saving or the system is saving automatically.
  */
 void fft::saveFFTtoFile(QFileInfo FileDetails, bool userSaving)
 {

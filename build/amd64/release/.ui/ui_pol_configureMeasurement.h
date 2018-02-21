@@ -77,19 +77,6 @@ public:
     QCheckBox *checkBox_Imp1;
     QSpacerItem *horizontalSpacer_13;
     QCheckBox *checkBox_Imp2;
-    QSpacerItem *verticalSpacer_7;
-    QHBoxLayout *horizontalLayout_8;
-    QLabel *label_StockGluc;
-    QLineEdit *lineEdit_StockGluc;
-    QLabel *label_StockGluc2;
-    QSpacerItem *horizontalSpacer_12;
-    QLabel *label_StockImp1;
-    QLineEdit *lineEdit_StockImp1;
-    QLabel *label_StockImp1_2;
-    QSpacerItem *horizontalSpacer_9;
-    QLabel *label_StockImp2;
-    QLineEdit *lineEdit_StockImp2;
-    QLabel *label_StockImp2_2;
     QSpacerItem *verticalSpacer_3;
     QHBoxLayout *horizontalLayout_6;
     QLabel *label_MinGluc;
@@ -116,6 +103,19 @@ public:
     QLabel *label_MaxImp2;
     QLineEdit *lineEdit_MaxImp2;
     QLabel *label_MaxImp2_2;
+    QSpacerItem *verticalSpacer_7;
+    QHBoxLayout *horizontalLayout_8;
+    QLabel *label_StockGluc;
+    QLineEdit *lineEdit_StockGluc;
+    QLabel *label_StockGluc2;
+    QSpacerItem *horizontalSpacer_12;
+    QLabel *label_StockImp1;
+    QLineEdit *lineEdit_StockImp1;
+    QLabel *label_StockImp1_2;
+    QSpacerItem *horizontalSpacer_9;
+    QLabel *label_StockImp2;
+    QLineEdit *lineEdit_StockImp2;
+    QLabel *label_StockImp2_2;
     QSpacerItem *verticalSpacer_6;
     QLabel *label_PumpFlow;
     QSpacerItem *verticalSpacer_20;
@@ -426,84 +426,6 @@ public:
 
         verticalLayout_fileconf->addLayout(horizontalLayout_4);
 
-        verticalSpacer_7 = new QSpacerItem(20, 5, QSizePolicy::Minimum, QSizePolicy::Fixed);
-
-        verticalLayout_fileconf->addItem(verticalSpacer_7);
-
-        horizontalLayout_8 = new QHBoxLayout();
-        horizontalLayout_8->setSpacing(2);
-        horizontalLayout_8->setObjectName(QStringLiteral("horizontalLayout_8"));
-        label_StockGluc = new QLabel(ConfigurationLayout);
-        label_StockGluc->setObjectName(QStringLiteral("label_StockGluc"));
-        label_StockGluc->setMinimumSize(QSize(100, 0));
-
-        horizontalLayout_8->addWidget(label_StockGluc);
-
-        lineEdit_StockGluc = new QLineEdit(ConfigurationLayout);
-        lineEdit_StockGluc->setObjectName(QStringLiteral("lineEdit_StockGluc"));
-        lineEdit_StockGluc->setMinimumSize(QSize(100, 0));
-        lineEdit_StockGluc->setMaximumSize(QSize(100, 16777215));
-
-        horizontalLayout_8->addWidget(lineEdit_StockGluc);
-
-        label_StockGluc2 = new QLabel(ConfigurationLayout);
-        label_StockGluc2->setObjectName(QStringLiteral("label_StockGluc2"));
-        label_StockGluc2->setMinimumSize(QSize(30, 0));
-
-        horizontalLayout_8->addWidget(label_StockGluc2);
-
-        horizontalSpacer_12 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_8->addItem(horizontalSpacer_12);
-
-        label_StockImp1 = new QLabel(ConfigurationLayout);
-        label_StockImp1->setObjectName(QStringLiteral("label_StockImp1"));
-        label_StockImp1->setMinimumSize(QSize(100, 0));
-
-        horizontalLayout_8->addWidget(label_StockImp1);
-
-        lineEdit_StockImp1 = new QLineEdit(ConfigurationLayout);
-        lineEdit_StockImp1->setObjectName(QStringLiteral("lineEdit_StockImp1"));
-        lineEdit_StockImp1->setMinimumSize(QSize(100, 0));
-        lineEdit_StockImp1->setMaximumSize(QSize(100, 16777215));
-
-        horizontalLayout_8->addWidget(lineEdit_StockImp1);
-
-        label_StockImp1_2 = new QLabel(ConfigurationLayout);
-        label_StockImp1_2->setObjectName(QStringLiteral("label_StockImp1_2"));
-        label_StockImp1_2->setMinimumSize(QSize(30, 0));
-
-        horizontalLayout_8->addWidget(label_StockImp1_2);
-
-        horizontalSpacer_9 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_8->addItem(horizontalSpacer_9);
-
-        label_StockImp2 = new QLabel(ConfigurationLayout);
-        label_StockImp2->setObjectName(QStringLiteral("label_StockImp2"));
-        label_StockImp2->setEnabled(false);
-        label_StockImp2->setMinimumSize(QSize(100, 0));
-
-        horizontalLayout_8->addWidget(label_StockImp2);
-
-        lineEdit_StockImp2 = new QLineEdit(ConfigurationLayout);
-        lineEdit_StockImp2->setObjectName(QStringLiteral("lineEdit_StockImp2"));
-        lineEdit_StockImp2->setEnabled(false);
-        lineEdit_StockImp2->setMinimumSize(QSize(100, 0));
-        lineEdit_StockImp2->setMaximumSize(QSize(100, 16777215));
-
-        horizontalLayout_8->addWidget(lineEdit_StockImp2);
-
-        label_StockImp2_2 = new QLabel(ConfigurationLayout);
-        label_StockImp2_2->setObjectName(QStringLiteral("label_StockImp2_2"));
-        label_StockImp2_2->setEnabled(false);
-        label_StockImp2_2->setMinimumSize(QSize(30, 0));
-
-        horizontalLayout_8->addWidget(label_StockImp2_2);
-
-
-        verticalLayout_fileconf->addLayout(horizontalLayout_8);
-
         verticalSpacer_3 = new QSpacerItem(20, 5, QSizePolicy::Minimum, QSizePolicy::Fixed);
 
         verticalLayout_fileconf->addItem(verticalSpacer_3);
@@ -661,6 +583,84 @@ public:
 
 
         verticalLayout_fileconf->addLayout(horizontalLayout_12);
+
+        verticalSpacer_7 = new QSpacerItem(20, 5, QSizePolicy::Minimum, QSizePolicy::Fixed);
+
+        verticalLayout_fileconf->addItem(verticalSpacer_7);
+
+        horizontalLayout_8 = new QHBoxLayout();
+        horizontalLayout_8->setSpacing(2);
+        horizontalLayout_8->setObjectName(QStringLiteral("horizontalLayout_8"));
+        label_StockGluc = new QLabel(ConfigurationLayout);
+        label_StockGluc->setObjectName(QStringLiteral("label_StockGluc"));
+        label_StockGluc->setMinimumSize(QSize(100, 0));
+
+        horizontalLayout_8->addWidget(label_StockGluc);
+
+        lineEdit_StockGluc = new QLineEdit(ConfigurationLayout);
+        lineEdit_StockGluc->setObjectName(QStringLiteral("lineEdit_StockGluc"));
+        lineEdit_StockGluc->setMinimumSize(QSize(100, 0));
+        lineEdit_StockGluc->setMaximumSize(QSize(100, 16777215));
+
+        horizontalLayout_8->addWidget(lineEdit_StockGluc);
+
+        label_StockGluc2 = new QLabel(ConfigurationLayout);
+        label_StockGluc2->setObjectName(QStringLiteral("label_StockGluc2"));
+        label_StockGluc2->setMinimumSize(QSize(30, 0));
+
+        horizontalLayout_8->addWidget(label_StockGluc2);
+
+        horizontalSpacer_12 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_8->addItem(horizontalSpacer_12);
+
+        label_StockImp1 = new QLabel(ConfigurationLayout);
+        label_StockImp1->setObjectName(QStringLiteral("label_StockImp1"));
+        label_StockImp1->setMinimumSize(QSize(100, 0));
+
+        horizontalLayout_8->addWidget(label_StockImp1);
+
+        lineEdit_StockImp1 = new QLineEdit(ConfigurationLayout);
+        lineEdit_StockImp1->setObjectName(QStringLiteral("lineEdit_StockImp1"));
+        lineEdit_StockImp1->setMinimumSize(QSize(100, 0));
+        lineEdit_StockImp1->setMaximumSize(QSize(100, 16777215));
+
+        horizontalLayout_8->addWidget(lineEdit_StockImp1);
+
+        label_StockImp1_2 = new QLabel(ConfigurationLayout);
+        label_StockImp1_2->setObjectName(QStringLiteral("label_StockImp1_2"));
+        label_StockImp1_2->setMinimumSize(QSize(30, 0));
+
+        horizontalLayout_8->addWidget(label_StockImp1_2);
+
+        horizontalSpacer_9 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_8->addItem(horizontalSpacer_9);
+
+        label_StockImp2 = new QLabel(ConfigurationLayout);
+        label_StockImp2->setObjectName(QStringLiteral("label_StockImp2"));
+        label_StockImp2->setEnabled(false);
+        label_StockImp2->setMinimumSize(QSize(100, 0));
+
+        horizontalLayout_8->addWidget(label_StockImp2);
+
+        lineEdit_StockImp2 = new QLineEdit(ConfigurationLayout);
+        lineEdit_StockImp2->setObjectName(QStringLiteral("lineEdit_StockImp2"));
+        lineEdit_StockImp2->setEnabled(false);
+        lineEdit_StockImp2->setMinimumSize(QSize(100, 0));
+        lineEdit_StockImp2->setMaximumSize(QSize(100, 16777215));
+
+        horizontalLayout_8->addWidget(lineEdit_StockImp2);
+
+        label_StockImp2_2 = new QLabel(ConfigurationLayout);
+        label_StockImp2_2->setObjectName(QStringLiteral("label_StockImp2_2"));
+        label_StockImp2_2->setEnabled(false);
+        label_StockImp2_2->setMinimumSize(QSize(30, 0));
+
+        horizontalLayout_8->addWidget(label_StockImp2_2);
+
+
+        verticalLayout_fileconf->addLayout(horizontalLayout_8);
 
         verticalSpacer_6 = new QSpacerItem(20, 15, QSizePolicy::Minimum, QSizePolicy::Fixed);
 
@@ -998,33 +998,6 @@ public:
 #endif // QT_NO_TOOLTIP
         checkBox_Imp2->setText(QApplication::translate("configurePolMeasure", "Impurity 2", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        label_StockGluc->setToolTip(QApplication::translate("configurePolMeasure", "Which concentration of glucose is in stock?", Q_NULLPTR));
-#endif // QT_NO_TOOLTIP
-        label_StockGluc->setText(QApplication::translate("configurePolMeasure", "Stock Glucose:", Q_NULLPTR));
-#ifndef QT_NO_TOOLTIP
-        lineEdit_StockGluc->setToolTip(QApplication::translate("configurePolMeasure", "Concentration of Glucose in Stock", Q_NULLPTR));
-#endif // QT_NO_TOOLTIP
-        lineEdit_StockGluc->setText(QApplication::translate("configurePolMeasure", "1000", Q_NULLPTR));
-        label_StockGluc2->setText(QApplication::translate("configurePolMeasure", "mg/dl", Q_NULLPTR));
-#ifndef QT_NO_TOOLTIP
-        label_StockImp1->setToolTip(QApplication::translate("configurePolMeasure", "Which concentration of impurity 1 is in stock?", Q_NULLPTR));
-#endif // QT_NO_TOOLTIP
-        label_StockImp1->setText(QApplication::translate("configurePolMeasure", "Stock Impurity 1:", Q_NULLPTR));
-#ifndef QT_NO_TOOLTIP
-        lineEdit_StockImp1->setToolTip(QApplication::translate("configurePolMeasure", "Concentration of Impurity 1 in Stock", Q_NULLPTR));
-#endif // QT_NO_TOOLTIP
-        lineEdit_StockImp1->setText(QApplication::translate("configurePolMeasure", "4", Q_NULLPTR));
-        label_StockImp1_2->setText(QApplication::translate("configurePolMeasure", "mg/dl", Q_NULLPTR));
-#ifndef QT_NO_TOOLTIP
-        label_StockImp2->setToolTip(QApplication::translate("configurePolMeasure", "Which concentration of impurity 2 is in stock?", Q_NULLPTR));
-#endif // QT_NO_TOOLTIP
-        label_StockImp2->setText(QApplication::translate("configurePolMeasure", "Stock Impurity 2:", Q_NULLPTR));
-#ifndef QT_NO_TOOLTIP
-        lineEdit_StockImp2->setToolTip(QApplication::translate("configurePolMeasure", "Concentration of Impurity 2 in Stock", Q_NULLPTR));
-#endif // QT_NO_TOOLTIP
-        lineEdit_StockImp2->setText(QApplication::translate("configurePolMeasure", "0", Q_NULLPTR));
-        label_StockImp2_2->setText(QApplication::translate("configurePolMeasure", "mg/dl", Q_NULLPTR));
-#ifndef QT_NO_TOOLTIP
         label_MinGluc->setToolTip(QApplication::translate("configurePolMeasure", "Minimum Glucose Concentration?", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_MinGluc->setText(QApplication::translate("configurePolMeasure", "Min. Glucose:", Q_NULLPTR));
@@ -1078,6 +1051,33 @@ public:
 #endif // QT_NO_TOOLTIP
         lineEdit_MaxImp2->setText(QApplication::translate("configurePolMeasure", "500", Q_NULLPTR));
         label_MaxImp2_2->setText(QApplication::translate("configurePolMeasure", "mg/dl", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        label_StockGluc->setToolTip(QApplication::translate("configurePolMeasure", "Which concentration of glucose is in stock?", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        label_StockGluc->setText(QApplication::translate("configurePolMeasure", "Stock Glucose:", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        lineEdit_StockGluc->setToolTip(QApplication::translate("configurePolMeasure", "Concentration of Glucose in Stock", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        lineEdit_StockGluc->setText(QApplication::translate("configurePolMeasure", "1000", Q_NULLPTR));
+        label_StockGluc2->setText(QApplication::translate("configurePolMeasure", "mg/dl", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        label_StockImp1->setToolTip(QApplication::translate("configurePolMeasure", "Which concentration of impurity 1 is in stock?", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        label_StockImp1->setText(QApplication::translate("configurePolMeasure", "Stock Impurity 1:", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        lineEdit_StockImp1->setToolTip(QApplication::translate("configurePolMeasure", "Concentration of Impurity 1 in Stock", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        lineEdit_StockImp1->setText(QApplication::translate("configurePolMeasure", "4", Q_NULLPTR));
+        label_StockImp1_2->setText(QApplication::translate("configurePolMeasure", "mg/dl", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        label_StockImp2->setToolTip(QApplication::translate("configurePolMeasure", "Which concentration of impurity 2 is in stock?", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        label_StockImp2->setText(QApplication::translate("configurePolMeasure", "Stock Impurity 2:", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        lineEdit_StockImp2->setToolTip(QApplication::translate("configurePolMeasure", "Concentration of Impurity 2 in Stock", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        lineEdit_StockImp2->setText(QApplication::translate("configurePolMeasure", "0", Q_NULLPTR));
+        label_StockImp2_2->setText(QApplication::translate("configurePolMeasure", "mg/dl", Q_NULLPTR));
         label_PumpFlow->setText(QApplication::translate("configurePolMeasure", "Pumps Flow:", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         label_AbsFlow->setToolTip(QApplication::translate("configurePolMeasure", "Absolute Flow for Cuvette Filling", Q_NULLPTR));

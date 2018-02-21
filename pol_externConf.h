@@ -60,8 +60,13 @@ public:
     int shortBreak;
     int longBreak;
 
+    /* Active substances */
+    bool glucoseActive;
+    bool Imp1Active;
+    bool Imp2Active;
+
     /* Stock Solutions */
-    QVector<int> stockSolutions;
+    QVector<double> stockSolutions;
     QVector<double> minConcentrations;
     QVector<double> maxConcentrations;
 
@@ -75,7 +80,7 @@ public:
     void GeneratePumpScripts(QString filetype, QVector<double> FlowVector);
 
     /* Generate Spectrometer configuration */
-    void GenerateSpectrometerConfiguration(QVector<double> GlucoseConcentration, QVector<double> Impurity1Concentration);
+    void GenerateSpectrometerConfiguration(QVector<double> GlucoseConcentration, QVector<double> Impurity1Concentration, QVector<double> Impurity2Concentration);
 
     /* Replaces the function of matlab */
     void pumpsPatternCalculator(void);
