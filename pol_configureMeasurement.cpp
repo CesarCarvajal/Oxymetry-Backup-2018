@@ -721,40 +721,39 @@ void configurePolMeasure::cancel(void)
  */
 void configurePolMeasure::GetConfigurationData(void)
 {
-
     /* Get Integration Time */
     integrationTime = ui->lineEdit_BIntTime->text().toFloat();
-    externSoftware->IntegrationTime = integrationTime;
+    externSoftware->ConfigurationFileGenerator->IntegrationTime = integrationTime;
 
     /* Get Frequency to Measure */
     freqToMeasure = ui->lineEdit_BFreq->text().toInt();
-    externSoftware->Frequency = freqToMeasure;
+    externSoftware->ConfigurationFileGenerator->Frequency = freqToMeasure;
 
     /* Get Number of Spectra */
     numSpectra = ui->lineEdit_BNSpec->text().toInt();
-    externSoftware->NrSpectra = numSpectra;
+    externSoftware->ConfigurationFileGenerator->NrSpectra = numSpectra;
 
     /* Get Number of Averages */
     numberOfAverages = ui->lineEdit_BNAve->text().toInt();
-    externSoftware->NrAverages = numberOfAverages;
+    externSoftware->ConfigurationFileGenerator->NrAverages = numberOfAverages;
 
     /* Get Number of Measurements */
     NrMeasurements = ui->lineEdit_BNMeas->text().toInt();
-    externSoftware->NConcentrations = NrMeasurements;
+    externSoftware->ConfigurationFileGenerator->NConcentrations = NrMeasurements;
 
     /* Get Number of Steps */
-    externSoftware->NSteps = ui->lineEdit_NSteps->text().toInt();
+    externSoftware->ConfigurationFileGenerator->NSteps = ui->lineEdit_NSteps->text().toInt();
 
     /* Get Flows */
-    externSoftware->absoluteFlow = ui->lineEdit_AbsFlow->text().toDouble();
-    externSoftware->idle =ui->checkBox->isChecked();
+    externSoftware->ConfigurationFileGenerator->absoluteFlow = ui->lineEdit_AbsFlow->text().toDouble();
+    externSoftware->ConfigurationFileGenerator->idle =ui->checkBox->isChecked();
 
     /* Get Refilling Times */
-    externSoftware->fillRefill = (((ui->lineEdit_AbsVol->text().toDouble()/externSoftware->absoluteFlow)*60) / externSoftware->NSteps)*1000;
+    externSoftware->ConfigurationFileGenerator->fillRefill = (((ui->lineEdit_AbsVol->text().toDouble()/externSoftware->ConfigurationFileGenerator->absoluteFlow)*60) / externSoftware->ConfigurationFileGenerator->NSteps)*1000;
 
     /* Break Times */
-    externSoftware->shortBreak = (ui->lineEdit_ShortBreak->text().toDouble())*1000;
-    externSoftware->longBreak = (ui->lineEdit_LongBreak->text().toDouble())*1000 + (externSoftware->IntegrationTime*externSoftware->NrSpectra);
+    externSoftware->ConfigurationFileGenerator->shortBreak = (ui->lineEdit_ShortBreak->text().toDouble())*1000;
+    externSoftware->ConfigurationFileGenerator->longBreak = (ui->lineEdit_LongBreak->text().toDouble())*1000 + (externSoftware->ConfigurationFileGenerator->IntegrationTime*externSoftware->ConfigurationFileGenerator->NrSpectra);
 
     /* Stock Solutions */
     externSoftware->stockSolutions.replace(0,ui->lineEdit_StockGluc->text().toDouble());
@@ -772,7 +771,7 @@ void configurePolMeasure::GetConfigurationData(void)
     externSoftware->maxConcentrations.replace(2,ui->lineEdit_MaxImp2->text().toDouble());
 
     /* Get additional time for intervals */
-    externSoftware->TimeIntervals = (ui->lineEdit_BtimeInterval->text().toDouble())*1000;
+    externSoftware->ConfigurationFileGenerator->TimeIntervals = (ui->lineEdit_BtimeInterval->text().toDouble())*1000;
 
     /* Very long Int Time? */
     if(integrationTime > 200){
@@ -789,9 +788,9 @@ void configurePolMeasure::GetConfigurationData(void)
     }
 
     /* Save the actual selected substances */
-    externSoftware->glucoseActive = ui->checkBox_Glucose->isChecked();
-    externSoftware->Imp1Active = ui->checkBox_Imp1->isChecked();
-    externSoftware->Imp2Active = ui->checkBox_Imp2->isChecked();
+    externSoftware->ConfigurationFileGenerator->glucoseActive = ui->checkBox_Glucose->isChecked();
+    externSoftware->ConfigurationFileGenerator->Imp1Active = ui->checkBox_Imp1->isChecked();
+    externSoftware->ConfigurationFileGenerator->Imp2Active = ui->checkBox_Imp2->isChecked();
 
 }
 

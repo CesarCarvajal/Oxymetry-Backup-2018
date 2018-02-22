@@ -71,9 +71,9 @@ public:
     double IntTime;
     double FrequencyF = 7;
     int NrAverages = 0;
-    double ConcentrationC1=0;
-    double ConcentrationC2=0;
-    double ConcentrationC3=0;
+    double ConcentrationC1=-1;
+    double ConcentrationC2=-1;
+    double ConcentrationC3=-1;
 
     /* Where are we going to extract the components of the FFT */
     int f_w;
@@ -85,7 +85,7 @@ public:
     fftw_complex *outputFFT = nullptr;
 
     /* Read info from file */
-    void ReadFileName(QString ExtractInfoName, QString FilePath, bool isTXT);
+    void ReadFile(QString FilePath);
 
     /* Destructor */
     ~fft(void);

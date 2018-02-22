@@ -68,7 +68,8 @@ SOURCES += \
     pol_panel.cpp \
     pol_plot.cpp \
     pol_measurements.cpp \
-    pol_externConf.cpp
+    pol_externConf.cpp \
+    pol_configFilesGenerator.cpp
 
 HEADERS += \
     application.h \
@@ -111,7 +112,8 @@ HEADERS += \
     pol_panel.h \
     pol_plot.h \
     pol_measurements.h \
-    pol_externConf.h
+    pol_externConf.h \
+    pol_configFilesGenerator.h
 
 FORMS += \
     initial_setup.ui \

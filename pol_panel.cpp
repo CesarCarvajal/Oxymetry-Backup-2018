@@ -686,6 +686,9 @@ void PanelPolarimeter::AdjustRunEnd(short int typeRunn){
         /* Update information bar */
         ui->info->setText("Finishing Measurements");
 
+        /* Set the stop of the measurement to true, so the long term Measurement can be stopped */
+        Runner->setMeasurementRunning(true);
+
         /* Keep plotting the average signals, so the last data point is visible at the end of the Measurements */
         while(!Runner->Stopped){
 
@@ -715,9 +718,6 @@ void PanelPolarimeter::AdjustRunEnd(short int typeRunn){
         /* Set progress bars to 100 percent */
         ui->currentProgressBar_Pol->setValue(0);
         ui->TotalProgressBar_Pol->setValue(0);
-
-        /* Set the stop of the measurment to true, so the long term Measurement can be stopped */
-        Runner->setMeasurementRunning(true);
 
         /* If the Measurement is done by no more entries, then just stop the measurement */
         Stop_Run_Polarimetry();
@@ -2102,14 +2102,6 @@ void PanelPolarimeter::LoadFromFFT(void) {
         fileInfo = DataPath;
     }
 
-    /* Check format of file; we need at least 4 _ in name */
-    if (fileInfo.completeBaseName().count(QLatin1Char('_')) != 5 || fileInfo.completeBaseName().at(fileInfo.completeBaseName().length()-1) !="T")
-    {
-        /* Show message if the file is not in order */
-        showWarning("Non valid File for FFT Analysis Loading! \n\n Please check Name and Content of the FFT File", "");
-        return;
-    }
-
     /* Show the analyzed data from FFT */
     FFTL.getFFTfromFFTData(fileInfo);
 
@@ -2157,14 +2149,6 @@ void PanelPolarimeter::LoadFromRawData(void) {
         fileInfo = DataPath;
     }
 
-    /* Check format of file; we need at least 4 _ in name */
-    if (fileInfo.completeBaseName().count(QLatin1Char('_')) != 4 || !fileInfo.completeBaseName().at(fileInfo.completeBaseName().length()-1).isNumber())
-    {
-        /* Show message */
-        showWarning("Non valid File for Raw Data Analysis! \n\n Please check Name and Content of the Raw Data File", "");
-        return;
-    }
-
     /* Data Analysis by FFT */
     FFTL.getFFTfromRawData(fileInfo, false, maxWavelength);
 
@@ -2198,18 +2182,41 @@ void PanelPolarimeter::writeToFile(FILE *file, double *a_pSpectrum, int WParam) 
         /* Write the Header with name/serial number */
         if (ptrSpectrometers[SpectrometerNumber]->hasReadableName()){
 
-            fprintf(file, "Serial number and name: %s", ptrSpectrometers[SpectrometerNumber]->getSerialNumber().toLatin1().data());
-            fprintf(file, ", %s\n", ptrSpectrometers[SpectrometerNumber]->getReadableName().toLatin1().data());
+            fprintf(file, "Serial Number: %s \n", ptrSpectrometers[SpectrometerNumber]->getSerialNumber().toLatin1().data());
+            fprintf(file, "Spectrometer Name: %s \n", ptrSpectrometers[SpectrometerNumber]->getReadableName().toLatin1().data());
 
         }else{
 
-            fprintf(file, "Serial number: %s\n", ptrSpectrometers[SpectrometerNumber]->getSerialNumber().toLatin1().data());
+            fprintf(file, "Serial Number: %s\n", ptrSpectrometers[SpectrometerNumber]->getSerialNumber().toLatin1().data());
         }
 
         /* Write some useful data on file */
-        fprintf(file, "Integration time: %.2f ms\n", ptrSpectrometers[SpectrometerNumber]->getIntegrationTime());
-        fprintf(file, "Number of averages: %i\n", ptrSpectrometers[SpectrometerNumber]->getNumberOfAverages());
-        fprintf(file, "Number of Spectra: %i\n\n", ConfigureMeasurement->numSpectra);
+        fprintf(file, "Integration Time: %.2f ms\n", ptrSpectrometers[SpectrometerNumber]->getIntegrationTime());
+        fprintf(file, "Nr. of Spectra: %i\n", ConfigureMeasurement->numSpectra);
+        fprintf(file, "Nr. of Averages: %i\n", ptrSpectrometers[SpectrometerNumber]->getNumberOfAverages());
+        fprintf(file, "Frequency: %.2f\n", FFTL.FrequencyF);
+
+        /* Include the concentrations in the file */
+        QString concentrations = "";
+
+        if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->glucoseActive){
+
+            FFTL.ConcentrationC1 = ConfigureMeasurement->externSoftware->GlucoseConcentration.at(Timeindex-1);
+            concentrations.append(QString::number(FFTL.ConcentrationC1));
+        }
+        if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->Imp1Active){
+
+            FFTL.ConcentrationC2 = ConfigureMeasurement->externSoftware->Impurity1Concentration.at(Timeindex-1);
+            concentrations.append(" , " + QString::number(FFTL.ConcentrationC2));
+        }
+        if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->Imp2Active){
+
+            FFTL.ConcentrationC3 = ConfigureMeasurement->externSoftware->Impurity2Concentration.at(Timeindex-1);
+            concentrations.append(" , " + QString::number(FFTL.ConcentrationC3));
+        }
+
+        fprintf(file, "Concentrations (mg/dl): %s\n\n", concentrations.toLatin1().data());
+
     }
 
     /* Save wavelengths */

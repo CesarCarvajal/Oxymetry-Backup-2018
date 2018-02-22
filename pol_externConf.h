@@ -21,6 +21,7 @@
 
 /* External includes */
 #include "qobject.h"
+#include "pol_configFilesGenerator.h"
 #include "qprocess.h"
 #include "QVector"
 
@@ -38,32 +39,13 @@ public:
     /* Run an external process for pump software */
     QProcess *process1 = nullptr;
 
-    /* Spectrometer variables */
-    int NConcentrations;
-    int NrSpectra;
-    int Frequency;
-    float IntegrationTime;
-    int NrAverages;
+    /* Create configuration file generator object */
+    Pol_configFilesGenerator *ConfigurationFileGenerator;
 
-    /* Refilling Times */
-    int fillRefill;
-
-    /* Number of steps */
-    int NSteps;
-
-    /* Pump variables */
-    double absoluteFlow;
-    int idle;
-    int TimeIntervals;
-
-    /* Time Breaks */
-    int shortBreak;
-    int longBreak;
-
-    /* Active substances */
-    bool glucoseActive;
-    bool Imp1Active;
-    bool Imp2Active;
+    /* Concentrations */
+    QVector <double> GlucoseConcentration;
+    QVector <double> Impurity1Concentration;
+    QVector <double> Impurity2Concentration;
 
     /* Stock Solutions */
     QVector<double> stockSolutions;
@@ -76,26 +58,8 @@ public:
     /* Open Nemesys Pump Software */
     void openPumpSoftware(void);
 
-    /* Generate pump files */
-    void GeneratePumpScripts(QString filetype, QVector<double> FlowVector);
-
-    /* Generate Spectrometer configuration */
-    void GenerateSpectrometerConfiguration(QVector<double> GlucoseConcentration, QVector<double> Impurity1Concentration, QVector<double> Impurity2Concentration);
-
     /* Replaces the function of matlab */
     void pumpsPatternCalculator(void);
-
-    /* Write pump files sequence */
-    void writePumpFile(FILE* pumpFile, QString filetype, QVector<double> FlowVector);
-
-    /* Write Flushing pattern */
-    void writeFlushing(FILE *pFile, QString filetype);
-
-    /* Write Filling pattern */
-    void writeFilling(FILE *pFile, QVector <double> FlowVector, int k);
-
-    /* Returns the correlation coefficient */
-    float correlationCoefficient(QVector <double> X, QVector <double> Y, int N);
 
     /* Destructor */
     ~Pol_ExternConf(void);

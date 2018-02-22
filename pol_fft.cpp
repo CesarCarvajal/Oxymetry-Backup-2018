@@ -75,7 +75,7 @@ void fft::getFFTfromFFTData(QFileInfo fileInformation)
     }
 
     /* Get Information from File Name */
-    ReadFileName(fileInformation.completeBaseName(), fileInformation.absoluteFilePath(), true);
+    ReadFile(fileInformation.absoluteFilePath());
 
     /* Create the readed row */
     QString Row;
@@ -175,22 +175,20 @@ void fft::getFFTfromRawData(QFileInfo fileInformation, bool Calibrating, double 
     }
 
     /* Initialize row counter */
-    QString Row;
+    QString Row = "";
 
-    /* Initialize the spliter according to the type CS (Oxymetry) Software file */
+    /* Initialize the spliter according to the Oxymetry type ".CS" file */
     QString spliter = "\t\t";
+
     /* Start reading at the second column for CS file */
     int column = 1;
 
     /* But, Is it a TXT from Avantes Software? */
-    bool isTXT = false;
     if(fileInformation.suffix()=="TXT"){
         /* Initialize the spliter according to the type TXT Avantes Software file */
         spliter = ";";
         /* Start reading at the forth column for TXT file */
         column = 3;
-        /* Save what file type are you reading */
-        isTXT = true;
     }
 
     /* Indicates when to start reading the numerical data from file */
@@ -201,7 +199,7 @@ void fft::getFFTfromRawData(QFileInfo fileInformation, bool Calibrating, double 
 
     /* Get Information from File Name if loading the data from a File*/
     if(!Calibrating){
-        ReadFileName(fileInformation.completeBaseName(), fileInformation.absoluteFilePath(), isTXT);
+        ReadFile(fileInformation.absoluteFilePath());
     }else{
         /* If calibrating, there is not need to read the Nr. spectra, frequency, etc from file */
         InitializeFFTArrays();
@@ -247,7 +245,7 @@ void fft::getFFTfromRawData(QFileInfo fileInformation, bool Calibrating, double 
                     counts.append(Readed_Row.at(j).toDouble());
                 }
 
-                /* The amount of columns of the file determines how many sprecta we have, only for raw data */
+                /* The amount of columns of the file determines how many sprectra we have, only for raw data */
                 NrSpectra = counts.length();
 
                 /* With the current counts from a row, calculate the FFT */
@@ -303,58 +301,22 @@ void fft::getFFTfromRawData(QFileInfo fileInformation, bool Calibrating, double 
  * @param[in] Name of the file to extract the information, the path of the file and the corresponding file type CS or TXT.
  *
  */
-void fft::ReadFileName(QString ExtractInfoName, QString FilePath, bool isTXT)
+void fft::ReadFile(QString FilePath)
 {
     /* Data to get from the File Name */
-    QString Concentration1_File,Concentration2_File, IntTime_File, Frequency_File = "";
-    ConcentrationC1 = IntTime = FrequencyF = ConcentrationC2 = ConcentrationC3 = NrAverages = NrSpectra = 0;
-
-    /* Which "_" are we? */
-    int l=0;
-
-    /* Iterate through the name and find the "_" on it */
-    for(int i=0; i < ExtractInfoName.length();i++){
-        if (ExtractInfoName[i] == "_"){
-            l = l+1;
-            continue;
-        }
-
-        /* Extract the Data from the File Name depending on which "_" are we */
-        if (l==0 && (ExtractInfoName[i] != 'C') && (ExtractInfoName[i-1] != 'C')){
-            Concentration1_File = Concentration1_File + ExtractInfoName[i];
-        } else if (l==1 && (ExtractInfoName[i] != 'C') && (ExtractInfoName[i-1] != 'C')){
-            Concentration2_File = Concentration2_File + ExtractInfoName[i];
-        }else if (l==2 && ExtractInfoName[i] != 'm' && ExtractInfoName[i] != 's'){
-            IntTime_File = IntTime_File + ExtractInfoName[i];
-        }else if (l==3 &&  ExtractInfoName[i] != 'H'){
-            Frequency_File = Frequency_File + ExtractInfoName[i];
-        }else{
-            if (ExtractInfoName[i] == 'H'){ break;}
-            continue;
-        }
-    }
-
-    /* Get the number from file name and save it */
-    ConcentrationC1 = Concentration1_File.toDouble();
-    ConcentrationC2 = Concentration2_File.toDouble();
-    IntTime = IntTime_File.toDouble();
-    FrequencyF = Frequency_File.toDouble();
+    ConcentrationC1 = IntTime = FrequencyF = ConcentrationC2 = ConcentrationC3 = NrAverages = NrSpectra = -1;
 
     /* There is some information in the file very important to know how many data are we using */
 
     /* Open the file to get the Nr of Spectra and Average Nr. */
     QFile file(FilePath);
 
-    /* Is it a file from Avantes or from Oxymetry Software? It defines where to start reading the data */
-    int line = (isTXT) ? 4 : 3;
-
-    /* Which column read? */
-    int wordcounter = 1;
+    QString ReadRow;
+    QString inputRow, inputRow2;
 
     /* Open the file */
     if(file.open(QIODevice::ReadOnly)) {
 
-        QString ReadRow;
         QTextStream stream(&file);
 
         while(!stream.atEnd()){
@@ -362,27 +324,46 @@ void fft::ReadFileName(QString ExtractInfoName, QString FilePath, bool isTXT)
             /* Read a line from the file */
             ReadRow = stream.readLine();
 
+            /* Indicates where to start reading the numerical information from file */
+            inputRow = ReadRow.at(0);
+            inputRow2 = ReadRow.at(7);
+
             /* Read the text and get the values */
             QStringList Readed_Row = ReadRow.split(" ");
 
-            /* Get the number of Averages and Spectra from the file depending on its type */
-            if (wordcounter==3 && isTXT==false){
-                /* Third Row of CS file has the number of averages */
-                NrAverages = Readed_Row.at(line).toDouble();
-            }else if (wordcounter==4 && isTXT==false)
-            {
-                /* Row 4 of CS file has the number of spectra */
-                NrSpectra = Readed_Row.at(line).toInt();
-            }else if (wordcounter==3 && isTXT==true)
-            {
-                NrSpectra = Readed_Row.at(line).toInt();
-                NrAverages = 0;
-            }
-            /* Which row are we reading? */
-            wordcounter = wordcounter+1;
+            /* Integration time found */
+            if(inputRow == 'I' && IntTime==-1){
 
-            /* Don't read further by now */
-            if(wordcounter > 5) {break;}
+                IntTime = QString(Readed_Row.at(2)).replace(",",".").toDouble();
+
+            }else if(inputRow == 'N' && inputRow2 == 'S' && NrSpectra==-1){
+
+                NrSpectra = Readed_Row.at(3).toInt();
+
+            }else if(inputRow == 'N' && inputRow2 == 'A' && NrAverages==-1){
+
+                NrAverages = Readed_Row.at(3).toInt();
+
+            }else if(inputRow == 'F' && FrequencyF==-1){
+
+                FrequencyF = QString(Readed_Row.at(1)).replace(",",".").toDouble();
+
+            }else if(inputRow == 'C' && ConcentrationC1==-1){
+
+                ConcentrationC1 = QString(Readed_Row.at(2)).replace(",",".").toDouble();
+
+                if(Readed_Row.length() > 3){
+                    ConcentrationC2 = QString(Readed_Row.at(4)).replace(",",".").toDouble();
+                }
+
+                if(Readed_Row.length() > 5){
+                    ConcentrationC3 = QString(Readed_Row.at(6)).replace(",",".").toDouble();
+                }
+
+            }else if(inputRow == 'W'){
+
+                break;
+            }
         }
     }
 
@@ -479,20 +460,35 @@ void fft::saveFFTtoFile(QFileInfo FileDetails, bool userSaving)
     FILE *fileFFT = fopen(path.toLatin1().data(), "wt");
 
     /* Write serial number */
-    fprintf(fileFFT, "Serial number: %s\n", ptrSpectrometers[0]->getSerialNumber().toLatin1().data());
+    fprintf(fileFFT, "Serial Number: %s\n", ptrSpectrometers[0]->getSerialNumber().toLatin1().data());
 
     /* Check for readable name */
     if (ptrSpectrometers[0]->hasReadableName())
     {
         /* Write readable name */
-        fprintf(fileFFT, "Readable name: %s\n", ptrSpectrometers[0]->getReadableName().toLatin1().data());
+        fprintf(fileFFT, "Readable Name: %s\n", ptrSpectrometers[0]->getReadableName().toLatin1().data());
     }
 
     /* Write integration time, number of averages, number of spectra and frequency on file */
-    fprintf(fileFFT, "Number of Recorded Spectra: %i\n", NrSpectra);
-    fprintf(fileFFT, "Averages: %i\n", NrAverages);
-    fprintf(fileFFT, "Integration time: %.2f ms\n", IntTime);
-    fprintf(fileFFT, "Frequency: %.2f Hz\n\n", FrequencyF);
+    fprintf(fileFFT, "Integration Time: %.2f ms\n", IntTime);
+    fprintf(fileFFT, "Nr. of Spectra: %i\n", NrSpectra);
+    fprintf(fileFFT, "Nr. of Averages: %i\n", NrAverages);
+    fprintf(fileFFT, "Frequency: %.2f Hz\n", FrequencyF);
+
+    /* Include the concentrations in the file */
+    QString concentrations = "";
+
+    if(ConcentrationC1 >= 0){
+        concentrations.append(QString::number(ConcentrationC1));
+    }
+    if(ConcentrationC2 >= 0){
+        concentrations.append(" , " + QString::number(ConcentrationC2));
+    }
+    if(ConcentrationC3 >= 0){
+        concentrations.append(" , " + QString::number(ConcentrationC3));
+    }
+
+    fprintf(fileFFT, "Concentrations (mg/dl): %s\n\n", concentrations.toLatin1().data());
 
     /* Loop through the wavelengths */
     for (int z = 0; z < wavelengths.length(); z++)
