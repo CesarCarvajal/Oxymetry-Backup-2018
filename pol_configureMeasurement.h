@@ -53,6 +53,9 @@ public:
     QList<double> timePoint;
     int NrMeasurements;
 
+    /* Is configuration loaded */
+    bool loadingConfigurationFromFile;
+
     /* Save if there was a configuration loaded */
     bool configured;
 

@@ -61,6 +61,9 @@ public:
     /* Replaces the function of matlab */
     void pumpsPatternCalculator(void);
 
+    /* Remove existing files */
+    void removeExistingFiles(void);
+
     /* Destructor */
     ~Pol_ExternConf(void);
 

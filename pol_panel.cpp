@@ -2197,25 +2197,28 @@ void PanelPolarimeter::writeToFile(FILE *file, double *a_pSpectrum, int WParam) 
         fprintf(file, "Frequency: %.2f\n", FFTL.FrequencyF);
 
         /* Include the concentrations in the file */
-        QString concentrations = "";
+        QString concentrations, conc = "";
 
         if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->glucoseActive){
 
             FFTL.ConcentrationC1 = ConfigureMeasurement->externSoftware->GlucoseConcentration.at(Timeindex-1);
             concentrations.append(QString::number(FFTL.ConcentrationC1));
+            conc.append("C1");
         }
         if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->Imp1Active){
 
             FFTL.ConcentrationC2 = ConfigureMeasurement->externSoftware->Impurity1Concentration.at(Timeindex-1);
             concentrations.append(" , " + QString::number(FFTL.ConcentrationC2));
+            conc.append("C2");
         }
         if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->Imp2Active){
 
             FFTL.ConcentrationC3 = ConfigureMeasurement->externSoftware->Impurity2Concentration.at(Timeindex-1);
             concentrations.append(" , " + QString::number(FFTL.ConcentrationC3));
+            conc.append("C3");
         }
 
-        fprintf(file, "Concentrations (mg/dl): %s\n\n", concentrations.toLatin1().data());
+        fprintf(file, "Concentrations %s: %s\n\n", conc.toLatin1().data() ,concentrations.toLatin1().data());
 
     }
 

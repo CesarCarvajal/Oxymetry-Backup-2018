@@ -64,6 +64,9 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     /* Connect signal mapper action */
     connect(signalMapperC, SIGNAL(mapped(QWidget *)), this, SLOT(handleClickEvent(QWidget *)));
 
+    /* loading configuration from file? */
+    loadingConfigurationFromFile = false;
+
     /* Set window flags */
     this->setWindowFlags(Qt::Dialog | Qt::WindowTitleHint | Qt::WindowStaysOnTopHint  | Qt::WindowCloseButtonHint);
 
@@ -177,6 +180,9 @@ void configurePolMeasure::selectPath(void)
         cleanAll();
 
     }
+
+    /* Is configuration loaded */
+    loadingConfigurationFromFile = true;
 
     /* Load Configuration */
     loadConfiguration();
@@ -322,10 +328,10 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
             }
 
             /* Update maximum concentrations */
-            externSoftware->maxConcentrations.replace(0, externSoftware->stockSolutions.at(0)/(NumberOfSubstances));
+           // externSoftware->maxConcentrations.replace(0, externSoftware->stockSolutions.at(0)/(NumberOfSubstances));
 
             /* Adjust the maximum concentration accordingly */
-            ui->lineEdit_MaxGluc->setText(QString::number(externSoftware->maxConcentrations.at(0)));
+           // ui->lineEdit_MaxGluc->setText(QString::number(externSoftware->maxConcentrations.at(0)));
 
         }else
             /* The user decide to change the stock Impurity 1 */
@@ -338,10 +344,10 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
                 }
 
                 /* Update maximum concentrations */
-                externSoftware->maxConcentrations.replace(1, externSoftware->stockSolutions.at(1)/(NumberOfSubstances));
+             //   externSoftware->maxConcentrations.replace(1, externSoftware->stockSolutions.at(1)/(NumberOfSubstances));
 
                 /* Adjust the maximum concentration accordingly */
-                ui->lineEdit_MaxImp1->setText(QString::number(externSoftware->maxConcentrations.at(1)));
+              //  ui->lineEdit_MaxImp1->setText(QString::number(externSoftware->maxConcentrations.at(1)));
 
             }else
                 /* The user decide to change the stock Impurity 2 */
@@ -354,10 +360,10 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
                     }
 
                     /* Update maximum concentrations */
-                    externSoftware->maxConcentrations.replace(2, externSoftware->stockSolutions.at(2)/(NumberOfSubstances));
+              //      externSoftware->maxConcentrations.replace(2, externSoftware->stockSolutions.at(2)/(NumberOfSubstances));
 
                     /* Adjust the maximum concentration accordingly */
-                    ui->lineEdit_MaxImp2->setText(QString::number(externSoftware->maxConcentrations.at(2)));
+             //       ui->lineEdit_MaxImp2->setText(QString::number(externSoftware->maxConcentrations.at(2)));
 
                 }
 
@@ -494,10 +500,6 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
                                 }
                             }
 
-        /* File name preview */
-        ui->lineEdit_BFileNamePrev->setText("0C1_0C2_" + QString::number(ui->lineEdit_BIntTime->text().toFloat()) + "ms_"
-                                            + QString::number(ui->lineEdit_BFreq->text().toInt()) + "Hz_1");
-
         /* Update Data */
         GetConfigurationData();
     }
@@ -572,6 +574,35 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
 
     }
 
+    QString C = "";
+
+    if(ui->checkBox_Glucose->isChecked()){
+
+        C.append(QString::number(ui->lineEdit_MaxGluc->text().toDouble()) + "C1");
+    }
+
+    if(ui->checkBox_Glucose->isChecked() && (ui->checkBox_Imp1->isChecked() || ui->checkBox_Imp2->isChecked())){
+        C.append("_");
+    }
+
+    if(ui->checkBox_Imp1->isChecked()){
+
+        C.append(QString::number(ui->lineEdit_MaxImp1->text().toDouble()) + "C2");
+    }
+
+    if(ui->checkBox_Imp1->isChecked() && ui->checkBox_Imp2->isChecked()){
+        C.append("_");
+    }
+
+    if(ui->checkBox_Imp2->isChecked()){
+
+        C.append(QString::number(ui->lineEdit_MaxImp2->text().toDouble()) + "C3");
+    }
+
+    /* File name preview */
+    ui->lineEdit_BFileNamePrev->setText(C + "_" + QString::number(ui->lineEdit_BIntTime->text().toFloat()) + "ms_"
+                                        + QString::number(ui->lineEdit_BFreq->text().toInt()) + "Hz_1");
+
 }
 
 /**
@@ -581,6 +612,9 @@ void configurePolMeasure::configurePolarimeter(void)
 {
     /* If the user never pressed enter or similar */
     GetConfigurationData();
+
+    /* Is configuration loaded */
+    loadingConfigurationFromFile = false;
 
     /* Get path to save configuration file */
     path = QFileDialog::getSaveFileName(this, tr("Save Configuration File"), "spectrometer_skript", "Text files (*.txt)");
@@ -610,6 +644,7 @@ void configurePolMeasure::configurePolarimeter(void)
  */
 void configurePolMeasure::loadConfiguration(void)
 {
+
     /* Save rows in file */
     QStringList wordList;
 
@@ -637,6 +672,8 @@ void configurePolMeasure::loadConfiguration(void)
             wordList.append(file.readLine().split(',').first());
         }
 
+        wordList.removeAt(0);
+
         /* Close file */
         file.close();
 
@@ -650,6 +687,20 @@ void configurePolMeasure::loadConfiguration(void)
             showWarning("Malformed configuration file!", "");
             configured = false;
             return;
+        }
+
+        /* Loading configuration from file? */
+        if(loadingConfigurationFromFile){
+
+            /* Concentrations */
+            externSoftware->GlucoseConcentration.resize((unsigned int)wordList.length());
+            externSoftware->Impurity1Concentration.resize((unsigned int)wordList.length());
+            externSoftware->Impurity2Concentration.resize((unsigned int)wordList.length());
+
+            /* Deactivate substances */
+            externSoftware->ConfigurationFileGenerator->glucoseActive = false;
+            externSoftware->ConfigurationFileGenerator->Imp1Active = false;
+            externSoftware->ConfigurationFileGenerator->Imp2Active = false;
         }
 
         unsigned int i = 0;
@@ -666,6 +717,45 @@ void configurePolMeasure::loadConfiguration(void)
             integrationTime = list[3].toFloat();
             numberOfAverages = list[4].toInt();
             freqToMeasure = list[5].toInt();
+
+            if(loadingConfigurationFromFile){
+                /* Get the File Name information */
+                QStringList listC = QString(list[1]).split("_");
+
+                /* Loop throught the file name */
+                for(int j = 0; j < listC.length() ; j++){
+
+                    /* Is glucose or substance 1 included? */
+                    if(QString(listC[j]).contains("C1")){
+
+                        /* Glucose is active */
+                        externSoftware->ConfigurationFileGenerator->glucoseActive = true;
+
+                        /* Add the corresponding concentration */
+                        externSoftware->GlucoseConcentration.replace(i, QString(listC[j]).left(QString(listC[j]).lastIndexOf("C1")).toDouble());
+                    }
+
+                    /* Is Impurity 1 or substance 2 included? */
+                    if(QString(listC[j]).contains("C2")){
+
+                        /* Glucose is active */
+                        externSoftware->ConfigurationFileGenerator->Imp1Active = true;
+
+                        /* Add the corresponding concentration */
+                        externSoftware->Impurity1Concentration.replace(i, QString(listC[j]).left(QString(listC[j]).lastIndexOf("C2")).toDouble());
+                    }
+
+                    /* Is impurity 2 or substance 3 included? */
+                    if(QString(listC[j]).contains("C3")){
+
+                        /* Impurity 2 is active */
+                        externSoftware->ConfigurationFileGenerator->Imp2Active = true;
+
+                        /* Add the corresponding concentration */
+                        externSoftware->Impurity2Concentration.replace(i, QString(listC[j]).left(QString(listC[j]).lastIndexOf("C3")).toDouble());
+                    }
+                }
+            }
 
             /* At least second entry? */
             if (i > 0)
@@ -737,6 +827,13 @@ void configurePolMeasure::GetConfigurationData(void)
     numberOfAverages = ui->lineEdit_BNAve->text().toInt();
     externSoftware->ConfigurationFileGenerator->NrAverages = numberOfAverages;
 
+    /* Save the actual selected substances */
+    externSoftware->ConfigurationFileGenerator->glucoseActive = ui->checkBox_Glucose->isChecked();
+    externSoftware->ConfigurationFileGenerator->Imp1Active = ui->checkBox_Imp1->isChecked();
+    externSoftware->ConfigurationFileGenerator->Imp2Active = ui->checkBox_Imp2->isChecked();
+
+    /* Required for the Pump Scripts */
+
     /* Get Number of Measurements */
     NrMeasurements = ui->lineEdit_BNMeas->text().toInt();
     externSoftware->ConfigurationFileGenerator->NConcentrations = NrMeasurements;
@@ -787,10 +884,6 @@ void configurePolMeasure::GetConfigurationData(void)
         showWarning("Please consider that large number of spectra will lead to a larger measurement time!", "");
     }
 
-    /* Save the actual selected substances */
-    externSoftware->ConfigurationFileGenerator->glucoseActive = ui->checkBox_Glucose->isChecked();
-    externSoftware->ConfigurationFileGenerator->Imp1Active = ui->checkBox_Imp1->isChecked();
-    externSoftware->ConfigurationFileGenerator->Imp2Active = ui->checkBox_Imp2->isChecked();
 
 }
 

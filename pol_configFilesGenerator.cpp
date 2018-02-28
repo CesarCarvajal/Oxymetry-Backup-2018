@@ -76,20 +76,30 @@ void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFil
     /* Open the file */
     FILE *file = fopen(pathFile.toLatin1().data(), "wt");
 
+    /* Write in file */
+    fprintf(file, "%s", "Time_interval ; File_name ; Nr_Spectra ; Int_time ; Nr_Averages ; Modulation_frequency\n");
+
+    /* Cycle of a concentration */
+    double cycleTime = (2 * fillRefill + 4*shortBreak)*(NSteps + (NSteps-1)) +  (2 * fillRefill + 3*shortBreak + longBreak );
+
+    /* Time intervals between measurements */
+    double measurementTime = cycleTime - (((longBreak + (2*IntegrationTime*NrSpectra))/3));
+
     /* Write measurement configuration for each concentration */
     for(int j = 0 ; j < NConcentrations; j++){
 
-        /* Time intervals between measurements */
-        int startTime = (10*fillRefill + 20*shortBreak + 7000) + TimeIntervals*j;
+        /* Measurement cycle time */
+        int mTime = measurementTime + (cycleTime * j);
 
         /* Configuration line */
-        QString line = QString::number(startTime) + ";" ;
+        QString line = QString::number(mTime) + ";" ;
 
         /* If glucose is active call it Concentration 1 or C1 */
         if(glucoseActive){
 
             /* Add C1 to the file name */
             line.append(QString::number(GlucoseConcentration.at(j)) + "C1_");
+
         }
 
         /* If Impurity 1 is active call it Concentration 2 or C2 */
@@ -261,6 +271,8 @@ float Pol_configFilesGenerator::correlationCoefficient(QVector <double> X, QVect
 
     /* Get the correlation coefficient */
     float corrcoeff = abs(((N*sumXY) - (sumX*sumY))/(sqrt(((N*sumX2) - (sumX*sumX))*((N*sumY2) - (sumY*sumY)))));
+
+    corrcoeff = corrcoeff*corrcoeff;
 
     return corrcoeff;
 }

@@ -177,7 +177,7 @@ void fft::getFFTfromRawData(QFileInfo fileInformation, bool Calibrating, double 
     /* Initialize row counter */
     QString Row = "";
 
-    /* Initialize the spliter according to the Oxymetry type ".CS" file */
+    /* Initialize the spliter according to the Oxymetry type ".CS" or ".tmp" file */
     QString spliter = "\t\t";
 
     /* Start reading at the second column for CS file */
@@ -235,7 +235,7 @@ void fft::getFFTfromRawData(QFileInfo fileInformation, bool Calibrating, double 
                 QStringList Readed_Row = Row.split(spliter);
                 Readed_Row.replaceInStrings(",",".");
 
-                if(Readed_Row.at(0).toDouble() > maxWavelength && Calibrating){break;}
+                if(Readed_Row.at(0).toDouble() > maxWavelength){break;}
 
                 /* Save the wavelengths in Position 0 */
                 wavelengths.append(Readed_Row.at(0).toDouble());
@@ -311,8 +311,8 @@ void fft::ReadFile(QString FilePath)
     /* Open the file to get the Nr of Spectra and Average Nr. */
     QFile file(FilePath);
 
+    /* Row of the file */
     QString ReadRow;
-    QString inputRow, inputRow2;
 
     /* Open the file */
     if(file.open(QIODevice::ReadOnly)) {
@@ -324,43 +324,41 @@ void fft::ReadFile(QString FilePath)
             /* Read a line from the file */
             ReadRow = stream.readLine();
 
-            /* Indicates where to start reading the numerical information from file */
-            inputRow = ReadRow.at(0);
-            inputRow2 = ReadRow.at(7);
-
             /* Read the text and get the values */
             QStringList Readed_Row = ReadRow.split(" ");
 
             /* Integration time found */
-            if(inputRow == 'I' && IntTime==-1){
+            if(ReadRow.contains("Integration") && IntTime==-1){
 
                 IntTime = QString(Readed_Row.at(2)).replace(",",".").toDouble();
 
-            }else if(inputRow == 'N' && inputRow2 == 'S' && NrSpectra==-1){
+            }else if(ReadRow.contains("Spectra") && NrSpectra==-1){
 
                 NrSpectra = Readed_Row.at(3).toInt();
 
-            }else if(inputRow == 'N' && inputRow2 == 'A' && NrAverages==-1){
+            }else if(ReadRow.contains("Averages") && NrAverages==-1){
 
                 NrAverages = Readed_Row.at(3).toInt();
 
-            }else if(inputRow == 'F' && FrequencyF==-1){
+            }else if(ReadRow.contains("Frequency") && FrequencyF==-1){
 
                 FrequencyF = QString(Readed_Row.at(1)).replace(",",".").toDouble();
 
-            }else if(inputRow == 'C' && ConcentrationC1==-1){
+            }else if(ReadRow.contains("Concentrations") && ConcentrationC1==-1 && ConcentrationC2==-1 && ConcentrationC3==-1){
 
-                ConcentrationC1 = QString(Readed_Row.at(2)).replace(",",".").toDouble();
+                if(ReadRow.contains("C1")){
+                    ConcentrationC1 = QString(Readed_Row.at(2)).replace(",",".").toDouble();
+                }
 
-                if(Readed_Row.length() > 3){
+                if(ReadRow.contains("C2")){
                     ConcentrationC2 = QString(Readed_Row.at(4)).replace(",",".").toDouble();
                 }
 
-                if(Readed_Row.length() > 5){
+                if(ReadRow.contains("C3")){
                     ConcentrationC3 = QString(Readed_Row.at(6)).replace(",",".").toDouble();
                 }
 
-            }else if(inputRow == 'W'){
+            }else if(ReadRow.contains("Wavelength")){
 
                 break;
             }
@@ -375,9 +373,9 @@ void fft::ReadFile(QString FilePath)
 }
 
 /**
- * @brief Initialize the FFT Vectors.
- *
- */
+                         * @brief Initialize the FFT Vectors.
+                         *
+                         */
 void fft::InitializeFFTArrays()
 {
     /* Initialize the vectors to empty */
@@ -394,9 +392,9 @@ void fft::InitializeFFTArrays()
 }
 
 /**
- * @brief Calculate the FFT from incoming Data
- * @param[in] The Raw Data and the size of the measurements N.
- */
+                         * @brief Calculate the FFT from incoming Data
+                         * @param[in] The Raw Data and the size of the measurements N.
+                         */
 void fft::CalculateFFT(int N, QVector<double> Data)
 {
     /* Create the arrays to save the FFT inputs and outputs */
@@ -431,9 +429,9 @@ void fft::CalculateFFT(int N, QVector<double> Data)
 }
 
 /**
- * @brief Save the FFT Data to a File
- * @param[in] Details of the file where the FFT will be saved. Also if the user is saving or the system is saving automatically.
- */
+                         * @brief Save the FFT Data to a File
+                         * @param[in] Details of the file where the FFT will be saved. Also if the user is saving or the system is saving automatically.
+                         */
 void fft::saveFFTtoFile(QFileInfo FileDetails, bool userSaving)
 {
 
@@ -476,19 +474,24 @@ void fft::saveFFTtoFile(QFileInfo FileDetails, bool userSaving)
     fprintf(fileFFT, "Frequency: %.2f Hz\n", FrequencyF);
 
     /* Include the concentrations in the file */
-    QString concentrations = "";
+    QString concentrations, conc = "";
 
     if(ConcentrationC1 >= 0){
         concentrations.append(QString::number(ConcentrationC1));
-    }
-    if(ConcentrationC2 >= 0){
-        concentrations.append(" , " + QString::number(ConcentrationC2));
-    }
-    if(ConcentrationC3 >= 0){
-        concentrations.append(" , " + QString::number(ConcentrationC3));
+        conc.append("C1");
     }
 
-    fprintf(fileFFT, "Concentrations (mg/dl): %s\n\n", concentrations.toLatin1().data());
+    if(ConcentrationC2 >= 0){
+        concentrations.append(" , " + QString::number(ConcentrationC2));
+        conc.append("C2");
+    }
+
+    if(ConcentrationC3 >= 0){
+        concentrations.append(" , " + QString::number(ConcentrationC3));
+        conc.append("C3");
+    }
+
+    fprintf(fileFFT, "Concentrations %s: %s\n\n", conc.toLatin1().data() , concentrations.toLatin1().data());
 
     /* Loop through the wavelengths */
     for (int z = 0; z < wavelengths.length(); z++)
@@ -524,8 +527,8 @@ void fft::saveFFTtoFile(QFileInfo FileDetails, bool userSaving)
 }
 
 /**
- * @brief Destructor of 'fft' class
- */
+                         * @brief Destructor of 'fft' class
+                         */
 fft::~fft(void)
 {
 

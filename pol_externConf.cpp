@@ -141,14 +141,14 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
             corrcoeffTime = ConfigurationFileGenerator->correlationCoefficient(Nmeasurements, GlucoseConcentration, ConfigurationFileGenerator->NConcentrations);
 
             /* Is the factor ok?, if not start again */
-            if(corrcoeffTime > 0.05){ continue;}
+            if(corrcoeffTime > 0.005){ continue;}
 
             /* Correlation between Glucose and Impurity 1 */
             if(ConfigurationFileGenerator->glucoseActive && ConfigurationFileGenerator->Imp1Active){
                 corrcoeffGlucImp1 = ConfigurationFileGenerator->correlationCoefficient(GlucoseConcentration, Impurity1Concentration, ConfigurationFileGenerator->NConcentrations);
 
                 /* Is the factor ok?, if not start again */
-                if(corrcoeffGlucImp1 > 0.05){ continue;}
+                if(corrcoeffGlucImp1 > 0.005){ continue;}
             }
 
             /* Correlation between Impurity 1 and Impurity 2 */
@@ -156,7 +156,7 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
                 corrcoeffImp1Imp2 = ConfigurationFileGenerator->correlationCoefficient(Impurity2Concentration, Impurity1Concentration, ConfigurationFileGenerator->NConcentrations);
 
                 /* Is the factor ok?, if not start again */
-                if(corrcoeffImp1Imp2 > 0.05){ continue;}
+                if(corrcoeffImp1Imp2 > 0.005){ continue;}
             }
 
             /* Correlation between Glucose and Impurity 2 */
@@ -164,7 +164,7 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
                 corrcoeffGlucImp2 = ConfigurationFileGenerator->correlationCoefficient(GlucoseConcentration, Impurity2Concentration, ConfigurationFileGenerator->NConcentrations);
 
                 /* Is the factor ok?, if not start again */
-                if(corrcoeffGlucImp2 > 0.05){ continue;}
+                if(corrcoeffGlucImp2 > 0.005){ continue;}
             }
 
             /* If no correlation or just a few elements, then stop doing random order */
@@ -189,14 +189,18 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
         Impurity2Flow.replace(i,Impurity2Concentration.at(i)*((ConfigurationFileGenerator->absoluteFlow)/(stockSolutions.at(2))));
 
         /* Water Flow */
-        WaterFlow.replace(i,ConfigurationFileGenerator->absoluteFlow - (GlucoseFlow.at(i) + Impurity1Flow.at(i)));
+        WaterFlow.replace(i,ConfigurationFileGenerator->absoluteFlow - (GlucoseFlow.at(i)));
     }
 
     /* Create the Spectrometer Script */
     ConfigurationFileGenerator->GenerateSpectrometerConfiguration(pathFile, GlucoseConcentration, Impurity1Concentration, Impurity2Concentration);
 
+    /* Remove the existing pump files */
+    removeExistingFiles();
+
     /* If glucose is active, then generate its pump script */
     if(ConfigurationFileGenerator->glucoseActive){
+
         /* Create the Glucose pump script */
         ConfigurationFileGenerator->GeneratePumpScripts(pathFile, "/GlucosePumpScript.nfp", GlucoseFlow);
     }
@@ -216,6 +220,45 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
     /* Create the Water pump script */
     ConfigurationFileGenerator->GeneratePumpScripts(pathFile, "/WaterPumpScript.nfp", WaterFlow);
 
+}
+
+/**
+ * @brief If there are pump files already, delete them
+ */
+void Pol_ExternConf::removeExistingFiles(void){
+
+    /* Get folder information */
+    QFileInfo folder(pathFile);
+
+    /* If there are some pump scripts already, remove them */
+    QFile file(folder.absolutePath() + "/GlucosePumpScript.nfp");
+
+    /* Does the pump file for glucose exists? */
+    if(file.exists()){
+
+        /* Remove the temporal file */
+        file.remove();
+    }
+
+    /* If there are some pump scripts already, remove them */
+    QFile file2(folder.absolutePath() + "/Impurity1PumpScript.nfp");
+
+    /* Does the pump file for glucose exists? */
+    if(file2.exists()){
+
+        /* Remove the temporal file */
+        file2.remove();
+    }
+
+    /* If there are some pump scripts already, remove them */
+    QFile file3(folder.absolutePath() + "/Impurity2PumpScript.nfp");
+
+    /* Does the pump file for glucose exists? */
+    if(file3.exists()){
+
+        /* Remove the temporal file */
+        file3.remove();
+    }
 }
 
 /**
