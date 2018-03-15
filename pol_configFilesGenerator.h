@@ -35,7 +35,7 @@ public:
     /* Constructor */
     explicit Pol_configFilesGenerator();
 
-    /* Spectrometer variables */
+    /* Spectrometer variables to be written in files and calculations */
     int NConcentrations;
     int NrSpectra;
     int Frequency;
@@ -43,21 +43,22 @@ public:
     int NrAverages;
 
     /* Refilling Times */
-    int fillRefill;
+    int fillRefill;          // Should accept double too
 
-    /* Number of steps */
+    /* Number of steps for filling refilling */
     int NSteps;
 
-    /* Pump variables */
+    /* Absolute flow for the pumps */
     double absoluteFlow;
+
+    /* Is the idle mode active? */
     int idle;
-    int TimeIntervals;
 
     /* Time Breaks */
-    int shortBreak;
-    int longBreak;
+    int shortBreak;     // Should accept double too
+    int longBreak;      // Should accept double too
 
-    /* Active substances */
+    /* Active substances flags */
     bool glucoseActive;
     bool Imp1Active;
     bool Imp2Active;

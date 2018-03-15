@@ -57,6 +57,9 @@ public:
     /* Show raw signal also when long term measuring running */
     double maxRawCounts;
 
+    /* Intervals between plots of average during the measurements */
+    int measurementPlotTimeInterval;
+
     /* When calibrating we don't need to save all this data, so just use a temporal file deleted at the end of the calibration */
     QString TempFileName;
 

@@ -245,6 +245,8 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     ui->button_Pol_ConfigureMeasurement->setDisabled((!m_NrDevices) ? true : false);
     ui->label_clearAll->setDisabled((!m_NrDevices) ? true : false);
 
+    /* Plots */
+
     /* Set axis and title of Raw Signal plot for Polarimeter */
     ui->qwtPlot_Pol->setXAxisTitle("Wavelength (nm)");
     ui->qwtPlot_Pol->setYAxisTitle("ADC counts");
@@ -288,6 +290,7 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
 
     /* Reference concentration only visible when running a measurement */
     ui->qwtPlot_Pol_Prediction->setVisible(false);
+    ui->label_RemainingTime->setVisible(false);
 
     /* Defaults values for x-axis are 400 to 1000 nm */
     unsigned int i = 0;
@@ -401,6 +404,11 @@ void PanelPolarimeter::toggle_Pol_Measurement(void)
             ui->qwtPlot_Pol_Compensation->setVisible(true);
             ui->qwtPlot_Pol_w_2w->setVisible(true);
 
+            /* Show remaining time */
+            QStringList ConvertedTime = ConfigureMeasurement->externSoftware->TimeConverter(ConfigureMeasurement->totalMtime);
+            ui->label_RemainingTime->setText(ConvertedTime.at(0) + " " + ConvertedTime.at(1));
+            ui->label_RemainingTime->setVisible(true);
+
             /* Restart the flag of interrupted measurement */
             Runner->Stopped = false;
 
@@ -428,9 +436,6 @@ void PanelPolarimeter::Run_Polarimetry(short int runType) {
 
     /* Adjust buttons, labels, configurations and GUI to start the Measurements or Calibration */
     AdjustRunStart(runType);
-
-    /* Time measurement index for Measurements, restart to 0 when starting a measurement */
-    Timeindex = 0;
 
     /* Adjust the folder where the Measurement data is going to be saved */
     AdjustMeasurementsSavingFolder();
@@ -564,7 +569,7 @@ void PanelPolarimeter::Stop_Run_Polarimetry(void) {
 
     }
 
-    /* Stop Long Term Measuring */
+    /* Stop Long Term Measurement */
     if(Runner->PolMeasuring){
 
         /* Measurement interrupted */
@@ -649,10 +654,14 @@ void PanelPolarimeter::AdjustRunStart(short int typeRun){
         /* Initialize the Calibration configuration and parameters */
         initializeCalibration();
 
+        /* Then it's measuring */
     }else{
 
         /* Remember Polarimeter Measurement is Running */
         Runner->setMeasurementRunning(true);
+
+        /* Time measurement index for Measurements, restart to 0 when starting a measurement */
+        Timeindex = 0;
 
         /* Update polarimetric Measurement button */
         ui->button_Start_Meas_Pol->setText("Stop Measurement");
@@ -662,6 +671,22 @@ void PanelPolarimeter::AdjustRunStart(short int typeRun){
         /* Restart Measurement progress bars */
         ui->currentProgressBar_Pol->setValue(0);
         ui->TotalProgressBar_Pol->setValue(0);
+
+        /* Calculate the total time length of the measurements */
+        int measurementLength = ConfigureMeasurement->timePoint.at(ConfigureMeasurement->timePoint.length()-1)/1000;
+
+        /* Adjust the intervals of averages plot during the measurements */
+        Runner->measurementPlotTimeInterval = int(ceil((ConfigureMeasurement->timePoint.at(ConfigureMeasurement->timePoint.length()-1)/300000)));
+
+        /* Adjust axis for the measurements */
+        ui->qwtPlot_Pol_Average->setXAxis(0.0, measurementLength + measurementLength*0.1 + ConfigureMeasurement->timePoint[0]/1000);
+
+        /* Clear all other plots too */
+        pol_plot->clean_AllPlots();
+
+        /* Clear plots */
+        clearPlot();
+
     }
 
     /* Restart timers */
@@ -680,8 +705,8 @@ void PanelPolarimeter::AdjustRunEnd(short int typeRunn){
         /* When finish, give some time to plot the last data point in the average during the Measurements */
         Runner->timerMS.start();
 
-        /* Start with at least 3 seconds of plotting the averages at the end of the Measurements */
-        int t = 3;
+        /* Start plotting the averages at the end of the Measurements */
+        int t = 0;
 
         /* Update information bar */
         ui->info->setText("Finishing Measurements");
@@ -698,15 +723,20 @@ void PanelPolarimeter::AdjustRunEnd(short int typeRunn){
                 /* Seconds */
                 t = t+1;
 
-                /* Plot the live average values for some time at the end of the Measurements */
-                plotAverage();
+                /* Plot 300 points for all the measurements */
+                if(t % Runner->measurementPlotTimeInterval == 0){
 
-                /* Handle events and update UI */
-                Application::processEvents();
+                    /* Plot last entry */
+                    plotAverage();
+
+                    /* Handle events and update UI */
+                    Application::processEvents();
+                }
             }
 
-            /* If the window is closed or a certain time has elapsed then break the loop */
-            if(abort_everything || t > ConfigureMeasurement->timePoint[0]/2000){break;}
+            /* If the window is closed or a certain time in seconds has elapsed then break the loop */
+            if(abort_everything || t > ConfigureMeasurement->timePoint[0]/1000){break;}
+
         }
 
         /* Reset selected rows in the Configuration profile table */
@@ -741,15 +771,20 @@ void PanelPolarimeter::Pol_Measure(void){
         /* Time in seconds */
         Runner->Timer_In_Seconds = Runner->Timer_In_Seconds + 1;
 
-        /* Plot the live average values of intensities */
-        plotAverage();
+        /* Plot 300 points for all the measurements */
+        if(Runner->Timer_In_Seconds % Runner->measurementPlotTimeInterval == 0){
+
+            /* Plot the live average values of intensities */
+            plotAverage();
+
+        }
     }
 
-    /* During the Measurements if the spectrometer isn't measuring then i's waiting for the pumps */
+    /* During the Measurements if the spectrometer isn't measuring then it's waiting for the pumps */
     if(!ptrSpectrometers[SpectrometerNumber]->isMeasuring()){
 
         /* Update information bar */
-        ui->info->setText("Measuring... Waiting for Cuvette Flushing");
+        ui->info->setText("Waiting for Cuvette Flushing");
     }
 
     /* Get the current path of the configuration file */
@@ -786,7 +821,7 @@ void PanelPolarimeter::Pol_Measure(void){
             if (ptrSpectrometers[SpectrometerNumber]->prepareMeasurement())
             {
                 /* Update information bar */
-                ui->info->setText("Measuring... Saving/Plotting Data");
+                ui->info->setText("Saving and Plotting Data");
 
                 /* Start the Measurement */
                 ptrSpectrometers[SpectrometerNumber]->startMeasurement(2);
@@ -816,7 +851,7 @@ void PanelPolarimeter::Pol_Measure(void){
                     ptrSpectrometers[SpectrometerNumber]->startMeasurement(-2);
 
                     /* Update information bar */
-                    ui->info->setText("Measuring... Adjusting Sample, See Live Raw Data");
+                    ui->info->setText("Adjusting Sample");
                 }
 
                 /* The raw data can be displayed now */
@@ -961,23 +996,14 @@ void PanelPolarimeter::changeFileName(void){
     if(Runner->PolConfigured){
 
         /* Get first name on the list */
-        QString changeFileName = ConfigureMeasurement->fileName.at(0);
-        QString NewFileName = "";
-
-        /* Iterate through the name and find the "_" on it */
-        for(int i=0; i < changeFileName.length();i++){
-
-            /* Save the first part of the file name */
-            NewFileName = NewFileName + changeFileName.at(i);
-
-            /* When reading C2_ then rewrite with new information */
-            if (changeFileName[i] == "2" && changeFileName[i+1] == "_"){
-                break;
-            }
-        }
+        QString changeFileName, NewFileName = "";
 
         /* For each file in the list */
         for(int j = 0; j < ConfigureMeasurement->fileName.length(); j++){
+
+            /* Get first name on the list */
+            changeFileName = ConfigureMeasurement->fileName.at(j);
+            NewFileName = NewFileName = changeFileName.left(changeFileName.lastIndexOf("C")+2);
 
             /* Change the name by the first part plus the new information */
             ConfigureMeasurement->fileName.replace(j, NewFileName + "_" + QString::number(ConfigureMeasurement->integrationTime) + "ms_"
@@ -1764,7 +1790,7 @@ void PanelPolarimeter::change_IntegrationTimePol(void){
 void PanelPolarimeter::change_AutoIntegrationTimePol(void){
 
     /* Update information bar */
-    ui->info->setText("Calibrating... Auto Adjusting Integration Time (This might take some time)");
+    ui->info->setText("Auto Adjusting (This might take some time)");
 
     /* Stop Calibration */
     Runner->AcceptParameterChanges();
@@ -2088,7 +2114,7 @@ void PanelPolarimeter::LoadFromFFT(void) {
     isFFTData = true;
 
     /* Load Data Path */
-    DataPath = QFileDialog::getOpenFileName(this, QString("Open FFT Data file"), ".", QString("*.TXT"));
+    DataPath = QFileDialog::getOpenFileName(this, QString("Open FFT Data file"), ".", QString("*.FFT"));
 
     /* File selected by user? */
     if (NULL == DataPath)
@@ -2199,18 +2225,23 @@ void PanelPolarimeter::writeToFile(FILE *file, double *a_pSpectrum, int WParam) 
         /* Include the concentrations in the file */
         QString concentrations, conc = "";
 
+        /* Is glucose active? */
         if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->glucoseActive){
 
             FFTL.ConcentrationC1 = ConfigureMeasurement->externSoftware->GlucoseConcentration.at(Timeindex-1);
             concentrations.append(QString::number(FFTL.ConcentrationC1));
             conc.append("C1");
         }
+
+        /* Is Impurity 1 active? */
         if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->Imp1Active){
 
             FFTL.ConcentrationC2 = ConfigureMeasurement->externSoftware->Impurity1Concentration.at(Timeindex-1);
             concentrations.append(" , " + QString::number(FFTL.ConcentrationC2));
             conc.append("C2");
         }
+
+        /* Is Impurity 2 active? */
         if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->Imp2Active){
 
             FFTL.ConcentrationC3 = ConfigureMeasurement->externSoftware->Impurity2Concentration.at(Timeindex-1);
@@ -2321,6 +2352,7 @@ void PanelPolarimeter::toggle_LoadData(void)
         ui->label_totalM->setVisible(false);
         ui->horizontalSpacer_Y->changeSize(20,12,QSizePolicy::Expanding,QSizePolicy::Fixed);
         ui->qwtPlot_Pol_Prediction->setVisible(false);
+        ui->label_RemainingTime->setVisible(false);
         ui->label_prediction->setVisible(false);
         ui->line_comp->setVisible(false);
         ui->qwtPlot_Pol->setVisible(false);
@@ -2473,7 +2505,7 @@ void PanelPolarimeter::clearPlot(void) {
 void PanelPolarimeter::saveGraph_Pol(void) {
 
     /* Update information bar */
-    ui->info->setText("Saving... Graphs to file");
+    ui->info->setText("Saving graphs to file");
 
     /* Get the folder to save the different PDF files with the plots */
     QString pathPDF =QFileDialog::getSaveFileName(this, tr("Save plots as PDF files"), "", "Text files (*.pdf)");
@@ -2507,7 +2539,7 @@ void PanelPolarimeter::saveGraph_Pol(void) {
 void PanelPolarimeter::plotAverage(void){
 
     /* Plot Averages */
-    pol_plot->plotAverages(dataloaded, FFTL.fft_DC, FFTL.fft_W, FFTL.fft_2W, FFTL.wavelengths);
+    pol_plot->plotAverages(dataloaded, FFTL.fft_DC, FFTL.fft_W, FFTL.fft_2W, FFTL.wavelengths, Runner->PolMeasuring, Runner->measurementPlotTimeInterval);
 
     /* Attach graphs */
     pol_plot->Average_DC_Signal->attach(ui->qwtPlot_Pol_Average);
@@ -2525,10 +2557,22 @@ void PanelPolarimeter::plotAverage(void){
     ui->qwtPlot_Pol_Average->update();
 
     /* If we have more than certain amount of values in the plot, change the X axis */
-    if(pol_plot->averaged_Signal_time.length() >= pol_plot->time_plot){
+    if(pol_plot->averaged_Signal_time.length() > pol_plot->time_plot){
 
-        /* Change axis according to the running time */
-        ui->qwtPlot_Pol_Average->setXAxis(pol_plot->maxXtime, pol_plot->maxXtime + pol_plot->time_plot);
+        /* Change axis according to the running type 0: Calibrating */
+        if(Runner->PolCalibrating){
+            /* Just add a certain time to the plot */
+            ui->qwtPlot_Pol_Average->setXAxis(pol_plot->maxXtime, pol_plot->maxXtime + pol_plot->time_plot);
+        }
+
+        /* Change axis according to the running type 1: Measuring */
+        if(Runner->PolMeasuring){
+            /* Calculate the total time length of the measurements */
+            int measurementLength = ConfigureMeasurement->timePoint.at(ConfigureMeasurement->timePoint.length()-1)/1000;
+
+            /* Adjust axis for the measurements */
+            ui->qwtPlot_Pol_Average->setXAxis(pol_plot->maxXtime, pol_plot->maxXtime + measurementLength + measurementLength*0.1 + ConfigureMeasurement->timePoint[0]/1000);
+        }
 
         /* Restart all vector to don't overload them with too many information */
         pol_plot->averaged_Signal_time.resize(0);
@@ -2614,6 +2658,7 @@ void PanelPolarimeter::toggle_Pol_Calibration(void)
             ui->label_totalM->setVisible(false);
             ui->horizontalSpacer_Y->changeSize(20,12,QSizePolicy::Expanding,QSizePolicy::Fixed);
             ui->qwtPlot_Pol_Prediction->setVisible(false);
+            ui->label_RemainingTime->setVisible(false);
             ui->label_prediction->setVisible(false);
             ui->line_comp->setVisible(false);
 
@@ -2680,7 +2725,7 @@ void PanelPolarimeter::initializeCalibration(void){
 void PanelPolarimeter::initializeDefaultCalibration(void){
 
     /* Default values for the calibration purpose */
-    double defaultSpectra = 1000, defaultFreq = 4;
+    double defaultSpectra = 1000, defaultFreq = 7;
 
     /* Assign the default number of spectra and frequency to calibrate without a configuration file */
     ColumnSpectra->setText(QString::number(defaultSpectra));
@@ -3011,6 +3056,7 @@ void PanelPolarimeter::clean_AllPol(void){
     ui->label_totalM->setVisible(false);
     ui->horizontalSpacer_Y->changeSize(20,12,QSizePolicy::Expanding,QSizePolicy::Fixed);
     ui->qwtPlot_Pol_Prediction->setVisible(false);
+    ui->label_RemainingTime->setVisible(false);
     ui->label_prediction->setVisible(false);
     ui->line_comp->setVisible(false);
 
@@ -3027,6 +3073,9 @@ void PanelPolarimeter::clean_AllPol(void){
 
     /* Show current progress bar*/
     ui->currentProgressBar_Pol->setVisible(false);
+
+    /* Restart total measurement time */
+    ConfigureMeasurement->totalMtime = 0;
 
     /* Is there any information ploted already? */
     if(pol_plot->Average_DC_Signal!=nullptr)
@@ -3064,7 +3113,7 @@ void PanelPolarimeter::clean_AllPol(void){
     FFTL.InitializeFFTArrays();
 
     /* Also restart plotting variables */
-    pol_plot->time_plot = 300;
+    pol_plot->time_plot = 400;
     ui->qwtPlot_Pol_Average->setXAxis(0, pol_plot->time_plot);
 
     /* Restart configuration */
@@ -3081,6 +3130,9 @@ void PanelPolarimeter::clean_AllPol(void){
 
     /* General Timer in seconds */
     Runner->Timer_In_Seconds=0;
+
+    /* Restart the time intervals of average plot during the measurements */
+    Runner->measurementPlotTimeInterval = 0;
 
     /* Time busy with FFT */
     Runner->liveFFT_Time = 0;

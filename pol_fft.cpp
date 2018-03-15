@@ -235,6 +235,7 @@ void fft::getFFTfromRawData(QFileInfo fileInformation, bool Calibrating, double 
                 QStringList Readed_Row = Row.split(spliter);
                 Readed_Row.replaceInStrings(",",".");
 
+                /* We don't need all the saved values */
                 if(Readed_Row.at(0).toDouble() > maxWavelength){break;}
 
                 /* Save the wavelengths in Position 0 */
@@ -319,6 +320,7 @@ void fft::ReadFile(QString FilePath)
 
         QTextStream stream(&file);
 
+        /* Read lines */
         while(!stream.atEnd()){
 
             /* Read a line from the file */
@@ -330,34 +332,46 @@ void fft::ReadFile(QString FilePath)
             /* Integration time found */
             if(ReadRow.contains("Integration") && IntTime==-1){
 
+                /* Get the integration time from file */
                 IntTime = QString(Readed_Row.at(2)).replace(",",".").toDouble();
 
+                /* Number of Spectra found */
             }else if(ReadRow.contains("Spectra") && NrSpectra==-1){
 
+                /* Get the number of spectra from file */
                 NrSpectra = Readed_Row.at(3).toInt();
 
+                /* Number of Averages found */
             }else if(ReadRow.contains("Averages") && NrAverages==-1){
 
+                /* Get the number of averages from file */
                 NrAverages = Readed_Row.at(3).toInt();
 
+                /* Frequency found */
             }else if(ReadRow.contains("Frequency") && FrequencyF==-1){
 
+                /* Get the frequency from file */
                 FrequencyF = QString(Readed_Row.at(1)).replace(",",".").toDouble();
 
+                /* Concentrations found */
             }else if(ReadRow.contains("Concentrations") && ConcentrationC1==-1 && ConcentrationC2==-1 && ConcentrationC3==-1){
 
+                /* Is there glucose? */
                 if(ReadRow.contains("C1")){
                     ConcentrationC1 = QString(Readed_Row.at(2)).replace(",",".").toDouble();
                 }
 
+                /* Is there Impurity 1? */
                 if(ReadRow.contains("C2")){
                     ConcentrationC2 = QString(Readed_Row.at(4)).replace(",",".").toDouble();
                 }
 
+                /* Is there Impurity 2? */
                 if(ReadRow.contains("C3")){
                     ConcentrationC3 = QString(Readed_Row.at(6)).replace(",",".").toDouble();
                 }
 
+                /* From here ahead just counts and other data */
             }else if(ReadRow.contains("Wavelength")){
 
                 break;
@@ -373,9 +387,9 @@ void fft::ReadFile(QString FilePath)
 }
 
 /**
-                         * @brief Initialize the FFT Vectors.
-                         *
-                         */
+ * @brief Initialize the FFT Vectors.
+ *
+*/
 void fft::InitializeFFTArrays()
 {
     /* Initialize the vectors to empty */
@@ -392,9 +406,9 @@ void fft::InitializeFFTArrays()
 }
 
 /**
-                         * @brief Calculate the FFT from incoming Data
-                         * @param[in] The Raw Data and the size of the measurements N.
-                         */
+* @brief Calculate the FFT from incoming Data
+* @param[in] The Raw Data and the size of the measurements N.
+*/
 void fft::CalculateFFT(int N, QVector<double> Data)
 {
     /* Create the arrays to save the FFT inputs and outputs */
@@ -429,29 +443,29 @@ void fft::CalculateFFT(int N, QVector<double> Data)
 }
 
 /**
-                         * @brief Save the FFT Data to a File
-                         * @param[in] Details of the file where the FFT will be saved. Also if the user is saving or the system is saving automatically.
-                         */
+* @brief Save the FFT Data to a File
+* @param[in] Details of the file where the FFT will be saved. Also if the user is saving or the system is saving automatically.
+*/
 void fft::saveFFTtoFile(QFileInfo FileDetails, bool userSaving)
 {
-
     /* Create the path and file name for the FFT file */
     QString path;
-    QString fileN = FileDetails.completeBaseName() + "_FFT";
+    QString fileN = FileDetails.completeBaseName();
 
     /* The user wants to save the FFT data in an specific folder */
     if(userSaving){
 
-        path = QFileDialog::getSaveFileName(0, tr("Save FFT Data"), fileN, "Text files (*.txt)");
+        /* Get the user path */
+        path = QFileDialog::getSaveFileName(0, tr("Save FFT Data"), fileN, "FFT files (*.FFT)");
 
     }else{
 
-        /* Create a Date Folder*/
+        /* Create a Date Folder automatically */
         QString folder = "FFT Data " + QDate::currentDate().toString("dd MM yyyy");
         QDir(FileDetails.absolutePath()).mkdir(folder);
 
         /* Save the file with the same input data name, but adding FFT at the end */
-        path = FileDetails.absolutePath() +"/" + folder + "/" + fileN + ".txt";
+        path = FileDetails.absolutePath() +"/" + folder + "/" + fileN + ".FFT";
     }
 
     /* Open the file for writing */
@@ -476,21 +490,25 @@ void fft::saveFFTtoFile(QFileInfo FileDetails, bool userSaving)
     /* Include the concentrations in the file */
     QString concentrations, conc = "";
 
+    /* Is there glucose? */
     if(ConcentrationC1 >= 0){
         concentrations.append(QString::number(ConcentrationC1));
         conc.append("C1");
     }
 
+    /* Is there Impurity 1? */
     if(ConcentrationC2 >= 0){
         concentrations.append(" , " + QString::number(ConcentrationC2));
         conc.append("C2");
     }
 
+    /* Is there Impurity 2? */
     if(ConcentrationC3 >= 0){
         concentrations.append(" , " + QString::number(ConcentrationC3));
         conc.append("C3");
     }
 
+    /* Write the concentrations to the file */
     fprintf(fileFFT, "Concentrations %s: %s\n\n", conc.toLatin1().data() , concentrations.toLatin1().data());
 
     /* Loop through the wavelengths */
@@ -527,8 +545,9 @@ void fft::saveFFTtoFile(QFileInfo FileDetails, bool userSaving)
 }
 
 /**
-                         * @brief Destructor of 'fft' class
-                         */
+* @brief Destructor of 'fft' class
+*
+*/
 fft::~fft(void)
 {
 

@@ -29,7 +29,7 @@ Pol_Plot::Pol_Plot()
 {
 
     /* Plot Average, range of time plotting */
-    time_plot=300;
+    time_plot=400;
 
     /* Running time of Averages */
     counts_average_time = 0;
@@ -118,7 +118,7 @@ void Pol_Plot::plotFFTatSelectedWave(QVector<double> FFTLfft_data, QVector<doubl
  * @brief Plot W, DC and 2W averaged
  * @param[in] Vectors with the DC, W, 2W and ratio W/2W components, also the wavelengths. The parameter dataloaded prevents mixing of data.
  */
-void Pol_Plot::plotAverages(bool dataloaded, QVector<double> FFTLfft_DC, QVector<double> FFTLfft_W, QVector<double> FFTLfft_2W, QVector<double> FFTLwavelengths){
+void Pol_Plot::plotAverages(bool dataloaded, QVector<double> FFTLfft_DC, QVector<double> FFTLfft_W, QVector<double> FFTLfft_2W, QVector<double> FFTLwavelengths, bool measuring, int time){
 
     /* Initialize the average variables */
     double average_DC=0, average_W=0, average_2W = 0;
@@ -148,8 +148,13 @@ void Pol_Plot::plotAverages(bool dataloaded, QVector<double> FFTLfft_DC, QVector
         maxYValue =  ceil(*std::max_element(AverageDC.begin(), AverageDC.end()));
     }
 
-    /* The signal is plotted every defined time, so run it's own timer for plotting */
-    counts_average_time = counts_average_time + 1;
+    /* Is there a long measurement */
+    if(!measuring){
+        /* The signal is plotted every defined time, so run it's own timer for plotting */
+        counts_average_time = counts_average_time + 1;
+    }else{
+        counts_average_time = counts_average_time + time;
+    }
 
     /* Add the time to the x axis of the plot */
     averaged_Signal_time.append(counts_average_time);

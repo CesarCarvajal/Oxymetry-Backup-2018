@@ -55,6 +55,9 @@ public:
     /* Path to save configuration file */
     QString pathFile;
 
+    /* Time Converter */
+    QStringList TimeConverter(double mTime);
+
     /* Open Nemesys Pump Software */
     void openPumpSoftware(void);
 

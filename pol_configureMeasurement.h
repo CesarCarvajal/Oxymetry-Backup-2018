@@ -45,15 +45,18 @@ public:
     /* Create the connection to extern software */
     Pol_ExternConf *externSoftware = nullptr;
 
-    /* Configurable Variables */
+    /* Configurable Variables loaded form files or created */
     int numSpectra;
     float integrationTime;
     int numberOfAverages;
     int freqToMeasure;
     QList<double> timePoint;
-    int NrMeasurements;
+    int NrMeasurements;             // Could inherit variables from configFilesGenerator (avoid repeat)
 
-    /* Is configuration loaded */
+    /* Total measurement time */
+    double totalMtime;
+
+    /* Is a configuration loaded */
     bool loadingConfigurationFromFile;
 
     /* Save if there was a configuration loaded */
@@ -77,6 +80,7 @@ public:
     /* User interface */
     Ui::configurePolMeasure *ui;
 
+    /* Own signal mapper for buttons and labels in configuration window */
     QSignalMapper *signalMapperC;
 
     /* Do you want to load a configuration? or not? */

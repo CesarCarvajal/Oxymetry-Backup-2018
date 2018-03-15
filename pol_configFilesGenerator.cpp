@@ -33,7 +33,7 @@
 Pol_configFilesGenerator::Pol_configFilesGenerator()
 {
 
-    /* Active substances */
+    /* Active substances flags */
     glucoseActive = false;
     Imp1Active = false;
     Imp2Active = false;
@@ -45,7 +45,7 @@ Pol_configFilesGenerator::Pol_configFilesGenerator()
  */
 void Pol_configFilesGenerator::GeneratePumpScripts(QString pathFile, QString filetype, QVector <double> FlowVector){
 
-    /* Get folder information */
+    /* Get folder to store the information */
     QFileInfo folder(pathFile);
 
     /* Defines the type of pump script */
@@ -177,7 +177,7 @@ void Pol_configFilesGenerator::writeFlushing(FILE *pFile, QString filetype){
         }
 
         /* 8 stop after filling valve refill */
-        fprintf(pFile, "%d\t%d\t%d\n", shortBreak, 0, idle);
+        fprintf(pFile, "%d\t%d\t%i\n", shortBreak, 0, idle);
 
         /* 9 stop after refilling valve fill */
         fprintf(pFile, "%d\t%d\t%d\n", shortBreak, 0, 1);
@@ -272,6 +272,7 @@ float Pol_configFilesGenerator::correlationCoefficient(QVector <double> X, QVect
     /* Get the correlation coefficient */
     float corrcoeff = abs(((N*sumXY) - (sumX*sumY))/(sqrt(((N*sumX2) - (sumX*sumX))*((N*sumY2) - (sumY*sumY)))));
 
+    /* Square the correlation coefficient */
     corrcoeff = corrcoeff*corrcoeff;
 
     return corrcoeff;

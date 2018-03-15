@@ -55,16 +55,16 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     /* Set up user interface */
     ui->setupUi(this);
 
-    /* Create signal mapper for panel */
+    /* Create signal mapper for configuration window */
     signalMapperC = new QSignalMapper(this);
 
-    /* Create the connection to extern software */
+    /* Create the connection to extern software object */
     externSoftware = new Pol_ExternConf();
 
     /* Connect signal mapper action */
     connect(signalMapperC, SIGNAL(mapped(QWidget *)), this, SLOT(handleClickEvent(QWidget *)));
 
-    /* loading configuration from file? */
+    /* Loading configuration from file? */
     loadingConfigurationFromFile = false;
 
     /* Set window flags */
@@ -101,7 +101,6 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     connect(ui->checkBox_Glucose, SIGNAL(clicked()), signalMapperC, SLOT(map()));
 
     /* Pump Flow */
-    connect(ui->lineEdit_BtimeInterval, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
     connect(ui->lineEdit_ShortBreak, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
     connect(ui->lineEdit_LongBreak, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
     connect(ui->lineEdit_AbsFlow, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
@@ -134,8 +133,6 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     signalMapperC->setMapping(ui->checkBox_Glucose, ui->checkBox_Glucose);
 
     /* Pump Flow */
-    signalMapperC->setMapping(ui->lineEdit_BtimeInterval, ui->lineEdit_BtimeInterval);
-    signalMapperC->setMapping(ui->lineEdit_ShortBreak, ui->lineEdit_ShortBreak);
     signalMapperC->setMapping(ui->lineEdit_LongBreak, ui->lineEdit_LongBreak);
     signalMapperC->setMapping(ui->lineEdit_AbsFlow, ui->lineEdit_AbsFlow);
     signalMapperC->setMapping(ui->lineEdit_NSteps, ui->lineEdit_NSteps);
@@ -152,6 +149,9 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
 
     /* Not configuration loaded */
     configured = false;
+
+    /* Start total measurement time in 0 */
+    totalMtime = 0;
 
 }
 
@@ -271,7 +271,7 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
         {
             /* Is there a valid number */
             if(!ok){
-                /* Set back default value */
+                /* If not, then set back default value */
                 ui->lineEdit_BIntTime->setText("6");
             }
 
@@ -281,7 +281,7 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
 
                 /* Is there a valid number */
                 if(!ok){
-                    /* Set back default value */
+                    /* If not, then set back default value */
                     ui->lineEdit_BNMeas->setText("51");
                 }
 
@@ -291,7 +291,7 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
 
                     /* Is there a valid number */
                     if(!ok){
-                        /* Set back default value */
+                        /* If not, then set back default value */
                         ui->lineEdit_BFreq->setText("7");
                     }
 
@@ -301,7 +301,7 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
 
                         /* Is there a valid number */
                         if(!ok){
-                            /* Set back default value */
+                            /* If not, then set back default value */
                             ui->lineEdit_BNSpec->setText("1000");
                         }
 
@@ -311,7 +311,7 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
 
                             /* Is there a valid number */
                             if(!ok){
-                                /* Set back default value */
+                                /* If not, then set back default value */
                                 ui->lineEdit_BNAve->setText("1");
                             }
                         }
@@ -323,15 +323,19 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
 
             /* Is there a valid number */
             if(!ok){
-                /* Set back default value */
+                /* If not, then set back default value */
                 ui->lineEdit_StockGluc->setText("1000");
             }
 
-            /* Update maximum concentrations */
-           // externSoftware->maxConcentrations.replace(0, externSoftware->stockSolutions.at(0)/(NumberOfSubstances));
+            /* Show critical message if the concentration of the stock is inappropriate */
+            if(ui->lineEdit_StockGluc->text().toDouble() < externSoftware->maxConcentrations.at(0)*(NumberOfSubstances) ){
 
-            /* Adjust the maximum concentration accordingly */
-           // ui->lineEdit_MaxGluc->setText(QString::number(externSoftware->maxConcentrations.at(0)));
+                QString message = "The stock of Glucose should have a minimum concentration of " + QString::number(externSoftware->maxConcentrations.at(0)*(NumberOfSubstances)) + " mg/dl";
+                showCritical(message, "");
+
+                /* Set back default value */
+                ui->lineEdit_StockGluc->setText(QString::number( externSoftware->maxConcentrations.at(0)*(NumberOfSubstances) ));
+            }
 
         }else
             /* The user decide to change the stock Impurity 1 */
@@ -339,15 +343,19 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
 
                 /* Is there a valid number */
                 if(!ok){
-                    /* Set back default value */
+                    /* If not, then set back default value */
                     ui->lineEdit_StockImp1->setText("4");
                 }
 
-                /* Update maximum concentrations */
-             //   externSoftware->maxConcentrations.replace(1, externSoftware->stockSolutions.at(1)/(NumberOfSubstances));
+                /* Show critical message if the concentration of the stock is inappropriate */
+                if(ui->lineEdit_StockImp1->text().toDouble() < externSoftware->maxConcentrations.at(1)*(NumberOfSubstances) ){
 
-                /* Adjust the maximum concentration accordingly */
-              //  ui->lineEdit_MaxImp1->setText(QString::number(externSoftware->maxConcentrations.at(1)));
+                    QString message = "The stock of Impurity 1 should have a minimum concentration of " + QString::number(externSoftware->maxConcentrations.at(1)*(NumberOfSubstances)) + " mg/dl";
+                    showCritical(message, "");
+
+                    /* Set back default value */
+                    ui->lineEdit_StockImp1->setText(QString::number(externSoftware->maxConcentrations.at(1)*(NumberOfSubstances)));
+                }
 
             }else
                 /* The user decide to change the stock Impurity 2 */
@@ -355,15 +363,19 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
 
                     /* Is there a valid number */
                     if(!ok){
-                        /* Set back default value */
+                        /* If not, then set back default value */
                         ui->lineEdit_StockImp2->setText("0");
                     }
 
-                    /* Update maximum concentrations */
-              //      externSoftware->maxConcentrations.replace(2, externSoftware->stockSolutions.at(2)/(NumberOfSubstances));
+                    /* Show critical message if the concentration of the stock is inappropriate */
+                    if(ui->lineEdit_StockImp2->text().toDouble() < externSoftware->maxConcentrations.at(2)*(NumberOfSubstances) ){
 
-                    /* Adjust the maximum concentration accordingly */
-             //       ui->lineEdit_MaxImp2->setText(QString::number(externSoftware->maxConcentrations.at(2)));
+                        QString message = "The stock of Impurity 2 should have a minimum concentration of " + QString::number(externSoftware->maxConcentrations.at(2)*(NumberOfSubstances)) + " mg/dl";
+                        showCritical(message, "");
+
+                        /* Set back default value */
+                        ui->lineEdit_StockImp2->setText(QString::number(externSoftware->maxConcentrations.at(2)*(NumberOfSubstances)));
+                    }
 
                 }
 
@@ -372,7 +384,7 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
 
             /* Is there a valid number */
             if(!ok){
-                /* Set back default value */
+                /* If not, then set back default value */
                 ui->lineEdit_Mingluc->setText("0");
             }
         }else
@@ -381,7 +393,7 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
 
                 /* Is there a valid number */
                 if(!ok){
-                    /* Set back default value */
+                    /* If not, then set back default value */
                     ui->lineEdit_MinImp1->setText("0");
                 }
             }else
@@ -390,7 +402,7 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
 
                     /* Is there a valid number */
                     if(!ok){
-                        /* Set back default value */
+                        /* If not, then set back default value */
                         ui->lineEdit_MinImp2->setText("0");
                     }
                 }
@@ -400,7 +412,7 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
 
             /* Is there a valid number */
             if(!ok){
-                /* Set back default value */
+                /* If not, then set back default value */
                 ui->lineEdit_MaxGluc->setText("1");
             }
 
@@ -416,7 +428,7 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
 
                 /* Is there a valid number */
                 if(!ok){
-                    /* Set back default value */
+                    /* If not, then set back default value */
                     ui->lineEdit_MaxImp1->setText("0.1");
                 }
 
@@ -432,7 +444,7 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
 
                     /* Is there a valid number */
                     if(!ok){
-                        /* Set back default value */
+                        /* If not, then set back default value */
                         ui->lineEdit_MaxImp2->setText("0");
                     }
 
@@ -445,30 +457,21 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
 
         /* Pump Flow */
 
-        /* The user decide to change the time interval */
-        if(LineLabel == ui->lineEdit_BtimeInterval && ui->lineEdit_BtimeInterval->text().toInt(&ok) >= 0){
-
-            /* Is there a valid number */
-            if(!ok){
-                /* Set back default value */
-                ui->lineEdit_BtimeInterval->setText("120");
-            }
-        }else
             /* The user decide to change the short break time */
-            if(LineLabel == ui->lineEdit_ShortBreak && ui->lineEdit_ShortBreak->text().toInt(&ok) >= 0){
+            if(LineLabel == ui->lineEdit_ShortBreak && ui->lineEdit_ShortBreak->text().toDouble(&ok) >= 0){
 
                 /* Is there a valid number */
                 if(!ok){
-                    /* Set back default value */
+                    /* If not, then set back default value */
                     ui->lineEdit_ShortBreak->setText("1");
                 }
             }else
                 /* The user decide to change the long break time */
-                if(LineLabel == ui->lineEdit_LongBreak && ui->lineEdit_LongBreak->text().toInt(&ok) >= 0){
+                if(LineLabel == ui->lineEdit_LongBreak && ui->lineEdit_LongBreak->text().toDouble(&ok) >= 0){
 
                     /* Is there a valid number */
                     if(!ok){
-                        /* Set back default value */
+                        /* If not, then set back default value */
                         ui->lineEdit_LongBreak->setText("30");
                     }
                 }else
@@ -477,7 +480,7 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
 
                         /* Is there a valid number */
                         if(!ok){
-                            /* Set back default value */
+                            /* If not, then set back default value */
                             ui->lineEdit_AbsFlow->setText("18.75");
                         }
                     }else
@@ -486,7 +489,7 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
 
                             /* Is there a valid number */
                             if(!ok){
-                                /* Set back default value */
+                                /* If not, then set back default value */
                                 ui->lineEdit_NSteps->setText("5");
                             }
                         }else
@@ -495,7 +498,7 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
 
                                 /* Is there a valid number */
                                 if(!ok){
-                                    /* Set back default value */
+                                    /* If not, then set back default value */
                                     ui->lineEdit_AbsVol->setText("25");
                                 }
                             }
@@ -504,7 +507,7 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
         GetConfigurationData();
     }
 
-    /* Check the impurity 2 */
+    /* Check the substances */
     if(checkBox == ui->checkBox_Imp2 || checkBox == ui->checkBox_Imp1 || checkBox == ui->checkBox_Glucose){
 
         /* Show/Hide Impurity 2 values */
@@ -574,34 +577,70 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
 
     }
 
+    /* Update file name preview */
     QString C = "";
 
+    /* Is glucose active? */
     if(ui->checkBox_Glucose->isChecked()){
 
+        /* If glucose is active, add to the name C1 */
         C.append(QString::number(ui->lineEdit_MaxGluc->text().toDouble()) + "C1");
     }
 
+    /* Is glucose and one of the other two substacnes active? */
     if(ui->checkBox_Glucose->isChecked() && (ui->checkBox_Imp1->isChecked() || ui->checkBox_Imp2->isChecked())){
+
+        /* Add the separator to the file name */
         C.append("_");
     }
 
+    /* Is impurity 1 active? */
     if(ui->checkBox_Imp1->isChecked()){
 
+        /* If Impurity 1 is active, add to the name C2 */
         C.append(QString::number(ui->lineEdit_MaxImp1->text().toDouble()) + "C2");
     }
 
+    /* If there is also a third substance, add the separator */
     if(ui->checkBox_Imp1->isChecked() && ui->checkBox_Imp2->isChecked()){
         C.append("_");
     }
 
+    /* Is impurity 2 active? */
     if(ui->checkBox_Imp2->isChecked()){
 
+        /* If Impurity 2 is active, add to the name C3 */
         C.append(QString::number(ui->lineEdit_MaxImp2->text().toDouble()) + "C3");
     }
 
-    /* File name preview */
+    /* Complete the file name preview */
     ui->lineEdit_BFileNamePrev->setText(C + "_" + QString::number(ui->lineEdit_BIntTime->text().toFloat()) + "ms_"
                                         + QString::number(ui->lineEdit_BFreq->text().toInt()) + "Hz_1");
+
+    /* Estimate the cycle time */
+    double cycleTime = (2 * externSoftware->ConfigurationFileGenerator->fillRefill + 4*externSoftware->ConfigurationFileGenerator->shortBreak)
+            *(externSoftware->ConfigurationFileGenerator->NSteps + (externSoftware->ConfigurationFileGenerator->NSteps-1))
+            +  (2 * externSoftware->ConfigurationFileGenerator->fillRefill + 3*externSoftware->ConfigurationFileGenerator->shortBreak + externSoftware->ConfigurationFileGenerator->longBreak );
+
+    /* Estimate the measurement time */
+    double measurementTime = cycleTime - (((externSoftware->ConfigurationFileGenerator->longBreak + (2*externSoftware->ConfigurationFileGenerator->IntegrationTime*externSoftware->ConfigurationFileGenerator->NrSpectra))/3));
+
+    /* Convert the time to minutes, hours or days */
+    QStringList ConvertedTime = externSoftware->TimeConverter(measurementTime/1000);
+
+    /* Display the Measurement Time preview */
+    ui->lineEdit_timebetweenM->setText(ConvertedTime.at(0));
+    ui->label2_timebetweenM->setText(ConvertedTime.at(1));
+
+    /* Estimate the total measurement time */
+    totalMtime = (measurementTime + (cycleTime * externSoftware->ConfigurationFileGenerator->NConcentrations))/1000;
+
+    /* Convert the time to minutes, hours or days */
+    ConvertedTime = externSoftware->TimeConverter(totalMtime);
+
+    /* Display the Total Measurement Time */
+    ui->lineEdit_BtimeInterval->setText(ConvertedTime.at(0));
+    ui->label_BtimeInt2->setText(ConvertedTime.at(1));
 
 }
 
@@ -613,7 +652,7 @@ void configurePolMeasure::configurePolarimeter(void)
     /* If the user never pressed enter or similar */
     GetConfigurationData();
 
-    /* Is configuration loaded */
+    /* Is there a configuration loaded? */
     loadingConfigurationFromFile = false;
 
     /* Get path to save configuration file */
@@ -622,10 +661,10 @@ void configurePolMeasure::configurePolarimeter(void)
     /* Is there a path? */
     if(!path.isEmpty()){
 
-        /* Get path to create configuration file */
+        /* Get path to create the configuration file */
         externSoftware->pathFile = path;
 
-        /* Calculate the needed scripts for the measurements */
+        /* Create the needed scripts for the measurements */
         externSoftware->pumpsPatternCalculator();
 
         /* Load saved file */
@@ -644,7 +683,6 @@ void configurePolMeasure::configurePolarimeter(void)
  */
 void configurePolMeasure::loadConfiguration(void)
 {
-
     /* Save rows in file */
     QStringList wordList;
 
@@ -672,6 +710,7 @@ void configurePolMeasure::loadConfiguration(void)
             wordList.append(file.readLine().split(',').first());
         }
 
+        /* Remove the first row since it only has a description of the file */
         wordList.removeAt(0);
 
         /* Close file */
@@ -708,9 +747,10 @@ void configurePolMeasure::loadConfiguration(void)
         /* Loop through elements */
         for (i = 0; i < (unsigned int)wordList.length(); i++)
         {
+            /* Divide by the semicolon ";" */
             QStringList list = wordList[i].split(';');
 
-            /* Copy entries to lists */
+            /* Copy entries to the lists */
             timePoint.append(list[0].toInt());
             fileName.append(list[1]);
             numSpectra = list[2].toInt();
@@ -718,14 +758,16 @@ void configurePolMeasure::loadConfiguration(void)
             numberOfAverages = list[4].toInt();
             freqToMeasure = list[5].toInt();
 
+            /* Are you loading a file without the pump description? */
             if(loadingConfigurationFromFile){
+
                 /* Get the File Name information */
                 QStringList listC = QString(list[1]).split("_");
 
                 /* Loop throught the file name */
                 for(int j = 0; j < listC.length() ; j++){
 
-                    /* Is glucose or substance 1 included? */
+                    /* Is glucose or C1 included? */
                     if(QString(listC[j]).contains("C1")){
 
                         /* Glucose is active */
@@ -735,7 +777,7 @@ void configurePolMeasure::loadConfiguration(void)
                         externSoftware->GlucoseConcentration.replace(i, QString(listC[j]).left(QString(listC[j]).lastIndexOf("C1")).toDouble());
                     }
 
-                    /* Is Impurity 1 or substance 2 included? */
+                    /* Is Impurity 1 or C2 included? */
                     if(QString(listC[j]).contains("C2")){
 
                         /* Glucose is active */
@@ -745,7 +787,7 @@ void configurePolMeasure::loadConfiguration(void)
                         externSoftware->Impurity1Concentration.replace(i, QString(listC[j]).left(QString(listC[j]).lastIndexOf("C2")).toDouble());
                     }
 
-                    /* Is impurity 2 or substance 3 included? */
+                    /* Is impurity 2 or C3 included? */
                     if(QString(listC[j]).contains("C3")){
 
                         /* Impurity 2 is active */
@@ -780,6 +822,13 @@ void configurePolMeasure::loadConfiguration(void)
             }
         }
 
+        /* Are you loading from file without pump description? */
+        if(loadingConfigurationFromFile){
+
+            /* Save the total time */
+            totalMtime = (timePoint.at(timePoint.length()-1) + timePoint.at(0))/1000;
+        }
+
         /* Copy path into line edit */
         ui->lineEdit_path->setText(path);
 
@@ -807,7 +856,7 @@ void configurePolMeasure::cancel(void)
 }
 
 /**
- * @brief Get data from formular
+ * @brief Get data from the form
  */
 void configurePolMeasure::GetConfigurationData(void)
 {
@@ -841,16 +890,19 @@ void configurePolMeasure::GetConfigurationData(void)
     /* Get Number of Steps */
     externSoftware->ConfigurationFileGenerator->NSteps = ui->lineEdit_NSteps->text().toInt();
 
-    /* Get Flows */
+    /* Get absolute Flow */
     externSoftware->ConfigurationFileGenerator->absoluteFlow = ui->lineEdit_AbsFlow->text().toDouble();
-    externSoftware->ConfigurationFileGenerator->idle =ui->checkBox->isChecked();
+
+    /* Is the idle active? */
+    int idled = ui->checkBox->isChecked();
+    externSoftware->ConfigurationFileGenerator->idle = idled;
 
     /* Get Refilling Times */
     externSoftware->ConfigurationFileGenerator->fillRefill = (((ui->lineEdit_AbsVol->text().toDouble()/externSoftware->ConfigurationFileGenerator->absoluteFlow)*60) / externSoftware->ConfigurationFileGenerator->NSteps)*1000;
 
-    /* Break Times */
-    externSoftware->ConfigurationFileGenerator->shortBreak = (ui->lineEdit_ShortBreak->text().toDouble())*1000;
-    externSoftware->ConfigurationFileGenerator->longBreak = (ui->lineEdit_LongBreak->text().toDouble())*1000 + (externSoftware->ConfigurationFileGenerator->IntegrationTime*externSoftware->ConfigurationFileGenerator->NrSpectra);
+    /* Get the Breaks */
+    externSoftware->ConfigurationFileGenerator->shortBreak = (ui->lineEdit_ShortBreak->text().toInt())*1000;
+    externSoftware->ConfigurationFileGenerator->longBreak = (ui->lineEdit_LongBreak->text().toInt())*1000 + (externSoftware->ConfigurationFileGenerator->IntegrationTime*externSoftware->ConfigurationFileGenerator->NrSpectra);
 
     /* Stock Solutions */
     externSoftware->stockSolutions.replace(0,ui->lineEdit_StockGluc->text().toDouble());
@@ -867,9 +919,6 @@ void configurePolMeasure::GetConfigurationData(void)
     externSoftware->maxConcentrations.replace(1,ui->lineEdit_MaxImp1->text().toDouble());
     externSoftware->maxConcentrations.replace(2,ui->lineEdit_MaxImp2->text().toDouble());
 
-    /* Get additional time for intervals */
-    externSoftware->ConfigurationFileGenerator->TimeIntervals = (ui->lineEdit_BtimeInterval->text().toDouble())*1000;
-
     /* Very long Int Time? */
     if(integrationTime > 200){
 
@@ -883,8 +932,6 @@ void configurePolMeasure::GetConfigurationData(void)
         /* Show warning */
         showWarning("Please consider that large number of spectra will lead to a larger measurement time!", "");
     }
-
-
 }
 
 /**

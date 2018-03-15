@@ -124,6 +124,8 @@ public:
     QLabel *label_totalM;
     QProgressBar *TotalProgressBar_Pol;
     QSpacerItem *horizontalSpacer_8;
+    QLabel *label_RemainingTime;
+    QSpacerItem *horizontalSpacer;
     QPushButton *button_LoadData;
     QPushButton *Button_Save_Graphs_Pol;
     QSpacerItem *horizontalSpacer_9;
@@ -874,6 +876,17 @@ public:
 
         horizontalLayout_4->addItem(horizontalSpacer_8);
 
+        label_RemainingTime = new QLabel(PanelPolarimeter);
+        label_RemainingTime->setObjectName(QStringLiteral("label_RemainingTime"));
+        label_RemainingTime->setMaximumSize(QSize(100, 12));
+        label_RemainingTime->setSizeIncrement(QSize(100, 0));
+
+        horizontalLayout_4->addWidget(label_RemainingTime);
+
+        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_4->addItem(horizontalSpacer);
+
         button_LoadData = new QPushButton(PanelPolarimeter);
         button_LoadData->setObjectName(QStringLiteral("button_LoadData"));
         button_LoadData->setMinimumSize(QSize(120, 30));
@@ -1071,6 +1084,7 @@ public:
 #ifndef QT_NO_TOOLTIP
         TotalProgressBar_Pol->setToolTip(QApplication::translate("PanelPolarimeter", "Total Progress", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
+        label_RemainingTime->setText(QApplication::translate("PanelPolarimeter", "0 hours", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         button_LoadData->setToolTip(QApplication::translate("PanelPolarimeter", "Load Data from Files", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP

@@ -51,7 +51,7 @@ PanelChangeWaveFFT::PanelChangeWaveFFT(QWidget *parent) :
 
 /**
  * @brief Get wavelength
- * @return wavelength
+ * @return index of the wavelength in array
  */
 int PanelChangeWaveFFT::getValue(void)
 {
@@ -61,7 +61,7 @@ int PanelChangeWaveFFT::getValue(void)
 
 /**
  * @brief Set wavelength
- * @param[in] value wavelength
+ * @param[in] wavelength value
  */
 void PanelChangeWaveFFT::setValue(double value)
 {

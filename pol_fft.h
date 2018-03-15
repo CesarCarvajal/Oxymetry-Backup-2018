@@ -81,7 +81,7 @@ public:
     /* The position in the array of FFT to show by default */
     int SelectedWaveL=404;
 
-    /* OutputFFT */
+    /* Output FFT vector */
     fftw_complex *outputFFT = nullptr;
 
     /* Read info from file */

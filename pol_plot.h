@@ -37,7 +37,7 @@ public:
     explicit Pol_Plot();
 
     /* Plot the real time averages of the frequency components DC, W, and 2W */
-    void plotAverages(bool dataloaded, QVector<double> FFTLfft_DC, QVector<double> FFTLfft_W, QVector<double> FFTLfft_2W, QVector<double> FFTLwavelengths);
+    void plotAverages(bool dataloaded, QVector<double> FFTLfft_DC, QVector<double> FFTLfft_W, QVector<double> FFTLfft_2W, QVector<double> FFTLwavelengths, bool measuring, int time);
 
     /* The user wants to look the FFT at one specific wavelength */
     void plotFFTatSelectedWave(QVector<double> FFTLfft_data, QVector<double> FFTLfrequencies);

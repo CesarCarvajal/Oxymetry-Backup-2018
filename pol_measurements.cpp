@@ -61,6 +61,9 @@ Pol_Measurements::Pol_Measurements()
     /* General Timer in seconds */
     Timer_In_Seconds=0;
 
+    /* Intervals between plots of average during the measurements */
+    measurementPlotTimeInterval = 0;
+
     /* Time busy with FFT */
     liveFFT_Time = 0;
 

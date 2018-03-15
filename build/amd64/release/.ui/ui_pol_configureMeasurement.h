@@ -147,13 +147,17 @@ public:
     QCheckBox *checkBox;
     QSpacerItem *horizontalSpacer_8;
     QSpacerItem *verticalSpacer_5;
-    QHBoxLayout *horizontalLayout_3;
-    QLabel *label_BFileNamePrev;
-    QLineEdit *lineEdit_BFileNamePrev;
-    QSpacerItem *horizontalSpacer_16;
+    QHBoxLayout *horizontalLayout_10;
     QLabel *label_BtimeInt;
     QLineEdit *lineEdit_BtimeInterval;
     QLabel *label_BtimeInt2;
+    QSpacerItem *horizontalSpacer_20;
+    QLabel *label_timebetweenM;
+    QLineEdit *lineEdit_timebetweenM;
+    QLabel *label2_timebetweenM;
+    QHBoxLayout *horizontalLayout_3;
+    QLabel *label_BFileNamePrev;
+    QLineEdit *lineEdit_BFileNamePrev;
     QSpacerItem *verticalSpacer_4;
     QHBoxLayout *horizontalLayout_9;
     QSpacerItem *horizontalSpacer;
@@ -166,7 +170,7 @@ public:
     {
         if (configurePolMeasure->objectName().isEmpty())
             configurePolMeasure->setObjectName(QStringLiteral("configurePolMeasure"));
-        configurePolMeasure->resize(786, 797);
+        configurePolMeasure->resize(786, 815);
         gridLayout = new QGridLayout(configurePolMeasure);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         verticalLayout = new QVBoxLayout();
@@ -835,6 +839,57 @@ public:
 
         verticalLayout_fileconf->addItem(verticalSpacer_5);
 
+        horizontalLayout_10 = new QHBoxLayout();
+        horizontalLayout_10->setObjectName(QStringLiteral("horizontalLayout_10"));
+        label_BtimeInt = new QLabel(ConfigurationLayout);
+        label_BtimeInt->setObjectName(QStringLiteral("label_BtimeInt"));
+        label_BtimeInt->setMinimumSize(QSize(150, 0));
+        label_BtimeInt->setMaximumSize(QSize(150, 16777215));
+
+        horizontalLayout_10->addWidget(label_BtimeInt);
+
+        lineEdit_BtimeInterval = new QLineEdit(ConfigurationLayout);
+        lineEdit_BtimeInterval->setObjectName(QStringLiteral("lineEdit_BtimeInterval"));
+        lineEdit_BtimeInterval->setEnabled(false);
+        lineEdit_BtimeInterval->setMinimumSize(QSize(100, 0));
+        lineEdit_BtimeInterval->setMaximumSize(QSize(100, 16777215));
+
+        horizontalLayout_10->addWidget(lineEdit_BtimeInterval);
+
+        label_BtimeInt2 = new QLabel(ConfigurationLayout);
+        label_BtimeInt2->setObjectName(QStringLiteral("label_BtimeInt2"));
+        label_BtimeInt2->setMinimumSize(QSize(30, 0));
+
+        horizontalLayout_10->addWidget(label_BtimeInt2);
+
+        horizontalSpacer_20 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_10->addItem(horizontalSpacer_20);
+
+        label_timebetweenM = new QLabel(ConfigurationLayout);
+        label_timebetweenM->setObjectName(QStringLiteral("label_timebetweenM"));
+        label_timebetweenM->setMinimumSize(QSize(150, 0));
+        label_timebetweenM->setMaximumSize(QSize(150, 16777215));
+
+        horizontalLayout_10->addWidget(label_timebetweenM);
+
+        lineEdit_timebetweenM = new QLineEdit(ConfigurationLayout);
+        lineEdit_timebetweenM->setObjectName(QStringLiteral("lineEdit_timebetweenM"));
+        lineEdit_timebetweenM->setEnabled(false);
+        lineEdit_timebetweenM->setMinimumSize(QSize(100, 0));
+        lineEdit_timebetweenM->setMaximumSize(QSize(100, 16777215));
+
+        horizontalLayout_10->addWidget(lineEdit_timebetweenM);
+
+        label2_timebetweenM = new QLabel(ConfigurationLayout);
+        label2_timebetweenM->setObjectName(QStringLiteral("label2_timebetweenM"));
+        label2_timebetweenM->setMinimumSize(QSize(30, 0));
+
+        horizontalLayout_10->addWidget(label2_timebetweenM);
+
+
+        verticalLayout_fileconf->addLayout(horizontalLayout_10);
+
         horizontalLayout_3 = new QHBoxLayout();
         horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
         label_BFileNamePrev = new QLabel(ConfigurationLayout);
@@ -847,29 +902,6 @@ public:
         lineEdit_BFileNamePrev->setEnabled(false);
 
         horizontalLayout_3->addWidget(lineEdit_BFileNamePrev);
-
-        horizontalSpacer_16 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_3->addItem(horizontalSpacer_16);
-
-        label_BtimeInt = new QLabel(ConfigurationLayout);
-        label_BtimeInt->setObjectName(QStringLiteral("label_BtimeInt"));
-        label_BtimeInt->setMinimumSize(QSize(100, 0));
-
-        horizontalLayout_3->addWidget(label_BtimeInt);
-
-        lineEdit_BtimeInterval = new QLineEdit(ConfigurationLayout);
-        lineEdit_BtimeInterval->setObjectName(QStringLiteral("lineEdit_BtimeInterval"));
-        lineEdit_BtimeInterval->setMinimumSize(QSize(100, 0));
-        lineEdit_BtimeInterval->setMaximumSize(QSize(100, 16777215));
-
-        horizontalLayout_3->addWidget(lineEdit_BtimeInterval);
-
-        label_BtimeInt2 = new QLabel(ConfigurationLayout);
-        label_BtimeInt2->setObjectName(QStringLiteral("label_BtimeInt2"));
-        label_BtimeInt2->setMinimumSize(QSize(30, 0));
-
-        horizontalLayout_3->addWidget(label_BtimeInt2);
 
 
         verticalLayout_fileconf->addLayout(horizontalLayout_3);
@@ -1024,7 +1056,7 @@ public:
         lineEdit_MinImp1->setToolTip(QApplication::translate("configurePolMeasure", "Minimum Impurity 1 Concentration", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         lineEdit_MinImp1->setText(QApplication::translate("configurePolMeasure", "0", Q_NULLPTR));
-        label_MinImp1_2->setText(QApplication::translate("configurePolMeasure", "mg/dl", Q_NULLPTR));
+        label_MinImp1_2->setText(QApplication::translate("configurePolMeasure", "g/l", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         label_MinImp2->setToolTip(QApplication::translate("configurePolMeasure", "Minimum Impurity 2 Concentration?", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
@@ -1051,7 +1083,7 @@ public:
         lineEdit_MaxImp1->setToolTip(QApplication::translate("configurePolMeasure", "Maximum Impurity 1 Concentration", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         lineEdit_MaxImp1->setText(QApplication::translate("configurePolMeasure", "2", Q_NULLPTR));
-        label_MaxImp1_2->setText(QApplication::translate("configurePolMeasure", "mg/dl", Q_NULLPTR));
+        label_MaxImp1_2->setText(QApplication::translate("configurePolMeasure", "g/l", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         label_MaxImp2->setToolTip(QApplication::translate("configurePolMeasure", "Maximum Impurity 2 Concentration?", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
@@ -1078,7 +1110,7 @@ public:
         lineEdit_StockImp1->setToolTip(QApplication::translate("configurePolMeasure", "Concentration of Impurity 1 in Stock", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         lineEdit_StockImp1->setText(QApplication::translate("configurePolMeasure", "4", Q_NULLPTR));
-        label_StockImp1_2->setText(QApplication::translate("configurePolMeasure", "mg/dl", Q_NULLPTR));
+        label_StockImp1_2->setText(QApplication::translate("configurePolMeasure", "g/l", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         label_StockImp2->setToolTip(QApplication::translate("configurePolMeasure", "Which concentration of impurity 2 is in stock?", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
@@ -1142,6 +1174,18 @@ public:
 #endif // QT_NO_TOOLTIP
         checkBox->setText(QString());
 #ifndef QT_NO_TOOLTIP
+        label_BtimeInt->setToolTip(QApplication::translate("configurePolMeasure", "Time Interval between measurements", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        label_BtimeInt->setText(QApplication::translate("configurePolMeasure", "Total Measurement Time:", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        lineEdit_BtimeInterval->setToolTip(QApplication::translate("configurePolMeasure", "Time Interval between measurements", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        lineEdit_BtimeInterval->setText(QApplication::translate("configurePolMeasure", "5.70111", Q_NULLPTR));
+        label_BtimeInt2->setText(QApplication::translate("configurePolMeasure", "hours", Q_NULLPTR));
+        label_timebetweenM->setText(QApplication::translate("configurePolMeasure", "Time Between Measurements:", Q_NULLPTR));
+        lineEdit_timebetweenM->setText(QApplication::translate("configurePolMeasure", "6.31667", Q_NULLPTR));
+        label2_timebetweenM->setText(QApplication::translate("configurePolMeasure", "min", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
         label_BFileNamePrev->setToolTip(QApplication::translate("configurePolMeasure", "File Name Preview", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_BFileNamePrev->setText(QApplication::translate("configurePolMeasure", "File Name Preview:", Q_NULLPTR));
@@ -1149,15 +1193,6 @@ public:
         lineEdit_BFileNamePrev->setToolTip(QApplication::translate("configurePolMeasure", "File Name Preview", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         lineEdit_BFileNamePrev->setText(QApplication::translate("configurePolMeasure", "500C1_0C2_6ms_7Hz_1", Q_NULLPTR));
-#ifndef QT_NO_TOOLTIP
-        label_BtimeInt->setToolTip(QApplication::translate("configurePolMeasure", "Time Interval between measurements", Q_NULLPTR));
-#endif // QT_NO_TOOLTIP
-        label_BtimeInt->setText(QApplication::translate("configurePolMeasure", "Time Intervals:", Q_NULLPTR));
-#ifndef QT_NO_TOOLTIP
-        lineEdit_BtimeInterval->setToolTip(QApplication::translate("configurePolMeasure", "Time Interval between measurements", Q_NULLPTR));
-#endif // QT_NO_TOOLTIP
-        lineEdit_BtimeInterval->setText(QApplication::translate("configurePolMeasure", "120", Q_NULLPTR));
-        label_BtimeInt2->setText(QApplication::translate("configurePolMeasure", "sec", Q_NULLPTR));
         pushButton_cancel->setText(QApplication::translate("configurePolMeasure", "Cancel", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         pushButton_generate->setToolTip(QApplication::translate("configurePolMeasure", "Generate Configuration File", Q_NULLPTR));

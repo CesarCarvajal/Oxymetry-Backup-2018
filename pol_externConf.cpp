@@ -34,13 +34,12 @@
  */
 Pol_ExternConf::Pol_ExternConf()
 {
-
-    /* Set size of vectors: there are 3 components */
+    /* Set size of vectors: there are 3 substances + 1 water */
     stockSolutions.reserve(3);
     maxConcentrations.reserve(3);
     minConcentrations.reserve(3);
 
-    /* Configuration File generator */
+    /* Configuration File generator object */
     ConfigurationFileGenerator = new Pol_configFilesGenerator();
 }
 
@@ -77,7 +76,7 @@ void Pol_ExternConf::openPumpSoftware(void){
 
         }else{
 
-            /* Show critical error if the shortcut doesnßt exist or the software isn't installed */
+            /* Show critical error if the shortcut doesn't exist or the software isn't installed */
             showCritical(QString("Nemesys Pump Software shortcut in desktop named 'NEMESYS' is missing!, Please check if the software is installed, and create a desktop shortcut for it!"), QString(""));
             return;
 
@@ -90,12 +89,12 @@ void Pol_ExternConf::openPumpSoftware(void){
  */
 void Pol_ExternConf::pumpsPatternCalculator(void){
 
-    /* Concentrations */
+    /* Set size of the concentrations vectors */
     GlucoseConcentration.resize(ConfigurationFileGenerator->NConcentrations);
     Impurity1Concentration.resize(ConfigurationFileGenerator->NConcentrations);
     Impurity2Concentration.resize(ConfigurationFileGenerator->NConcentrations);
 
-    /* Flows */
+    /* Create vectors of Flows */
     QVector <double> WaterFlow(ConfigurationFileGenerator->NConcentrations);
     QVector <double> GlucoseFlow(ConfigurationFileGenerator->NConcentrations);
     QVector <double> Impurity1Flow(ConfigurationFileGenerator->NConcentrations);
@@ -104,10 +103,10 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
     /* Measurements vector */
     QVector <double> Nmeasurements(ConfigurationFileGenerator->NConcentrations);
 
-    /* Get gaps between concentrations */
+    /* Gaps between concentrations */
     double gapGlucose, gapImpurity1, gapImpurity2;
 
-    /* Gap between concentrations */
+    /* Get gaps between concentrations */
     gapGlucose = (maxConcentrations.at(0) - minConcentrations.at(0))/(ConfigurationFileGenerator->NConcentrations-1);
     gapImpurity1 = (maxConcentrations.at(1) - minConcentrations.at(1))/(ConfigurationFileGenerator->NConcentrations-1);
     gapImpurity2 = (maxConcentrations.at(2) - minConcentrations.at(2))/(ConfigurationFileGenerator->NConcentrations-1);
@@ -126,18 +125,18 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
     /* Is there more than 1 substance available? */
     if(ConfigurationFileGenerator->glucoseActive + ConfigurationFileGenerator->Imp1Active + ConfigurationFileGenerator->Imp2Active > 1){
 
-        /* Check correlation factor */
+        /* Check correlation factor, skip if the vector has 4 or less elements */
         while( true && ConfigurationFileGenerator->NConcentrations > 4){
 
             /* Correlation factors */
             float corrcoeffGlucImp1= 1, corrcoeffTime = 1, corrcoeffImp1Imp2= 1, corrcoeffGlucImp2= 1;
 
-            /* Random Indexes */
+            /* Random shuffle the vectors */
             std::random_shuffle(GlucoseConcentration.begin(), GlucoseConcentration.end());
             std::random_shuffle(Impurity1Concentration.begin(), Impurity1Concentration.end());
             std::random_shuffle(Impurity2Concentration.begin(), Impurity2Concentration.end());
 
-            /* correlation of glucose and number of measurements */
+            /* Correlation of glucose and number of measurements */
             corrcoeffTime = ConfigurationFileGenerator->correlationCoefficient(Nmeasurements, GlucoseConcentration, ConfigurationFileGenerator->NConcentrations);
 
             /* Is the factor ok?, if not start again */
@@ -173,7 +172,7 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
         }
     }else{
 
-        /* Random Indexes if there is only 1 substance */
+        /* Random Indexes if there is only 1 substance or the vector has 4 or less elements */
         std::random_shuffle(GlucoseConcentration.begin(), GlucoseConcentration.end());
         std::random_shuffle(Impurity1Concentration.begin(), Impurity1Concentration.end());
         std::random_shuffle(Impurity2Concentration.begin(), Impurity2Concentration.end());
@@ -183,13 +182,32 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
     /* Flow Calculation */
     for(int i =0; i < ConfigurationFileGenerator->NConcentrations; i++){
 
-        /* Concentrations */
+        /* Get the flows for each substance */
         GlucoseFlow.replace(i,GlucoseConcentration.at(i)*((ConfigurationFileGenerator->absoluteFlow)/(stockSolutions.at(0))));
         Impurity1Flow.replace(i,Impurity1Concentration.at(i)*((ConfigurationFileGenerator->absoluteFlow)/(stockSolutions.at(1))));
         Impurity2Flow.replace(i,Impurity2Concentration.at(i)*((ConfigurationFileGenerator->absoluteFlow)/(stockSolutions.at(2))));
 
+        /* Which substances are active? Calculate the right flow to substract from water */
+        double Flow = 0;
+
+        /* If glucose is active consider its flow */
+        if(ConfigurationFileGenerator->glucoseActive){
+            Flow = Flow + GlucoseFlow.at(i);
+        }
+
+        /* If Impurity 1 is active consider its flow */
+        if(ConfigurationFileGenerator->Imp1Active){
+            Flow = Flow + Impurity1Flow.at(i);
+        }
+
+        /* If Impurity 2 is active consider its flow */
+        if(ConfigurationFileGenerator->Imp2Active){
+            Flow = Flow + Impurity2Flow.at(i);
+        }
+
         /* Water Flow */
-        WaterFlow.replace(i,ConfigurationFileGenerator->absoluteFlow - (GlucoseFlow.at(i)));
+        WaterFlow.replace(i,ConfigurationFileGenerator->absoluteFlow - Flow);
+
     }
 
     /* Create the Spectrometer Script */
@@ -207,12 +225,14 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
 
     /* If Impurity 1 is active, then generate its pump script */
     if(ConfigurationFileGenerator->Imp1Active){
+
         /* Create the Impurity 1 pump script */
         ConfigurationFileGenerator->GeneratePumpScripts(pathFile, "/Impurity1PumpScript.nfp", Impurity1Flow);
     }
 
     /* If impurity 2 is active, then generate its pump script */
     if(ConfigurationFileGenerator->Imp2Active){
+
         /* Create the Impurity 2 pump script */
         ConfigurationFileGenerator->GeneratePumpScripts(pathFile, "/Impurity2PumpScript.nfp", Impurity2Flow);
     }
@@ -233,33 +253,77 @@ void Pol_ExternConf::removeExistingFiles(void){
     /* If there are some pump scripts already, remove them */
     QFile file(folder.absolutePath() + "/GlucosePumpScript.nfp");
 
-    /* Does the pump file for glucose exists? */
+    /* Does the pump file for glucose exist? */
     if(file.exists()){
 
-        /* Remove the temporal file */
+        /* Remove the glucose pump file */
         file.remove();
     }
 
     /* If there are some pump scripts already, remove them */
     QFile file2(folder.absolutePath() + "/Impurity1PumpScript.nfp");
 
-    /* Does the pump file for glucose exists? */
+    /* Does the pump file for Impurity 1 exist? */
     if(file2.exists()){
 
-        /* Remove the temporal file */
+        /* Remove the impurity 1 pump file */
         file2.remove();
     }
 
     /* If there are some pump scripts already, remove them */
     QFile file3(folder.absolutePath() + "/Impurity2PumpScript.nfp");
 
-    /* Does the pump file for glucose exists? */
+    /* Does the pump file for Impurity 2 exists? */
     if(file3.exists()){
 
-        /* Remove the temporal file */
+        /* Remove the impurity 2 pump file */
         file3.remove();
     }
 }
+
+/**
+ * @brief Convert the time to minutes, hours or days
+ *
+ */
+QStringList Pol_ExternConf::TimeConverter(double mTime){
+
+    /* Save the time and its unit */
+    QStringList timeUnits;
+
+    /* Unit */
+    QString unit = "";
+
+    /* Convert the time to minutes, hours or days */
+    if(mTime < 60){
+        unit = "sec";
+
+    }
+    /* minutes */
+    else if(mTime > 60 && mTime < 3600){
+
+        mTime = mTime/60;
+        unit = "min";
+
+        /* Hours */
+    }else if(mTime > 3600 && mTime < 86400){
+
+        mTime = mTime/3600;
+        unit = "hours";
+
+        /* Days */
+    }else if(mTime > 86400){
+
+        mTime = mTime/86400;
+        unit = "days";
+    }
+
+    /* Return the time and its unit */
+    timeUnits.append(QString::number(mTime));
+    timeUnits.append(unit);
+
+    return timeUnits;
+}
+
 
 /**
  * @brief Destructor of 'Pol_ExternConf' class
