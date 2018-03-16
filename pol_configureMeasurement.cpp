@@ -153,6 +153,20 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     /* Start total measurement time in 0 */
     totalMtime = 0;
 
+    /* Hide Solution 2 at the beginning */
+    ui->lineEdit_StockImp2->setVisible(false);
+    ui->label_StockImp2->setVisible(false);
+    ui->label_StockImp2_2->setVisible(false);
+    ui->lineEdit_MaxImp2->setVisible(false);
+    ui->label_MaxImp2->setVisible(false);
+    ui->label_MaxImp2_2->setVisible(false);
+    ui->lineEdit_MinImp2->setVisible(false);
+    ui->label_MinImp2->setVisible(false);
+    ui->label_MinImp2_2->setVisible(false);
+    ui->label_VolI2->setVisible(false);
+    ui->label_VolI22->setVisible(false);
+    ui->lineEdit_VolI2->setVisible(false);
+
 }
 
 /**
@@ -457,51 +471,51 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
 
         /* Pump Flow */
 
-            /* The user decide to change the short break time */
-            if(LineLabel == ui->lineEdit_ShortBreak && ui->lineEdit_ShortBreak->text().toDouble(&ok) >= 0){
+        /* The user decide to change the short break time */
+        if(LineLabel == ui->lineEdit_ShortBreak && ui->lineEdit_ShortBreak->text().toDouble(&ok) >= 0){
+
+            /* Is there a valid number */
+            if(!ok){
+                /* If not, then set back default value */
+                ui->lineEdit_ShortBreak->setText("1");
+            }
+        }else
+            /* The user decide to change the long break time */
+            if(LineLabel == ui->lineEdit_LongBreak && ui->lineEdit_LongBreak->text().toDouble(&ok) >= 0){
 
                 /* Is there a valid number */
                 if(!ok){
                     /* If not, then set back default value */
-                    ui->lineEdit_ShortBreak->setText("1");
+                    ui->lineEdit_LongBreak->setText("30");
                 }
             }else
-                /* The user decide to change the long break time */
-                if(LineLabel == ui->lineEdit_LongBreak && ui->lineEdit_LongBreak->text().toDouble(&ok) >= 0){
+                /* The user decide to change the absolute Flow */
+                if(LineLabel == ui->lineEdit_AbsFlow && ui->lineEdit_AbsFlow->text().toDouble(&ok) >= 0){
 
                     /* Is there a valid number */
                     if(!ok){
                         /* If not, then set back default value */
-                        ui->lineEdit_LongBreak->setText("30");
+                        ui->lineEdit_AbsFlow->setText("18.75");
                     }
                 }else
-                    /* The user decide to change the absolute Flow */
-                    if(LineLabel == ui->lineEdit_AbsFlow && ui->lineEdit_AbsFlow->text().toDouble(&ok) >= 0){
+                    /* The user decide to change the Nr Steps */
+                    if(LineLabel == ui->lineEdit_NSteps && ui->lineEdit_NSteps->text().toInt(&ok) >= 0){
 
                         /* Is there a valid number */
                         if(!ok){
                             /* If not, then set back default value */
-                            ui->lineEdit_AbsFlow->setText("18.75");
+                            ui->lineEdit_NSteps->setText("5");
                         }
                     }else
-                        /* The user decide to change the Nr Steps */
-                        if(LineLabel == ui->lineEdit_NSteps && ui->lineEdit_NSteps->text().toInt(&ok) >= 0){
+                        /* The user decide to change the Filling Time */
+                        if(LineLabel == ui->lineEdit_AbsVol && ui->lineEdit_AbsVol->text().toInt(&ok) >= 0){
 
                             /* Is there a valid number */
                             if(!ok){
                                 /* If not, then set back default value */
-                                ui->lineEdit_NSteps->setText("5");
+                                ui->lineEdit_AbsVol->setText("25");
                             }
-                        }else
-                            /* The user decide to change the Filling Time */
-                            if(LineLabel == ui->lineEdit_AbsVol && ui->lineEdit_AbsVol->text().toInt(&ok) >= 0){
-
-                                /* Is there a valid number */
-                                if(!ok){
-                                    /* If not, then set back default value */
-                                    ui->lineEdit_AbsVol->setText("25");
-                                }
-                            }
+                        }
 
         /* Update Data */
         GetConfigurationData();
@@ -511,37 +525,46 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
     if(checkBox == ui->checkBox_Imp2 || checkBox == ui->checkBox_Imp1 || checkBox == ui->checkBox_Glucose){
 
         /* Show/Hide Impurity 2 values */
-        ui->lineEdit_StockImp2->setEnabled(ui->checkBox_Imp2->isChecked());
-        ui->label_StockImp2->setEnabled(ui->checkBox_Imp2->isChecked());
-        ui->label_StockImp2_2->setEnabled(ui->checkBox_Imp2->isChecked());
-        ui->lineEdit_MaxImp2->setEnabled(ui->checkBox_Imp2->isChecked());
-        ui->label_MaxImp2->setEnabled(ui->checkBox_Imp2->isChecked());
-        ui->label_MaxImp2_2->setEnabled(ui->checkBox_Imp2->isChecked());
-        ui->lineEdit_MinImp2->setEnabled(ui->checkBox_Imp2->isChecked());
-        ui->label_MinImp2->setEnabled(ui->checkBox_Imp2->isChecked());
-        ui->label_MinImp2_2->setEnabled(ui->checkBox_Imp2->isChecked());
+        ui->lineEdit_StockImp2->setVisible(ui->checkBox_Imp2->isChecked());
+        ui->label_StockImp2->setVisible(ui->checkBox_Imp2->isChecked());
+        ui->label_StockImp2_2->setVisible(ui->checkBox_Imp2->isChecked());
+        ui->lineEdit_MaxImp2->setVisible(ui->checkBox_Imp2->isChecked());
+        ui->label_MaxImp2->setVisible(ui->checkBox_Imp2->isChecked());
+        ui->label_MaxImp2_2->setVisible(ui->checkBox_Imp2->isChecked());
+        ui->lineEdit_MinImp2->setVisible(ui->checkBox_Imp2->isChecked());
+        ui->label_MinImp2->setVisible(ui->checkBox_Imp2->isChecked());
+        ui->label_MinImp2_2->setVisible(ui->checkBox_Imp2->isChecked());
+        ui->label_VolI2->setVisible(ui->checkBox_Imp2->isChecked());
+        ui->label_VolI22->setVisible(ui->checkBox_Imp2->isChecked());
+        ui->lineEdit_VolI2->setVisible(ui->checkBox_Imp2->isChecked());
 
         /* Show/Hide Impurity 1 values */
-        ui->lineEdit_StockImp1->setEnabled(ui->checkBox_Imp1->isChecked());
-        ui->label_StockImp1->setEnabled(ui->checkBox_Imp1->isChecked());
-        ui->label_StockImp1_2->setEnabled(ui->checkBox_Imp1->isChecked());
-        ui->lineEdit_MaxImp1->setEnabled(ui->checkBox_Imp1->isChecked());
-        ui->label_MaxImp1->setEnabled(ui->checkBox_Imp1->isChecked());
-        ui->label_MaxImp1_2->setEnabled(ui->checkBox_Imp1->isChecked());
-        ui->lineEdit_MinImp1->setEnabled(ui->checkBox_Imp1->isChecked());
-        ui->label_MinImp1->setEnabled(ui->checkBox_Imp1->isChecked());
-        ui->label_MinImp1_2->setEnabled(ui->checkBox_Imp1->isChecked());
+        ui->lineEdit_StockImp1->setVisible(ui->checkBox_Imp1->isChecked());
+        ui->label_StockImp1->setVisible(ui->checkBox_Imp1->isChecked());
+        ui->label_StockImp1_2->setVisible(ui->checkBox_Imp1->isChecked());
+        ui->lineEdit_MaxImp1->setVisible(ui->checkBox_Imp1->isChecked());
+        ui->label_MaxImp1->setVisible(ui->checkBox_Imp1->isChecked());
+        ui->label_MaxImp1_2->setVisible(ui->checkBox_Imp1->isChecked());
+        ui->lineEdit_MinImp1->setVisible(ui->checkBox_Imp1->isChecked());
+        ui->label_MinImp1->setVisible(ui->checkBox_Imp1->isChecked());
+        ui->label_MinImp1_2->setVisible(ui->checkBox_Imp1->isChecked());
+        ui->label_VolI1->setVisible(ui->checkBox_Imp1->isChecked());
+        ui->label_VolI12->setVisible(ui->checkBox_Imp1->isChecked());
+        ui->lineEdit_VolI1->setVisible(ui->checkBox_Imp1->isChecked());
 
         /* Show/Hide Glucose values */
-        ui->lineEdit_StockGluc->setEnabled(ui->checkBox_Glucose->isChecked());
-        ui->label_StockGluc->setEnabled(ui->checkBox_Glucose->isChecked());
-        ui->label_StockGluc2->setEnabled(ui->checkBox_Glucose->isChecked());
-        ui->lineEdit_MaxGluc->setEnabled(ui->checkBox_Glucose->isChecked());
-        ui->label_MaxGluc->setEnabled(ui->checkBox_Glucose->isChecked());
-        ui->label_MaxGluc2->setEnabled(ui->checkBox_Glucose->isChecked());
-        ui->lineEdit_Mingluc->setEnabled(ui->checkBox_Glucose->isChecked());
-        ui->label_MinGluc->setEnabled(ui->checkBox_Glucose->isChecked());
-        ui->label_MinGluc2->setEnabled(ui->checkBox_Glucose->isChecked());
+        ui->lineEdit_StockGluc->setVisible(ui->checkBox_Glucose->isChecked());
+        ui->label_StockGluc->setVisible(ui->checkBox_Glucose->isChecked());
+        ui->label_StockGluc2->setVisible(ui->checkBox_Glucose->isChecked());
+        ui->lineEdit_MaxGluc->setVisible(ui->checkBox_Glucose->isChecked());
+        ui->label_MaxGluc->setVisible(ui->checkBox_Glucose->isChecked());
+        ui->label_MaxGluc2->setVisible(ui->checkBox_Glucose->isChecked());
+        ui->lineEdit_Mingluc->setVisible(ui->checkBox_Glucose->isChecked());
+        ui->label_MinGluc->setVisible(ui->checkBox_Glucose->isChecked());
+        ui->label_MinGluc2->setVisible(ui->checkBox_Glucose->isChecked());
+        ui->label_VolGl1->setVisible(ui->checkBox_Glucose->isChecked());
+        ui->label_VolG2->setVisible(ui->checkBox_Glucose->isChecked());
+        ui->lineEdit_VolG->setVisible(ui->checkBox_Glucose->isChecked());
 
         /* Update maximum concentrations */
         for(int l=0; l<3; l++){
@@ -641,6 +664,21 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
     /* Display the Total Measurement Time */
     ui->lineEdit_BtimeInterval->setText(ConvertedTime.at(0));
     ui->label_BtimeInt2->setText(ConvertedTime.at(1));
+
+    /* Calculate the needed minimum volume of the stock solutions */
+    QVector <double> Volume(3);
+
+    /* Minimum volume per stock solution */
+    for(int l=0; l<3; l++){
+        double vol = (externSoftware->minConcentrations.at(l)+externSoftware->maxConcentrations.at(l))/(NumberOfSubstances);
+        vol = (vol/ externSoftware->stockSolutions.at(l))*externSoftware->ConfigurationFileGenerator->NConcentrations*ui->lineEdit_AbsVol->text().toDouble();
+        Volume.replace(l, vol);
+    }
+
+    /* Show the user how much is needed minimum */
+    ui->lineEdit_VolG->setText(QString::number(Volume.at(0)));
+    ui->lineEdit_VolI1->setText(QString::number(Volume.at(1)));
+    ui->lineEdit_VolI2->setText(QString::number(Volume.at(2)));
 
 }
 

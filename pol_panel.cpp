@@ -872,6 +872,8 @@ void PanelPolarimeter::Pol_Measure(void){
  */
 void PanelPolarimeter::ConfSetup_Pol_Measurement(void) {
 
+
+
     /* Update information bar */
     ui->info->setText("Loading... Configuration File");
 
