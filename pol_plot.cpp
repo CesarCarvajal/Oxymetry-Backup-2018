@@ -35,7 +35,7 @@ Pol_Plot::Pol_Plot()
     counts_average_time = 0;
 
     /* Max value for plotting Y axis in Averages */
-    maxYValue = 2000;
+    maxYValue = 0;
 
     /* Max value for plotting X axis in Averages */
     maxXtime = 150;

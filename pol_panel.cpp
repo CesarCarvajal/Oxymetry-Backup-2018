@@ -45,6 +45,7 @@
 #include "timer.h"
 #include "math_helper.h"
 #include <qprocess.h>
+#include "qwt_plot.h"
 #include "qwt_plot_renderer.h"
 
 /* Polarimeter Panel stuff */
@@ -266,7 +267,9 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     ui->qwtPlot_Pol_Average->setXAxisTitle("Time (sec)");
     ui->qwtPlot_Pol_Average->setYAxisTitle("Intensity");
     ui->qwtPlot_Pol_Average->setYAxis(0.0, ceil(2000*1.1));
-    ui->qwtPlot_Pol_Average->setXAxis(0.0, pol_plot->time_plot);
+    minXAverage = 0;
+    maxXAverage = pol_plot->time_plot;
+    ui->qwtPlot_Pol_Average->setXAxis(minXAverage, maxXAverage);
 
     /* Set axis and title of FFT Curve at a certain Wavelength */
     ui->qwtPlot_Pol_FFT->setXAxis(0.0, 21);
@@ -329,6 +332,9 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     /* Set size of columns for measurement profile table */
     ui->tableInfoMeasure->setColumnWidth(0,144);
     ui->tableInfoMeasure->setColumnWidth(1,144);
+
+    /* Control the axis of the average plot */
+    maxYAverage = 0;
 
 }
 
@@ -679,7 +685,9 @@ void PanelPolarimeter::AdjustRunStart(short int typeRun){
         Runner->measurementPlotTimeInterval = int(ceil((ConfigureMeasurement->timePoint.at(ConfigureMeasurement->timePoint.length()-1)/300000)));
 
         /* Adjust axis for the measurements */
-        ui->qwtPlot_Pol_Average->setXAxis(0.0, measurementLength + measurementLength*0.1 + ConfigureMeasurement->timePoint[0]/1000);
+        minXAverage = 0;
+        maxXAverage = measurementLength + measurementLength*0.1 + ConfigureMeasurement->timePoint[0]/1000;
+        ui->qwtPlot_Pol_Average->setXAxis(minXAverage, maxXAverage);
 
         /* Clear all other plots too */
         pol_plot->clean_AllPlots();
@@ -1152,8 +1160,11 @@ void PanelPolarimeter::ReceiveDataIsHerePol(int WParam, int LParam)
             /* Is there a maximum amount of counts to change the Y axis on raw data plot? */
             if(Runner->maxRawCounts==-1 || Runner->maxRawCounts < ptrSpectrometers[SpectrometerNumber]->getMaxCounts()){
 
+                /* Maximum counts to plot */
+                maxYRaw = ceil(ptrSpectrometers[SpectrometerNumber]->getMaxCounts()+ ptrSpectrometers[SpectrometerNumber]->getMaxCounts()/2);
+
                 /* If so, adjust the Y axis */
-                ui->qwtPlot_Pol->setYAxis(0.0, ceil(ptrSpectrometers[SpectrometerNumber]->getMaxCounts()+ ptrSpectrometers[SpectrometerNumber]->getMaxCounts()/2));
+                ui->qwtPlot_Pol->setAxisScale(QwtPlot::yLeft, 0.0, maxYRaw);
 
                 /* Save the maximum amount of counts registered */
                 Runner->maxRawCounts = ptrSpectrometers[SpectrometerNumber]->getMaxCounts();
@@ -2427,7 +2438,9 @@ void PanelPolarimeter::Adjust_AveragePlotTime(void){
 
     /* Plot always 20 measurements per refresh */
     pol_plot->time_plot = (measuringTime + measuringTime/3 + 12)*20;
-    ui->qwtPlot_Pol_Average->setXAxis(pol_plot->averaged_Signal_time.at(0),pol_plot->averaged_Signal_time.at(0)+ pol_plot->time_plot);
+    minXAverage = pol_plot->averaged_Signal_time.at(0);
+    maxXAverage = pol_plot->averaged_Signal_time.at(0)+ pol_plot->time_plot;
+    ui->qwtPlot_Pol_Average->setXAxis(minXAverage,maxXAverage);
 }
 
 /**
@@ -2549,10 +2562,12 @@ void PanelPolarimeter::plotAverage(void){
     pol_plot->Average_2W_Signal->attach(ui->qwtPlot_Pol_Average);
 
     /* Is there a new maximum value for the Y axis to resize it? Usually DC is the largest of all three */
-    if(dataloaded){
-        ui->qwtPlot_Pol_Average->setYAxis(0.0, ceil((2000)*1.1));
-    }else{
-        ui->qwtPlot_Pol_Average->setYAxis(0.0, ceil((pol_plot->maxYValue)*1.1));
+    if(maxYAverage < ceil((pol_plot->maxYValue)*1.1)){
+
+        /* Save the actual maximum value of Y plot of averages */
+        maxYAverage = ceil((pol_plot->maxYValue)*1.1);
+        ui->qwtPlot_Pol_Average->setYAxis(0.0, maxYAverage);
+        ui->qwtPlot_Pol_Average->setXAxis(minXAverage, maxXAverage);
     }
 
     /* Update plots */
@@ -2563,8 +2578,13 @@ void PanelPolarimeter::plotAverage(void){
 
         /* Change axis according to the running type 0: Calibrating */
         if(Runner->PolCalibrating){
+
+            /* Set limits for x axis of averages */
+            minXAverage = pol_plot->maxXtime;
+            maxXAverage = pol_plot->maxXtime + pol_plot->time_plot;
+
             /* Just add a certain time to the plot */
-            ui->qwtPlot_Pol_Average->setXAxis(pol_plot->maxXtime, pol_plot->maxXtime + pol_plot->time_plot);
+            ui->qwtPlot_Pol_Average->setXAxis(minXAverage, maxXAverage);
         }
 
         /* Change axis according to the running type 1: Measuring */
@@ -2573,7 +2593,9 @@ void PanelPolarimeter::plotAverage(void){
             int measurementLength = ConfigureMeasurement->timePoint.at(ConfigureMeasurement->timePoint.length()-1)/1000;
 
             /* Adjust axis for the measurements */
-            ui->qwtPlot_Pol_Average->setXAxis(pol_plot->maxXtime, pol_plot->maxXtime + measurementLength + measurementLength*0.1 + ConfigureMeasurement->timePoint[0]/1000);
+            minXAverage = pol_plot->maxXtime;
+            maxXAverage = pol_plot->maxXtime + measurementLength + measurementLength*0.1 + ConfigureMeasurement->timePoint[0]/1000;
+            ui->qwtPlot_Pol_Average->setXAxis(minXAverage, maxXAverage);
         }
 
         /* Restart all vector to don't overload them with too many information */
@@ -2584,7 +2606,7 @@ void PanelPolarimeter::plotAverage(void){
     }
 
     /* This QT function doesn't work properly for a live plot */
-    ui->qwtPlot_Pol_Average->disableZoom();
+    //ui->qwtPlot_Pol_Average->disableZoom();
 }
 
 /* CALIBRATION ------------------------------------------------------------------------------------------------------------*/
@@ -3088,6 +3110,7 @@ void PanelPolarimeter::clean_AllPol(void){
     /* Clear all other plots too */
     pol_plot->clean_AllPlots();
 
+    /* Clean the configuration */
     ConfigureMeasurement->path = "";
     ConfigureMeasurement->ui->lineEdit_path->setText("Please select a configuration file");
     ConfigureMeasurement->cleanAll();
@@ -3116,7 +3139,11 @@ void PanelPolarimeter::clean_AllPol(void){
 
     /* Also restart plotting variables */
     pol_plot->time_plot = 400;
-    ui->qwtPlot_Pol_Average->setXAxis(0, pol_plot->time_plot);
+    minXAverage = 0;
+    maxXAverage = pol_plot->time_plot;
+    maxYRaw = 0;
+    maxYAverage = 0;
+    ui->qwtPlot_Pol_Average->setXAxis(minXAverage, maxXAverage);
 
     /* Restart configuration */
     Runner->setConfigured(false);

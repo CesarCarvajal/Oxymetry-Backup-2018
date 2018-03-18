@@ -63,7 +63,7 @@ public:
     QVector<double> AverageDC, AverageW, Average2W;
 
     /* Maximum value on Y axis */
-    int maxYValue;
+    double maxYValue;
 
     /* Maximum value on X axis of average plot */
     double maxXtime;

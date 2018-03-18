@@ -227,6 +227,9 @@ private:
     /* Plot Objetct */
     Pol_Plot *pol_plot = nullptr;
 
+    /* Fix the X axis zoom problem */
+    double minXAverage, maxXAverage, maxYRaw, maxYAverage;
+
     /* Range of Wavelengths */
     double minWavelength = 400.0, maxWavelength = 1000.0;
 
