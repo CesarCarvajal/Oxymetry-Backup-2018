@@ -123,9 +123,10 @@ public:
     QSpacerItem *horizontalSpacer_Y;
     QLabel *label_totalM;
     QProgressBar *TotalProgressBar_Pol;
-    QSpacerItem *horizontalSpacer_8;
-    QLabel *label_RemainingTime;
     QSpacerItem *horizontalSpacer;
+    QLabel *label_remaining;
+    QLabel *label_RemainingTime;
+    QSpacerItem *horizontalSpacer_8;
     QPushButton *button_LoadData;
     QPushButton *Button_Save_Graphs_Pol;
     QSpacerItem *horizontalSpacer_9;
@@ -135,7 +136,7 @@ public:
     {
         if (PanelPolarimeter->objectName().isEmpty())
             PanelPolarimeter->setObjectName(QStringLiteral("PanelPolarimeter"));
-        PanelPolarimeter->resize(1208, 784);
+        PanelPolarimeter->resize(1210, 784);
         QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -378,8 +379,10 @@ public:
         Table_Measurements_Pol->setObjectName(QStringLiteral("Table_Measurements_Pol"));
         sizePolicy3.setHeightForWidth(Table_Measurements_Pol->sizePolicy().hasHeightForWidth());
         Table_Measurements_Pol->setSizePolicy(sizePolicy3);
-        Table_Measurements_Pol->setMinimumSize(QSize(290, 50));
-        Table_Measurements_Pol->setMaximumSize(QSize(290, 16777215));
+        Table_Measurements_Pol->setMinimumSize(QSize(300, 50));
+        Table_Measurements_Pol->setMaximumSize(QSize(300, 16777215));
+        Table_Measurements_Pol->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+        Table_Measurements_Pol->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
         Table_Measurements_Pol->setAutoScroll(true);
         Table_Measurements_Pol->setAutoScrollMargin(18);
         Table_Measurements_Pol->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -824,7 +827,7 @@ public:
         currentProgressBar_Pol->setObjectName(QStringLiteral("currentProgressBar_Pol"));
         sizePolicy4.setHeightForWidth(currentProgressBar_Pol->sizePolicy().hasHeightForWidth());
         currentProgressBar_Pol->setSizePolicy(sizePolicy4);
-        currentProgressBar_Pol->setMaximumSize(QSize(60, 12));
+        currentProgressBar_Pol->setMaximumSize(QSize(50, 12));
         currentProgressBar_Pol->setAutoFillBackground(false);
         currentProgressBar_Pol->setValue(0);
         currentProgressBar_Pol->setTextVisible(false);
@@ -837,7 +840,7 @@ public:
         info->setObjectName(QStringLiteral("info"));
         sizePolicy4.setHeightForWidth(info->sizePolicy().hasHeightForWidth());
         info->setSizePolicy(sizePolicy4);
-        info->setMinimumSize(QSize(200, 0));
+        info->setMinimumSize(QSize(160, 0));
         info->setMaximumSize(QSize(250, 12));
         QFont font10;
         font10.setPointSize(7);
@@ -866,26 +869,35 @@ public:
         TotalProgressBar_Pol->setObjectName(QStringLiteral("TotalProgressBar_Pol"));
         sizePolicy4.setHeightForWidth(TotalProgressBar_Pol->sizePolicy().hasHeightForWidth());
         TotalProgressBar_Pol->setSizePolicy(sizePolicy4);
-        TotalProgressBar_Pol->setMinimumSize(QSize(160, 0));
+        TotalProgressBar_Pol->setMinimumSize(QSize(140, 0));
         TotalProgressBar_Pol->setMaximumSize(QSize(240, 12));
         TotalProgressBar_Pol->setValue(0);
 
         horizontalLayout_4->addWidget(TotalProgressBar_Pol);
 
-        horizontalSpacer_8 = new QSpacerItem(60, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        horizontalLayout_4->addItem(horizontalSpacer_8);
+        horizontalLayout_4->addItem(horizontalSpacer);
+
+        label_remaining = new QLabel(PanelPolarimeter);
+        label_remaining->setObjectName(QStringLiteral("label_remaining"));
+        label_remaining->setMinimumSize(QSize(70, 0));
+        label_remaining->setMaximumSize(QSize(70, 16777215));
+        label_remaining->setFont(font10);
+
+        horizontalLayout_4->addWidget(label_remaining);
 
         label_RemainingTime = new QLabel(PanelPolarimeter);
         label_RemainingTime->setObjectName(QStringLiteral("label_RemainingTime"));
         label_RemainingTime->setMaximumSize(QSize(100, 12));
         label_RemainingTime->setSizeIncrement(QSize(100, 0));
+        label_RemainingTime->setFont(font10);
 
         horizontalLayout_4->addWidget(label_RemainingTime);
 
-        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        horizontalSpacer_8 = new QSpacerItem(60, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        horizontalLayout_4->addItem(horizontalSpacer);
+        horizontalLayout_4->addItem(horizontalSpacer_8);
 
         button_LoadData = new QPushButton(PanelPolarimeter);
         button_LoadData->setObjectName(QStringLiteral("button_LoadData"));
@@ -1080,10 +1092,11 @@ public:
         info->setToolTip(QApplication::translate("PanelPolarimeter", "Status Bar", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         info->setText(QString());
-        label_totalM->setText(QApplication::translate("PanelPolarimeter", "Total measurement:", Q_NULLPTR));
+        label_totalM->setText(QApplication::translate("PanelPolarimeter", "Total:", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         TotalProgressBar_Pol->setToolTip(QApplication::translate("PanelPolarimeter", "Total Progress", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
+        label_remaining->setText(QApplication::translate("PanelPolarimeter", "Remaining Time:", Q_NULLPTR));
         label_RemainingTime->setText(QApplication::translate("PanelPolarimeter", "0 hours", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         button_LoadData->setToolTip(QApplication::translate("PanelPolarimeter", "Load Data from Files", Q_NULLPTR));

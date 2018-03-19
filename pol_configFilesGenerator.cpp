@@ -37,6 +37,10 @@ Pol_configFilesGenerator::Pol_configFilesGenerator()
     glucoseActive = false;
     Imp1Active = false;
     Imp2Active = false;
+
+    /* Delay on starting the measurements */
+    startDelay = 0;
+
 }
 
 /**
@@ -57,6 +61,11 @@ void Pol_configFilesGenerator::GeneratePumpScripts(QString pathFile, QString fil
     /* Write in file */
     fprintf(Sfile, "%s", "ml/min \n");
     fprintf(Sfile, "%s", "1 \n");
+
+    /* Print start delay if needed */
+    if(startDelay!=0){
+        fprintf(Sfile, "%.0f\t%d\t%i\n", startDelay*1000, 0, 0);
+    }
 
     /* Write in file */
     writePumpFile(Sfile, filetype, FlowVector);

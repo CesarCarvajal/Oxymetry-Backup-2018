@@ -293,9 +293,13 @@ QStringList Pol_ExternConf::TimeConverter(double mTime){
     /* Unit */
     QString unit = "";
 
+    /* Precision */
+    int precision = 3;
+
     /* Convert the time to minutes, hours or days */
     if(mTime < 60){
         unit = "sec";
+        precision = 0;
 
     }
     /* minutes */
@@ -303,22 +307,25 @@ QStringList Pol_ExternConf::TimeConverter(double mTime){
 
         mTime = mTime/60;
         unit = "min";
+        precision = 2;
 
         /* Hours */
     }else if(mTime > 3600 && mTime < 86400){
 
         mTime = mTime/3600;
         unit = "hours";
+        precision = 3;
 
         /* Days */
     }else if(mTime > 86400){
 
         mTime = mTime/86400;
         unit = "days";
+        precision = 4;
     }
 
     /* Return the time and its unit */
-    timeUnits.append(QString::number(mTime));
+    timeUnits.append(QString::number(mTime,'f', precision));
     timeUnits.append(unit);
 
     return timeUnits;

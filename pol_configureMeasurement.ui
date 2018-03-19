@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>784</width>
+    <width>796</width>
     <height>706</height>
    </rect>
   </property>
@@ -2023,7 +2023,7 @@
             <item>
              <widget class="QLineEdit" name="lineEdit_startDelay">
               <property name="enabled">
-               <bool>false</bool>
+               <bool>true</bool>
               </property>
               <property name="minimumSize">
                <size>

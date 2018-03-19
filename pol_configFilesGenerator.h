@@ -56,12 +56,15 @@ public:
 
     /* Time Breaks */
     int shortBreak;     // Should accept double too
-    int longBreak;      // Should accept double too
+    int longBreak;
 
     /* Active substances flags */
     bool glucoseActive;
     bool Imp1Active;
     bool Imp2Active;
+
+    /* Start delay */
+    double startDelay;
 
     /* Generate pump files */
     void GeneratePumpScripts(QString pathFile, QString filetype, QVector<double> FlowVector);

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1208</width>
+    <width>1210</width>
     <height>784</height>
    </rect>
   </property>
@@ -583,18 +583,24 @@
          </property>
          <property name="minimumSize">
           <size>
-           <width>290</width>
+           <width>300</width>
            <height>50</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>290</width>
+           <width>300</width>
            <height>16777215</height>
           </size>
          </property>
          <property name="toolTip">
           <string>Measurement Profile</string>
+         </property>
+         <property name="horizontalScrollBarPolicy">
+          <enum>Qt::ScrollBarAsNeeded</enum>
+         </property>
+         <property name="sizeAdjustPolicy">
+          <enum>QAbstractScrollArea::AdjustToContents</enum>
          </property>
          <property name="autoScroll">
           <bool>true</bool>
@@ -1741,7 +1747,7 @@
              </property>
              <property name="maximumSize">
               <size>
-               <width>60</width>
+               <width>50</width>
                <height>12</height>
               </size>
              </property>
@@ -1775,7 +1781,7 @@
              </property>
              <property name="minimumSize">
               <size>
-               <width>200</width>
+               <width>160</width>
                <height>0</height>
               </size>
              </property>
@@ -1836,7 +1842,7 @@
               </font>
              </property>
              <property name="text">
-              <string>Total measurement:</string>
+              <string>Total:</string>
              </property>
             </widget>
            </item>
@@ -1850,7 +1856,7 @@
              </property>
              <property name="minimumSize">
               <size>
-               <width>160</width>
+               <width>140</width>
                <height>0</height>
               </size>
              </property>
@@ -1869,20 +1875,41 @@
             </widget>
            </item>
            <item>
-            <spacer name="horizontalSpacer_8">
+            <spacer name="horizontalSpacer">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
              </property>
-             <property name="sizeType">
-              <enum>QSizePolicy::Expanding</enum>
-             </property>
              <property name="sizeHint" stdset="0">
               <size>
-               <width>60</width>
+               <width>40</width>
                <height>20</height>
               </size>
              </property>
             </spacer>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_remaining">
+             <property name="minimumSize">
+              <size>
+               <width>70</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>70</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>7</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>Remaining Time:</string>
+             </property>
+            </widget>
            </item>
            <item>
             <widget class="QLabel" name="label_RemainingTime">
@@ -1898,19 +1925,27 @@
                <height>0</height>
               </size>
              </property>
+             <property name="font">
+              <font>
+               <pointsize>7</pointsize>
+              </font>
+             </property>
              <property name="text">
               <string>0 hours</string>
              </property>
             </widget>
            </item>
            <item>
-            <spacer name="horizontalSpacer">
+            <spacer name="horizontalSpacer_8">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
              </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Expanding</enum>
+             </property>
              <property name="sizeHint" stdset="0">
               <size>
-               <width>40</width>
+               <width>60</width>
                <height>20</height>
               </size>
              </property>

@@ -83,6 +83,7 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     connect(ui->lineEdit_BNSpec, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
     connect(ui->lineEdit_BNAve, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
     connect(ui->lineEdit_BNMeas, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
+    connect(ui->lineEdit_startDelay, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
 
     /* Solutions Concentrations */
     connect(ui->lineEdit_StockGluc, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
@@ -117,6 +118,7 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     signalMapperC->setMapping(ui->lineEdit_BNSpec, ui->lineEdit_BNSpec);
     signalMapperC->setMapping(ui->lineEdit_BNAve, ui->lineEdit_BNAve);
     signalMapperC->setMapping(ui->lineEdit_BNMeas, ui->lineEdit_BNMeas);
+    signalMapperC->setMapping(ui->lineEdit_startDelay, ui->lineEdit_startDelay);
 
     /* Solutions Concentrations */
     signalMapperC->setMapping(ui->lineEdit_StockGluc, ui->lineEdit_StockGluc);
@@ -210,10 +212,10 @@ void configurePolMeasure::cleanAll(void)
     /* Clear lists */
     timePoint.clear();
     fileName.clear();
-    numSpectra=0;
-    integrationTime=0;
-    numberOfAverages=0;
-    freqToMeasure =0;
+    externSoftware->ConfigurationFileGenerator->NrSpectra=0;
+    externSoftware->ConfigurationFileGenerator->IntegrationTime=0;
+    externSoftware->ConfigurationFileGenerator->NrAverages=0;
+    externSoftware->ConfigurationFileGenerator->Frequency =0;
     ui->lineEdit_path->setEnabled(false);
 
 }
@@ -328,7 +330,17 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
                                 /* If not, then set back default value */
                                 ui->lineEdit_BNAve->setText("1");
                             }
-                        }
+                        }else
+                            /* The user decide to configure the Nr of Averages */
+                            if(LineLabel == ui->lineEdit_startDelay && ui->lineEdit_startDelay->text().toDouble(&ok) >= 0){
+
+                                /* Is there a valid number */
+                                if(!ok){
+                                    /* If not, then set back default value */
+                                    ui->lineEdit_startDelay->setText("0");
+                                }
+                            }
+
 
         /* Solutions Concentrations Settings */
 
@@ -656,10 +668,10 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
     ui->label2_timebetweenM->setText(ConvertedTime.at(1));
 
     /* Estimate the total measurement time */
-    totalMtime = (measurementTime + (cycleTime * externSoftware->ConfigurationFileGenerator->NConcentrations))/1000;
+    double totalMtimer = (measurementTime + (cycleTime * externSoftware->ConfigurationFileGenerator->NConcentrations))/1000;
 
     /* Convert the time to minutes, hours or days */
-    ConvertedTime = externSoftware->TimeConverter(totalMtime);
+    ConvertedTime = externSoftware->TimeConverter(totalMtimer);
 
     /* Display the Total Measurement Time */
     ui->lineEdit_BtimeInterval->setText(ConvertedTime.at(0));
@@ -791,10 +803,10 @@ void configurePolMeasure::loadConfiguration(void)
             /* Copy entries to the lists */
             timePoint.append(list[0].toInt());
             fileName.append(list[1]);
-            numSpectra = list[2].toInt();
-            integrationTime = list[3].toFloat();
-            numberOfAverages = list[4].toInt();
-            freqToMeasure = list[5].toInt();
+            externSoftware->ConfigurationFileGenerator->NrSpectra = list[2].toInt();
+            externSoftware->ConfigurationFileGenerator->IntegrationTime = list[3].toFloat();
+            externSoftware->ConfigurationFileGenerator->NrAverages = list[4].toInt();
+            externSoftware->ConfigurationFileGenerator->Frequency = list[5].toInt();
 
             /* Are you loading a file without the pump description? */
             if(loadingConfigurationFromFile){
@@ -841,7 +853,7 @@ void configurePolMeasure::loadConfiguration(void)
             if (i > 0)
             {
                 /* Calculate duration of entry before current entry */
-                double duration = numSpectra * integrationTime * numberOfAverages;
+                double duration = externSoftware->ConfigurationFileGenerator->NrSpectra * externSoftware->ConfigurationFileGenerator->IntegrationTime * externSoftware->ConfigurationFileGenerator->NrAverages;
 
                 /* Check if there's a time overlap between last and current entry */
                 if ((timePoint[i - 1] + duration) > timePoint[i])
@@ -860,12 +872,8 @@ void configurePolMeasure::loadConfiguration(void)
             }
         }
 
-        /* Are you loading from file without pump description? */
-        if(loadingConfigurationFromFile){
-
-            /* Save the total time */
-            totalMtime = (timePoint.at(timePoint.length()-1) + timePoint.at(0))/1000;
-        }
+        /* Save the total time */
+        totalMtime = (timePoint.at(timePoint.length()-1) + timePoint.at(0))/1000;
 
         /* Copy path into line edit */
         ui->lineEdit_path->setText(path);
@@ -898,21 +906,21 @@ void configurePolMeasure::cancel(void)
  */
 void configurePolMeasure::GetConfigurationData(void)
 {
-    /* Get Integration Time */
-    integrationTime = ui->lineEdit_BIntTime->text().toFloat();
-    externSoftware->ConfigurationFileGenerator->IntegrationTime = integrationTime;
 
-    /* Get Frequency to Measure */
-    freqToMeasure = ui->lineEdit_BFreq->text().toInt();
-    externSoftware->ConfigurationFileGenerator->Frequency = freqToMeasure;
+    /* Get the start delay in seconds */
+    externSoftware->ConfigurationFileGenerator->startDelay = ui->lineEdit_startDelay->text().toDouble()*3600;
+
+    /* Get Integration Time in ms */
+    externSoftware->ConfigurationFileGenerator->IntegrationTime = ui->lineEdit_BIntTime->text().toFloat();
+
+    /* Get Frequency to Measure in Hz */
+    externSoftware->ConfigurationFileGenerator->Frequency = ui->lineEdit_BFreq->text().toInt();
 
     /* Get Number of Spectra */
-    numSpectra = ui->lineEdit_BNSpec->text().toInt();
-    externSoftware->ConfigurationFileGenerator->NrSpectra = numSpectra;
+    externSoftware->ConfigurationFileGenerator->NrSpectra = ui->lineEdit_BNSpec->text().toInt();
 
     /* Get Number of Averages */
-    numberOfAverages = ui->lineEdit_BNAve->text().toInt();
-    externSoftware->ConfigurationFileGenerator->NrAverages = numberOfAverages;
+    externSoftware->ConfigurationFileGenerator->NrAverages = ui->lineEdit_BNAve->text().toInt();
 
     /* Save the actual selected substances */
     externSoftware->ConfigurationFileGenerator->glucoseActive = ui->checkBox_Glucose->isChecked();
@@ -922,8 +930,7 @@ void configurePolMeasure::GetConfigurationData(void)
     /* Required for the Pump Scripts */
 
     /* Get Number of Measurements */
-    NrMeasurements = ui->lineEdit_BNMeas->text().toInt();
-    externSoftware->ConfigurationFileGenerator->NConcentrations = NrMeasurements;
+    externSoftware->ConfigurationFileGenerator->NConcentrations = ui->lineEdit_BNMeas->text().toInt();
 
     /* Get Number of Steps */
     externSoftware->ConfigurationFileGenerator->NSteps = ui->lineEdit_NSteps->text().toInt();
@@ -935,10 +942,10 @@ void configurePolMeasure::GetConfigurationData(void)
     int idled = ui->checkBox->isChecked();
     externSoftware->ConfigurationFileGenerator->idle = idled;
 
-    /* Get Refilling Times */
+    /* Get Refilling Times in ms */
     externSoftware->ConfigurationFileGenerator->fillRefill = (((ui->lineEdit_AbsVol->text().toDouble()/externSoftware->ConfigurationFileGenerator->absoluteFlow)*60) / externSoftware->ConfigurationFileGenerator->NSteps)*1000;
 
-    /* Get the Breaks */
+    /* Get the Breaks in ms */
     externSoftware->ConfigurationFileGenerator->shortBreak = (ui->lineEdit_ShortBreak->text().toInt())*1000;
     externSoftware->ConfigurationFileGenerator->longBreak = (ui->lineEdit_LongBreak->text().toInt())*1000 + (externSoftware->ConfigurationFileGenerator->IntegrationTime*externSoftware->ConfigurationFileGenerator->NrSpectra);
 
@@ -958,14 +965,14 @@ void configurePolMeasure::GetConfigurationData(void)
     externSoftware->maxConcentrations.replace(2,ui->lineEdit_MaxImp2->text().toDouble());
 
     /* Very long Int Time? */
-    if(integrationTime > 200){
+    if(externSoftware->ConfigurationFileGenerator->IntegrationTime > 200){
 
         /* Show warning */
         showWarning("Please consider that large integration times will lead to a larger measurement time!", "");
     }
 
     /* Too large number of spectra */
-    if(numSpectra > 3000){
+    if(externSoftware->ConfigurationFileGenerator->NrSpectra > 3000){
 
         /* Show warning */
         showWarning("Please consider that large number of spectra will lead to a larger measurement time!", "");

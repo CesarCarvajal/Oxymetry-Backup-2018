@@ -202,6 +202,9 @@ private slots:
     /* Process the received data from the spectrometer */
     void ProcessReceivedDataPol(QString Path);
 
+    /* Delay the measurememts */
+    void delayMeasurements(void);
+
 private:
 
     QSignalMapper *signalMapper;

@@ -46,12 +46,7 @@ public:
     Pol_ExternConf *externSoftware = nullptr;
 
     /* Configurable Variables loaded form files or created */
-    int numSpectra;
-    float integrationTime;
-    int numberOfAverages;
-    int freqToMeasure;
     QList<double> timePoint;
-    int NrMeasurements;             // Could inherit variables from configFilesGenerator (avoid repeat)
 
     /* Total measurement time */
     double totalMtime;

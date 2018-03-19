@@ -202,7 +202,7 @@ public:
     {
         if (configurePolMeasure->objectName().isEmpty())
             configurePolMeasure->setObjectName(QStringLiteral("configurePolMeasure"));
-        configurePolMeasure->resize(784, 706);
+        configurePolMeasure->resize(796, 706);
         QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -1043,7 +1043,7 @@ public:
 
         lineEdit_startDelay = new QLineEdit(ConfigurationLayout);
         lineEdit_startDelay->setObjectName(QStringLiteral("lineEdit_startDelay"));
-        lineEdit_startDelay->setEnabled(false);
+        lineEdit_startDelay->setEnabled(true);
         lineEdit_startDelay->setMinimumSize(QSize(100, 0));
         lineEdit_startDelay->setMaximumSize(QSize(100, 16777215));
 
