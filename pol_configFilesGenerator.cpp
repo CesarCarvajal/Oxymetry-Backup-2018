@@ -41,6 +41,9 @@ Pol_configFilesGenerator::Pol_configFilesGenerator()
     /* Delay on starting the measurements */
     startDelay = 0;
 
+    /* Number of Sustances active */
+    NumberOfSubstances = 2;
+
 }
 
 /**

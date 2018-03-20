@@ -45,6 +45,9 @@ public:
     /* Refilling Times */
     int fillRefill;          // Should accept double too
 
+    /* How many substances are active */
+    int NumberOfSubstances;
+
     /* Number of steps for filling refilling */
     int NSteps;
 

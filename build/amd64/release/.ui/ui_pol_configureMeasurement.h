@@ -15,6 +15,8 @@
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QDialog>
+#include <QtWidgets/QDoubleSpinBox>
+#include <QtWidgets/QFrame>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
@@ -22,6 +24,7 @@
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
+#include <QtWidgets/QSpinBox>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 #include "clickablelabel.h"
@@ -43,39 +46,41 @@ public:
     ClickableLabel *label_basicConf;
     QWidget *ConfigurationLayout;
     QVBoxLayout *verticalLayout_fileconf;
+    QFrame *line;
     QLabel *label_Spectrometer;
     QGridLayout *gridLayout_2;
-    QSpacerItem *horizontalSpacer_7;
-    QSpacerItem *horizontalSpacer_2;
-    QHBoxLayout *horizontalLayout_27;
-    QLabel *label_minW1;
-    QLineEdit *lineEdit_minW;
-    QLabel *label_minW2;
     QHBoxLayout *horizontalLayout_24;
     QLabel *label_BIntTime;
-    QLineEdit *lineEdit_BIntTime;
+    QDoubleSpinBox *doubleSpinBox_intTime;
     QLabel *label_BIntTime2;
     QHBoxLayout *horizontalLayout_26;
     QLabel *label_BNSpec;
-    QLineEdit *lineEdit_BNSpec;
+    QSpinBox *spinBox_BNSpec;
     QLabel *label_10;
-    QHBoxLayout *horizontalLayout_25;
-    QLabel *label_BFreq;
-    QLineEdit *lineEdit_BFreq;
-    QLabel *label_BFreq2;
     QHBoxLayout *horizontalLayout_11;
     QLabel *label_BNAve;
-    QLineEdit *lineEdit_BNAve;
+    QSpinBox *spinBox_BNAve;
     QLabel *label_11;
-    QHBoxLayout *horizontalLayout_23;
-    QLabel *label_BNMeas;
-    QLineEdit *lineEdit_BNMeas;
-    QLabel *label_9;
     QHBoxLayout *horizontalLayout;
     QLabel *label_maxW1;
-    QLineEdit *lineEdit_maxW;
+    QDoubleSpinBox *doubleSpinBox_maxW;
     QLabel *label_maxW2;
+    QHBoxLayout *horizontalLayout_23;
+    QLabel *label_BNMeas;
+    QSpinBox *spinBox_BNMeas;
+    QLabel *label_9;
+    QHBoxLayout *horizontalLayout_25;
+    QLabel *label_BFreq;
+    QSpinBox *spinBox_BFreq;
+    QLabel *label_BFreq2;
+    QSpacerItem *horizontalSpacer_2;
+    QSpacerItem *horizontalSpacer_7;
+    QHBoxLayout *horizontalLayout_27;
+    QLabel *label_minW1;
+    QDoubleSpinBox *doubleSpinBox_minW;
+    QLabel *label_minW2;
     QSpacerItem *verticalSpacer_13;
+    QFrame *line_2;
     QLabel *label_SolConc;
     QGridLayout *gridLayout_3;
     QHBoxLayout *horizontalLayout_30;
@@ -110,14 +115,17 @@ public:
     QLabel *label_MinGluc;
     QLineEdit *lineEdit_Mingluc;
     QLabel *label_MinGluc2;
+    QSpacerItem *horizontalSpacer_14;
     QHBoxLayout *horizontalLayout_18;
     QLabel *label_StockGluc;
     QLineEdit *lineEdit_StockGluc;
     QLabel *label_StockGluc2;
+    QSpacerItem *horizontalSpacer_16;
     QHBoxLayout *horizontalLayout_17;
     QLabel *label_MaxGluc;
     QLineEdit *lineEdit_MaxGluc;
     QLabel *label_MaxGluc2;
+    QSpacerItem *horizontalSpacer_15;
     QHBoxLayout *horizontalLayout_12;
     QLabel *label_StockImp1;
     QLineEdit *lineEdit_StockImp1;
@@ -132,12 +140,14 @@ public:
     QLabel *label_VolGl1;
     QLineEdit *lineEdit_VolG;
     QLabel *label_VolG2;
+    QSpacerItem *horizontalSpacer_17;
     QHBoxLayout *horizontalLayout_33;
     QLabel *label_VolI2;
     QLineEdit *lineEdit_VolI2;
     QLabel *label_VolI22;
     QSpacerItem *horizontalSpacer_13;
     QSpacerItem *verticalSpacer_6;
+    QFrame *line_3;
     QLabel *label_PumpFlow;
     QGridLayout *gridLayout_4;
     QHBoxLayout *horizontalLayout_34;
@@ -153,6 +163,7 @@ public:
     QLineEdit *lineEdit_AbsVol;
     QLabel *label_AbsVol_2;
     QSpacerItem *verticalSpacer_12;
+    QFrame *line_4;
     QLabel *label;
     QGridLayout *gridLayout_5;
     QHBoxLayout *horizontalLayout_38;
@@ -202,7 +213,7 @@ public:
     {
         if (configurePolMeasure->objectName().isEmpty())
             configurePolMeasure->setObjectName(QStringLiteral("configurePolMeasure"));
-        configurePolMeasure->resize(796, 706);
+        configurePolMeasure->resize(822, 727);
         QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -292,6 +303,13 @@ public:
         ConfigurationLayout->setSizePolicy(sizePolicy1);
         verticalLayout_fileconf = new QVBoxLayout(ConfigurationLayout);
         verticalLayout_fileconf->setObjectName(QStringLiteral("verticalLayout_fileconf"));
+        line = new QFrame(ConfigurationLayout);
+        line->setObjectName(QStringLiteral("line"));
+        line->setFrameShape(QFrame::HLine);
+        line->setFrameShadow(QFrame::Sunken);
+
+        verticalLayout_fileconf->addWidget(line);
+
         label_Spectrometer = new QLabel(ConfigurationLayout);
         label_Spectrometer->setObjectName(QStringLiteral("label_Spectrometer"));
         sizePolicy1.setHeightForWidth(label_Spectrometer->sizePolicy().hasHeightForWidth());
@@ -307,39 +325,6 @@ public:
 
         gridLayout_2 = new QGridLayout();
         gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
-        horizontalSpacer_7 = new QSpacerItem(235, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
-
-        gridLayout_2->addItem(horizontalSpacer_7, 2, 2, 1, 1);
-
-        horizontalSpacer_2 = new QSpacerItem(235, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
-
-        gridLayout_2->addItem(horizontalSpacer_2, 3, 2, 1, 1);
-
-        horizontalLayout_27 = new QHBoxLayout();
-        horizontalLayout_27->setObjectName(QStringLiteral("horizontalLayout_27"));
-        label_minW1 = new QLabel(ConfigurationLayout);
-        label_minW1->setObjectName(QStringLiteral("label_minW1"));
-        label_minW1->setMinimumSize(QSize(100, 0));
-
-        horizontalLayout_27->addWidget(label_minW1);
-
-        lineEdit_minW = new QLineEdit(ConfigurationLayout);
-        lineEdit_minW->setObjectName(QStringLiteral("lineEdit_minW"));
-        lineEdit_minW->setEnabled(false);
-        lineEdit_minW->setMinimumSize(QSize(100, 0));
-        lineEdit_minW->setMaximumSize(QSize(100, 16777215));
-
-        horizontalLayout_27->addWidget(lineEdit_minW);
-
-        label_minW2 = new QLabel(ConfigurationLayout);
-        label_minW2->setObjectName(QStringLiteral("label_minW2"));
-        label_minW2->setMinimumSize(QSize(30, 0));
-
-        horizontalLayout_27->addWidget(label_minW2);
-
-
-        gridLayout_2->addLayout(horizontalLayout_27, 3, 0, 1, 1);
-
         horizontalLayout_24 = new QHBoxLayout();
         horizontalLayout_24->setObjectName(QStringLiteral("horizontalLayout_24"));
         label_BIntTime = new QLabel(ConfigurationLayout);
@@ -348,17 +333,17 @@ public:
 
         horizontalLayout_24->addWidget(label_BIntTime);
 
-        lineEdit_BIntTime = new QLineEdit(ConfigurationLayout);
-        lineEdit_BIntTime->setObjectName(QStringLiteral("lineEdit_BIntTime"));
-        QSizePolicy sizePolicy2(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(0);
-        sizePolicy2.setHeightForWidth(lineEdit_BIntTime->sizePolicy().hasHeightForWidth());
-        lineEdit_BIntTime->setSizePolicy(sizePolicy2);
-        lineEdit_BIntTime->setMinimumSize(QSize(100, 0));
-        lineEdit_BIntTime->setMaximumSize(QSize(100, 16777215));
+        doubleSpinBox_intTime = new QDoubleSpinBox(ConfigurationLayout);
+        doubleSpinBox_intTime->setObjectName(QStringLiteral("doubleSpinBox_intTime"));
+        doubleSpinBox_intTime->setMinimumSize(QSize(100, 0));
+        doubleSpinBox_intTime->setMaximumSize(QSize(100, 16777215));
+        doubleSpinBox_intTime->setDecimals(1);
+        doubleSpinBox_intTime->setMinimum(1);
+        doubleSpinBox_intTime->setMaximum(20000);
+        doubleSpinBox_intTime->setSingleStep(0.1);
+        doubleSpinBox_intTime->setValue(6);
 
-        horizontalLayout_24->addWidget(lineEdit_BIntTime);
+        horizontalLayout_24->addWidget(doubleSpinBox_intTime);
 
         label_BIntTime2 = new QLabel(ConfigurationLayout);
         label_BIntTime2->setObjectName(QStringLiteral("label_BIntTime2"));
@@ -374,15 +359,28 @@ public:
         label_BNSpec = new QLabel(ConfigurationLayout);
         label_BNSpec->setObjectName(QStringLiteral("label_BNSpec"));
         label_BNSpec->setMinimumSize(QSize(100, 0));
+        label_BNSpec->setFrameShape(QFrame::NoFrame);
+        label_BNSpec->setFrameShadow(QFrame::Plain);
+        label_BNSpec->setMidLineWidth(0);
 
         horizontalLayout_26->addWidget(label_BNSpec);
 
-        lineEdit_BNSpec = new QLineEdit(ConfigurationLayout);
-        lineEdit_BNSpec->setObjectName(QStringLiteral("lineEdit_BNSpec"));
-        lineEdit_BNSpec->setMinimumSize(QSize(100, 0));
-        lineEdit_BNSpec->setMaximumSize(QSize(100, 16777215));
+        spinBox_BNSpec = new QSpinBox(ConfigurationLayout);
+        spinBox_BNSpec->setObjectName(QStringLiteral("spinBox_BNSpec"));
+        spinBox_BNSpec->setMinimumSize(QSize(100, 0));
+        spinBox_BNSpec->setMaximumSize(QSize(100, 16777215));
+        spinBox_BNSpec->setFont(font1);
+        spinBox_BNSpec->setWrapping(false);
+        spinBox_BNSpec->setFrame(true);
+        spinBox_BNSpec->setButtonSymbols(QAbstractSpinBox::UpDownArrows);
+        spinBox_BNSpec->setAccelerated(false);
+        spinBox_BNSpec->setProperty("showGroupSeparator", QVariant(false));
+        spinBox_BNSpec->setMinimum(1);
+        spinBox_BNSpec->setMaximum(100000);
+        spinBox_BNSpec->setSingleStep(100);
+        spinBox_BNSpec->setValue(1000);
 
-        horizontalLayout_26->addWidget(lineEdit_BNSpec);
+        horizontalLayout_26->addWidget(spinBox_BNSpec);
 
         label_10 = new QLabel(ConfigurationLayout);
         label_10->setObjectName(QStringLiteral("label_10"));
@@ -393,30 +391,6 @@ public:
 
         gridLayout_2->addLayout(horizontalLayout_26, 2, 0, 1, 1);
 
-        horizontalLayout_25 = new QHBoxLayout();
-        horizontalLayout_25->setObjectName(QStringLiteral("horizontalLayout_25"));
-        label_BFreq = new QLabel(ConfigurationLayout);
-        label_BFreq->setObjectName(QStringLiteral("label_BFreq"));
-        label_BFreq->setMinimumSize(QSize(100, 0));
-
-        horizontalLayout_25->addWidget(label_BFreq);
-
-        lineEdit_BFreq = new QLineEdit(ConfigurationLayout);
-        lineEdit_BFreq->setObjectName(QStringLiteral("lineEdit_BFreq"));
-        lineEdit_BFreq->setMinimumSize(QSize(100, 0));
-        lineEdit_BFreq->setMaximumSize(QSize(100, 16777215));
-
-        horizontalLayout_25->addWidget(lineEdit_BFreq);
-
-        label_BFreq2 = new QLabel(ConfigurationLayout);
-        label_BFreq2->setObjectName(QStringLiteral("label_BFreq2"));
-        label_BFreq2->setMinimumSize(QSize(30, 0));
-
-        horizontalLayout_25->addWidget(label_BFreq2);
-
-
-        gridLayout_2->addLayout(horizontalLayout_25, 1, 2, 1, 1);
-
         horizontalLayout_11 = new QHBoxLayout();
         horizontalLayout_11->setObjectName(QStringLiteral("horizontalLayout_11"));
         label_BNAve = new QLabel(ConfigurationLayout);
@@ -425,12 +399,14 @@ public:
 
         horizontalLayout_11->addWidget(label_BNAve);
 
-        lineEdit_BNAve = new QLineEdit(ConfigurationLayout);
-        lineEdit_BNAve->setObjectName(QStringLiteral("lineEdit_BNAve"));
-        lineEdit_BNAve->setMinimumSize(QSize(100, 0));
-        lineEdit_BNAve->setMaximumSize(QSize(100, 16777215));
+        spinBox_BNAve = new QSpinBox(ConfigurationLayout);
+        spinBox_BNAve->setObjectName(QStringLiteral("spinBox_BNAve"));
+        spinBox_BNAve->setMinimumSize(QSize(100, 0));
+        spinBox_BNAve->setMaximumSize(QSize(100, 16777215));
+        spinBox_BNAve->setMinimum(1);
+        spinBox_BNAve->setMaximum(1000);
 
-        horizontalLayout_11->addWidget(lineEdit_BNAve);
+        horizontalLayout_11->addWidget(spinBox_BNAve);
 
         label_11 = new QLabel(ConfigurationLayout);
         label_11->setObjectName(QStringLiteral("label_11"));
@@ -441,6 +417,35 @@ public:
 
         gridLayout_2->addLayout(horizontalLayout_11, 2, 1, 1, 1);
 
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
+        label_maxW1 = new QLabel(ConfigurationLayout);
+        label_maxW1->setObjectName(QStringLiteral("label_maxW1"));
+        label_maxW1->setMinimumSize(QSize(100, 0));
+
+        horizontalLayout->addWidget(label_maxW1);
+
+        doubleSpinBox_maxW = new QDoubleSpinBox(ConfigurationLayout);
+        doubleSpinBox_maxW->setObjectName(QStringLiteral("doubleSpinBox_maxW"));
+        doubleSpinBox_maxW->setEnabled(false);
+        doubleSpinBox_maxW->setMinimumSize(QSize(100, 0));
+        doubleSpinBox_maxW->setMaximumSize(QSize(100, 16777215));
+        doubleSpinBox_maxW->setDecimals(1);
+        doubleSpinBox_maxW->setMaximum(2000);
+        doubleSpinBox_maxW->setSingleStep(0.5);
+        doubleSpinBox_maxW->setValue(600);
+
+        horizontalLayout->addWidget(doubleSpinBox_maxW);
+
+        label_maxW2 = new QLabel(ConfigurationLayout);
+        label_maxW2->setObjectName(QStringLiteral("label_maxW2"));
+        label_maxW2->setMinimumSize(QSize(30, 0));
+
+        horizontalLayout->addWidget(label_maxW2);
+
+
+        gridLayout_2->addLayout(horizontalLayout, 3, 1, 1, 1);
+
         horizontalLayout_23 = new QHBoxLayout();
         horizontalLayout_23->setObjectName(QStringLiteral("horizontalLayout_23"));
         label_BNMeas = new QLabel(ConfigurationLayout);
@@ -450,12 +455,15 @@ public:
 
         horizontalLayout_23->addWidget(label_BNMeas);
 
-        lineEdit_BNMeas = new QLineEdit(ConfigurationLayout);
-        lineEdit_BNMeas->setObjectName(QStringLiteral("lineEdit_BNMeas"));
-        lineEdit_BNMeas->setMinimumSize(QSize(100, 0));
-        lineEdit_BNMeas->setMaximumSize(QSize(100, 16777215));
+        spinBox_BNMeas = new QSpinBox(ConfigurationLayout);
+        spinBox_BNMeas->setObjectName(QStringLiteral("spinBox_BNMeas"));
+        spinBox_BNMeas->setMinimumSize(QSize(100, 0));
+        spinBox_BNMeas->setMaximumSize(QSize(60, 16777215));
+        spinBox_BNMeas->setMinimum(1);
+        spinBox_BNMeas->setMaximum(100000);
+        spinBox_BNMeas->setValue(51);
 
-        horizontalLayout_23->addWidget(lineEdit_BNMeas);
+        horizontalLayout_23->addWidget(spinBox_BNMeas);
 
         label_9 = new QLabel(ConfigurationLayout);
         label_9->setObjectName(QStringLiteral("label_9"));
@@ -467,37 +475,82 @@ public:
 
         gridLayout_2->addLayout(horizontalLayout_23, 1, 0, 1, 1);
 
-        horizontalLayout = new QHBoxLayout();
-        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
-        label_maxW1 = new QLabel(ConfigurationLayout);
-        label_maxW1->setObjectName(QStringLiteral("label_maxW1"));
-        label_maxW1->setMinimumSize(QSize(100, 0));
+        horizontalLayout_25 = new QHBoxLayout();
+        horizontalLayout_25->setObjectName(QStringLiteral("horizontalLayout_25"));
+        label_BFreq = new QLabel(ConfigurationLayout);
+        label_BFreq->setObjectName(QStringLiteral("label_BFreq"));
+        label_BFreq->setMinimumSize(QSize(100, 0));
 
-        horizontalLayout->addWidget(label_maxW1);
+        horizontalLayout_25->addWidget(label_BFreq);
 
-        lineEdit_maxW = new QLineEdit(ConfigurationLayout);
-        lineEdit_maxW->setObjectName(QStringLiteral("lineEdit_maxW"));
-        lineEdit_maxW->setEnabled(false);
-        lineEdit_maxW->setMinimumSize(QSize(100, 0));
-        lineEdit_maxW->setMaximumSize(QSize(100, 16777215));
+        spinBox_BFreq = new QSpinBox(ConfigurationLayout);
+        spinBox_BFreq->setObjectName(QStringLiteral("spinBox_BFreq"));
+        spinBox_BFreq->setMinimumSize(QSize(100, 0));
+        spinBox_BFreq->setMaximumSize(QSize(100, 16777215));
+        spinBox_BFreq->setMaximum(50000);
+        spinBox_BFreq->setValue(7);
 
-        horizontalLayout->addWidget(lineEdit_maxW);
+        horizontalLayout_25->addWidget(spinBox_BFreq);
 
-        label_maxW2 = new QLabel(ConfigurationLayout);
-        label_maxW2->setObjectName(QStringLiteral("label_maxW2"));
-        label_maxW2->setMinimumSize(QSize(30, 0));
+        label_BFreq2 = new QLabel(ConfigurationLayout);
+        label_BFreq2->setObjectName(QStringLiteral("label_BFreq2"));
+        label_BFreq2->setMinimumSize(QSize(30, 0));
 
-        horizontalLayout->addWidget(label_maxW2);
+        horizontalLayout_25->addWidget(label_BFreq2);
 
 
-        gridLayout_2->addLayout(horizontalLayout, 3, 1, 1, 1);
+        gridLayout_2->addLayout(horizontalLayout_25, 1, 2, 1, 1);
+
+        horizontalSpacer_2 = new QSpacerItem(235, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        gridLayout_2->addItem(horizontalSpacer_2, 3, 2, 1, 1);
+
+        horizontalSpacer_7 = new QSpacerItem(235, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        gridLayout_2->addItem(horizontalSpacer_7, 2, 2, 1, 1);
+
+        horizontalLayout_27 = new QHBoxLayout();
+        horizontalLayout_27->setObjectName(QStringLiteral("horizontalLayout_27"));
+        label_minW1 = new QLabel(ConfigurationLayout);
+        label_minW1->setObjectName(QStringLiteral("label_minW1"));
+        label_minW1->setMinimumSize(QSize(100, 0));
+
+        horizontalLayout_27->addWidget(label_minW1);
+
+        doubleSpinBox_minW = new QDoubleSpinBox(ConfigurationLayout);
+        doubleSpinBox_minW->setObjectName(QStringLiteral("doubleSpinBox_minW"));
+        doubleSpinBox_minW->setEnabled(false);
+        doubleSpinBox_minW->setMinimumSize(QSize(100, 0));
+        doubleSpinBox_minW->setMaximumSize(QSize(100, 16777215));
+        doubleSpinBox_minW->setDecimals(1);
+        doubleSpinBox_minW->setMaximum(2000);
+        doubleSpinBox_minW->setSingleStep(0.5);
+        doubleSpinBox_minW->setValue(400);
+
+        horizontalLayout_27->addWidget(doubleSpinBox_minW);
+
+        label_minW2 = new QLabel(ConfigurationLayout);
+        label_minW2->setObjectName(QStringLiteral("label_minW2"));
+        label_minW2->setMinimumSize(QSize(30, 0));
+
+        horizontalLayout_27->addWidget(label_minW2);
+
+
+        gridLayout_2->addLayout(horizontalLayout_27, 3, 0, 1, 1);
 
 
         verticalLayout_fileconf->addLayout(gridLayout_2);
 
-        verticalSpacer_13 = new QSpacerItem(20, 15, QSizePolicy::Minimum, QSizePolicy::Fixed);
+        verticalSpacer_13 = new QSpacerItem(20, 10, QSizePolicy::Minimum, QSizePolicy::Fixed);
 
         verticalLayout_fileconf->addItem(verticalSpacer_13);
+
+        line_2 = new QFrame(ConfigurationLayout);
+        line_2->setObjectName(QStringLiteral("line_2"));
+        line_2->setFrameShape(QFrame::HLine);
+        line_2->setFrameShadow(QFrame::Sunken);
+
+        verticalLayout_fileconf->addWidget(line_2);
 
         label_SolConc = new QLabel(ConfigurationLayout);
         label_SolConc->setObjectName(QStringLiteral("label_SolConc"));
@@ -697,6 +750,9 @@ public:
 
         lineEdit_Mingluc = new QLineEdit(ConfigurationLayout);
         lineEdit_Mingluc->setObjectName(QStringLiteral("lineEdit_Mingluc"));
+        QSizePolicy sizePolicy2(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
         sizePolicy2.setHeightForWidth(lineEdit_Mingluc->sizePolicy().hasHeightForWidth());
         lineEdit_Mingluc->setSizePolicy(sizePolicy2);
         lineEdit_Mingluc->setMinimumSize(QSize(100, 0));
@@ -709,6 +765,10 @@ public:
         label_MinGluc2->setMinimumSize(QSize(30, 0));
 
         horizontalLayout_15->addWidget(label_MinGluc2);
+
+        horizontalSpacer_14 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_15->addItem(horizontalSpacer_14);
 
 
         gridLayout_3->addLayout(horizontalLayout_15, 1, 0, 1, 1);
@@ -734,6 +794,10 @@ public:
 
         horizontalLayout_18->addWidget(label_StockGluc2);
 
+        horizontalSpacer_16 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_18->addItem(horizontalSpacer_16);
+
 
         gridLayout_3->addLayout(horizontalLayout_18, 3, 0, 1, 1);
 
@@ -757,6 +821,10 @@ public:
         label_MaxGluc2->setMinimumSize(QSize(30, 0));
 
         horizontalLayout_17->addWidget(label_MaxGluc2);
+
+        horizontalSpacer_15 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_17->addItem(horizontalSpacer_15);
 
 
         gridLayout_3->addLayout(horizontalLayout_17, 2, 0, 1, 1);
@@ -839,6 +907,10 @@ public:
 
         horizontalLayout_32->addWidget(label_VolG2);
 
+        horizontalSpacer_17 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_32->addItem(horizontalSpacer_17);
+
 
         gridLayout_3->addLayout(horizontalLayout_32, 4, 0, 1, 1);
 
@@ -874,9 +946,16 @@ public:
 
         verticalLayout_fileconf->addLayout(gridLayout_3);
 
-        verticalSpacer_6 = new QSpacerItem(20, 15, QSizePolicy::Minimum, QSizePolicy::Fixed);
+        verticalSpacer_6 = new QSpacerItem(20, 10, QSizePolicy::Minimum, QSizePolicy::Fixed);
 
         verticalLayout_fileconf->addItem(verticalSpacer_6);
+
+        line_3 = new QFrame(ConfigurationLayout);
+        line_3->setObjectName(QStringLiteral("line_3"));
+        line_3->setFrameShape(QFrame::HLine);
+        line_3->setFrameShadow(QFrame::Sunken);
+
+        verticalLayout_fileconf->addWidget(line_3);
 
         label_PumpFlow = new QLabel(ConfigurationLayout);
         label_PumpFlow->setObjectName(QStringLiteral("label_PumpFlow"));
@@ -967,9 +1046,16 @@ public:
 
         verticalLayout_fileconf->addLayout(gridLayout_4);
 
-        verticalSpacer_12 = new QSpacerItem(20, 15, QSizePolicy::Minimum, QSizePolicy::Fixed);
+        verticalSpacer_12 = new QSpacerItem(20, 10, QSizePolicy::Minimum, QSizePolicy::Fixed);
 
         verticalLayout_fileconf->addItem(verticalSpacer_12);
+
+        line_4 = new QFrame(ConfigurationLayout);
+        line_4->setObjectName(QStringLiteral("line_4"));
+        line_4->setFrameShape(QFrame::HLine);
+        line_4->setFrameShadow(QFrame::Sunken);
+
+        verticalLayout_fileconf->addWidget(line_4);
 
         label = new QLabel(ConfigurationLayout);
         label->setObjectName(QStringLiteral("label"));
@@ -1204,7 +1290,7 @@ public:
 
         verticalLayout->addWidget(ConfigurationLayout);
 
-        verticalSpacer_4 = new QSpacerItem(20, 5, QSizePolicy::Minimum, QSizePolicy::Fixed);
+        verticalSpacer_4 = new QSpacerItem(20, 5, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         verticalLayout->addItem(verticalSpacer_4);
 
@@ -1263,51 +1349,32 @@ public:
 #ifndef QT_NO_TOOLTIP
         pushButton_select->setToolTip(QApplication::translate("configurePolMeasure", "Load a Configuration File", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        pushButton_select->setText(QApplication::translate("configurePolMeasure", "Load Configuration", Q_NULLPTR));
+        pushButton_select->setText(QApplication::translate("configurePolMeasure", "Open", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         label_basicConf->setToolTip(QApplication::translate("configurePolMeasure", "Hide/Show Create Configuration File", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_basicConf->setText(QApplication::translate("configurePolMeasure", "< Create Configuration File:", Q_NULLPTR));
         label_Spectrometer->setText(QApplication::translate("configurePolMeasure", "Spectrometer:", Q_NULLPTR));
-        label_minW1->setText(QApplication::translate("configurePolMeasure", "Min. Wavelength:", Q_NULLPTR));
-        lineEdit_minW->setText(QApplication::translate("configurePolMeasure", "400", Q_NULLPTR));
-        label_minW2->setText(QApplication::translate("configurePolMeasure", "nm", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         label_BIntTime->setToolTip(QApplication::translate("configurePolMeasure", "What's the Integration Time?", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_BIntTime->setText(QApplication::translate("configurePolMeasure", "Integration Time: ", Q_NULLPTR));
-#ifndef QT_NO_TOOLTIP
-        lineEdit_BIntTime->setToolTip(QApplication::translate("configurePolMeasure", "Insert Integration Time", Q_NULLPTR));
-#endif // QT_NO_TOOLTIP
-        lineEdit_BIntTime->setText(QApplication::translate("configurePolMeasure", "6", Q_NULLPTR));
         label_BIntTime2->setText(QApplication::translate("configurePolMeasure", "ms", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         label_BNSpec->setToolTip(QApplication::translate("configurePolMeasure", "How many spectra?", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_BNSpec->setText(QApplication::translate("configurePolMeasure", "Nr. Spectra: ", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        lineEdit_BNSpec->setToolTip(QApplication::translate("configurePolMeasure", "Insert Number of Spectra", Q_NULLPTR));
+        spinBox_BNSpec->setToolTip(QApplication::translate("configurePolMeasure", "Number of Spectra", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        lineEdit_BNSpec->setText(QApplication::translate("configurePolMeasure", "1000", Q_NULLPTR));
         label_10->setText(QString());
-#ifndef QT_NO_TOOLTIP
-        label_BFreq->setToolTip(QApplication::translate("configurePolMeasure", "What's the Modulation Frequency?", Q_NULLPTR));
-#endif // QT_NO_TOOLTIP
-        label_BFreq->setText(QApplication::translate("configurePolMeasure", "Frequency: ", Q_NULLPTR));
-#ifndef QT_NO_TOOLTIP
-        lineEdit_BFreq->setToolTip(QApplication::translate("configurePolMeasure", "Insert Modulation Frequency", Q_NULLPTR));
-#endif // QT_NO_TOOLTIP
-        lineEdit_BFreq->setText(QApplication::translate("configurePolMeasure", "7", Q_NULLPTR));
-        label_BFreq2->setText(QApplication::translate("configurePolMeasure", "Hz", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         label_BNAve->setToolTip(QApplication::translate("configurePolMeasure", "How many averages?", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_BNAve->setText(QApplication::translate("configurePolMeasure", "Nr. Averages: ", Q_NULLPTR));
-#ifndef QT_NO_TOOLTIP
-        lineEdit_BNAve->setToolTip(QApplication::translate("configurePolMeasure", "Insert Number of Averages", Q_NULLPTR));
-#endif // QT_NO_TOOLTIP
-        lineEdit_BNAve->setText(QApplication::translate("configurePolMeasure", "1", Q_NULLPTR));
         label_11->setText(QString());
+        label_maxW1->setText(QApplication::translate("configurePolMeasure", "Max. Wavelength:", Q_NULLPTR));
+        label_maxW2->setText(QApplication::translate("configurePolMeasure", "nm", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         label_BNMeas->setToolTip(QApplication::translate("configurePolMeasure", "How many Concentrations to Measure?", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
@@ -1319,13 +1386,17 @@ public:
 #endif // QT_NO_ACCESSIBILITY
         label_BNMeas->setText(QApplication::translate("configurePolMeasure", "Nr. Measurements:", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        lineEdit_BNMeas->setToolTip(QApplication::translate("configurePolMeasure", "Insert Number of Concentrations to Measure", Q_NULLPTR));
+        spinBox_BNMeas->setToolTip(QApplication::translate("configurePolMeasure", "Number of Measurements", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        lineEdit_BNMeas->setText(QApplication::translate("configurePolMeasure", "51", Q_NULLPTR));
         label_9->setText(QString());
-        label_maxW1->setText(QApplication::translate("configurePolMeasure", "Max. Wavelength:", Q_NULLPTR));
-        lineEdit_maxW->setText(QApplication::translate("configurePolMeasure", "600", Q_NULLPTR));
-        label_maxW2->setText(QApplication::translate("configurePolMeasure", "nm", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        label_BFreq->setToolTip(QApplication::translate("configurePolMeasure", "What's the Modulation Frequency?", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        label_BFreq->setText(QApplication::translate("configurePolMeasure", "Frequency: ", Q_NULLPTR));
+        spinBox_BFreq->setSuffix(QString());
+        label_BFreq2->setText(QApplication::translate("configurePolMeasure", "Hz", Q_NULLPTR));
+        label_minW1->setText(QApplication::translate("configurePolMeasure", "Min. Wavelength:", Q_NULLPTR));
+        label_minW2->setText(QApplication::translate("configurePolMeasure", "nm", Q_NULLPTR));
         label_SolConc->setText(QApplication::translate("configurePolMeasure", "Solutions Concentration:", Q_NULLPTR));
         label_VolI1->setText(QApplication::translate("configurePolMeasure", "Volume Impurity 1:", Q_NULLPTR));
         lineEdit_VolI1->setText(QApplication::translate("configurePolMeasure", "318.75", Q_NULLPTR));
@@ -1498,10 +1569,10 @@ public:
 #ifndef QT_NO_TOOLTIP
         lineEdit_BtimeInterval->setToolTip(QApplication::translate("configurePolMeasure", "Time Interval between measurements", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        lineEdit_BtimeInterval->setText(QApplication::translate("configurePolMeasure", "5.70111", Q_NULLPTR));
+        lineEdit_BtimeInterval->setText(QApplication::translate("configurePolMeasure", "5.703", Q_NULLPTR));
         label_BtimeInt2->setText(QApplication::translate("configurePolMeasure", "hours", Q_NULLPTR));
         label_timebetweenM->setText(QApplication::translate("configurePolMeasure", "Intervals:", Q_NULLPTR));
-        lineEdit_timebetweenM->setText(QApplication::translate("configurePolMeasure", "6.31667", Q_NULLPTR));
+        lineEdit_timebetweenM->setText(QApplication::translate("configurePolMeasure", "6.32", Q_NULLPTR));
         label2_timebetweenM->setText(QApplication::translate("configurePolMeasure", "min", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         label_BFileNamePrev->setToolTip(QApplication::translate("configurePolMeasure", "File Name Preview", Q_NULLPTR));

@@ -97,6 +97,9 @@ private slots:
     /* Handle click events */
     void handleClickEvent(QWidget *widget);
 
+    /* Update parameters */
+    void updateConfigurationValues(void);
+
 private:
 
     /* Abort run if set to FALSE */

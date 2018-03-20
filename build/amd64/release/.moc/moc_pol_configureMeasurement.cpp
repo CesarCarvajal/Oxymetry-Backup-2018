@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_configurePolMeasure_t {
-    QByteArrayData data[8];
-    char stringdata0[93];
+    QByteArrayData data[9];
+    char stringdata0[119];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -38,12 +38,14 @@ QT_MOC_LITERAL(3, 32, 20), // "configurePolarimeter"
 QT_MOC_LITERAL(4, 53, 6), // "cancel"
 QT_MOC_LITERAL(5, 60, 16), // "handleClickEvent"
 QT_MOC_LITERAL(6, 77, 8), // "QWidget*"
-QT_MOC_LITERAL(7, 86, 6) // "widget"
+QT_MOC_LITERAL(7, 86, 6), // "widget"
+QT_MOC_LITERAL(8, 93, 25) // "updateConfigurationValues"
 
     },
     "configurePolMeasure\0selectPath\0\0"
     "configurePolarimeter\0cancel\0"
-    "handleClickEvent\0QWidget*\0widget"
+    "handleClickEvent\0QWidget*\0widget\0"
+    "updateConfigurationValues"
 };
 #undef QT_MOC_LITERAL
 
@@ -53,7 +55,7 @@ static const uint qt_meta_data_configurePolMeasure[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       4,   14, // methods
+       5,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -61,16 +63,18 @@ static const uint qt_meta_data_configurePolMeasure[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   34,    2, 0x08 /* Private */,
-       3,    0,   35,    2, 0x08 /* Private */,
-       4,    0,   36,    2, 0x08 /* Private */,
-       5,    1,   37,    2, 0x08 /* Private */,
+       1,    0,   39,    2, 0x08 /* Private */,
+       3,    0,   40,    2, 0x08 /* Private */,
+       4,    0,   41,    2, 0x08 /* Private */,
+       5,    1,   42,    2, 0x08 /* Private */,
+       8,    0,   45,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, 0x80000000 | 6,    7,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -85,6 +89,7 @@ void configurePolMeasure::qt_static_metacall(QObject *_o, QMetaObject::Call _c, 
         case 1: _t->configurePolarimeter(); break;
         case 2: _t->cancel(); break;
         case 3: _t->handleClickEvent((*reinterpret_cast< QWidget*(*)>(_a[1]))); break;
+        case 4: _t->updateConfigurationValues(); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
@@ -126,13 +131,13 @@ int configurePolMeasure::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 4)
+        if (_id < 5)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 4;
+        _id -= 5;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 4)
+        if (_id < 5)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 4;
+        _id -= 5;
     }
     return _id;
 }
