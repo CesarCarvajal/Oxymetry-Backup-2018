@@ -22,7 +22,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_PanelPolarimeter_t {
     QByteArrayData data[56];
-    char stringdata0[838];
+    char stringdata0[911];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -35,83 +35,87 @@ QT_MOC_LITERAL(0, 0, 16), // "PanelPolarimeter"
 QT_MOC_LITERAL(1, 17, 10), // "updateTabs"
 QT_MOC_LITERAL(2, 28, 0), // ""
 QT_MOC_LITERAL(3, 29, 16), // "DisEnablePreview"
-QT_MOC_LITERAL(4, 46, 4), // "help"
-QT_MOC_LITERAL(5, 51, 20), // "change_NrAveragesPol"
-QT_MOC_LITERAL(6, 72, 19), // "change_FrequencyPol"
-QT_MOC_LITERAL(7, 92, 19), // "change_NrSpectraPol"
-QT_MOC_LITERAL(8, 112, 17), // "change_WaveFFTPol"
-QT_MOC_LITERAL(9, 130, 29), // "change_AutoIntegrationTimePol"
-QT_MOC_LITERAL(10, 160, 25), // "change_IntegrationTimePol"
-QT_MOC_LITERAL(11, 186, 12), // "clean_AllPol"
-QT_MOC_LITERAL(12, 199, 21), // "initializeCalibration"
-QT_MOC_LITERAL(13, 221, 23), // "Pol_MeasurementProgress"
-QT_MOC_LITERAL(14, 245, 1), // "i"
-QT_MOC_LITERAL(15, 247, 13), // "Pol_Calibrate"
-QT_MOC_LITERAL(16, 261, 11), // "Pol_Measure"
-QT_MOC_LITERAL(17, 273, 28), // "initializeDefaultCalibration"
-QT_MOC_LITERAL(18, 302, 22), // "Adjust_AveragePlotTime"
-QT_MOC_LITERAL(19, 325, 24), // "adjustIntegrationTimePol"
-QT_MOC_LITERAL(20, 350, 16), // "handleClickEvent"
-QT_MOC_LITERAL(21, 367, 8), // "QWidget*"
-QT_MOC_LITERAL(22, 376, 6), // "widget"
-QT_MOC_LITERAL(23, 383, 20), // "ReceiveDataIsHerePol"
-QT_MOC_LITERAL(24, 404, 6), // "WParam"
-QT_MOC_LITERAL(25, 411, 6), // "LParam"
-QT_MOC_LITERAL(26, 418, 22), // "toggle_Pol_Measurement"
-QT_MOC_LITERAL(27, 441, 14), // "changeFileName"
-QT_MOC_LITERAL(28, 456, 11), // "writeToFile"
-QT_MOC_LITERAL(29, 468, 5), // "FILE*"
-QT_MOC_LITERAL(30, 474, 4), // "file"
-QT_MOC_LITERAL(31, 479, 7), // "double*"
-QT_MOC_LITERAL(32, 487, 11), // "a_pSpectrum"
-QT_MOC_LITERAL(33, 499, 12), // "quitOxymetry"
-QT_MOC_LITERAL(34, 512, 11), // "LoadFromFFT"
-QT_MOC_LITERAL(35, 524, 15), // "LoadFromRawData"
-QT_MOC_LITERAL(36, 540, 25), // "ConfSetup_Pol_Measurement"
-QT_MOC_LITERAL(37, 566, 22), // "toggle_Pol_Calibration"
-QT_MOC_LITERAL(38, 589, 15), // "Run_Polarimetry"
-QT_MOC_LITERAL(39, 605, 7), // "runType"
-QT_MOC_LITERAL(40, 613, 20), // "Stop_Run_Polarimetry"
-QT_MOC_LITERAL(41, 634, 15), // "toggle_LoadData"
-QT_MOC_LITERAL(42, 650, 8), // "Plot_FFT"
-QT_MOC_LITERAL(43, 659, 9), // "clearPlot"
-QT_MOC_LITERAL(44, 669, 13), // "saveGraph_Pol"
-QT_MOC_LITERAL(45, 683, 11), // "plotAverage"
-QT_MOC_LITERAL(46, 695, 14), // "AdjustRunStart"
-QT_MOC_LITERAL(47, 710, 9), // "short int"
-QT_MOC_LITERAL(48, 720, 7), // "typeRun"
-QT_MOC_LITERAL(49, 728, 12), // "AdjustRunEnd"
-QT_MOC_LITERAL(50, 741, 8), // "typeRunn"
-QT_MOC_LITERAL(51, 750, 30), // "AdjustMeasurementsSavingFolder"
-QT_MOC_LITERAL(52, 781, 22), // "ProcessReceivedDataPol"
-QT_MOC_LITERAL(53, 804, 4), // "Path"
-QT_MOC_LITERAL(54, 809, 17), // "delayMeasurements"
-QT_MOC_LITERAL(55, 827, 10) // "enableHelp"
+QT_MOC_LITERAL(4, 46, 8), // "help_Pol"
+QT_MOC_LITERAL(5, 55, 26), // "change_Number_Averages_Pol"
+QT_MOC_LITERAL(6, 82, 20), // "change_Frequency_Pol"
+QT_MOC_LITERAL(7, 103, 25), // "change_Number_Spectra_Pol"
+QT_MOC_LITERAL(8, 129, 25), // "change_Wavelength_FFT_Pol"
+QT_MOC_LITERAL(9, 155, 32), // "change_Auto_Integration_Time_Pol"
+QT_MOC_LITERAL(10, 188, 27), // "change_Integration_Time_Pol"
+QT_MOC_LITERAL(11, 216, 13), // "clean_All_Pol"
+QT_MOC_LITERAL(12, 230, 22), // "initialize_Calibration"
+QT_MOC_LITERAL(13, 253, 24), // "pol_Measurement_Progress"
+QT_MOC_LITERAL(14, 278, 1), // "i"
+QT_MOC_LITERAL(15, 280, 13), // "pol_Calibrate"
+QT_MOC_LITERAL(16, 294, 11), // "pol_Measure"
+QT_MOC_LITERAL(17, 306, 30), // "initialize_Default_Calibration"
+QT_MOC_LITERAL(18, 337, 24), // "adjust_Average_Plot_Time"
+QT_MOC_LITERAL(19, 362, 27), // "adjust_Integration_Time_Pol"
+QT_MOC_LITERAL(20, 390, 18), // "handle_Click_Event"
+QT_MOC_LITERAL(21, 409, 8), // "QWidget*"
+QT_MOC_LITERAL(22, 418, 6), // "widget"
+QT_MOC_LITERAL(23, 425, 16), // "receive_Data_Pol"
+QT_MOC_LITERAL(24, 442, 6), // "WParam"
+QT_MOC_LITERAL(25, 449, 6), // "LParam"
+QT_MOC_LITERAL(26, 456, 22), // "toggle_Pol_Measurement"
+QT_MOC_LITERAL(27, 479, 16), // "change_File_Name"
+QT_MOC_LITERAL(28, 496, 13), // "write_To_File"
+QT_MOC_LITERAL(29, 510, 5), // "FILE*"
+QT_MOC_LITERAL(30, 516, 4), // "file"
+QT_MOC_LITERAL(31, 521, 7), // "double*"
+QT_MOC_LITERAL(32, 529, 11), // "a_pSpectrum"
+QT_MOC_LITERAL(33, 541, 13), // "quit_Oxymetry"
+QT_MOC_LITERAL(34, 555, 13), // "Load_From_FFT"
+QT_MOC_LITERAL(35, 569, 18), // "Load_From_Raw_Data"
+QT_MOC_LITERAL(36, 588, 26), // "conf_Setup_Pol_Measurement"
+QT_MOC_LITERAL(37, 615, 22), // "toggle_Pol_Calibration"
+QT_MOC_LITERAL(38, 638, 15), // "run_Polarimetry"
+QT_MOC_LITERAL(39, 654, 7), // "runType"
+QT_MOC_LITERAL(40, 662, 20), // "stop_Run_Polarimetry"
+QT_MOC_LITERAL(41, 683, 16), // "toggle_Load_Data"
+QT_MOC_LITERAL(42, 700, 8), // "plot_FFT"
+QT_MOC_LITERAL(43, 709, 10), // "clear_Plot"
+QT_MOC_LITERAL(44, 720, 14), // "save_Graph_Pol"
+QT_MOC_LITERAL(45, 735, 12), // "plot_Average"
+QT_MOC_LITERAL(46, 748, 16), // "adjust_Run_Start"
+QT_MOC_LITERAL(47, 765, 9), // "short int"
+QT_MOC_LITERAL(48, 775, 7), // "typeRun"
+QT_MOC_LITERAL(49, 783, 14), // "adjust_Run_End"
+QT_MOC_LITERAL(50, 798, 8), // "typeRunn"
+QT_MOC_LITERAL(51, 807, 33), // "adjust_Measurements_Saving_Fo..."
+QT_MOC_LITERAL(52, 841, 25), // "process_Received_Data_Pol"
+QT_MOC_LITERAL(53, 867, 4), // "Path"
+QT_MOC_LITERAL(54, 872, 22), // "delay_Pol_Measurements"
+QT_MOC_LITERAL(55, 895, 15) // "enable_Help_Pol"
 
     },
     "PanelPolarimeter\0updateTabs\0\0"
-    "DisEnablePreview\0help\0change_NrAveragesPol\0"
-    "change_FrequencyPol\0change_NrSpectraPol\0"
-    "change_WaveFFTPol\0change_AutoIntegrationTimePol\0"
-    "change_IntegrationTimePol\0clean_AllPol\0"
-    "initializeCalibration\0Pol_MeasurementProgress\0"
-    "i\0Pol_Calibrate\0Pol_Measure\0"
-    "initializeDefaultCalibration\0"
-    "Adjust_AveragePlotTime\0adjustIntegrationTimePol\0"
-    "handleClickEvent\0QWidget*\0widget\0"
-    "ReceiveDataIsHerePol\0WParam\0LParam\0"
-    "toggle_Pol_Measurement\0changeFileName\0"
-    "writeToFile\0FILE*\0file\0double*\0"
-    "a_pSpectrum\0quitOxymetry\0LoadFromFFT\0"
-    "LoadFromRawData\0ConfSetup_Pol_Measurement\0"
-    "toggle_Pol_Calibration\0Run_Polarimetry\0"
-    "runType\0Stop_Run_Polarimetry\0"
-    "toggle_LoadData\0Plot_FFT\0clearPlot\0"
-    "saveGraph_Pol\0plotAverage\0AdjustRunStart\0"
-    "short int\0typeRun\0AdjustRunEnd\0typeRunn\0"
-    "AdjustMeasurementsSavingFolder\0"
-    "ProcessReceivedDataPol\0Path\0"
-    "delayMeasurements\0enableHelp"
+    "DisEnablePreview\0help_Pol\0"
+    "change_Number_Averages_Pol\0"
+    "change_Frequency_Pol\0change_Number_Spectra_Pol\0"
+    "change_Wavelength_FFT_Pol\0"
+    "change_Auto_Integration_Time_Pol\0"
+    "change_Integration_Time_Pol\0clean_All_Pol\0"
+    "initialize_Calibration\0pol_Measurement_Progress\0"
+    "i\0pol_Calibrate\0pol_Measure\0"
+    "initialize_Default_Calibration\0"
+    "adjust_Average_Plot_Time\0"
+    "adjust_Integration_Time_Pol\0"
+    "handle_Click_Event\0QWidget*\0widget\0"
+    "receive_Data_Pol\0WParam\0LParam\0"
+    "toggle_Pol_Measurement\0change_File_Name\0"
+    "write_To_File\0FILE*\0file\0double*\0"
+    "a_pSpectrum\0quit_Oxymetry\0Load_From_FFT\0"
+    "Load_From_Raw_Data\0conf_Setup_Pol_Measurement\0"
+    "toggle_Pol_Calibration\0run_Polarimetry\0"
+    "runType\0stop_Run_Polarimetry\0"
+    "toggle_Load_Data\0plot_FFT\0clear_Plot\0"
+    "save_Graph_Pol\0plot_Average\0"
+    "adjust_Run_Start\0short int\0typeRun\0"
+    "adjust_Run_End\0typeRunn\0"
+    "adjust_Measurements_Saving_Folder\0"
+    "process_Received_Data_Pol\0Path\0"
+    "delay_Pol_Measurements\0enable_Help_Pol"
 };
 #undef QT_MOC_LITERAL
 
@@ -227,44 +231,44 @@ void PanelPolarimeter::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         switch (_id) {
         case 0: _t->updateTabs(); break;
         case 1: _t->DisEnablePreview((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 2: _t->help(); break;
-        case 3: _t->change_NrAveragesPol(); break;
-        case 4: _t->change_FrequencyPol(); break;
-        case 5: _t->change_NrSpectraPol(); break;
-        case 6: _t->change_WaveFFTPol(); break;
-        case 7: _t->change_AutoIntegrationTimePol(); break;
-        case 8: _t->change_IntegrationTimePol(); break;
-        case 9: _t->clean_AllPol(); break;
-        case 10: _t->initializeCalibration(); break;
-        case 11: _t->Pol_MeasurementProgress((*reinterpret_cast< uint(*)>(_a[1]))); break;
-        case 12: _t->Pol_Calibrate(); break;
-        case 13: _t->Pol_Measure(); break;
-        case 14: _t->initializeDefaultCalibration(); break;
-        case 15: _t->Adjust_AveragePlotTime(); break;
-        case 16: _t->adjustIntegrationTimePol(); break;
-        case 17: _t->handleClickEvent((*reinterpret_cast< QWidget*(*)>(_a[1]))); break;
-        case 18: _t->ReceiveDataIsHerePol((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 2: _t->help_Pol(); break;
+        case 3: _t->change_Number_Averages_Pol(); break;
+        case 4: _t->change_Frequency_Pol(); break;
+        case 5: _t->change_Number_Spectra_Pol(); break;
+        case 6: _t->change_Wavelength_FFT_Pol(); break;
+        case 7: _t->change_Auto_Integration_Time_Pol(); break;
+        case 8: _t->change_Integration_Time_Pol(); break;
+        case 9: _t->clean_All_Pol(); break;
+        case 10: _t->initialize_Calibration(); break;
+        case 11: _t->pol_Measurement_Progress((*reinterpret_cast< uint(*)>(_a[1]))); break;
+        case 12: _t->pol_Calibrate(); break;
+        case 13: _t->pol_Measure(); break;
+        case 14: _t->initialize_Default_Calibration(); break;
+        case 15: _t->adjust_Average_Plot_Time(); break;
+        case 16: _t->adjust_Integration_Time_Pol(); break;
+        case 17: _t->handle_Click_Event((*reinterpret_cast< QWidget*(*)>(_a[1]))); break;
+        case 18: _t->receive_Data_Pol((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
         case 19: _t->toggle_Pol_Measurement(); break;
-        case 20: _t->changeFileName(); break;
-        case 21: _t->writeToFile((*reinterpret_cast< FILE*(*)>(_a[1])),(*reinterpret_cast< double*(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3]))); break;
-        case 22: _t->quitOxymetry(); break;
-        case 23: _t->LoadFromFFT(); break;
-        case 24: _t->LoadFromRawData(); break;
-        case 25: _t->ConfSetup_Pol_Measurement(); break;
+        case 20: _t->change_File_Name(); break;
+        case 21: _t->write_To_File((*reinterpret_cast< FILE*(*)>(_a[1])),(*reinterpret_cast< double*(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3]))); break;
+        case 22: _t->quit_Oxymetry(); break;
+        case 23: _t->Load_From_FFT(); break;
+        case 24: _t->Load_From_Raw_Data(); break;
+        case 25: _t->conf_Setup_Pol_Measurement(); break;
         case 26: _t->toggle_Pol_Calibration(); break;
-        case 27: _t->Run_Polarimetry((*reinterpret_cast< short(*)>(_a[1]))); break;
-        case 28: _t->Stop_Run_Polarimetry(); break;
-        case 29: _t->toggle_LoadData(); break;
-        case 30: _t->Plot_FFT(); break;
-        case 31: _t->clearPlot(); break;
-        case 32: _t->saveGraph_Pol(); break;
-        case 33: _t->plotAverage(); break;
-        case 34: _t->AdjustRunStart((*reinterpret_cast< short int(*)>(_a[1]))); break;
-        case 35: _t->AdjustRunEnd((*reinterpret_cast< short int(*)>(_a[1]))); break;
-        case 36: _t->AdjustMeasurementsSavingFolder(); break;
-        case 37: _t->ProcessReceivedDataPol((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 38: _t->delayMeasurements(); break;
-        case 39: _t->enableHelp(); break;
+        case 27: _t->run_Polarimetry((*reinterpret_cast< short(*)>(_a[1]))); break;
+        case 28: _t->stop_Run_Polarimetry(); break;
+        case 29: _t->toggle_Load_Data(); break;
+        case 30: _t->plot_FFT(); break;
+        case 31: _t->clear_Plot(); break;
+        case 32: _t->save_Graph_Pol(); break;
+        case 33: _t->plot_Average(); break;
+        case 34: _t->adjust_Run_Start((*reinterpret_cast< short int(*)>(_a[1]))); break;
+        case 35: _t->adjust_Run_End((*reinterpret_cast< short int(*)>(_a[1]))); break;
+        case 36: _t->adjust_Measurements_Saving_Folder(); break;
+        case 37: _t->process_Received_Data_Pol((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 38: _t->delay_Pol_Measurements(); break;
+        case 39: _t->enable_Help_Pol(); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {

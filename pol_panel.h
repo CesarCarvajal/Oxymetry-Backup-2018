@@ -84,7 +84,7 @@ public:
     void enable_Polarimeter_Measurement(bool activate);
 
     /* Get the number of the current spectrometer in Polarimeter */
-    void SelectedSpectrometer_Polarimeter(void);
+    void selected_Spectrometer_Pol(void);
 
     /* Show needed items of UI */
     void showUI_Item(bool UIstatus);
@@ -95,115 +95,115 @@ public:
 private slots:
 
     /* Open help dialog */
-    void help(void);
+    void help_Pol(void);
 
     /* Change Nr of averages during calibration */
-    void change_NrAveragesPol(void);
+    void change_Number_Averages_Pol(void);
 
     /* Change the Frequency during calibration */
-    void change_FrequencyPol(void);
+    void change_Frequency_Pol(void);
 
     /* Change the Number of Spectra during calibration */
-    void change_NrSpectraPol(void);
+    void change_Number_Spectra_Pol(void);
 
     /* Change the wavelength to show in the FFT */
-    void change_WaveFFTPol(void);
+    void change_Wavelength_FFT_Pol(void);
 
     /* Change the Integration time from the auto adjusted during calibration */
-    void change_AutoIntegrationTimePol(void);
+    void change_Auto_Integration_Time_Pol(void);
 
     /* Change the Integration time manually during calibration */
-    void change_IntegrationTimePol(void);
+    void change_Integration_Time_Pol(void);
 
     /* Clean all the configuration, plots, etc */
-    void clean_AllPol(void);
+    void clean_All_Pol(void);
 
     /* Initialize the Calibration */
-    void initializeCalibration(void);
+    void initialize_Calibration(void);
 
     /* Display the progress on measurement */
-    void Pol_MeasurementProgress(unsigned int i);
+    void pol_Measurement_Progress(unsigned int i);
 
     /* Do calibration routine */
-    void Pol_Calibrate(void);
+    void pol_Calibrate(void);
 
     /* Do Measurement routine */
-    void Pol_Measure(void);
+    void pol_Measure(void);
 
     /* Initialize a calibration without a configuration file loaded */
-    void initializeDefaultCalibration(void);
+    void initialize_Default_Calibration(void);
 
     /* Adjust time plotting in live averages */
-    void Adjust_AveragePlotTime(void);
+    void adjust_Average_Plot_Time(void);
 
     /* Adjust the Integration Time */
-    void adjustIntegrationTimePol(void);
+    void adjust_Integration_Time_Pol(void);
 
     /* Functions for spectrometer items */
-    void handleClickEvent(QWidget *widget);
+    void handle_Click_Event(QWidget *widget);
 
     /* Called if new data signal arrived */
-    void ReceiveDataIsHerePol(int WParam, int LParam);
+    void receive_Data_Pol(int WParam, int LParam);
 
     /* Select start or stop a measurement */
     void toggle_Pol_Measurement(void);
 
     /* Change file names for measurement */
-    void changeFileName(void);
+    void change_File_Name(void);
 
     /* Write the raw data counts to a file */
-    void writeToFile(FILE *file, double *a_pSpectrum, int WParam);
+    void write_To_File(FILE *file, double *a_pSpectrum, int WParam);
 
     /* Close any open loop in the polarimeter tab */
-    void quitOxymetry(void);
+    void quit_Oxymetry(void);
 
     /* FFT file to load and visualize */
-    void LoadFromFFT(void);
+    void Load_From_FFT(void);
 
     /* Raw Data file to load and visualize */
-    void LoadFromRawData(void);
+    void Load_From_Raw_Data(void);
 
     /* Configuration of Measurements for Polarimeter */
-    void ConfSetup_Pol_Measurement(void);
+    void conf_Setup_Pol_Measurement(void);
 
     /* The user wants to calibrate before to start the measurement */
     void toggle_Pol_Calibration(void);
 
     /* Run the spectrometer */
-    void Run_Polarimetry(short runType);
+    void run_Polarimetry(short runType);
 
     /* Stop running the spectrometer */
-    void Stop_Run_Polarimetry(void);
+    void stop_Run_Polarimetry(void);
 
     /* Select what kind of data should be loaded */
-    void toggle_LoadData(void);
+    void toggle_Load_Data(void);
 
     /* Plot FFT */
-    void Plot_FFT(void);
+    void plot_FFT(void);
 
     /* Clear Plots */
-    void clearPlot(void);
+    void clear_Plot(void);
 
     /* Save graphs as PDF in Polarimeter */
-    void saveGraph_Pol(void);
+    void save_Graph_Pol(void);
 
     /* Plot Averages */
-    void plotAverage(void);
+    void plot_Average(void);
 
     /* Adjust the polarimeter tab running start */
-    void AdjustRunStart(short int typeRun);
+    void adjust_Run_Start(short int typeRun);
 
     /* Adjust the polarimeter tab running End */
-    void AdjustRunEnd(short int typeRunn);
+    void adjust_Run_End(short int typeRunn);
 
     /* Adjust the folder where the measurments data is going to be saved */
-    void AdjustMeasurementsSavingFolder(void);
+    void adjust_Measurements_Saving_Folder(void);
 
     /* Process the received data from the spectrometer */
-    void ProcessReceivedDataPol(QString Path);
+    void process_Received_Data_Pol(QString Path);
 
     /* Delay the measurememts */
-    void delayMeasurements(void);
+    void delay_Pol_Measurements(void);
 
 private:
 
@@ -222,19 +222,19 @@ private:
     bool dataloaded = false;
 
     /* Get current path to executable */
-    QString current;
+    QString currentWorkingPath;
 
     /* FFT Object */
     fft FFTL;
 
     /* Plot Objetct */
-    Pol_Plot *pol_plot = nullptr;
+    Pol_Plot *Pol_Plotter = nullptr;
 
     /* Fix the X axis zoom problem */
     double minXAverage, maxXAverage, maxYRaw, maxYAverage;
 
     /* Range of Wavelengths */
-    double minWavelength = 400.0, maxWavelength = 1000.0;
+    double minWavelength, maxWavelength;
 
     QString greenButton = "color: rgb(0,128,0)", RedButton = "color: rgb(250,0,0)", grayButton = "color: rgb(211,211,211)";
 
@@ -274,7 +274,7 @@ public:
 public slots:
 
     /* Enable Help Non Modal Window */
-    void enableHelp();
+    void enable_Help_Pol();
 
 signals:
 
