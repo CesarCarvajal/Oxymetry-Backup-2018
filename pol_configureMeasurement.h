@@ -25,6 +25,7 @@
 #include <QList>
 #include <QStringList>
 #include <QSignalMapper>
+#include <QDateTime>
 #include "pol_externConf.h"
 
 namespace Ui {
@@ -62,6 +63,9 @@ public:
 
     /* Build the name of the Raw Data */
     QStringList fileName;
+
+    /*Start time of the measurement with delay */
+    QDateTime startTime;
 
     /* Clean all the loaded configuration */
     void cleanAll(void);

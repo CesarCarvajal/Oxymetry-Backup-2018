@@ -297,9 +297,6 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     /* Defaults values for x-axis are 400 to 1000 nm */
     unsigned int i = 0;
 
-    /* Set default wavelengths range */
-    minWavelength = 400.0, maxWavelength = 1000.0;
-
     /* Are there any spectrometers connected? */
     if (m_NrDevices > 0)
     {
@@ -313,8 +310,14 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
             stopWavelengths[i] = ptrSpectrometers[i]->getStopWavelength();
         }
         /* Find minimum and maximum wavelengths in array */
-        minWavelength = getMinimum(startWavelengths, m_NrDevices);
-        maxWavelength = getMaximum(stopWavelengths, m_NrDevices);
+        ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->minWavelength = getMinimum(startWavelengths, m_NrDevices);
+        ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->maxWavelength = getMaximum(stopWavelengths, m_NrDevices);
+
+        /* Set limits for the wavelengths range */
+        ConfigureMeasurement->ui->doubleSpinBox_minW->setMinimum(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->minWavelength);
+        ConfigureMeasurement->ui->doubleSpinBox_minW->setMaximum(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->maxWavelength);
+        ConfigureMeasurement->ui->doubleSpinBox_maxW->setMinimum(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->minWavelength);
+        ConfigureMeasurement->ui->doubleSpinBox_maxW->setMaximum(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->maxWavelength);
 
         /* Which wavelentgth would you like to see the FFT? */
         signalMapper->setMapping(ui->waveToPlotFFT, ui->waveToPlotFFT);
@@ -326,14 +329,11 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     }
 
     /* Update x-axis of graphs depending on Wavelengths */
-    ui->qwtPlot_Pol->setXAxis(minWavelength, maxWavelength);
-    ui->qwtPlot_Pol_Compensation->setXAxis(minWavelength, maxWavelength);
-    ui->qwtPlot_Pol_w_2w->setXAxis(minWavelength, maxWavelength);
+    update_Wavelength_Range();
 
     /* Set size of columns for measurement profile table */
     ui->tableInfoMeasure->setColumnWidth(0,144);
     ui->tableInfoMeasure->setColumnWidth(1,144);
-
 }
 
 /**
@@ -617,6 +617,9 @@ void PanelPolarimeter::adjust_Run_Start(short int typeRun){
     /* Show current progress bar for the Measurements and Calibration */
     ui->currentProgressBar_Pol->setVisible(true);
 
+    /* Restart maximum Intensity measured */
+    FFTL.MaximumIntensity = 0;
+
     /* Re-attach the raw signal plot in case it was removed for example when cleaning all */
     curves_Pol[0]->attach(ui->qwtPlot_Pol);
 
@@ -691,7 +694,7 @@ void PanelPolarimeter::adjust_Run_Start(short int typeRun){
 
         /* Show remaining time */
         QStringList ConvertedTime = ConfigureMeasurement->externSoftware->TimeConverter(ConfigureMeasurement->totalMtime);
-        ui->label_RemainingTime->setText(ConvertedTime.at(0) + " " + ConvertedTime.at(1));
+        ui->label_RemainingTime->setText(QDateTime::fromTime_t(ConfigureMeasurement->totalMtime).toUTC().toString("hh:mm:ss") + " " + ConvertedTime.at(1));
         ui->label_RemainingTime->setVisible(true);
 
     }
@@ -740,7 +743,7 @@ void PanelPolarimeter::adjust_Run_End(short int typeRunn){
 
                 /* Change time to the proper units */
                 QStringList ConvertedTime = ConfigureMeasurement->externSoftware->TimeConverter(ConfigureMeasurement->totalMtime);
-                ui->label_RemainingTime->setText(ConvertedTime.at(0) + " " + ConvertedTime.at(1));
+                ui->label_RemainingTime->setText(QDateTime::fromTime_t(ConfigureMeasurement->totalMtime).toUTC().toString("hh:mm:ss") + " " + ConvertedTime.at(1));
 
                 /* Plot 300 points for all the measurements */
                 if(t % Runner->measurementPlotTimeInterval == 0){
@@ -799,7 +802,7 @@ void PanelPolarimeter::pol_Measure(void){
         /* Show remaining time */
         ConfigureMeasurement->totalMtime = ConfigureMeasurement->totalMtime - 1;
         QStringList ConvertedTime = ConfigureMeasurement->externSoftware->TimeConverter(ConfigureMeasurement->totalMtime);
-        ui->label_RemainingTime->setText(ConvertedTime.at(0) + " " + ConvertedTime.at(1));
+        ui->label_RemainingTime->setText(QDateTime::fromTime_t(ConfigureMeasurement->totalMtime).toUTC().toString("hh:mm:ss") + " " + ConvertedTime.at(1));
 
         /* Plot 300 points for all the measurements */
         if(Runner->Timer_In_Seconds % Runner->measurementPlotTimeInterval == 0){
@@ -912,6 +915,9 @@ void PanelPolarimeter::conf_Setup_Pol_Measurement(void) {
     /* Was there a configuration loaded? */
     if(ConfigureMeasurement->configured && !ConfigureMeasurement->Conf_canceled){
 
+        /* Update Wavelengths Range */
+        update_Wavelength_Range();
+
         /* Show needed UI items */
         showUI_Item(true);
 
@@ -962,7 +968,7 @@ void PanelPolarimeter::conf_Setup_Pol_Measurement(void) {
 
             /* Create label for time point */
             QLabel *nt2 = new QLabel();
-            nt2->setText(QString::number(ConfigureMeasurement->timePoint.at(i)/1000));
+            nt2->setText(QDateTime::fromTime_t(ConfigureMeasurement->timePoint.at(i)/1000).toUTC().toString("hh:mm:ss"));
             nt2->setStyleSheet("QLabel { margin-left: 2px; }");
             ui->Table_Measurements_Pol->setCellWidget(i, 0, nt2);
 
@@ -1235,7 +1241,7 @@ void PanelPolarimeter::process_Received_Data_Pol(QString Path)
     }else{
 
         /* Data Analysis by FFT from the just written file */
-        FFTL.getFFTfromRawData(fileInfo, Runner->PolCalibrating, maxWavelength);
+        FFTL.getFFTfromRawData(fileInfo, Runner->PolCalibrating, ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->minWavelength, ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->maxWavelength);
 
         /* Update information bar */
         ui->info->setText("Waiting for Spectrometer...");
@@ -1936,6 +1942,9 @@ void PanelPolarimeter::change_Wavelength_FFT_Pol(void){
             /* Get the user selected wavelength */
             FFTL.SelectedWaveL = changeDialog.getValue();
 
+            /* Don't allow to find automatically the wavelength since the user changed it */
+            FFTL.changeFFTwavelength = false;
+
             /* Full of zeros those other frequencies of non interest */
             for ( int  i = 0; i < FFTL.NrSpectra/2; i++ )
             {
@@ -2166,7 +2175,7 @@ void PanelPolarimeter::Load_From_FFT(void) {
     dataloaded = true;
 
     /* By default show the wavelength 516,41 nm */
-    ui->waveToPlotFFT->setText(QString::number(FFTL.wavelengths.at(404)));
+    ui->waveToPlotFFT->setText(QString::number(FFTL.wavelengths.at(FFTL.SelectedWaveL)));
 
     /* Update information bar */
     ui->info->setText("");
@@ -2201,7 +2210,7 @@ void PanelPolarimeter::Load_From_Raw_Data(void) {
     }
 
     /* Data Analysis by FFT */
-    FFTL.getFFTfromRawData(fileInfo, false, maxWavelength);
+    FFTL.getFFTfromRawData(fileInfo, false, ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->minWavelength, ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->maxWavelength);
 
     /* Clear all the plots for a new load of data */
     clear_Plot();
@@ -2213,7 +2222,7 @@ void PanelPolarimeter::Load_From_Raw_Data(void) {
     dataloaded = true;
 
     /* By default show the wavelength 516,41 nm */
-    ui->waveToPlotFFT->setText(QString::number(FFTL.wavelengths.at(404)));
+    ui->waveToPlotFFT->setText(QString::number(FFTL.wavelengths.at(FFTL.SelectedWaveL)));
 
     /* Update information bar */
     ui->info->setText("");
@@ -2331,6 +2340,9 @@ void PanelPolarimeter::toggle_Load_Data(void)
 
     /* Update Information bar */
     ui->info->setText("Select the type of File to load...");
+
+    /* Restart maximum Intensity measured */
+    FFTL.MaximumIntensity = 0;
 
     /* Use a dialog to select the kind of data to be loaded */
     QMessageBox msgBox;
@@ -3089,6 +3101,12 @@ void PanelPolarimeter::clean_All_Pol(void){
     /* Remove some items from the GUI loaded when needed */
     showUI_Item(false);
 
+    /* Restart the flag to select automatically the wavelength for the FFT plot */
+    FFTL.changeFFTwavelength = true;
+
+    /* Restart maximum Intensity measured */
+    FFTL.MaximumIntensity = 0;
+
     /* Don't show total measurement bar */
     ui->TotalProgressBar_Pol->setVisible(false);
     ui->label_totalM->setVisible(false);
@@ -3187,6 +3205,43 @@ void PanelPolarimeter::clean_All_Pol(void){
     OldFreqValue = "";
     OldSpectraValue = "";
 
+    /* Restart the range of the wavelengths for the measurements */
+    unsigned int i = 0;
+
+    /* Are there any spectrometers connected? */
+    if (m_NrDevices > 0)
+    {
+        double startWavelengths[m_NrDevices], stopWavelengths[m_NrDevices];
+
+        /* Loop through spectrometers */
+        for (i = 0; i < m_NrDevices; i++)
+        {
+            /* Get start and stop wavelengths for current spectrometer */
+            startWavelengths[i] = ptrSpectrometers[i]->getStartWavelength();
+            stopWavelengths[i] = ptrSpectrometers[i]->getStopWavelength();
+        }
+        /* Find minimum and maximum wavelengths in array */
+        ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->minWavelength = getMinimum(startWavelengths, m_NrDevices);
+        ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->maxWavelength = getMaximum(stopWavelengths, m_NrDevices);
+
+        /* Set limits for the wavelengths range */
+        ConfigureMeasurement->ui->doubleSpinBox_minW->setMinimum(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->minWavelength);
+        ConfigureMeasurement->ui->doubleSpinBox_minW->setMaximum(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->maxWavelength);
+        ConfigureMeasurement->ui->doubleSpinBox_maxW->setMinimum(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->minWavelength);
+        ConfigureMeasurement->ui->doubleSpinBox_maxW->setMaximum(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->maxWavelength);
+
+        /* Which wavelentgth would you like to see the FFT? */
+        signalMapper->setMapping(ui->waveToPlotFFT, ui->waveToPlotFFT);
+
+        /* Disable edition of Spectrometer Data until there is a calibration running */
+        devices2[0]->ui->label_autoAdjust->setEnabled(false);
+        devices2[0]->ui->label_integrationTime->setEnabled(false);
+        devices2[0]->ui->label_numberOfAverages->setEnabled(false);
+    }
+
+    /* Update x-axis of graphs depending on Wavelengths */
+    update_Wavelength_Range();
+
     /* Update information bar */
     ui->info->setText("");
 }
@@ -3230,8 +3285,11 @@ void PanelPolarimeter::delay_Pol_Measurements(void){
     /* Is there a delay time on the measurement? */
     if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->startDelay != 0){
 
+        /* Get the actual time and add the delay time */
+        ConfigureMeasurement->startTime = QDateTime::currentDateTime().addSecs(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->startDelay);
+
         /* Tell the user that there is a delay in the start */
-        ui->info->setText("Waiting to start...");
+        ui->info->setText("Starting at " + ConfigureMeasurement->startTime.toString("hh:mm:ss ap"));
 
         /* Count the seconds */
         int timer = 0;
@@ -3253,7 +3311,7 @@ void PanelPolarimeter::delay_Pol_Measurements(void){
 
                 /* Show remaining time */
                 ConvertedTime1 = ConfigureMeasurement->externSoftware->TimeConverter(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->startDelay - timer);
-                ui->label_RemainingTime->setText(ConvertedTime1.at(0) + " " + ConvertedTime1.at(1));
+                ui->label_RemainingTime->setText(QDateTime::fromTime_t(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->startDelay - timer).toUTC().toString("hh:mm:ss") + " " + ConvertedTime1.at(1));
                 ui->label_RemainingTime->setVisible(true);
 
                 ui->currentProgressBar_Pol->setValue(100 - ((ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->startDelay - timer)*100)/ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->startDelay);
@@ -3264,9 +3322,24 @@ void PanelPolarimeter::delay_Pol_Measurements(void){
             Application::processEvents();
         }
 
+        /* Restart progress bar */
         ui->currentProgressBar_Pol->setValue(0);
     }
 }
+
+/**
+ * @brief Set the range of wavelengths according to the user
+ */
+void PanelPolarimeter::update_Wavelength_Range(void){
+
+    /* Update x-axis of graphs depending on Wavelengths */
+    ui->qwtPlot_Pol->setXAxis(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->minWavelength, ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->maxWavelength);
+    ui->qwtPlot_Pol_Compensation->setXAxis(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->minWavelength, ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->maxWavelength);
+    ui->qwtPlot_Pol_w_2w->setXAxis(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->minWavelength, ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->maxWavelength);
+
+
+}
+
 
 /**
  * @brief Destructor of 'Polarimeter' class

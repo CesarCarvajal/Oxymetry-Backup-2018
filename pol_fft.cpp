@@ -80,6 +80,9 @@ void fft::getFFTfromFFTData(QFileInfo fileInformation)
     /* Create the readed row */
     QString Row;
 
+    /* Get the maximum DC value */
+    double DCValue = 0;
+
     /* Initialize row counter */
     int rowcounter = 0;
 
@@ -115,7 +118,8 @@ void fft::getFFTfromFFTData(QFileInfo fileInformation)
                 wavelengths.append(Readed_Row.at(0).toDouble());
 
                 /* Save the DC - Position 1 */
-                fft_DC.append(Readed_Row.at(1).toDouble());
+                DCValue = Readed_Row.at(1).toDouble();
+                fft_DC.append(DCValue);
 
                 /* Save W - Position 2 */
                 fft_W.append(Readed_Row.at(2).toDouble());
@@ -129,8 +133,27 @@ void fft::getFFTfromFFTData(QFileInfo fileInformation)
                 /* What is the modulation frequency? */
                 f_w = NrSpectra*(IntTime/1000)*FrequencyF;
 
-                /* By default show the FFT values for the wavelength 537,57 nm */
-                if (wavelengths.length() == SelectedWaveL){
+                /* The user haven't selected a wavelength for the FFT plot */
+                if(changeFFTwavelength){
+
+                    /* Find the highest DC intensity and choose that wavelength for the FFT plot */
+                    if(DCValue > MaximumIntensity && wavelengths.length()!=0){
+
+                        /* Save the maximum intensity */
+                        MaximumIntensity =DCValue;
+
+                        /* Save the position where the intensity is the maximum */
+                        SelectedWaveL = wavelengths.length()-1;
+
+                        /* Restart the maximum */
+                        fft_data.resize(0);
+                        time.resize(0);
+
+                    }
+                }
+
+                /* Show the intensities for the maximum DC value */
+                if (SelectedWaveL == wavelengths.length()-1 && wavelengths.length()> 0){
 
                     for ( int  i = 0; i < NrSpectra/2; i++ )
                     {
@@ -145,8 +168,8 @@ void fft::getFFTfromFFTData(QFileInfo fileInformation)
                     fft_data.replace(0,fft_DC.at(rowcounter));
                     fft_data.replace(f_w, fft_W.at(rowcounter));
                     fft_data.replace(2*f_w, fft_2W.at(rowcounter));
-
                 }
+
                 /* Counter of File Lines */
                 rowcounter = rowcounter + 1;
             }
@@ -162,7 +185,7 @@ void fft::getFFTfromFFTData(QFileInfo fileInformation)
  * @brief Get the Raw Data from File and Calculate/Plot the FFT.
  * @param[in] Information of the Raw Data file to be processed, the type of running "calibrating or measuring" and the maximum wavelength in use.
  */
-void fft::getFFTfromRawData(QFileInfo fileInformation, bool Calibrating, double maxWavelength)
+void fft::getFFTfromRawData(QFileInfo fileInformation, bool Calibrating, double minWavelength, double maxWavelength)
 {
     /* Enroute File */
     QFile file(fileInformation.absoluteFilePath());
@@ -176,6 +199,9 @@ void fft::getFFTfromRawData(QFileInfo fileInformation, bool Calibrating, double 
 
     /* Initialize row counter */
     QString Row = "";
+
+    /* DC value to get maximum intensity */
+    double DCValue = 0;
 
     /* Initialize the spliter according to the Oxymetry type ".CS" or ".tmp" file */
     QString spliter = "\t\t";
@@ -237,6 +263,7 @@ void fft::getFFTfromRawData(QFileInfo fileInformation, bool Calibrating, double 
 
                 /* We don't need all the saved values */
                 if(Readed_Row.at(0).toDouble() > maxWavelength){break;}
+                if(Readed_Row.at(0).toDouble() < minWavelength){continue;}
 
                 /* Save the wavelengths in Position 0 */
                 wavelengths.append(Readed_Row.at(0).toDouble());
@@ -256,13 +283,33 @@ void fft::getFFTfromRawData(QFileInfo fileInformation, bool Calibrating, double 
                 f_w = NrSpectra*(IntTime/1000)*FrequencyF;
 
                 /* From the Output array of FFT, save each of the frequency shares amplitude */
-                fft_DC.append(sqrt(fabs((outputFFT[0][0]*outputFFT[0][0])) + fabs((outputFFT[0][1]*outputFFT[0][1]))));
+                DCValue = sqrt(fabs((outputFFT[0][0]*outputFFT[0][0])) + fabs((outputFFT[0][1]*outputFFT[0][1])));
+                fft_DC.append(DCValue);
                 fft_W.append(sqrt(fabs((outputFFT[f_w][0]*outputFFT[f_w][0])) + fabs((outputFFT[f_w][1]*outputFFT[f_w][1]))));
                 fft_2W.append(sqrt(fabs((outputFFT[2*f_w][0]*outputFFT[2*f_w][0])) + fabs((outputFFT[2*f_w][1]*outputFFT[2*f_w][1]))));
                 fft_Compensation_Signal.append(fft_W.at(rowcounter)/fft_2W.at(rowcounter));
 
+                /* The user haven't selected a wavelength for the FFT plot */
+                if(changeFFTwavelength){
+
+                    /* Find the highest DC intensity and choose that wavelength for the FFT plot */
+                    if(DCValue > MaximumIntensity && wavelengths.length()!=0){
+
+                        /* Save the maximum intensity */
+                        MaximumIntensity =DCValue;
+
+                        /* Save the position where the intensity is the maximum */
+                        SelectedWaveL = wavelengths.length()-1;
+
+                        /* Restart the maximum */
+                        fft_data.resize(0);
+                        time.resize(0);
+
+                    }
+                }
+
                 /* By default show the FFT values for the wavelength 537,57 nm */
-                if (wavelengths.length() == SelectedWaveL){
+                if (SelectedWaveL == wavelengths.length()-1 && wavelengths.length()> 0){
                     for ( int  i = 0; i < NrSpectra/2; i++ )
                     {
                         /* Amplitude at all frequencies */

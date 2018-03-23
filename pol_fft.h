@@ -44,7 +44,7 @@ class fft : public QObject
 public:
 
     /* Get the FFT from the loaded file */
-    void getFFTfromRawData(QFileInfo FileName, bool Calibrating, double maxWavelength);
+    void getFFTfromRawData(QFileInfo FileName, bool Calibrating, double minWavelength, double maxWavelength);
     void getFFTfromFFTData(QFileInfo FileName);
 
     /* Initialize the arrays according to the file */
@@ -79,7 +79,13 @@ public:
     int f_w;
 
     /* The position in the array of FFT to show by default */
-    int SelectedWaveL=404;
+    int SelectedWaveL=-1;
+
+    /* Maximum Intensity measured */
+    double MaximumIntensity = 0;
+
+    /* Change the selected wavelength for the FFT plot */
+    bool changeFFTwavelength = true;
 
     /* Output FFT vector */
     fftw_complex *outputFFT = nullptr;

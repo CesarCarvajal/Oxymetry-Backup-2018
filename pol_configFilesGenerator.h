@@ -69,6 +69,9 @@ public:
     /* Start delay */
     double startDelay;
 
+    /* Range of Wavelengths */
+    double minWavelength, maxWavelength;
+
     /* Generate pump files */
     void GeneratePumpScripts(QString pathFile, QString filetype, QVector<double> FlowVector);
 

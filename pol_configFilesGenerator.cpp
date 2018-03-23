@@ -44,6 +44,10 @@ Pol_configFilesGenerator::Pol_configFilesGenerator()
     /* Number of Sustances active */
     NumberOfSubstances = 2;
 
+    /* Range of Wavelengths */
+    minWavelength = 400;
+    maxWavelength = 1000;
+
 }
 
 /**

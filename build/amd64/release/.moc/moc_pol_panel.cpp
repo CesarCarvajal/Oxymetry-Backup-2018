@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_PanelPolarimeter_t {
-    QByteArrayData data[56];
-    char stringdata0[911];
+    QByteArrayData data[57];
+    char stringdata0[935];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -86,7 +86,8 @@ QT_MOC_LITERAL(51, 807, 33), // "adjust_Measurements_Saving_Fo..."
 QT_MOC_LITERAL(52, 841, 25), // "process_Received_Data_Pol"
 QT_MOC_LITERAL(53, 867, 4), // "Path"
 QT_MOC_LITERAL(54, 872, 22), // "delay_Pol_Measurements"
-QT_MOC_LITERAL(55, 895, 15) // "enable_Help_Pol"
+QT_MOC_LITERAL(55, 895, 23), // "update_Wavelength_Range"
+QT_MOC_LITERAL(56, 919, 15) // "enable_Help_Pol"
 
     },
     "PanelPolarimeter\0updateTabs\0\0"
@@ -115,7 +116,8 @@ QT_MOC_LITERAL(55, 895, 15) // "enable_Help_Pol"
     "adjust_Run_End\0typeRunn\0"
     "adjust_Measurements_Saving_Folder\0"
     "process_Received_Data_Pol\0Path\0"
-    "delay_Pol_Measurements\0enable_Help_Pol"
+    "delay_Pol_Measurements\0update_Wavelength_Range\0"
+    "enable_Help_Pol"
 };
 #undef QT_MOC_LITERAL
 
@@ -125,7 +127,7 @@ static const uint qt_meta_data_PanelPolarimeter[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      40,   14, // methods
+      41,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -133,48 +135,49 @@ static const uint qt_meta_data_PanelPolarimeter[] = {
        2,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    0,  214,    2, 0x06 /* Public */,
-       3,    1,  215,    2, 0x06 /* Public */,
+       1,    0,  219,    2, 0x06 /* Public */,
+       3,    1,  220,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       4,    0,  218,    2, 0x08 /* Private */,
-       5,    0,  219,    2, 0x08 /* Private */,
-       6,    0,  220,    2, 0x08 /* Private */,
-       7,    0,  221,    2, 0x08 /* Private */,
-       8,    0,  222,    2, 0x08 /* Private */,
-       9,    0,  223,    2, 0x08 /* Private */,
-      10,    0,  224,    2, 0x08 /* Private */,
-      11,    0,  225,    2, 0x08 /* Private */,
-      12,    0,  226,    2, 0x08 /* Private */,
-      13,    1,  227,    2, 0x08 /* Private */,
-      15,    0,  230,    2, 0x08 /* Private */,
-      16,    0,  231,    2, 0x08 /* Private */,
-      17,    0,  232,    2, 0x08 /* Private */,
-      18,    0,  233,    2, 0x08 /* Private */,
-      19,    0,  234,    2, 0x08 /* Private */,
-      20,    1,  235,    2, 0x08 /* Private */,
-      23,    2,  238,    2, 0x08 /* Private */,
-      26,    0,  243,    2, 0x08 /* Private */,
-      27,    0,  244,    2, 0x08 /* Private */,
-      28,    3,  245,    2, 0x08 /* Private */,
-      33,    0,  252,    2, 0x08 /* Private */,
-      34,    0,  253,    2, 0x08 /* Private */,
-      35,    0,  254,    2, 0x08 /* Private */,
-      36,    0,  255,    2, 0x08 /* Private */,
-      37,    0,  256,    2, 0x08 /* Private */,
-      38,    1,  257,    2, 0x08 /* Private */,
-      40,    0,  260,    2, 0x08 /* Private */,
-      41,    0,  261,    2, 0x08 /* Private */,
-      42,    0,  262,    2, 0x08 /* Private */,
-      43,    0,  263,    2, 0x08 /* Private */,
-      44,    0,  264,    2, 0x08 /* Private */,
-      45,    0,  265,    2, 0x08 /* Private */,
-      46,    1,  266,    2, 0x08 /* Private */,
-      49,    1,  269,    2, 0x08 /* Private */,
-      51,    0,  272,    2, 0x08 /* Private */,
-      52,    1,  273,    2, 0x08 /* Private */,
-      54,    0,  276,    2, 0x08 /* Private */,
-      55,    0,  277,    2, 0x0a /* Public */,
+       4,    0,  223,    2, 0x08 /* Private */,
+       5,    0,  224,    2, 0x08 /* Private */,
+       6,    0,  225,    2, 0x08 /* Private */,
+       7,    0,  226,    2, 0x08 /* Private */,
+       8,    0,  227,    2, 0x08 /* Private */,
+       9,    0,  228,    2, 0x08 /* Private */,
+      10,    0,  229,    2, 0x08 /* Private */,
+      11,    0,  230,    2, 0x08 /* Private */,
+      12,    0,  231,    2, 0x08 /* Private */,
+      13,    1,  232,    2, 0x08 /* Private */,
+      15,    0,  235,    2, 0x08 /* Private */,
+      16,    0,  236,    2, 0x08 /* Private */,
+      17,    0,  237,    2, 0x08 /* Private */,
+      18,    0,  238,    2, 0x08 /* Private */,
+      19,    0,  239,    2, 0x08 /* Private */,
+      20,    1,  240,    2, 0x08 /* Private */,
+      23,    2,  243,    2, 0x08 /* Private */,
+      26,    0,  248,    2, 0x08 /* Private */,
+      27,    0,  249,    2, 0x08 /* Private */,
+      28,    3,  250,    2, 0x08 /* Private */,
+      33,    0,  257,    2, 0x08 /* Private */,
+      34,    0,  258,    2, 0x08 /* Private */,
+      35,    0,  259,    2, 0x08 /* Private */,
+      36,    0,  260,    2, 0x08 /* Private */,
+      37,    0,  261,    2, 0x08 /* Private */,
+      38,    1,  262,    2, 0x08 /* Private */,
+      40,    0,  265,    2, 0x08 /* Private */,
+      41,    0,  266,    2, 0x08 /* Private */,
+      42,    0,  267,    2, 0x08 /* Private */,
+      43,    0,  268,    2, 0x08 /* Private */,
+      44,    0,  269,    2, 0x08 /* Private */,
+      45,    0,  270,    2, 0x08 /* Private */,
+      46,    1,  271,    2, 0x08 /* Private */,
+      49,    1,  274,    2, 0x08 /* Private */,
+      51,    0,  277,    2, 0x08 /* Private */,
+      52,    1,  278,    2, 0x08 /* Private */,
+      54,    0,  281,    2, 0x08 /* Private */,
+      55,    0,  282,    2, 0x08 /* Private */,
+      56,    0,  283,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void,
@@ -217,6 +220,7 @@ static const uint qt_meta_data_PanelPolarimeter[] = {
     QMetaType::Void, 0x80000000 | 47,   50,
     QMetaType::Void,
     QMetaType::Void, QMetaType::QString,   53,
+    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
 
@@ -268,7 +272,8 @@ void PanelPolarimeter::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         case 36: _t->adjust_Measurements_Saving_Folder(); break;
         case 37: _t->process_Received_Data_Pol((*reinterpret_cast< QString(*)>(_a[1]))); break;
         case 38: _t->delay_Pol_Measurements(); break;
-        case 39: _t->enable_Help_Pol(); break;
+        case 39: _t->update_Wavelength_Range(); break;
+        case 40: _t->enable_Help_Pol(); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
@@ -327,13 +332,13 @@ int PanelPolarimeter::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 40)
+        if (_id < 41)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 40;
+        _id -= 41;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 40)
+        if (_id < 41)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 40;
+        _id -= 41;
     }
     return _id;
 }

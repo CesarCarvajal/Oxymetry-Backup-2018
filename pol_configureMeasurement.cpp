@@ -25,6 +25,7 @@
 #include <QLineEdit>
 #include <QList>
 #include <QTimer>
+#include <QDateTime>
 #include <QElapsedTimer>
 #include <QFile>
 #include <QMessageBox>
@@ -78,12 +79,14 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     /* Connect configuration edition */
 
     /* Spectrometer Settings */
-    connect(ui->lineEdit_startDelay, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
     connect(ui->spinBox_BFreq, SIGNAL(valueChanged(int)), this, SLOT(updateConfigurationValues()));
     connect(ui->spinBox_BNMeas, SIGNAL(valueChanged(int)), this, SLOT(updateConfigurationValues()));
     connect(ui->spinBox_BNSpec, SIGNAL(valueChanged(int)), this, SLOT(updateConfigurationValues()));
     connect(ui->spinBox_BNAve, SIGNAL(valueChanged(int)), this, SLOT(updateConfigurationValues()));
     connect(ui->doubleSpinBox_intTime, SIGNAL(valueChanged(double)), this, SLOT(updateConfigurationValues()));
+    connect(ui->doubleSpinBox_startDelay, SIGNAL(valueChanged(double)), this, SLOT(updateConfigurationValues()));
+    connect(ui->doubleSpinBox_minW, SIGNAL(valueChanged(double)), this, SLOT(updateConfigurationValues()));
+    connect(ui->doubleSpinBox_maxW, SIGNAL(valueChanged(double)), this, SLOT(updateConfigurationValues()));
 
     /* Solutions Concentrations */
     connect(ui->lineEdit_StockGluc, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
@@ -102,18 +105,15 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     connect(ui->checkBox_Glucose, SIGNAL(clicked()), signalMapperC, SLOT(map()));
 
     /* Pump Flow */
-    connect(ui->lineEdit_ShortBreak, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
-    connect(ui->lineEdit_LongBreak, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
-    connect(ui->lineEdit_AbsFlow, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
-    connect(ui->lineEdit_NSteps, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
-    connect(ui->lineEdit_AbsVol, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
+    connect(ui->spinBox_ShortBreak, SIGNAL(valueChanged(int)), this, SLOT(updateConfigurationValues()));
+    connect(ui->spinBox_LongBreak, SIGNAL(valueChanged(int)), this, SLOT(updateConfigurationValues()));
+    connect(ui->doubleSpinBox_AbsFlow, SIGNAL(valueChanged(double)), this, SLOT(updateConfigurationValues()));
+    connect(ui->spinBox_AbsVol, SIGNAL(valueChanged(int)), this, SLOT(updateConfigurationValues()));
+    connect(ui->spinBox_NSteps, SIGNAL(valueChanged(int)), this, SLOT(updateConfigurationValues()));
 
     /* Map of connections */
     signalMapperC->setMapping(ui->label_load, ui->label_load);
     signalMapperC->setMapping(ui->label_basicConf, ui->label_basicConf);
-
-    /* Spectrometer Settings */
-    signalMapperC->setMapping(ui->lineEdit_startDelay, ui->lineEdit_startDelay);
 
     /* Solutions Concentrations */
     signalMapperC->setMapping(ui->lineEdit_StockGluc, ui->lineEdit_StockGluc);
@@ -128,12 +128,6 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     signalMapperC->setMapping(ui->checkBox_Imp2, ui->checkBox_Imp2);
     signalMapperC->setMapping(ui->checkBox_Imp1, ui->checkBox_Imp1);
     signalMapperC->setMapping(ui->checkBox_Glucose, ui->checkBox_Glucose);
-
-    /* Pump Flow */
-    signalMapperC->setMapping(ui->lineEdit_LongBreak, ui->lineEdit_LongBreak);
-    signalMapperC->setMapping(ui->lineEdit_AbsFlow, ui->lineEdit_AbsFlow);
-    signalMapperC->setMapping(ui->lineEdit_NSteps, ui->lineEdit_NSteps);
-    signalMapperC->setMapping(ui->lineEdit_AbsVol, ui->lineEdit_AbsVol);
 
     /* Connect Button of configuration */
     connect(ui->pushButton_generate, SIGNAL(clicked()), this, SLOT(configurePolarimeter()));
@@ -163,6 +157,10 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     ui->label_VolI2->setVisible(false);
     ui->label_VolI22->setVisible(false);
     ui->lineEdit_VolI2->setVisible(false);
+
+    /* Hide the time label, show it only when there is a delay */
+    ui->label_timeLabel->hide();
+    ui->timeEdit_timeLabel->hide();
 
 }
 
@@ -271,17 +269,6 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
         }
 
     }
-
-        /* The user decide to configure the Nr of Averages */
-        if(LineLabel == ui->lineEdit_startDelay && ui->lineEdit_startDelay->text().toDouble(&ok) >= 0){
-
-            /* Is there a valid number */
-            if(!ok){
-                /* If not, then set back default value */
-                ui->lineEdit_startDelay->setText("0");
-            }
-        }
-
 
     /* Solutions Concentrations Settings */
 
@@ -421,54 +408,6 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
                 /* Adjust stock solutions concentration accordingly */
                 ui->lineEdit_StockImp2->setText(QString::number(externSoftware->stockSolutions.at(2)));
             }
-
-    /* Pump Flow */
-
-    /* The user decide to change the short break time */
-    if(LineLabel == ui->lineEdit_ShortBreak && ui->lineEdit_ShortBreak->text().toDouble(&ok) >= 0){
-
-        /* Is there a valid number */
-        if(!ok){
-            /* If not, then set back default value */
-            ui->lineEdit_ShortBreak->setText("1");
-        }
-    }else
-        /* The user decide to change the long break time */
-        if(LineLabel == ui->lineEdit_LongBreak && ui->lineEdit_LongBreak->text().toDouble(&ok) >= 0){
-
-            /* Is there a valid number */
-            if(!ok){
-                /* If not, then set back default value */
-                ui->lineEdit_LongBreak->setText("30");
-            }
-        }else
-            /* The user decide to change the absolute Flow */
-            if(LineLabel == ui->lineEdit_AbsFlow && ui->lineEdit_AbsFlow->text().toDouble(&ok) >= 0){
-
-                /* Is there a valid number */
-                if(!ok){
-                    /* If not, then set back default value */
-                    ui->lineEdit_AbsFlow->setText("18.75");
-                }
-            }else
-                /* The user decide to change the Nr Steps */
-                if(LineLabel == ui->lineEdit_NSteps && ui->lineEdit_NSteps->text().toInt(&ok) >= 0){
-
-                    /* Is there a valid number */
-                    if(!ok){
-                        /* If not, then set back default value */
-                        ui->lineEdit_NSteps->setText("5");
-                    }
-                }else
-                    /* The user decide to change the Filling Time */
-                    if(LineLabel == ui->lineEdit_AbsVol && ui->lineEdit_AbsVol->text().toInt(&ok) >= 0){
-
-                        /* Is there a valid number */
-                        if(!ok){
-                            /* If not, then set back default value */
-                            ui->lineEdit_AbsVol->setText("25");
-                        }
-                    }
 
 /* Check the substances */
 if(checkBox == ui->checkBox_Imp2 || checkBox == ui->checkBox_Imp1 || checkBox == ui->checkBox_Glucose){
@@ -748,7 +687,7 @@ void configurePolMeasure::GetConfigurationData(void)
 {
 
     /* Get the start delay in seconds */
-    externSoftware->ConfigurationFileGenerator->startDelay = ui->lineEdit_startDelay->text().toDouble()*3600;
+    externSoftware->ConfigurationFileGenerator->startDelay = ui->doubleSpinBox_startDelay->value()*3600;
 
     /* Get Integration Time in ms */
     externSoftware->ConfigurationFileGenerator->IntegrationTime = ui->doubleSpinBox_intTime->value();
@@ -773,21 +712,21 @@ void configurePolMeasure::GetConfigurationData(void)
     externSoftware->ConfigurationFileGenerator->NConcentrations = ui->spinBox_BNMeas->value();
 
     /* Get Number of Steps */
-    externSoftware->ConfigurationFileGenerator->NSteps = ui->lineEdit_NSteps->text().toInt();
+    externSoftware->ConfigurationFileGenerator->NSteps = ui->spinBox_NSteps->value();
 
     /* Get absolute Flow */
-    externSoftware->ConfigurationFileGenerator->absoluteFlow = ui->lineEdit_AbsFlow->text().toDouble();
+    externSoftware->ConfigurationFileGenerator->absoluteFlow = ui->doubleSpinBox_AbsFlow->value();
 
     /* Is the idle active? */
     int idled = ui->checkBox->isChecked();
     externSoftware->ConfigurationFileGenerator->idle = idled;
 
     /* Get Refilling Times in ms */
-    externSoftware->ConfigurationFileGenerator->fillRefill = (((ui->lineEdit_AbsVol->text().toDouble()/externSoftware->ConfigurationFileGenerator->absoluteFlow)*60) / externSoftware->ConfigurationFileGenerator->NSteps)*1000;
+    externSoftware->ConfigurationFileGenerator->fillRefill = (((ui->spinBox_AbsVol->value()/externSoftware->ConfigurationFileGenerator->absoluteFlow)*60) / externSoftware->ConfigurationFileGenerator->NSteps)*1000;
 
     /* Get the Breaks in ms */
-    externSoftware->ConfigurationFileGenerator->shortBreak = (ui->lineEdit_ShortBreak->text().toInt())*1000;
-    externSoftware->ConfigurationFileGenerator->longBreak = (ui->lineEdit_LongBreak->text().toInt())*1000 + (externSoftware->ConfigurationFileGenerator->IntegrationTime*externSoftware->ConfigurationFileGenerator->NrSpectra);
+    externSoftware->ConfigurationFileGenerator->shortBreak = (ui->spinBox_ShortBreak->value())*1000;
+    externSoftware->ConfigurationFileGenerator->longBreak = (ui->spinBox_LongBreak->value())*1000 + (externSoftware->ConfigurationFileGenerator->IntegrationTime*externSoftware->ConfigurationFileGenerator->NrSpectra);
 
     /* Stock Solutions */
     externSoftware->stockSolutions.replace(0,ui->lineEdit_StockGluc->text().toDouble());
@@ -806,6 +745,10 @@ void configurePolMeasure::GetConfigurationData(void)
 
     /* How many substances are there now? */
     externSoftware->ConfigurationFileGenerator->NumberOfSubstances = externSoftware->ConfigurationFileGenerator->glucoseActive + externSoftware->ConfigurationFileGenerator->Imp1Active + externSoftware->ConfigurationFileGenerator->Imp2Active;
+
+    /* Which Wavelength range will be used? */
+    externSoftware->ConfigurationFileGenerator->minWavelength = ui->doubleSpinBox_minW->value();
+    externSoftware->ConfigurationFileGenerator->maxWavelength = ui->doubleSpinBox_maxW->value();
 
     /* Very long Int Time? */
     if(externSoftware->ConfigurationFileGenerator->IntegrationTime > 200){
@@ -929,7 +872,7 @@ void configurePolMeasure::updateConfigurationValues(void)
     /* Minimum volume per stock solution */
     for(int l=0; l<3; l++){
         double vol = (externSoftware->minConcentrations.at(l)+externSoftware->maxConcentrations.at(l))/(externSoftware->ConfigurationFileGenerator->NumberOfSubstances);
-        vol = (vol/ externSoftware->stockSolutions.at(l))*externSoftware->ConfigurationFileGenerator->NConcentrations*ui->lineEdit_AbsVol->text().toDouble();
+        vol = (vol/ externSoftware->stockSolutions.at(l))*externSoftware->ConfigurationFileGenerator->NConcentrations*ui->spinBox_AbsVol->value();
         Volume.replace(l, vol);
     }
 
@@ -937,6 +880,27 @@ void configurePolMeasure::updateConfigurationValues(void)
     ui->lineEdit_VolG->setText(QString::number(Volume.at(0)));
     ui->lineEdit_VolI1->setText(QString::number(Volume.at(1)));
     ui->lineEdit_VolI2->setText(QString::number(Volume.at(2)));
+
+    /* If there is a delay in the start, show when it's going to start then */
+    if(externSoftware->ConfigurationFileGenerator->startDelay != 0){
+
+        /* Show label when there is a delay */
+        ui->label_timeLabel->show();
+        ui->timeEdit_timeLabel->show();
+
+        /* Get the actual time and add the delay time */
+        startTime = QDateTime::currentDateTime().addSecs(externSoftware->ConfigurationFileGenerator->startDelay);
+
+        /* Print it in format of h:m:s AM/PM */
+        ui->timeEdit_timeLabel->setText(startTime.toString("hh:mm:ss ap"));
+
+    }else{
+
+        /* Hide the time label when there is not delay */
+        ui->label_timeLabel->hide();
+        ui->timeEdit_timeLabel->hide();
+    }
+
 }
 
 /**

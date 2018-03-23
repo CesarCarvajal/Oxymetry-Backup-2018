@@ -658,7 +658,7 @@
          </attribute>
          <column>
           <property name="text">
-           <string>Time (s)</string>
+           <string>Time</string>
           </property>
           <property name="toolTip">
            <string>Time Intervals</string>

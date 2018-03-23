@@ -205,6 +205,9 @@ private slots:
     /* Delay the measurememts */
     void delay_Pol_Measurements(void);
 
+    /* Change the wavelengths range according to the user selection */
+    void update_Wavelength_Range(void);
+
 private:
 
     QSignalMapper *signalMapper;
@@ -233,9 +236,7 @@ private:
     /* Fix the X axis zoom problem */
     double minXAverage, maxXAverage, maxYRaw, maxYAverage;
 
-    /* Range of Wavelengths */
-    double minWavelength, maxWavelength;
-
+    /* Start measurement button color */
     QString greenButton = "color: rgb(0,128,0)", RedButton = "color: rgb(250,0,0)", grayButton = "color: rgb(211,211,211)";
 
     /* Saves old values of frequency or Nr Spectra from labels in calibration */
