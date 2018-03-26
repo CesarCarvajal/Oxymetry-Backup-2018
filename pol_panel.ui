@@ -134,13 +134,13 @@
          <property name="minimumSize">
           <size>
            <width>290</width>
-           <height>120</height>
+           <height>189</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
            <width>290</width>
-           <height>120</height>
+           <height>189</height>
           </size>
          </property>
          <property name="toolTip">
@@ -435,7 +435,7 @@
            </property>
            <property name="sizeHint" stdset="0">
             <size>
-             <width>120</width>
+             <width>110</width>
              <height>5</height>
             </size>
            </property>
@@ -583,13 +583,13 @@
          </property>
          <property name="minimumSize">
           <size>
-           <width>300</width>
+           <width>290</width>
            <height>50</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>300</width>
+           <width>290</width>
            <height>16777215</height>
           </size>
          </property>

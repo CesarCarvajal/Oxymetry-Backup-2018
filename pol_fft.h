@@ -43,26 +43,16 @@ class fft : public QObject
 
 public:
 
-    /* Get the FFT from the loaded file */
-    void getFFTfromRawData(QFileInfo FileName, bool Calibrating, double minWavelength, double maxWavelength);
-    void getFFTfromFFTData(QFileInfo FileName);
-
-    /* Initialize the arrays according to the file */
-    void InitializeFFTArrays();
-
-    /* Save FFT to a file */
-    void saveFFTtoFile(QFileInfo FileDetails, bool userSaving);
-
-    /* Calculate the FFT from the Data */
-    void CalculateFFT(int N, QVector<double> Data);
-
-    /* Size of Nr Spectra */
-    QVector<double> counts;
+    /* Vector with time frequency */
     QVector<double> time;
+
+    /* FFT raw data */
     QVector<double> fft_data;
 
     /* Size of Nr Waves */
     QVector<double> wavelengths;
+
+    /* Extracted components */
     QVector<double> fft_DC, fft_W, fft_2W;
     QVector<double> fft_Compensation_Signal;
 
@@ -71,6 +61,8 @@ public:
     double IntTime;
     double FrequencyF = 7;
     int NrAverages = 0;
+
+    /* Concentrations */
     double ConcentrationC1=-1;
     double ConcentrationC2=-1;
     double ConcentrationC3=-1;
@@ -87,14 +79,36 @@ public:
     /* Change the selected wavelength for the FFT plot */
     bool changeFFTwavelength = true;
 
+private:
+
+    /* Counts */
+    QVector<double> counts;
+
     /* Output FFT vector */
     fftw_complex *outputFFT = nullptr;
+
+public:
+
+    /* Get the FFT from the loaded file */
+    void getFFTfromRawData(QFileInfo FileName, bool Calibrating, double minWavelength, double maxWavelength);
+    void getFFTfromFFTData(QFileInfo FileName);
+
+    /* Initialize the arrays according to the file */
+    void InitializeFFTArrays();
+
+    /* Save FFT to a file */
+    void saveFFTtoFile(QFileInfo FileDetails, bool userSaving);
+
+    /* Destructor */
+    ~fft(void);
+
+private:
 
     /* Read info from file */
     void ReadFile(QString FilePath);
 
-    /* Destructor */
-    ~fft(void);
+    /* Calculate the FFT from the Data */
+    void CalculateFFT(int N, QVector<double> Data);
 
 };
 

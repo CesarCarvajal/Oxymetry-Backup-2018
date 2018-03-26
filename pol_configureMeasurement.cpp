@@ -901,6 +901,9 @@ void configurePolMeasure::updateConfigurationValues(void)
         ui->timeEdit_timeLabel->hide();
     }
 
+    /* Set range limits */
+    ui->doubleSpinBox_minW->setMaximum(ui->doubleSpinBox_maxW->value());
+    ui->doubleSpinBox_maxW->setMinimum(ui->doubleSpinBox_minW->value());
 }
 
 /**

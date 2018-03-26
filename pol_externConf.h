@@ -36,9 +36,6 @@ public:
     /* Constructor */
     explicit Pol_ExternConf();
 
-    /* Run an external process for pump software */
-    QProcess *process1 = nullptr;
-
     /* Create configuration file generator object */
     Pol_configFilesGenerator *ConfigurationFileGenerator;
 
@@ -55,6 +52,13 @@ public:
     /* Path to save configuration file */
     QString pathFile;
 
+private:
+
+    /* Run an external process for pump software */
+    QProcess *process1 = nullptr;
+
+public:
+
     /* Time Converter */
     QStringList TimeConverter(double mTime);
 
@@ -64,11 +68,14 @@ public:
     /* Replaces the function of matlab */
     void pumpsPatternCalculator(void);
 
+    /* Destructor */
+    ~Pol_ExternConf(void);
+
+private slots:
+
     /* Remove existing files */
     void removeExistingFiles(void);
 
-    /* Destructor */
-    ~Pol_ExternConf(void);
 
 };
 

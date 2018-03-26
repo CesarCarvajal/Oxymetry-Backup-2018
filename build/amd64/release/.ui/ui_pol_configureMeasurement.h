@@ -442,7 +442,7 @@ public:
         doubleSpinBox_maxW->setMaximumSize(QSize(100, 16777215));
         doubleSpinBox_maxW->setDecimals(1);
         doubleSpinBox_maxW->setMaximum(2000);
-        doubleSpinBox_maxW->setSingleStep(0.5);
+        doubleSpinBox_maxW->setSingleStep(0.1);
         doubleSpinBox_maxW->setValue(750);
 
         horizontalLayout->addWidget(doubleSpinBox_maxW);
@@ -534,7 +534,7 @@ public:
         doubleSpinBox_minW->setMaximumSize(QSize(100, 16777215));
         doubleSpinBox_minW->setDecimals(1);
         doubleSpinBox_minW->setMaximum(2000);
-        doubleSpinBox_minW->setSingleStep(0.5);
+        doubleSpinBox_minW->setSingleStep(0.1);
         doubleSpinBox_minW->setValue(400);
 
         horizontalLayout_27->addWidget(doubleSpinBox_minW);

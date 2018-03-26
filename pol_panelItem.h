@@ -59,7 +59,6 @@ public:
 
     /* Enable/disable clickable labels */
     void setClickableLabelsEnabled(bool value);
-    void setClickableLabelsDisabled(bool value);
 
     /* Destructor */
     ~PanelItem_Pol(void);

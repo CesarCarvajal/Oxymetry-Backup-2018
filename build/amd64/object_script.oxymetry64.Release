@@ -43,6 +43,7 @@ INPUT(
 ./release\.obj\pol_measurements.o
 ./release\.obj\pol_externConf.o
 ./release\.obj\pol_configFilesGenerator.o
+./release\.obj\pol_set_wavelength_ranges.o
 ./release\.obj\qrc_icons.o
 ./release\.obj\moc_application.o
 ./release\.obj\moc_spectrometer_config.o
@@ -77,4 +78,5 @@ INPUT(
 ./release\.obj\moc_pol_measurements.o
 ./release\.obj\moc_pol_externConf.o
 ./release\.obj\moc_pol_configFilesGenerator.o
+./release\.obj\moc_pol_set_wavelength_ranges.o
 );

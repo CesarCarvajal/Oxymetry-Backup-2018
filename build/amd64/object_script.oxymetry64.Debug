@@ -1,5 +1,5 @@
 INPUT(
-C:\Users\OpLaSens-1\Desktop\Cesar\Software\oxymetry\build\amd64\debug\.obj\oxymetry_res.o
+./debug\.obj\oxymetry_res.o
 ./debug\.obj\main.o
 ./debug\.obj\application.o
 ./debug\.obj\messages.o
@@ -43,6 +43,7 @@ C:\Users\OpLaSens-1\Desktop\Cesar\Software\oxymetry\build\amd64\debug\.obj\oxyme
 ./debug\.obj\pol_measurements.o
 ./debug\.obj\pol_externConf.o
 ./debug\.obj\pol_configFilesGenerator.o
+./debug\.obj\pol_set_wavelength_ranges.o
 ./debug\.obj\qrc_icons.o
 ./debug\.obj\moc_application.o
 ./debug\.obj\moc_spectrometer_config.o
@@ -77,4 +78,5 @@ C:\Users\OpLaSens-1\Desktop\Cesar\Software\oxymetry\build\amd64\debug\.obj\oxyme
 ./debug\.obj\moc_pol_measurements.o
 ./debug\.obj\moc_pol_externConf.o
 ./debug\.obj\moc_pol_configFilesGenerator.o
+./debug\.obj\moc_pol_set_wavelength_ranges.o
 );

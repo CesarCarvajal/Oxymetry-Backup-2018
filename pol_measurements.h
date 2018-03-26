@@ -78,6 +78,8 @@ public:
     /* Time busy with FFT */
     int liveFFT_Time;
 
+public:
+
     /* Is the measurement running? */
     void setMeasurementRunning(bool runningM);
 

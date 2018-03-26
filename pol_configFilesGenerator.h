@@ -43,7 +43,7 @@ public:
     int NrAverages;
 
     /* Refilling Times */
-    int fillRefill;          // Should accept double too
+    int fillRefill;
 
     /* How many substances are active */
     int NumberOfSubstances;
@@ -58,7 +58,7 @@ public:
     int idle;
 
     /* Time Breaks */
-    int shortBreak;     // Should accept double too
+    int shortBreak;
     int longBreak;
 
     /* Active substances flags */
@@ -72,11 +72,21 @@ public:
     /* Range of Wavelengths */
     double minWavelength, maxWavelength;
 
+public:
+
     /* Generate pump files */
     void GeneratePumpScripts(QString pathFile, QString filetype, QVector<double> FlowVector);
 
     /* Generate Spectrometer configuration */
     void GenerateSpectrometerConfiguration(QString pathFile, QVector<double> GlucoseConcentration, QVector<double> Impurity1Concentration, QVector<double> Impurity2Concentration);
+
+    /* Calculate the correlation factors */
+    float correlationCoefficient(QVector <double> X, QVector <double> Y, int N);
+
+    /* Destructor */
+    ~Pol_configFilesGenerator(void);
+
+private:
 
     /* Write pump files sequence */
     void writePumpFile(FILE* pumpFile, QString filetype, QVector<double> FlowVector);
@@ -86,13 +96,6 @@ public:
 
     /* Write Filling pattern */
     void writeFilling(FILE *pFile, QVector <double> FlowVector, int k);
-
-    /* Calculate the correlation factors */
-    float correlationCoefficient(QVector <double> X, QVector <double> Y, int N);
-
-
-    /* Destructor */
-    ~Pol_configFilesGenerator(void);
 
 };
 

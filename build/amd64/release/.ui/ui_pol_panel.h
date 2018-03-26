@@ -193,8 +193,8 @@ public:
         list_devices_Pol->setObjectName(QStringLiteral("list_devices_Pol"));
         sizePolicy1.setHeightForWidth(list_devices_Pol->sizePolicy().hasHeightForWidth());
         list_devices_Pol->setSizePolicy(sizePolicy1);
-        list_devices_Pol->setMinimumSize(QSize(290, 120));
-        list_devices_Pol->setMaximumSize(QSize(290, 120));
+        list_devices_Pol->setMinimumSize(QSize(290, 189));
+        list_devices_Pol->setMaximumSize(QSize(290, 189));
         list_devices_Pol->setAutoScroll(false);
 
         verticalLayout_8->addWidget(list_devices_Pol);
@@ -315,7 +315,7 @@ public:
 
         horizontalLayout_2->addWidget(label_n);
 
-        HSpaceX = new QSpacerItem(120, 5, QSizePolicy::Fixed, QSizePolicy::Minimum);
+        HSpaceX = new QSpacerItem(110, 5, QSizePolicy::Fixed, QSizePolicy::Minimum);
 
         horizontalLayout_2->addItem(HSpaceX);
 
@@ -379,8 +379,8 @@ public:
         Table_Measurements_Pol->setObjectName(QStringLiteral("Table_Measurements_Pol"));
         sizePolicy3.setHeightForWidth(Table_Measurements_Pol->sizePolicy().hasHeightForWidth());
         Table_Measurements_Pol->setSizePolicy(sizePolicy3);
-        Table_Measurements_Pol->setMinimumSize(QSize(300, 50));
-        Table_Measurements_Pol->setMaximumSize(QSize(300, 16777215));
+        Table_Measurements_Pol->setMinimumSize(QSize(290, 50));
+        Table_Measurements_Pol->setMaximumSize(QSize(290, 16777215));
         Table_Measurements_Pol->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
         Table_Measurements_Pol->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
         Table_Measurements_Pol->setAutoScroll(true);
@@ -1005,7 +1005,7 @@ public:
 #endif // QT_NO_TOOLTIP
         label_Measurements_Pol->setText(QApplication::translate("PanelPolarimeter", "Measurement Profile:", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem4 = Table_Measurements_Pol->horizontalHeaderItem(0);
-        ___qtablewidgetitem4->setText(QApplication::translate("PanelPolarimeter", "Time (s)", Q_NULLPTR));
+        ___qtablewidgetitem4->setText(QApplication::translate("PanelPolarimeter", "Time", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         ___qtablewidgetitem4->setToolTip(QApplication::translate("PanelPolarimeter", "Time Intervals", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP

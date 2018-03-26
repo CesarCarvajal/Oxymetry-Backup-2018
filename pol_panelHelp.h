@@ -49,6 +49,8 @@ private slots:
     void close(void);
 
 private:
+
+    /* UI */
     Ui::PanelPolHelp *ui;
 
     /* Label for application icon */

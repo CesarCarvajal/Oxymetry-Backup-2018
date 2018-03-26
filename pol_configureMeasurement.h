@@ -52,9 +52,6 @@ public:
     /* Total measurement time */
     double totalMtime;
 
-    /* Is a configuration loaded */
-    bool loadingConfigurationFromFile;
-
     /* Save if there was a configuration loaded */
     bool configured;
 
@@ -67,8 +64,32 @@ public:
     /*Start time of the measurement with delay */
     QDateTime startTime;
 
+    /* User interface */
+    Ui::configurePolMeasure *ui;
+
+    /* Do you want to load a configuration? or not? */
+    bool Conf_canceled;
+
+private:
+
+    /* Abort run if set to FALSE */
+    bool bRunTimePattern = false;
+
+    /* Own signal mapper for buttons and labels in configuration window */
+    QSignalMapper *signalMapperC;
+
+    /* Is a configuration loaded */
+    bool loadingConfigurationFromFile;
+
+public:
+
     /* Clean all the loaded configuration */
     void cleanAll(void);
+
+    /* Destructor */
+    ~configurePolMeasure(void);
+
+private slots:
 
     /* Get configuration data */
     void GetConfigurationData(void);
@@ -76,19 +97,6 @@ public:
     /* Load configuration file */
     void loadConfiguration(void);
 
-    /* User interface */
-    Ui::configurePolMeasure *ui;
-
-    /* Own signal mapper for buttons and labels in configuration window */
-    QSignalMapper *signalMapperC;
-
-    /* Do you want to load a configuration? or not? */
-    bool Conf_canceled;
-
-    /* Destructor */
-    ~configurePolMeasure(void);
-
-private slots:
     /* Select path */
     void selectPath(void);
 
@@ -103,11 +111,6 @@ private slots:
 
     /* Update parameters */
     void updateConfigurationValues(void);
-
-private:
-
-    /* Abort run if set to FALSE */
-    bool bRunTimePattern = false;
 
 };
 

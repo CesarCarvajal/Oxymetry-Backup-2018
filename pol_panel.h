@@ -77,22 +77,88 @@ public:
     /* User interface */
     Ui::PanelPolarimeter *ui;
 
+private:
+
+    /* Load configuration class */
+    configurePolMeasure *ConfigureMeasurement;
+
+    /* Help Dialog object */
+    PanelPolHelp* helpDialog;
+
+    /* Measurements Object */
+    Pol_Measurements *Runner = nullptr;
+
+    /* The user modifies this when calibrating */
+    QLineEdit *ColumnSpectra = new QLineEdit();
+    QLineEdit *ColumnFreq = new QLineEdit();
+
+    /* If this changes, then quit everything */
+    bool abort_everything;
+
+    /* The number of the spectrometer in use for polarimeter */
+    int SpectrometerNumber;
+
+    /* Connected devices */
+    QList<PanelItem_Pol *> devices2;
+    QList<QwtPlotCurve *> curves_Pol;
+
+    /* Signal mapper */
+    QSignalMapper *signalMapper;
+
+    /* Since there is a lot of data to handle, we use files to save it temporarily */
+    QFileInfo fileInfo;
+
+    /* Path given by the user to load files */
+    QString DataPath;
+
+    /* Distinguish between raw and fft data */
+    bool isFFTData;
+
+    /* Was there data loaded? */
+    bool dataloaded;
+
+    /* Get current path to executable */
+    QString currentWorkingPath;
+
+    /* FFT Object */
+    fft FFTL;
+
+    /* Plot Objetct */
+    Pol_Plot *PolPlotter = nullptr;
+
+    /* Fix the X axis zoom problem */
+    double minXAverage, maxXAverage, maxYRaw, maxYAverage;
+
+    /* Start measurement button color */
+    QString greenButton = "color: rgb(0,128,0)", RedButton = "color: rgb(250,0,0)", grayButton = "color: rgb(211,211,211)";
+
+    /* Saves old values of frequency or Nr Spectra from labels in calibration */
+    QString OldFreqValue, OldSpectraValue;
+
+    /* Folder Name to save the data */
+    QString folder;
+
+    /* Index of configured waiting time in measurements */
+    unsigned int Timeindex;
+
+public:
+
     /* Updates user interface */
     void update();
 
     /* Disable/enable polarimeter */
     void enable_Polarimeter_Measurement(bool activate);
 
-    /* Get the number of the current spectrometer in Polarimeter */
-    void selected_Spectrometer_Pol(void);
-
-    /* Show needed items of UI */
-    void showUI_Item(bool UIstatus);
-
     /* Destructor */
     ~PanelPolarimeter(void);
 
 private slots:
+
+    /* Show needed items of UI */
+    void showUI_Item(bool UIstatus);
+
+    /* Get the number of the current spectrometer in Polarimeter */
+    void selected_Spectrometer_Pol(void);
 
     /* Open help dialog */
     void help_Pol(void);
@@ -207,70 +273,6 @@ private slots:
 
     /* Change the wavelengths range according to the user selection */
     void update_Wavelength_Range(void);
-
-private:
-
-    QSignalMapper *signalMapper;
-
-    /* Since there is a lot of data to handle, we use files to save it temporarily */
-    QFileInfo fileInfo;
-
-    /* Path given by the user to load files */
-    QString DataPath;
-
-    /* Distinguish between raw and fft data */
-    bool isFFTData = true;
-
-    /* Was there data loaded? */
-    bool dataloaded = false;
-
-    /* Get current path to executable */
-    QString currentWorkingPath;
-
-    /* FFT Object */
-    fft FFTL;
-
-    /* Plot Objetct */
-    Pol_Plot *Pol_Plotter = nullptr;
-
-    /* Fix the X axis zoom problem */
-    double minXAverage, maxXAverage, maxYRaw, maxYAverage;
-
-    /* Start measurement button color */
-    QString greenButton = "color: rgb(0,128,0)", RedButton = "color: rgb(250,0,0)", grayButton = "color: rgb(211,211,211)";
-
-    /* Saves old values of frequency or Nr Spectra from labels in calibration */
-    QString OldFreqValue, OldSpectraValue = "";
-
-    /* Folder Name to save the data */
-    QString folder;
-
-    /* Index of configured waiting time in measurements */
-    unsigned int Timeindex = 0;
-
-public:
-
-    QList<PanelItem_Pol *> devices2;
-    QList<QwtPlotCurve *> curves_Pol;
-
-    /* The number of the spectrometer in use for polarimeter */
-    int SpectrometerNumber = 0;
-
-    /* The user modifies this when calibrating */
-    QLineEdit *ColumnSpectra = new QLineEdit();
-    QLineEdit *ColumnFreq = new QLineEdit();
-
-    /* Load configuration class */
-    configurePolMeasure *ConfigureMeasurement;
-
-    /* If this changes, then quit everything */
-    bool abort_everything = false;
-
-    /* Help Dialog object */
-    PanelPolHelp* helpDialog;
-
-    /* Measurements Object */
-    Pol_Measurements *Runner = nullptr;
 
 public slots:
 

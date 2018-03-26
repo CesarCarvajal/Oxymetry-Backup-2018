@@ -36,22 +36,6 @@ public:
     /* Constructor */
     explicit Pol_Plot();
 
-    /* Plot the real time averages of the frequency components DC, W, and 2W */
-    void plotAverages(bool dataloaded, QVector<double> FFTLfft_DC, QVector<double> FFTLfft_W, QVector<double> FFTLfft_2W, QVector<double> FFTLwavelengths, bool measuring, int time);
-
-    /* The user wants to look the FFT at one specific wavelength */
-    void plotFFTatSelectedWave(QVector<double> FFTLfft_data, QVector<double> FFTLfrequencies);
-
-    /* Plot the graphs */
-    void Plot_FFT_Graphs(QVector<double> FFTLwavelengths, QVector<double> FFTLfrequencies, QVector<double> FFTLfft_data, QVector<double> FFTLfft_DC,
-                         QVector<double> FFTLfft_W, QVector<double> FFTLfft_2W, QVector<double> FFTLfft_Compensation_Signal);
-
-    /* Clean all the plots */
-    void clean_AllPlots(void);
-
-    /* Averages Plot time */
-    int counts_average_time;
-
     /* Polarimetry curves */
     QwtPlotCurve *FFT_oneWave, *predictionSignal;
     QwtPlotCurve *FFT_DC, *FFT_W, *FFT_2W;
@@ -73,6 +57,26 @@ public:
 
     /* Reference prediction */
     QVector<double> linearR;
+
+private:
+
+    /* Averages Plot time */
+    int counts_average_time;
+
+public:
+
+    /* Plot the real time averages of the frequency components DC, W, and 2W */
+    void plotAverages(bool dataloaded, QVector<double> FFTLfft_DC, QVector<double> FFTLfft_W, QVector<double> FFTLfft_2W, QVector<double> FFTLwavelengths, bool measuring, int time);
+
+    /* The user wants to look the FFT at one specific wavelength */
+    void plotFFTatSelectedWave(QVector<double> FFTLfft_data, QVector<double> FFTLfrequencies);
+
+    /* Plot the graphs */
+    void Plot_FFT_Graphs(QVector<double> FFTLwavelengths, QVector<double> FFTLfrequencies, QVector<double> FFTLfft_data, QVector<double> FFTLfft_DC,
+                         QVector<double> FFTLfft_W, QVector<double> FFTLfft_2W, QVector<double> FFTLfft_Compensation_Signal);
+
+    /* Clean all the plots */
+    void clean_AllPlots(void);
 
     /* Destructor */
     ~Pol_Plot(void);

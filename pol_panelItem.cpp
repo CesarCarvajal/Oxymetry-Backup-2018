@@ -44,11 +44,14 @@ PanelItem_Pol::PanelItem_Pol(QWidget *parent, QString name) :
     ui->lineEdit_name->setText(name);
     ui->lineEdit_name->setStyleSheet("* { background-color: rgba(0, 0, 0, 0); }");
     ui->label_integrationTime->setStyleSheet("QLabel { color: blue; }");
+    ui->label_setWranges->setStyleSheet("QLabel { color: blue; }");
+    ui->label_frequency->setStyleSheet("QLabel { color: blue; }");
+    ui->label_Nspectra->setStyleSheet("QLabel { color: blue; }");
     ui->label_autoAdjust->setStyleSheet("QLabel { color: blue; }");
     ui->label_numberOfAverages->setStyleSheet("QLabel { color: blue; }");
     ui->label_saturatedPixels->setText(QString("Not saturated"));
     ui->label_saturatedPixels->setStyleSheet(QString("color: green; font: bold;"));
-    ui->label_ActiveSpec_Pol->setText(QString("Active Spectrometer"));
+    ui->label_ActiveSpec_Pol->setText(QString("Active Spectrometer:"));
     ui->label_ActiveSpec_Pol->setStyleSheet(QString("color: green; font: bold;"));
 }
 
@@ -190,35 +193,37 @@ void PanelItem_Pol::setClickableLabelsEnabled(bool value)
     /* Enable/disable labels */
     ui->label_integrationTime->setEnabled(value);
     ui->label_numberOfAverages->setEnabled(value);
+    ui->label_setWranges->setEnabled(value);
+    ui->label_frequency->setEnabled(value);
+    ui->label_Nspectra->setEnabled(value);
 
     /* Set label stylesheets */
     ui->label_integrationTime->setStyleSheet(value ? "QLabel { color: blue; }" : "QLabel { color: grey; }");
     ui->label_numberOfAverages->setStyleSheet(value ? "QLabel { color: blue; }" : "QLabel { color: grey; }");
+    ui->label_setWranges->setStyleSheet(value ? "QLabel { color: blue; }" : "QLabel { color: grey; }");
+    ui->label_frequency->setStyleSheet(value ? "QLabel { color: blue; }" : "QLabel { color: grey; }");
+    ui->label_Nspectra->setStyleSheet(value ? "QLabel { color: blue; }" : "QLabel { color: grey; }");
 
-    ui->label_ActiveSpec_Pol->setText(QString(value ? "Active Spectrometer" : "Select a Spectrometer from Preview List"));
+    ui->label_ActiveSpec_Pol->setText(QString(value ? "Active Spectrometer:" : "Select a Spectrometer from Preview List"));
+    ui->lineEdit_name->setVisible(value ? true : false);
     ui->label_ActiveSpec_Pol->setStyleSheet(QString(value ? "color: green; font: bold;" : "color: red; font: bold;"));
     ui->label_saturatedPixels->setVisible(value);
+    ui->label_Status->setVisible(value);
     ui->label_integrationTime->setVisible(value);
+    ui->label_setWrange->setVisible(value);
+    ui->label_setWrange2->setVisible(value);
+    ui->label_setWranges->setVisible(value);
     ui->label_numberOfAverages->setVisible(value);
     ui->label_autoAdjust->setVisible(value);
     ui->label->setVisible(value);
     ui->label_2->setVisible(value);
     ui->label_timeBase->setVisible(value);
-}
+    ui->label_frequency->setVisible(value);
+    ui->label_freq2->setVisible(value);
+    ui->label_freq3->setVisible(value);
+    ui->label_Nspectra->setVisible(value);
+    ui->label_Nspectra2->setVisible(value);
 
-/**
- * @brief Disable clickable labels
- * @param[in] value TRUE disables labels, FALSE enables labels
- */
-void PanelItem_Pol::setClickableLabelsDisabled(bool value)
-{
-    /* Disable/enable labels */
-    ui->label_integrationTime->setDisabled(value);
-    ui->label_numberOfAverages->setDisabled(value);
-
-    /* Set label stylesheets */
-    ui->label_integrationTime->setStyleSheet(value ? "QLabel { color: grey; }" : "QLabel { color: blue; }");
-    ui->label_numberOfAverages->setStyleSheet(value ? "QLabel { color: grey; }" : "QLabel { color: blue; }");
 }
 
 /**
