@@ -49,8 +49,11 @@ public:
     QVector<double> minConcentrations;
     QVector<double> maxConcentrations;
 
-    /* Path to save configuration file */
-    QString pathFile;
+    /* Path is not modified, it's used to save files and delete scripts */
+    QString pathForScripts;
+
+    /* Wavelengh range */
+    double minWavelength, maxWavelength;
 
 private:
 

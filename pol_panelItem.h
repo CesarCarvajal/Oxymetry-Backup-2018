@@ -60,6 +60,30 @@ public:
     /* Enable/disable clickable labels */
     void setClickableLabelsEnabled(bool value);
 
+    /* Returns the minimum set wavelength */
+    double getMinimumWavelength(void);
+
+    /* Returns the maximum set wavelength */
+    double getMaximumWavelength(void);
+
+    /* Set label wavelength range values */
+    void setWavelengthRange(double min, double max);
+
+    /* Enable parameters of the devices */
+    void enableComponents(bool value);
+
+    /* Set number of spectra */
+    void setNumberOfSpectra(int NSpectra);
+
+    /* Set number of spectra */
+    void setFrequency(int Frequency);
+
+    /* Get the number of averages */
+    int getNumberOfSpectra(void);
+
+    /* Get the frequency */
+    int getFrequency(void);
+
     /* Destructor */
     ~PanelItem_Pol(void);
 
@@ -71,6 +95,10 @@ private:
     int numberOfAverages;   /* Number of averages */
     bool isSaturated;       /* Has saturated pixels? */
     bool isEnabled;         /* Spectrometer enabled? */
+    int numberOfSpectra;
+    int frequency;
+    double minimumWavelength;
+    double maximumWavelength;
 };
 
 #endif // POL_PANELITEM_H

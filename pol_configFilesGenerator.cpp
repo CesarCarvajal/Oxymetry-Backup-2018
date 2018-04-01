@@ -44,10 +44,6 @@ Pol_configFilesGenerator::Pol_configFilesGenerator()
     /* Number of Sustances active */
     NumberOfSubstances = 2;
 
-    /* Range of Wavelengths */
-    minWavelength = 400;
-    maxWavelength = 1000;
-
 }
 
 /**
@@ -87,13 +83,45 @@ void Pol_configFilesGenerator::GeneratePumpScripts(QString pathFile, QString fil
  * @brief Generate Spectrometer configuration
  * @param[in] Vectors with Glucose and Impurities concentrations
  */
-void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFile, QVector <double> GlucoseConcentration, QVector <double> Impurity1Concentration, QVector <double> Impurity2Concentration){
+void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFile, QVector <double> GlucoseConcentration, QVector <double> Impurity1Concentration, QVector <double> Impurity2Concentration, QVector <double> StockSolutions, double minW, double maxW){
 
     /* Open the file */
     FILE *file = fopen(pathFile.toLatin1().data(), "wt");
 
     /* Write in file */
-    fprintf(file, "%s", "Time_interval ; File_name ; Nr_Spectra ; Int_time ; Nr_Averages ; Modulation_frequency\n");
+    fprintf(file, "%s", "Nr_M;Nr_Sp;Int_T;Nr_Av;Freq;MinW;MaxW;Ab_F;Ab_V;N_Ste;S_Break;L_Break;St_Del;C1?;C2?;C3?;mC1;MC1;StC1;mC2;MC2;StC2;mC3;MC3;StC3;Time_Int;File_Name\n");
+
+    /* Write all the configuration data */
+    QString configurationData = "";
+
+    configurationData.append(QString::number(NConcentrations) + ";");
+    configurationData.append(QString::number(NrSpectra) + ";");
+    configurationData.append(QString::number(IntegrationTime) + ";");
+    configurationData.append(QString::number(NrAverages) + ";");
+    configurationData.append(QString::number(Frequency) + ";");
+    configurationData.append(QString::number(minW) + ";");
+    configurationData.append(QString::number(maxW) + ";");
+    configurationData.append(QString::number(absoluteFlow) + ";");
+    configurationData.append(QString::number(absVol) + ";");
+    configurationData.append(QString::number(NSteps) + ";");
+    configurationData.append(QString::number(shortBreak) + ";");
+    configurationData.append(QString::number(longBreak) + ";");
+    configurationData.append(QString::number(startDelay) + ";");
+    configurationData.append(QString::number(glucoseActive) + ";");
+    configurationData.append(QString::number(Imp1Active) + ";");
+    configurationData.append(QString::number(Imp2Active) + ";");
+    configurationData.append(QString::number(*std::min_element(GlucoseConcentration.begin(), GlucoseConcentration.end()))+ ";");
+    configurationData.append(QString::number(*std::max_element(GlucoseConcentration.begin(), GlucoseConcentration.end()))+ ";");
+    configurationData.append(QString::number(StockSolutions.at(0)) + ";");
+    configurationData.append(QString::number(*std::min_element(Impurity1Concentration.begin(), Impurity1Concentration.end()))+ ";");
+    configurationData.append(QString::number(*std::max_element(Impurity1Concentration.begin(), Impurity1Concentration.end()))+ ";");
+    configurationData.append(QString::number(StockSolutions.at(1)) + ";");
+    configurationData.append(QString::number(*std::min_element(Impurity2Concentration.begin(), Impurity2Concentration.end()))+ ";");
+    configurationData.append(QString::number(*std::max_element(Impurity2Concentration.begin(), Impurity2Concentration.end()))+ ";");
+    configurationData.append(QString::number(StockSolutions.at(2)) + "\n");
+
+    /* Write in file */
+    fprintf(file, "%s", configurationData.toLatin1().data());
 
     /* Cycle of a concentration */
     double cycleTime = (2 * fillRefill + 4*shortBreak)*(NSteps + (NSteps-1)) +  (2 * fillRefill + 3*shortBreak + longBreak );
@@ -133,8 +161,7 @@ void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFil
         }
 
         /* Complete the file name */
-        line = line + QString::number(IntegrationTime) + "ms_" + QString::number(Frequency) + "Hz_" + QString::number(j+1) + ";" + QString::number(NrSpectra) +
-                ";" + QString::number(IntegrationTime) + ";" + QString::number(NrAverages) + ";" + QString::number(Frequency) + "\n";
+        line = line + QString::number(IntegrationTime) + "ms_" + QString::number(Frequency) + "Hz_" + QString::number(j+1) + "\n";
 
         /* Write in file */
         fprintf(file, "%s", line.toLatin1().data());

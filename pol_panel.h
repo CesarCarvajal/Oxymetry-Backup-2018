@@ -88,37 +88,12 @@ private:
     /* Measurements Object */
     Pol_Measurements *Runner = nullptr;
 
-    /* The user modifies this when calibrating */
-    QLineEdit *ColumnSpectra = new QLineEdit();
-    QLineEdit *ColumnFreq = new QLineEdit();
-
-    /* If this changes, then quit everything */
-    bool abort_everything;
-
-    /* The number of the spectrometer in use for polarimeter */
-    int SpectrometerNumber;
-
     /* Connected devices */
-    QList<PanelItem_Pol *> devices2;
-    QList<QwtPlotCurve *> curves_Pol;
+    PanelItem_Pol * PolarimetrySpectrometer;
+    QwtPlotCurve * curve_Pol;
 
     /* Signal mapper */
     QSignalMapper *signalMapper;
-
-    /* Since there is a lot of data to handle, we use files to save it temporarily */
-    QFileInfo fileInfo;
-
-    /* Path given by the user to load files */
-    QString DataPath;
-
-    /* Distinguish between raw and fft data */
-    bool isFFTData;
-
-    /* Was there data loaded? */
-    bool dataloaded;
-
-    /* Get current path to executable */
-    QString currentWorkingPath;
 
     /* FFT Object */
     fft FFTL;
@@ -126,20 +101,49 @@ private:
     /* Plot Objetct */
     Pol_Plot *PolPlotter = nullptr;
 
-    /* Fix the X axis zoom problem */
-    double minXAverage, maxXAverage, maxYRaw, maxYAverage;
-
     /* Start measurement button color */
     QString greenButton = "color: rgb(0,128,0)", RedButton = "color: rgb(250,0,0)", grayButton = "color: rgb(211,211,211)";
 
-    /* Saves old values of frequency or Nr Spectra from labels in calibration */
-    QString OldFreqValue, OldSpectraValue;
+private:
 
-    /* Folder Name to save the data */
-    QString folder;
+    /* Get current path to executable */
+    QString currentWorkingPath;
+
+    /* If this changes, then quit everything */
+    bool abort_everything;
+
+    /* The number of the spectrometer in use for polarimeter */
+    int SpectrometerNumber;
 
     /* Index of configured waiting time in measurements */
     unsigned int Timeindex;
+
+    /* Distinguish between raw and fft data */
+    bool isFFTData;
+
+    /* Was there data loaded? */
+    bool dataloaded;
+
+    /* Since there is a lot of data to handle, we use files to save it temporarily */
+    QFileInfo fileInfoSaving;
+
+    /* Elapsed time for the measurements */
+    int totalMeasuretime;
+
+    /* File information for the temporal file of calibration */
+    QFileInfo fileInfoCalibration;
+
+    /* File loading information */
+    QFileInfo fileInfoLoad;
+
+    /* Path given by the user to load files */
+    QString UserLoadDataPath;
+
+    /* Folder where the data will be saved */
+    QString folderForData;
+
+    /* Fix the X axis zoom problem */
+    double minXAverage, maxXAverage, maxYRaw, maxYAverage;
 
 public:
 
@@ -274,10 +278,16 @@ private slots:
     /* Change the wavelengths range according to the user selection */
     void update_Wavelength_Range(void);
 
+    /* Adjust the wavelengths range */
+    void adjust_Wavelength_Range(void);
+
 public slots:
 
     /* Enable Help Non Modal Window */
     void enable_Help_Pol();
+
+    /* Set configured values */
+    void setConfiguration(void);
 
 signals:
 

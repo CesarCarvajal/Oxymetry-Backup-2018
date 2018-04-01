@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
+   <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -79,7 +79,7 @@
        </font>
       </property>
       <property name="toolTip">
-       <string>Spectrometer Name</string>
+       <string>Change spectrometer Name</string>
       </property>
       <property name="text">
        <string/>
@@ -119,12 +119,12 @@
      <x>0</x>
      <y>30</y>
      <width>281</width>
-     <height>152</height>
+     <height>154</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
     <property name="sizeConstraint">
-     <enum>QLayout::SetMinimumSize</enum>
+     <enum>QLayout::SetDefaultConstraint</enum>
     </property>
     <item row="4" column="0">
      <layout class="QHBoxLayout" name="horizontalLayout_8">
@@ -168,6 +168,9 @@
         <property name="cursor">
          <cursorShape>PointingHandCursor</cursorShape>
         </property>
+        <property name="toolTip">
+         <string>Change Number of Spectra</string>
+        </property>
         <property name="frameShape">
          <enum>QFrame::NoFrame</enum>
         </property>
@@ -191,6 +194,9 @@
           <bold>false</bold>
          </font>
         </property>
+        <property name="toolTip">
+         <string>Spectrometer Status</string>
+        </property>
         <property name="text">
          <string>&lt;saturated pixels&gt;</string>
         </property>
@@ -213,6 +219,9 @@
         <property name="cursor">
          <cursorShape>PointingHandCursor</cursorShape>
         </property>
+        <property name="toolTip">
+         <string>Set the wavelength range</string>
+        </property>
         <property name="frameShape">
          <enum>QFrame::StyledPanel</enum>
         </property>
@@ -227,6 +236,19 @@
          <string>nm</string>
         </property>
        </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_11">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
       </item>
      </layout>
     </item>
@@ -285,7 +307,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Number of Averages:</string>
+         <string>Number of Averages:    </string>
         </property>
         <property name="alignment">
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -335,7 +357,7 @@
       <item>
        <widget class="ClickableLabel" name="label_integrationTime">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -348,7 +370,7 @@
         </property>
         <property name="maximumSize">
          <size>
-          <width>20</width>
+          <width>50</width>
           <height>16777215</height>
          </size>
         </property>
@@ -367,7 +389,7 @@
          <enum>QFrame::StyledPanel</enum>
         </property>
         <property name="text">
-         <string/>
+         <string>6</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -414,7 +436,7 @@
          <enum>Qt::Horizontal</enum>
         </property>
         <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
+         <enum>QSizePolicy::Expanding</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
@@ -438,7 +460,7 @@
          <string>Auto Adjust Integration Time</string>
         </property>
         <property name="text">
-         <string>(Auto Adjust)</string>
+         <string>(Auto)</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -455,7 +477,7 @@
          <bool>true</bool>
         </property>
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -468,7 +490,7 @@
         </property>
         <property name="maximumSize">
          <size>
-          <width>20</width>
+          <width>50</width>
           <height>16777215</height>
          </size>
         </property>
@@ -479,6 +501,9 @@
         </property>
         <property name="cursor">
          <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="toolTip">
+         <string>Change the Frequency to Measure</string>
         </property>
         <property name="frameShape">
          <enum>QFrame::NoFrame</enum>
@@ -494,6 +519,19 @@
          <string>Hz</string>
         </property>
        </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_10">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>18</height>
+         </size>
+        </property>
+       </spacer>
       </item>
      </layout>
     </item>
@@ -526,7 +564,7 @@
          <cursorShape>PointingHandCursor</cursorShape>
         </property>
         <property name="text">
-         <string>Wavelength Range:</string>
+         <string>Wavelengths Range:</string>
         </property>
        </widget>
       </item>

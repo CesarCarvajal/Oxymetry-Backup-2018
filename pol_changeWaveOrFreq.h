@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef POL_SET_WAVELENGTH_RANGES_H
-#define POL_SET_WAVELENGTH_RANGES_H
+#ifndef POL_CHANGEWAVEORFREQ_H
+#define POL_CHANGEWAVEORFREQ_H
 
 /* External includes */
 #include <QDialog>
@@ -25,31 +25,44 @@
 #include <QTimer>
 
 namespace Ui {
-    class PanelSetWavelengthRanges;
+    class PanelChangeWaveOrFreq;
 }
 
 /**
- * @brief The 'PanelSetWavelengthRanges' class
+ * @brief The 'PanelChangeWaveFFT' class
  */
-class PanelSetWavelengthRanges : public QDialog
+class PanelChangeWaveOrFreq : public QDialog
 {
     Q_OBJECT
 
 public:
     /* Constructor */
-    explicit PanelSetWavelengthRanges(QWidget *parent = 0);
+    explicit PanelChangeWaveOrFreq(QWidget *parent = 0);
 
-    /* Get or set wavelength ranges */
-    double getMinValue(void);
-    double getMaxValue(void);
+    /* User Interface */
+    Ui::PanelChangeWaveOrFreq *ui;
 
-    void setValues(double minW, double maxW, double actualMin, double actualMax);
+    /* Get or set wavelength */
+    int getValue(void);
+    void setValue(double value);
+
+    /* Show/Hide the frequency spinbox */
+    void ShowFrequency(bool value);
+
+    /* Show/Hide the list of wavelengths */
+    void ShowWavelengthsList(bool value);
+
+    /* Get or set the frequency */
+    int getFrequency(void);
+    void setFrequency(int value);
+
+    /* Set Units */
+    void setUnits(QString unit);
 
     /* Destructor */
-    ~PanelSetWavelengthRanges(void);
+    ~PanelChangeWaveOrFreq(void);
 
 public slots:
-
     /* Brings the window to foreground at creation */
     void activateWindow(void)
     {
@@ -57,16 +70,9 @@ public slots:
     }
 
 private slots:
-
     /* User pressed 'apply' button */
     void applyButton(void);
 
-    /* Set limits of the range */
-    void setLimits(void);
-
-private:
-
-    Ui::PanelSetWavelengthRanges *ui;
 };
 
-#endif // POL_SET_WAVELEGNTH_RANGES_H
+#endif // POL_CHANGEWAVEORFREQ_H

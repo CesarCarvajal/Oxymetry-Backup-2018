@@ -222,12 +222,13 @@ public:
     {
         if (configurePolMeasure->objectName().isEmpty())
             configurePolMeasure->setObjectName(QStringLiteral("configurePolMeasure"));
-        configurePolMeasure->resize(822, 760);
-        QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
+        configurePolMeasure->resize(922, 760);
+        QSizePolicy sizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(configurePolMeasure->sizePolicy().hasHeightForWidth());
         configurePolMeasure->setSizePolicy(sizePolicy);
+        configurePolMeasure->setMinimumSize(QSize(922, 760));
         gridLayout = new QGridLayout(configurePolMeasure);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         gridLayout->setSizeConstraint(QLayout::SetDefaultConstraint);
@@ -441,7 +442,7 @@ public:
         doubleSpinBox_maxW->setMinimumSize(QSize(100, 0));
         doubleSpinBox_maxW->setMaximumSize(QSize(100, 16777215));
         doubleSpinBox_maxW->setDecimals(1);
-        doubleSpinBox_maxW->setMaximum(2000);
+        doubleSpinBox_maxW->setMaximum(10000);
         doubleSpinBox_maxW->setSingleStep(0.1);
         doubleSpinBox_maxW->setValue(750);
 
@@ -533,7 +534,7 @@ public:
         doubleSpinBox_minW->setMinimumSize(QSize(100, 0));
         doubleSpinBox_minW->setMaximumSize(QSize(100, 16777215));
         doubleSpinBox_minW->setDecimals(1);
-        doubleSpinBox_minW->setMaximum(2000);
+        doubleSpinBox_minW->setMaximum(10000);
         doubleSpinBox_minW->setSingleStep(0.1);
         doubleSpinBox_minW->setValue(400);
 
@@ -1214,7 +1215,7 @@ public:
         doubleSpinBox_startDelay->setMaximumSize(QSize(100, 16777215));
         doubleSpinBox_startDelay->setDecimals(3);
         doubleSpinBox_startDelay->setMaximum(1e+7);
-        doubleSpinBox_startDelay->setSingleStep(0.01);
+        doubleSpinBox_startDelay->setSingleStep(0.001);
 
         horizontalLayout_13->addWidget(doubleSpinBox_startDelay);
 
@@ -1371,6 +1372,7 @@ public:
         sizePolicy4.setVerticalStretch(0);
         sizePolicy4.setHeightForWidth(label_timeLabel->sizePolicy().hasHeightForWidth());
         label_timeLabel->setSizePolicy(sizePolicy4);
+        label_timeLabel->setMinimumSize(QSize(150, 0));
 
         timeLayout->addWidget(label_timeLabel);
 
@@ -1462,7 +1464,7 @@ public:
 #ifndef QT_NO_TOOLTIP
         label_load->setToolTip(QApplication::translate("configurePolMeasure", "Hide/Show Loading Configuration", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        label_load->setText(QApplication::translate("configurePolMeasure", "< Load a Spectrometer Configuration File:", Q_NULLPTR));
+        label_load->setText(QApplication::translate("configurePolMeasure", "< Load Configuration:", Q_NULLPTR));
         label_filename->setText(QApplication::translate("configurePolMeasure", "Filename:", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         lineEdit_path->setToolTip(QApplication::translate("configurePolMeasure", "Configuration File URL", Q_NULLPTR));
@@ -1471,11 +1473,11 @@ public:
 #ifndef QT_NO_TOOLTIP
         pushButton_select->setToolTip(QApplication::translate("configurePolMeasure", "Load a Configuration File", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        pushButton_select->setText(QApplication::translate("configurePolMeasure", "Open", Q_NULLPTR));
+        pushButton_select->setText(QApplication::translate("configurePolMeasure", "Load", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         label_basicConf->setToolTip(QApplication::translate("configurePolMeasure", "Hide/Show Create Configuration File", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        label_basicConf->setText(QApplication::translate("configurePolMeasure", "< Create Configuration File:", Q_NULLPTR));
+        label_basicConf->setText(QApplication::translate("configurePolMeasure", "< Create Configuration:", Q_NULLPTR));
         label_Spectrometer->setText(QApplication::translate("configurePolMeasure", "Spectrometer:", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         label_BIntTime->setToolTip(QApplication::translate("configurePolMeasure", "What's the Integration Time?", Q_NULLPTR));
@@ -1674,7 +1676,7 @@ public:
         label_timebetweenM->setText(QApplication::translate("configurePolMeasure", "Intervals:", Q_NULLPTR));
         lineEdit_timebetweenM->setText(QApplication::translate("configurePolMeasure", "6.32", Q_NULLPTR));
         label2_timebetweenM->setText(QApplication::translate("configurePolMeasure", "min", Q_NULLPTR));
-        label_timeLabel->setText(QApplication::translate("configurePolMeasure", "The measurement will start at: ", Q_NULLPTR));
+        label_timeLabel->setText(QApplication::translate("configurePolMeasure", "Starting from now at:  ", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         label_BFileNamePrev->setToolTip(QApplication::translate("configurePolMeasure", "File Name Preview", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
@@ -1687,7 +1689,7 @@ public:
 #ifndef QT_NO_TOOLTIP
         pushButton_generate->setToolTip(QApplication::translate("configurePolMeasure", "Generate Configuration File", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        pushButton_generate->setText(QApplication::translate("configurePolMeasure", "Generate Configuration", Q_NULLPTR));
+        pushButton_generate->setText(QApplication::translate("configurePolMeasure", "Create", Q_NULLPTR));
     } // retranslateUi
 
 };

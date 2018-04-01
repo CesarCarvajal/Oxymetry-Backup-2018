@@ -27,6 +27,7 @@
 #include <QSignalMapper>
 #include <QDateTime>
 #include "pol_externConf.h"
+#include <QFileInfo>
 
 namespace Ui {
 class configurePolMeasure;
@@ -43,6 +44,9 @@ public:
     /* Constructor */
     explicit configurePolMeasure(QWidget *parent = 0);
 
+    /* User interface */
+    Ui::configurePolMeasure *ui;
+
     /* Create the connection to extern software */
     Pol_ExternConf *externSoftware = nullptr;
 
@@ -55,17 +59,20 @@ public:
     /* Save if there was a configuration loaded */
     bool configured;
 
-    /* Path for Store to RAM */
-    QString path;
+    /* Was the pumps software open already? */
+    bool openPumps;
 
-    /* Build the name of the Raw Data */
-    QStringList fileName;
+    /* Path for the files */
+    QString pathOfData;
+
+    /* File information for saving data of measurements */
+    QFileInfo pathDataMeasurements;
+
+    /* Build the name of the Raw Data files */
+    QStringList savingFilesNames;
 
     /*Start time of the measurement with delay */
     QDateTime startTime;
-
-    /* User interface */
-    Ui::configurePolMeasure *ui;
 
     /* Do you want to load a configuration? or not? */
     bool Conf_canceled;
@@ -86,6 +93,12 @@ public:
     /* Clean all the loaded configuration */
     void cleanAll(void);
 
+    /* Update form */
+    void updateForm(void);
+
+    /* Load configuration file */
+    void loadConfiguration(void);
+
     /* Destructor */
     ~configurePolMeasure(void);
 
@@ -93,9 +106,6 @@ private slots:
 
     /* Get configuration data */
     void GetConfigurationData(void);
-
-    /* Load configuration file */
-    void loadConfiguration(void);
 
     /* Select path */
     void selectPath(void);
@@ -108,6 +118,9 @@ private slots:
 
     /* Handle click events */
     void handleClickEvent(QWidget *widget);
+
+    /* Get complete configuration data from file */
+    void getConfigurationFromFile(QString data);
 
     /* Update parameters */
     void updateConfigurationValues(void);

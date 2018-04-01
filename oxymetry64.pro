@@ -62,7 +62,6 @@ SOURCES += \
     light_control.cpp \
     pol_configureMeasurement.cpp \
     pol_fft.cpp \
-    pol_changeWave_FFT.cpp \
     pol_panelHelp.cpp \
     pol_panelItem.cpp \
     pol_panel.cpp \
@@ -70,7 +69,8 @@ SOURCES += \
     pol_measurements.cpp \
     pol_externConf.cpp \
     pol_configFilesGenerator.cpp \
-    pol_set_wavelength_ranges.cpp
+    pol_set_wavelength_ranges.cpp \
+    pol_changeWaveOrFreq.cpp
 
 HEADERS += \
     application.h \
@@ -107,7 +107,6 @@ HEADERS += \
     light_control.h \
     pol_configureMeasurement.h \
     pol_fft.h \
-    pol_changeWave_FFT.h \
     pol_panelHelp.h \
     pol_panelItem.h \
     pol_panel.h \
@@ -115,7 +114,8 @@ HEADERS += \
     pol_measurements.h \
     pol_externConf.h \
     pol_configFilesGenerator.h \
-    pol_set_wavelength_ranges.h
+    pol_set_wavelength_ranges.h \
+    pol_changeWaveOrFreq.h
 
 FORMS += \
     initial_setup.ui \
@@ -139,11 +139,11 @@ FORMS += \
     fluidic_control.ui \
     light_control.ui \
     pol_configureMeasurement.ui \
-    pol_changeWave_FFT.ui \
     pol_panelHelp.ui \
     pol_panelItem.ui \
     pol_panel.ui \
-    pol_set_wavelength_ranges.ui
+    pol_set_wavelength_ranges.ui \
+    pol_changeWaveOrFreq.ui
 
 DISTFILES += \
     oxymetry.rc

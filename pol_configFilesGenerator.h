@@ -45,6 +45,9 @@ public:
     /* Refilling Times */
     int fillRefill;
 
+    /* Absolute Volume */
+    int absVol;
+
     /* How many substances are active */
     int NumberOfSubstances;
 
@@ -69,16 +72,13 @@ public:
     /* Start delay */
     double startDelay;
 
-    /* Range of Wavelengths */
-    double minWavelength, maxWavelength;
-
 public:
 
     /* Generate pump files */
     void GeneratePumpScripts(QString pathFile, QString filetype, QVector<double> FlowVector);
 
     /* Generate Spectrometer configuration */
-    void GenerateSpectrometerConfiguration(QString pathFile, QVector<double> GlucoseConcentration, QVector<double> Impurity1Concentration, QVector<double> Impurity2Concentration);
+    void GenerateSpectrometerConfiguration(QString pathFile, QVector<double> GlucoseConcentration, QVector<double> Impurity1Concentration, QVector<double> Impurity2Concentration, QVector<double> StockSolutions, double minW, double maxW);
 
     /* Calculate the correlation factors */
     float correlationCoefficient(QVector <double> X, QVector <double> Y, int N);

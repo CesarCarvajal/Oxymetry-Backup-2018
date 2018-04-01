@@ -47,14 +47,14 @@ public:
     {
         if (PanelSetWavelengthRanges->objectName().isEmpty())
             PanelSetWavelengthRanges->setObjectName(QStringLiteral("PanelSetWavelengthRanges"));
-        PanelSetWavelengthRanges->resize(367, 95);
+        PanelSetWavelengthRanges->resize(367, 106);
         horizontalLayoutWidget = new QWidget(PanelSetWavelengthRanges);
         horizontalLayoutWidget->setObjectName(QStringLiteral("horizontalLayoutWidget"));
-        horizontalLayoutWidget->setGeometry(QRect(10, 50, 351, 41));
+        horizontalLayoutWidget->setGeometry(QRect(10, 60, 351, 41));
         horizontalLayout = new QHBoxLayout(horizontalLayoutWidget);
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
         horizontalLayout->setContentsMargins(0, 0, 0, 0);
-        horizontalSpacer = new QSpacerItem(20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        horizontalSpacer = new QSpacerItem(20, 18, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         horizontalLayout->addItem(horizontalSpacer);
 
@@ -65,13 +65,13 @@ public:
 
         horizontalLayout->addWidget(button_apply);
 
-        horizontalSpacer_2 = new QSpacerItem(5, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
+        horizontalSpacer_2 = new QSpacerItem(5, 18, QSizePolicy::Fixed, QSizePolicy::Minimum);
 
         horizontalLayout->addItem(horizontalSpacer_2);
 
         gridLayoutWidget = new QWidget(PanelSetWavelengthRanges);
         gridLayoutWidget->setObjectName(QStringLiteral("gridLayoutWidget"));
-        gridLayoutWidget->setGeometry(QRect(10, 0, 351, 52));
+        gridLayoutWidget->setGeometry(QRect(10, 10, 351, 52));
         gridLayout = new QGridLayout(gridLayoutWidget);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         gridLayout->setContentsMargins(0, 0, 0, 0);

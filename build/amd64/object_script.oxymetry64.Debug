@@ -35,7 +35,6 @@ INPUT(
 ./debug\.obj\light_control.o
 ./debug\.obj\pol_configureMeasurement.o
 ./debug\.obj\pol_fft.o
-./debug\.obj\pol_changeWave_FFT.o
 ./debug\.obj\pol_panelHelp.o
 ./debug\.obj\pol_panelItem.o
 ./debug\.obj\pol_panel.o
@@ -44,6 +43,7 @@ INPUT(
 ./debug\.obj\pol_externConf.o
 ./debug\.obj\pol_configFilesGenerator.o
 ./debug\.obj\pol_set_wavelength_ranges.o
+./debug\.obj\pol_changeWaveOrFreq.o
 ./debug\.obj\qrc_icons.o
 ./debug\.obj\moc_application.o
 ./debug\.obj\moc_spectrometer_config.o
@@ -70,7 +70,6 @@ INPUT(
 ./debug\.obj\moc_fluidic_control.o
 ./debug\.obj\moc_light_control.o
 ./debug\.obj\moc_pol_configureMeasurement.o
-./debug\.obj\moc_pol_changeWave_FFT.o
 ./debug\.obj\moc_pol_panelHelp.o
 ./debug\.obj\moc_pol_panelItem.o
 ./debug\.obj\moc_pol_panel.o
@@ -79,4 +78,5 @@ INPUT(
 ./debug\.obj\moc_pol_externConf.o
 ./debug\.obj\moc_pol_configFilesGenerator.o
 ./debug\.obj\moc_pol_set_wavelength_ranges.o
+./debug\.obj\moc_pol_changeWaveOrFreq.o
 );

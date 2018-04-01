@@ -46,6 +46,7 @@ public:
     QHBoxLayout *horizontalLayout_11;
     ClickableLabel *label_setWranges;
     QLabel *label_setWrange2;
+    QSpacerItem *horizontalSpacer_11;
     QHBoxLayout *horizontalLayout_3;
     ClickableLabel *label_numberOfAverages;
     QHBoxLayout *horizontalLayout_6;
@@ -62,6 +63,7 @@ public:
     QHBoxLayout *horizontalLayout_12;
     ClickableLabel *label_frequency;
     QLabel *label_freq3;
+    QSpacerItem *horizontalSpacer_10;
     QHBoxLayout *horizontalLayout_13;
     QSpacerItem *horizontalSpacer_9;
     QLabel *label_setWrange;
@@ -78,7 +80,7 @@ public:
         if (PanelItem_Pol->objectName().isEmpty())
             PanelItem_Pol->setObjectName(QStringLiteral("PanelItem_Pol"));
         PanelItem_Pol->resize(285, 185);
-        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
+        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(PanelItem_Pol->sizePolicy().hasHeightForWidth());
@@ -123,10 +125,10 @@ public:
 
         gridLayoutWidget = new QWidget(PanelItem_Pol);
         gridLayoutWidget->setObjectName(QStringLiteral("gridLayoutWidget"));
-        gridLayoutWidget->setGeometry(QRect(0, 30, 281, 152));
+        gridLayoutWidget->setGeometry(QRect(0, 30, 281, 154));
         gridLayout = new QGridLayout(gridLayoutWidget);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
-        gridLayout->setSizeConstraint(QLayout::SetMinimumSize);
+        gridLayout->setSizeConstraint(QLayout::SetDefaultConstraint);
         gridLayout->setContentsMargins(0, 0, 0, 0);
         horizontalLayout_8 = new QHBoxLayout();
         horizontalLayout_8->setObjectName(QStringLiteral("horizontalLayout_8"));
@@ -189,6 +191,10 @@ public:
 
         horizontalLayout_11->addWidget(label_setWrange2);
 
+        horizontalSpacer_11 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_11->addItem(horizontalSpacer_11);
+
 
         gridLayout->addLayout(horizontalLayout_11, 6, 3, 1, 1);
 
@@ -242,13 +248,13 @@ public:
         horizontalLayout_7->setObjectName(QStringLiteral("horizontalLayout_7"));
         label_integrationTime = new ClickableLabel(gridLayoutWidget);
         label_integrationTime->setObjectName(QStringLiteral("label_integrationTime"));
-        QSizePolicy sizePolicy2(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        QSizePolicy sizePolicy2(QSizePolicy::Minimum, QSizePolicy::Fixed);
         sizePolicy2.setHorizontalStretch(0);
         sizePolicy2.setVerticalStretch(0);
         sizePolicy2.setHeightForWidth(label_integrationTime->sizePolicy().hasHeightForWidth());
         label_integrationTime->setSizePolicy(sizePolicy2);
         label_integrationTime->setMinimumSize(QSize(20, 0));
-        label_integrationTime->setMaximumSize(QSize(20, 16777215));
+        label_integrationTime->setMaximumSize(QSize(50, 16777215));
         label_integrationTime->setFont(font1);
         label_integrationTime->setCursor(QCursor(Qt::PointingHandCursor));
         label_integrationTime->setFrameShape(QFrame::StyledPanel);
@@ -258,8 +264,11 @@ public:
 
         label_timeBase = new QLabel(gridLayoutWidget);
         label_timeBase->setObjectName(QStringLiteral("label_timeBase"));
-        sizePolicy2.setHeightForWidth(label_timeBase->sizePolicy().hasHeightForWidth());
-        label_timeBase->setSizePolicy(sizePolicy2);
+        QSizePolicy sizePolicy3(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy3.setHorizontalStretch(0);
+        sizePolicy3.setVerticalStretch(0);
+        sizePolicy3.setHeightForWidth(label_timeBase->sizePolicy().hasHeightForWidth());
+        label_timeBase->setSizePolicy(sizePolicy3);
         label_timeBase->setMinimumSize(QSize(20, 0));
         label_timeBase->setMaximumSize(QSize(20, 16777215));
         label_timeBase->setSizeIncrement(QSize(20, 0));
@@ -267,7 +276,7 @@ public:
 
         horizontalLayout_7->addWidget(label_timeBase);
 
-        horizontalSpacer_6 = new QSpacerItem(20, 18, QSizePolicy::Fixed, QSizePolicy::Minimum);
+        horizontalSpacer_6 = new QSpacerItem(20, 18, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         horizontalLayout_7->addItem(horizontalSpacer_6);
 
@@ -292,7 +301,7 @@ public:
         sizePolicy2.setHeightForWidth(label_frequency->sizePolicy().hasHeightForWidth());
         label_frequency->setSizePolicy(sizePolicy2);
         label_frequency->setMinimumSize(QSize(20, 0));
-        label_frequency->setMaximumSize(QSize(20, 16777215));
+        label_frequency->setMaximumSize(QSize(50, 16777215));
         label_frequency->setFont(font1);
         label_frequency->setCursor(QCursor(Qt::PointingHandCursor));
         label_frequency->setFrameShape(QFrame::NoFrame);
@@ -303,6 +312,10 @@ public:
         label_freq3->setObjectName(QStringLiteral("label_freq3"));
 
         horizontalLayout_12->addWidget(label_freq3);
+
+        horizontalSpacer_10 = new QSpacerItem(20, 18, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_12->addItem(horizontalSpacer_10);
 
 
         gridLayout->addLayout(horizontalLayout_12, 5, 3, 1, 1);
@@ -370,32 +383,44 @@ public:
 #endif // QT_NO_TOOLTIP
         label_ActiveSpec_Pol->setText(QApplication::translate("PanelItem_Pol", "Active Spectrometer:", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        lineEdit_name->setToolTip(QApplication::translate("PanelItem_Pol", "Spectrometer Name", Q_NULLPTR));
+        lineEdit_name->setToolTip(QApplication::translate("PanelItem_Pol", "Change spectrometer Name", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         lineEdit_name->setText(QString());
         label_Nspectra2->setText(QApplication::translate("PanelItem_Pol", "Number of Spectra:", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        label_Nspectra->setToolTip(QApplication::translate("PanelItem_Pol", "Change Number of Spectra", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         label_Nspectra->setText(QApplication::translate("PanelItem_Pol", "1000", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        label_saturatedPixels->setToolTip(QApplication::translate("PanelItem_Pol", "Spectrometer Status", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         label_saturatedPixels->setText(QApplication::translate("PanelItem_Pol", "<saturated pixels>", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        label_setWranges->setToolTip(QApplication::translate("PanelItem_Pol", "Set the wavelength range", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         label_setWranges->setText(QApplication::translate("PanelItem_Pol", "400,0 - 750,0", Q_NULLPTR));
         label_setWrange2->setText(QApplication::translate("PanelItem_Pol", "nm", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         label_numberOfAverages->setToolTip(QApplication::translate("PanelItem_Pol", "Change Number of Averages", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_numberOfAverages->setText(QString());
-        label_2->setText(QApplication::translate("PanelItem_Pol", "Number of Averages:", Q_NULLPTR));
+        label_2->setText(QApplication::translate("PanelItem_Pol", "Number of Averages:    ", Q_NULLPTR));
         label->setText(QApplication::translate("PanelItem_Pol", "Integration Time:", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         label_integrationTime->setToolTip(QApplication::translate("PanelItem_Pol", "Change Integration Time", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        label_integrationTime->setText(QString());
+        label_integrationTime->setText(QApplication::translate("PanelItem_Pol", "6", Q_NULLPTR));
         label_timeBase->setText(QApplication::translate("PanelItem_Pol", "ms", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         label_autoAdjust->setToolTip(QApplication::translate("PanelItem_Pol", "Auto Adjust Integration Time", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        label_autoAdjust->setText(QApplication::translate("PanelItem_Pol", "(Auto Adjust)", Q_NULLPTR));
+        label_autoAdjust->setText(QApplication::translate("PanelItem_Pol", "(Auto)", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        label_frequency->setToolTip(QApplication::translate("PanelItem_Pol", "Change the Frequency to Measure", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         label_frequency->setText(QApplication::translate("PanelItem_Pol", "7", Q_NULLPTR));
         label_freq3->setText(QApplication::translate("PanelItem_Pol", "Hz", Q_NULLPTR));
-        label_setWrange->setText(QApplication::translate("PanelItem_Pol", "Wavelength Range:", Q_NULLPTR));
+        label_setWrange->setText(QApplication::translate("PanelItem_Pol", "Wavelengths Range:", Q_NULLPTR));
         label_freq2->setText(QApplication::translate("PanelItem_Pol", "Frequency:", Q_NULLPTR));
         label_Status->setText(QApplication::translate("PanelItem_Pol", "Status:", Q_NULLPTR));
     } // retranslateUi

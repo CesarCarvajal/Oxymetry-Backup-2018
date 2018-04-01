@@ -74,6 +74,85 @@ float PanelItem_Pol::getIntegrationTime(void)
 }
 
 /**
+ * @brief Sets the wavelength range
+ * @param[in] String with the range as text
+ */
+void PanelItem_Pol::setWavelengthRange(double min, double max)
+{
+    /* minimum */
+    minimumWavelength = min;
+
+    /* maximum */
+    maximumWavelength = max;
+
+    /* Set label text */
+    ui->label_setWranges->setText(QString::number(minimumWavelength) + " - " + QString::number(maximumWavelength));
+}
+
+
+/**
+ * @brief Sets the number of Spectra
+ * @param[in] Integer with the number of spectra
+ */
+void PanelItem_Pol::setNumberOfSpectra(int NSpectra){
+
+    numberOfSpectra = NSpectra;
+
+    /* Set number of Spectra label value */
+    ui->label_Nspectra->setText(QString::number(numberOfSpectra));
+
+}
+
+/**
+ * @brief Sets the frequency for the measurements
+ * @param[in] Integer with the frequency
+ */
+void PanelItem_Pol::setFrequency(int Frequency){
+
+    frequency = Frequency;
+
+    /* Set number of Spectra label value */
+    ui->label_frequency->setText(QString::number(frequency));
+
+}
+
+/**
+ * @brief Enable components
+ * @param[in] Bool enable or not
+ */
+void PanelItem_Pol::enableComponents(bool value)
+{
+    /* Enable device parameters */
+    ui->label_autoAdjust->setEnabled(value);
+    ui->label_integrationTime->setEnabled(value);
+    ui->label_setWranges->setEnabled(value);
+    ui->label_numberOfAverages->setEnabled(value);
+    ui->label_frequency->setEnabled(value);
+    ui->label_Nspectra->setEnabled(value);
+
+    /* Change how they look for editing */
+    if(value){
+
+        /* Change to editable */
+        ui->label_integrationTime->setFrameShape(QFrame::StyledPanel);
+        ui->label_setWranges->setFrameShape(QFrame::StyledPanel);
+        ui->label_numberOfAverages->setFrameShape(QFrame::StyledPanel);
+        ui->label_frequency->setFrameShape(QFrame::StyledPanel);
+        ui->label_Nspectra->setFrameShape(QFrame::StyledPanel);
+
+    }
+    else{
+
+        /* Change to non editable */
+        ui->label_integrationTime->setFrameShape(QFrame::NoFrame);
+        ui->label_setWranges->setFrameShape(QFrame::NoFrame);
+        ui->label_numberOfAverages->setFrameShape(QFrame::NoFrame);
+        ui->label_frequency->setFrameShape(QFrame::NoFrame);
+        ui->label_Nspectra->setFrameShape(QFrame::NoFrame);
+    }
+}
+
+/**
  * @brief Sets integration time
  * @param[in] value Integration time in milliseconds
  */
@@ -117,6 +196,42 @@ void PanelItem_Pol::setIntegrationTime(float value)
 int PanelItem_Pol::getNumberOfAverages(void)
 {
     return numberOfAverages;
+}
+
+/**
+ * @brief Gets the minimum wavelength
+ * @return Minimum wavelength
+ */
+double PanelItem_Pol::getMinimumWavelength(void)
+{
+    return minimumWavelength;
+}
+
+/**
+ * @brief Gets the maximum wavelength
+ * @return Maximum wavelength
+ */
+double PanelItem_Pol::getMaximumWavelength(void)
+{
+    return maximumWavelength;
+}
+
+/**
+ * @brief Gets number of Spectra
+ * @return Number of Spectra
+ */
+int PanelItem_Pol::getNumberOfSpectra(void)
+{
+    return numberOfSpectra;
+}
+
+/**
+ * @brief Gets frequency
+ * @return Frequency
+ */
+int PanelItem_Pol::getFrequency(void)
+{
+    return frequency;
 }
 
 /**

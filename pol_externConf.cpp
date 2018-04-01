@@ -211,7 +211,7 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
     }
 
     /* Create the Spectrometer Script */
-    ConfigurationFileGenerator->GenerateSpectrometerConfiguration(pathFile, GlucoseConcentration, Impurity1Concentration, Impurity2Concentration);
+    ConfigurationFileGenerator->GenerateSpectrometerConfiguration(pathForScripts, GlucoseConcentration, Impurity1Concentration, Impurity2Concentration, stockSolutions, minWavelength, maxWavelength);
 
     /* Remove the existing pump files */
     removeExistingFiles();
@@ -220,25 +220,25 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
     if(ConfigurationFileGenerator->glucoseActive){
 
         /* Create the Glucose pump script */
-        ConfigurationFileGenerator->GeneratePumpScripts(pathFile, "/GlucosePumpScript.nfp", GlucoseFlow);
+        ConfigurationFileGenerator->GeneratePumpScripts(pathForScripts, "/GlucosePumpScript.nfp", GlucoseFlow);
     }
 
     /* If Impurity 1 is active, then generate its pump script */
     if(ConfigurationFileGenerator->Imp1Active){
 
         /* Create the Impurity 1 pump script */
-        ConfigurationFileGenerator->GeneratePumpScripts(pathFile, "/Impurity1PumpScript.nfp", Impurity1Flow);
+        ConfigurationFileGenerator->GeneratePumpScripts(pathForScripts, "/Impurity1PumpScript.nfp", Impurity1Flow);
     }
 
     /* If impurity 2 is active, then generate its pump script */
     if(ConfigurationFileGenerator->Imp2Active){
 
         /* Create the Impurity 2 pump script */
-        ConfigurationFileGenerator->GeneratePumpScripts(pathFile, "/Impurity2PumpScript.nfp", Impurity2Flow);
+        ConfigurationFileGenerator->GeneratePumpScripts(pathForScripts, "/Impurity2PumpScript.nfp", Impurity2Flow);
     }
 
     /* Create the Water pump script */
-    ConfigurationFileGenerator->GeneratePumpScripts(pathFile, "/WaterPumpScript.nfp", WaterFlow);
+    ConfigurationFileGenerator->GeneratePumpScripts(pathForScripts, "/WaterPumpScript.nfp", WaterFlow);
 
 }
 
@@ -248,7 +248,7 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
 void Pol_ExternConf::removeExistingFiles(void){
 
     /* Get folder information */
-    QFileInfo folder(pathFile);
+    QFileInfo folder(pathForScripts);
 
     /* If there are some pump scripts already, remove them */
     QFile file(folder.absolutePath() + "/GlucosePumpScript.nfp");

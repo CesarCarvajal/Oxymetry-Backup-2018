@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_configurePolMeasure_t {
-    QByteArrayData data[11];
-    char stringdata0[158];
+    QByteArrayData data[12];
+    char stringdata0[170];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -34,20 +34,21 @@ static const qt_meta_stringdata_configurePolMeasure_t qt_meta_stringdata_configu
 QT_MOC_LITERAL(0, 0, 19), // "configurePolMeasure"
 QT_MOC_LITERAL(1, 20, 20), // "GetConfigurationData"
 QT_MOC_LITERAL(2, 41, 0), // ""
-QT_MOC_LITERAL(3, 42, 17), // "loadConfiguration"
-QT_MOC_LITERAL(4, 60, 10), // "selectPath"
-QT_MOC_LITERAL(5, 71, 20), // "configurePolarimeter"
-QT_MOC_LITERAL(6, 92, 6), // "cancel"
-QT_MOC_LITERAL(7, 99, 16), // "handleClickEvent"
-QT_MOC_LITERAL(8, 116, 8), // "QWidget*"
-QT_MOC_LITERAL(9, 125, 6), // "widget"
-QT_MOC_LITERAL(10, 132, 25) // "updateConfigurationValues"
+QT_MOC_LITERAL(3, 42, 10), // "selectPath"
+QT_MOC_LITERAL(4, 53, 20), // "configurePolarimeter"
+QT_MOC_LITERAL(5, 74, 6), // "cancel"
+QT_MOC_LITERAL(6, 81, 16), // "handleClickEvent"
+QT_MOC_LITERAL(7, 98, 8), // "QWidget*"
+QT_MOC_LITERAL(8, 107, 6), // "widget"
+QT_MOC_LITERAL(9, 114, 24), // "getConfigurationFromFile"
+QT_MOC_LITERAL(10, 139, 4), // "data"
+QT_MOC_LITERAL(11, 144, 25) // "updateConfigurationValues"
 
     },
     "configurePolMeasure\0GetConfigurationData\0"
-    "\0loadConfiguration\0selectPath\0"
-    "configurePolarimeter\0cancel\0"
-    "handleClickEvent\0QWidget*\0widget\0"
+    "\0selectPath\0configurePolarimeter\0"
+    "cancel\0handleClickEvent\0QWidget*\0"
+    "widget\0getConfigurationFromFile\0data\0"
     "updateConfigurationValues"
 };
 #undef QT_MOC_LITERAL
@@ -70,17 +71,17 @@ static const uint qt_meta_data_configurePolMeasure[] = {
        3,    0,   50,    2, 0x08 /* Private */,
        4,    0,   51,    2, 0x08 /* Private */,
        5,    0,   52,    2, 0x08 /* Private */,
-       6,    0,   53,    2, 0x08 /* Private */,
-       7,    1,   54,    2, 0x08 /* Private */,
-      10,    0,   57,    2, 0x08 /* Private */,
+       6,    1,   53,    2, 0x08 /* Private */,
+       9,    1,   56,    2, 0x08 /* Private */,
+      11,    0,   59,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void, 0x80000000 | 8,    9,
+    QMetaType::Void, 0x80000000 | 7,    8,
+    QMetaType::Void, QMetaType::QString,   10,
     QMetaType::Void,
 
        0        // eod
@@ -93,18 +94,18 @@ void configurePolMeasure::qt_static_metacall(QObject *_o, QMetaObject::Call _c, 
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->GetConfigurationData(); break;
-        case 1: _t->loadConfiguration(); break;
-        case 2: _t->selectPath(); break;
-        case 3: _t->configurePolarimeter(); break;
-        case 4: _t->cancel(); break;
-        case 5: _t->handleClickEvent((*reinterpret_cast< QWidget*(*)>(_a[1]))); break;
+        case 1: _t->selectPath(); break;
+        case 2: _t->configurePolarimeter(); break;
+        case 3: _t->cancel(); break;
+        case 4: _t->handleClickEvent((*reinterpret_cast< QWidget*(*)>(_a[1]))); break;
+        case 5: _t->getConfigurationFromFile((*reinterpret_cast< QString(*)>(_a[1]))); break;
         case 6: _t->updateConfigurationValues(); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
         switch (_id) {
         default: *reinterpret_cast<int*>(_a[0]) = -1; break;
-        case 5:
+        case 4:
             switch (*reinterpret_cast<int*>(_a[1])) {
             default: *reinterpret_cast<int*>(_a[0]) = -1; break;
             case 0:

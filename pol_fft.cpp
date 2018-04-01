@@ -270,6 +270,8 @@ void fft::getFFTfromRawData(QFileInfo fileInformation, bool Calibrating, double 
 
                 /* Save all the counts per row from Raw Data for future calculation of FFT */
                 for (int j=column; j < Readed_Row.length(); j++){
+
+                    /* Save counts */
                     counts.append(Readed_Row.at(j).toDouble());
                 }
 

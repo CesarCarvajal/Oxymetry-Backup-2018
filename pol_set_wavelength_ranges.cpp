@@ -78,11 +78,15 @@ double PanelSetWavelengthRanges::getMaxValue(void)
  * @brief Set ranges of wavelengths
  * @param[in] wavelength value
  */
-void PanelSetWavelengthRanges::setValues(double minW, double maxW)
+void PanelSetWavelengthRanges::setValues(double minW, double maxW, double actualMin, double actualMax)
 {
     /* Add wavelenghts to ranges */
    ui->doubleSpinBox_minWset->setMinimum(minW);
    ui->doubleSpinBox_maxWset->setMaximum(maxW);
+
+   /* Set actual range */
+   ui->doubleSpinBox_minWset->setValue(actualMin);
+   ui->doubleSpinBox_maxWset->setValue(actualMax);
 
    /* Change upper and lower limits */
    setLimits();
