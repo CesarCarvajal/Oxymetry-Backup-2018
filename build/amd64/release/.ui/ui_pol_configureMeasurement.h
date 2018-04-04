@@ -1050,7 +1050,7 @@ public:
         doubleSpinBox_AbsFlow->setSizePolicy(sizePolicy2);
         doubleSpinBox_AbsFlow->setMinimumSize(QSize(100, 0));
         doubleSpinBox_AbsFlow->setMaximumSize(QSize(100, 16777215));
-        doubleSpinBox_AbsFlow->setMaximum(1e+7);
+        doubleSpinBox_AbsFlow->setMaximum(500);
         doubleSpinBox_AbsFlow->setSingleStep(0.05);
         doubleSpinBox_AbsFlow->setValue(18.75);
 
@@ -1078,7 +1078,7 @@ public:
         spinBox_NSteps->setMinimumSize(QSize(100, 0));
         spinBox_NSteps->setMaximumSize(QSize(100, 16777215));
         spinBox_NSteps->setMinimum(1);
-        spinBox_NSteps->setMaximum(100);
+        spinBox_NSteps->setMaximum(30);
         spinBox_NSteps->setValue(5);
 
         horizontalLayout_36->addWidget(spinBox_NSteps);
@@ -1156,6 +1156,7 @@ public:
 
         checkBox = new QCheckBox(ConfigurationLayout);
         checkBox->setObjectName(QStringLiteral("checkBox"));
+        checkBox->setEnabled(false);
         QSizePolicy sizePolicy3(QSizePolicy::Expanding, QSizePolicy::Fixed);
         sizePolicy3.setHorizontalStretch(0);
         sizePolicy3.setVerticalStretch(0);

@@ -89,7 +89,7 @@ void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFil
     FILE *file = fopen(pathFile.toLatin1().data(), "wt");
 
     /* Write in file */
-    fprintf(file, "%s", "Nr_M;Nr_Sp;Int_T;Nr_Av;Freq;MinW;MaxW;Ab_F;Ab_V;N_Ste;S_Break;L_Break;St_Del;C1?;C2?;C3?;mC1;MC1;StC1;mC2;MC2;StC2;mC3;MC3;StC3;Time_Int;File_Name\n");
+    fprintf(file, "%s", "Nr_M;Nr_Sp;Int_T;Nr_Av;Freq;MinW;MaxW;Ab_F;Ab_V;N_Ste;S_Break;L_Break;St_Del;C1?;C2?;C3?;mC1;MC1;StC1;mC2;MC2;StC2;mC3;MC3;StC3;\n");
 
     /* Write all the configuration data */
     QString configurationData = "";
@@ -122,6 +122,9 @@ void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFil
 
     /* Write in file */
     fprintf(file, "%s", configurationData.toLatin1().data());
+
+    /* Write in file */
+    fprintf(file, "%s", "Time_Interval;File_Name;\n");
 
     /* Cycle of a concentration */
     double cycleTime = (2 * fillRefill + 4*shortBreak)*(NSteps + (NSteps-1)) +  (2 * fillRefill + 3*shortBreak + longBreak );
@@ -161,7 +164,10 @@ void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFil
         }
 
         /* Complete the file name */
-        line = line + QString::number(IntegrationTime) + "ms_" + QString::number(Frequency) + "Hz_" + QString::number(j+1) + "\n";
+        line = line.append(QString::number(IntegrationTime) + "ms_" + QString::number(Frequency) + "Hz_" + QString::number(j+1));
+
+        /* At end of line */
+        line.append(";\n");
 
         /* Write in file */
         fprintf(file, "%s", line.toLatin1().data());
@@ -267,8 +273,29 @@ void Pol_configFilesGenerator::writeFilling(FILE *pFile, QVector <double> FlowVe
         /* 3 Stop after filling valve refill */
         fprintf(pFile, "%d\t%d\t%d\n", shortBreak, 0, 1);
 
-        /* 4 Refill after filling valve refill */
-        fprintf(pFile, "%d\t%.4f\t%d\n", fillRefill, -FlowVector.at(k), 1);
+        /* High volume of dosing? More than 5 ml? */
+        if(((NSteps*fillRefill)/60000.0)*(FlowVector.at(k)) > ((fillRefill)/60000.0)*(absoluteFlow)){
+
+            /* 4 Refill after filling valve refill */
+            fprintf(pFile, "%d\t%.4f\t%d\n", fillRefill, -FlowVector.at(k), 1);
+        }
+
+        /* Lower than 5 ml? */
+        else{
+
+            /* No refilling until the last step */
+            if(i<NSteps){
+
+                /* 4 Refill after filling valve refill */
+                fprintf(pFile, "%d\t%d\t%d\n", fillRefill, 0, 1);
+            }
+            /* Use last step for refilling */
+            else{
+
+                /* 4 Refill after filling valve refill */
+                fprintf(pFile, "%d\t%.4f\t%d\n", fillRefill, -FlowVector.at(k)*NSteps, 1);
+            }
+        }
 
         /* Is it the last refill pattern? */
         if(i == NSteps){
@@ -320,7 +347,6 @@ float Pol_configFilesGenerator::correlationCoefficient(QVector <double> X, QVect
 
     return corrcoeff;
 }
-
 
 /**
  * @brief Destructor of 'Pol_ExternConf' class

@@ -60,6 +60,7 @@
 #include "ui_pol_panelItem.h"
 #include "ui_pol_panel.h"
 #include "pol_measurements.h"
+#include "pol_waitingDialog.h"
 #include "ui_pol_ConfigureMeasurement.h"
 
 /* Panel stuff */
@@ -94,6 +95,8 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
 
     /* Start the abort signal in false */
     abort_everything = false;
+
+    /* No data loaded before */
     dataloaded = false;
 
     /* Start the time index in 0 */
@@ -633,7 +636,6 @@ void PanelPolarimeter::adjust_Run_End(short int typeRunn){
 
             /* If the window is closed or a certain time in seconds has elapsed then break the loop */
             if(abort_everything || totalMeasuretime == 0){break;}
-
         }
 
         /* Reset selected rows in the Configuration profile table */
@@ -758,7 +760,6 @@ void PanelPolarimeter::adjust_Run_Start(short int typeRun){
         QStringList ConvertedTime = ConfigureMeasurement->externSoftware->TimeConverter(totalMeasuretime);
         ui->label_RemainingTime->setText(QDateTime::fromTime_t(totalMeasuretime).toUTC().toString("hh:mm:ss") + " " + ConvertedTime.at(1));
         ui->label_RemainingTime->setVisible(true);
-
     }
 
     /* Restart timers */
@@ -948,7 +949,7 @@ void PanelPolarimeter::change_Integration_Time_Pol(void){
         float intTime = changeDialog.getValue();
 
         /* Is it an aceptable integration time? */
-        double Timeresolution = 1000/(4*ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->Frequency);
+        double Timeresolution = 1000/(4*PolarimetrySpectrometer->getFrequency());
 
         /* Too large integration time for the actual settings? */
         if( intTime > Timeresolution){
@@ -1012,8 +1013,8 @@ void PanelPolarimeter::change_File_Name(void){
             NewFileName = NewFileName = changeFileName.left(changeFileName.lastIndexOf("C")+2);
 
             /* Change the name by the first part plus the new information */
-            ConfigureMeasurement->savingFilesNames.replace(j, NewFileName + "_" + QString::number(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->IntegrationTime) + "ms_"
-                                                           + QString::number(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->Frequency) + "Hz_" + QString::number(j+1));
+            ConfigureMeasurement->savingFilesNames.replace(j, NewFileName + "_" + QString::number(PolarimetrySpectrometer->getIntegrationTime()) + "ms_"
+                                                           + QString::number(PolarimetrySpectrometer->getFrequency()) + "Hz_" + QString::number(j+1));
 
             /* Remove the actual data on table */
             ui->Table_Measurements_Pol->removeCellWidget(j, 1);
@@ -1070,7 +1071,7 @@ void PanelPolarimeter::change_Frequency_Pol(void){
         int Freq = changeDialog.getFrequency();
 
         /* What's the largest frequency that can be resolved? */
-        double Freqresolution = 1000/ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->IntegrationTime;
+        double Freqresolution = 1000/PolarimetrySpectrometer->getIntegrationTime();
 
         /* Is the new frequency greater than the maximum resolution? */
         if(Freq > Freqresolution/4){
@@ -1479,7 +1480,7 @@ void PanelPolarimeter::conf_Setup_Pol_Measurement(void) {
     /* Update information bar */
     ui->info->setText("Creating a configuration...");
 
-    /* Set some values */
+    /* Set some values in the configuration form */
     ConfigureMeasurement->ui->doubleSpinBox_intTime->setValue(PolarimetrySpectrometer->getIntegrationTime());
     ConfigureMeasurement->ui->spinBox_BNAve->setValue(PolarimetrySpectrometer->getNumberOfAverages());
     ConfigureMeasurement->ui->spinBox_BFreq->setValue(PolarimetrySpectrometer->getFrequency());
@@ -1518,6 +1519,15 @@ void PanelPolarimeter::conf_Setup_Pol_Measurement(void) {
  */
 void PanelPolarimeter::delay_Pol_Measurements(void){
 
+    /* Start the waiting dialog of 5 seconds to press the buttons in the syringe pumps software */
+    WaitingDialog dialog(this);
+
+    /* Run waiting dialog */
+    dialog.show();
+
+    /* Start counting */
+    dialog.setCount();
+
     /* Is there a delay time on the measurement? */
     if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->startDelay != 0){
 
@@ -1552,7 +1562,6 @@ void PanelPolarimeter::delay_Pol_Measurements(void){
 
                 /* Show remaining time in loading bar */
                 ui->currentProgressBar_Pol->setValue(100 - ((ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->startDelay - timer)*100)/ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->startDelay);
-
             }
 
             /* Don't lock the user interface */

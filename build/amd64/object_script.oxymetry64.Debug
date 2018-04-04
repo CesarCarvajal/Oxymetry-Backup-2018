@@ -44,6 +44,7 @@ INPUT(
 ./debug\.obj\pol_configFilesGenerator.o
 ./debug\.obj\pol_set_wavelength_ranges.o
 ./debug\.obj\pol_changeWaveOrFreq.o
+./debug\.obj\pol_waitingDialog.o
 ./debug\.obj\qrc_icons.o
 ./debug\.obj\moc_application.o
 ./debug\.obj\moc_spectrometer_config.o
@@ -79,4 +80,5 @@ INPUT(
 ./debug\.obj\moc_pol_configFilesGenerator.o
 ./debug\.obj\moc_pol_set_wavelength_ranges.o
 ./debug\.obj\moc_pol_changeWaveOrFreq.o
+./debug\.obj\moc_pol_waitingDialog.o
 );

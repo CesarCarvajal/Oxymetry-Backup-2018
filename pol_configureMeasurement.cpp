@@ -558,6 +558,9 @@ void configurePolMeasure::loadConfiguration(void)
     /* Remove the first row since it as the configuration data already obtained from the file */
     wordList.removeAt(0);
 
+    /* Remove the first row since it as the configuration data already obtained from the file */
+    wordList.removeAt(0);
+
     unsigned int i = 0;
 
     /* Loop through elements */

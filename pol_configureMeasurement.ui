@@ -1995,7 +1995,7 @@
                </size>
               </property>
               <property name="maximum">
-               <double>10000000.000000000000000</double>
+               <double>500.000000000000000</double>
               </property>
               <property name="singleStep">
                <double>0.050000000000000</double>
@@ -2056,7 +2056,7 @@
                <number>1</number>
               </property>
               <property name="maximum">
-               <number>100</number>
+               <number>30</number>
               </property>
               <property name="value">
                <number>5</number>
@@ -2217,6 +2217,9 @@
             </item>
             <item>
              <widget class="QCheckBox" name="checkBox">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                 <horstretch>0</horstretch>
