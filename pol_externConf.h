@@ -52,6 +52,12 @@ public:
     /* Path is not modified, it's used to save files and delete scripts */
     QString pathForScripts;
 
+    /* Flow vectors */
+    QVector <double> WaterFlow;
+    QVector <double> GlucoseFlow;
+    QVector <double> Impurity1Flow;
+    QVector <double> Impurity2Flow;
+
     /* Wavelengh range */
     double minWavelength, maxWavelength;
 
@@ -70,6 +76,9 @@ public:
 
     /* Replaces the function of matlab */
     void pumpsPatternCalculator(void);
+
+    /* Write scripts for pumps and spectrometer */
+    void writeScripts(void);
 
     /* Destructor */
     ~Pol_ExternConf(void);

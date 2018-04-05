@@ -651,11 +651,11 @@ void PanelPolarimeter::adjust_Run_End(short int typeRunn){
         /* If the Measurement is done by no more entries, then just stop the measurement */
         stop_Run_Polarimetry();
 
-        /* Show prediciton plot */
-        ui->horizontalSpacer_Y->changeSize(20,12,QSizePolicy::Fixed,QSizePolicy::Fixed);
-        ui->label_prediction->setVisible(true);
-        ui->line_comp->setVisible(true);
-        ui->qwtPlot_Pol_Prediction->setVisible(true);
+        /* Show prediciton plot - NO YET */
+        //ui->horizontalSpacer_Y->changeSize(20,12,QSizePolicy::Fixed,QSizePolicy::Fixed);
+        //ui->label_prediction->setVisible(true);
+       // ui->line_comp->setVisible(true);
+        //ui->qwtPlot_Pol_Prediction->setVisible(true);
     }
 
     /* Stop the measurements */
@@ -823,6 +823,14 @@ void PanelPolarimeter::adjust_Wavelength_Range(void){
     /* Update information bar */
     ui->info->setText("Setting Spectrometer...");
 
+    /* Update configuration */
+    if(ConfigureMeasurement->configured){
+        ConfigureMeasurement->ui->doubleSpinBox_minW->setValue(PolarimetrySpectrometer->getMinimumWavelength());
+        ConfigureMeasurement->ui->doubleSpinBox_maxW->setValue(PolarimetrySpectrometer->getMaximumWavelength());
+        ConfigureMeasurement->updateConfigurationValues();
+        ConfigureMeasurement->GetConfigurationData();
+    }
+
     /* Restart the calibration */
     Runner->restart_CalibrationPol();
 
@@ -914,6 +922,13 @@ void PanelPolarimeter::change_Auto_Integration_Time_Pol(void){
     /* Update information bar */
     ui->info->setText("Setting Spectrometer...");
 
+    /* Update configuration */
+    if(ConfigureMeasurement->configured){
+        ConfigureMeasurement->ui->doubleSpinBox_intTime->setValue(PolarimetrySpectrometer->getIntegrationTime());
+        ConfigureMeasurement->updateConfigurationValues();
+        ConfigureMeasurement->GetConfigurationData();
+    }
+
     /* Restart the calibration */
     Runner->restart_CalibrationPol();
 }
@@ -990,6 +1005,13 @@ void PanelPolarimeter::change_Integration_Time_Pol(void){
     /* Update information bar */
     ui->info->setText("Setting Spectrometer...");
 
+    /* Update configuration */
+    if(ConfigureMeasurement->configured){
+        ConfigureMeasurement->ui->doubleSpinBox_intTime->setValue(PolarimetrySpectrometer->getIntegrationTime());
+        ConfigureMeasurement->updateConfigurationValues();
+        ConfigureMeasurement->GetConfigurationData();
+    }
+
     /* Restart the calibration */
     Runner->restart_CalibrationPol();
 }
@@ -1010,7 +1032,7 @@ void PanelPolarimeter::change_File_Name(void){
 
             /* Get first name on the list */
             changeFileName = ConfigureMeasurement->savingFilesNames.at(j);
-            NewFileName = NewFileName = changeFileName.left(changeFileName.lastIndexOf("C")+2);
+            NewFileName = changeFileName.left(changeFileName.lastIndexOf("C")+2);
 
             /* Change the name by the first part plus the new information */
             ConfigureMeasurement->savingFilesNames.replace(j, NewFileName + "_" + QString::number(PolarimetrySpectrometer->getIntegrationTime()) + "ms_"
@@ -1098,6 +1120,13 @@ void PanelPolarimeter::change_Frequency_Pol(void){
     /* Update information bar */
     ui->info->setText("Setting Spectrometer...");
 
+    /* Update configuration */
+    if(ConfigureMeasurement->configured){
+        ConfigureMeasurement->ui->spinBox_BFreq->setValue(PolarimetrySpectrometer->getFrequency());
+        ConfigureMeasurement->updateConfigurationValues();
+        ConfigureMeasurement->GetConfigurationData();
+    }
+
     /* Restart the calibration */
     Runner->restart_CalibrationPol();
 
@@ -1154,6 +1183,13 @@ void PanelPolarimeter::change_Number_Averages_Pol(void){
     /* Update information bar */
     ui->info->setText("Setting Spectrometer...");
 
+    /* Update configuration */
+    if(ConfigureMeasurement->configured){
+        ConfigureMeasurement->ui->spinBox_BNAve->setValue(PolarimetrySpectrometer->getNumberOfAverages());
+        ConfigureMeasurement->updateConfigurationValues();
+        ConfigureMeasurement->GetConfigurationData();
+    }
+
     /* Restart the calibration */
     Runner->restart_CalibrationPol();
 }
@@ -1209,9 +1245,15 @@ void PanelPolarimeter::change_Number_Spectra_Pol(void){
     /* Update information bar */
     ui->info->setText("Setting Spectrometer...");
 
+    /* Update configuration */
+    if(ConfigureMeasurement->configured){
+        ConfigureMeasurement->ui->spinBox_BNSpec->setValue(PolarimetrySpectrometer->getNumberOfSpectra());
+        ConfigureMeasurement->updateConfigurationValues();
+        ConfigureMeasurement->GetConfigurationData();
+    }
+
     /* Restart the calibration */
     Runner->restart_CalibrationPol();
-
 }
 
 /**
@@ -1506,6 +1548,21 @@ void PanelPolarimeter::conf_Setup_Pol_Measurement(void) {
 
         /* Set the configured values */
         setConfiguration();
+
+        /* Set some values in the configuration form */
+        ConfigureMeasurement->ui->doubleSpinBox_intTime->setValue(PolarimetrySpectrometer->getIntegrationTime());
+        ConfigureMeasurement->ui->spinBox_BNAve->setValue(PolarimetrySpectrometer->getNumberOfAverages());
+        ConfigureMeasurement->ui->spinBox_BFreq->setValue(PolarimetrySpectrometer->getFrequency());
+        ConfigureMeasurement->ui->spinBox_BNSpec->setValue(PolarimetrySpectrometer->getNumberOfSpectra());
+        ConfigureMeasurement->ui->doubleSpinBox_minW->setValue(PolarimetrySpectrometer->getMinimumWavelength());
+        ConfigureMeasurement->ui->doubleSpinBox_maxW->setValue(PolarimetrySpectrometer->getMaximumWavelength());
+
+        /* Keep loaded and saved values despite canceled changes: alloes edition of previously loaded configuration */
+        if(ConfigureMeasurement->configured){
+
+            /* Update values in the configuration form */
+            ConfigureMeasurement->updateForm();
+        }
 
     }else{
 
@@ -2013,7 +2070,8 @@ void PanelPolarimeter::initialize_Default_Calibration(void){
 
     /* For the class FFT, we also need this information to be updated from here (saves time) */
     FFTL.NrSpectra = PolarimetrySpectrometer->getNumberOfSpectra();
-    FFTL.IntTime = ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->IntegrationTime;
+    FFTL.IntTime = PolarimetrySpectrometer->getIntegrationTime();
+    FFTL.NrAverages = PolarimetrySpectrometer->getNumberOfSpectra();
     FFTL.ConcentrationC1 = 0;
     FFTL.ConcentrationC2 = 0;
     FFTL.ConcentrationC3 = 0;
@@ -2191,6 +2249,7 @@ void PanelPolarimeter::pol_Calibrate(void){
             FFTL.NrSpectra = ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->NrSpectra;
             FFTL.FrequencyF = ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->Frequency;
             FFTL.IntTime = ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->IntegrationTime;
+            FFTL.NrAverages = ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->NrAverages;
             FFTL.ConcentrationC1 = 0;
             FFTL.ConcentrationC2 = 0;
             FFTL.ConcentrationC3 = 0;
@@ -3244,21 +3303,15 @@ void PanelPolarimeter::toggle_Pol_Calibration(void)
                                                           QMessageBox::Yes | QMessageBox::No))
             {
                 /* Button 'yes' pressed; save */
-                ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->GenerateSpectrometerConfiguration(
-                            ConfigureMeasurement->externSoftware->pathForScripts, ConfigureMeasurement->externSoftware->GlucoseConcentration,
-                            ConfigureMeasurement->externSoftware->Impurity1Concentration, ConfigureMeasurement->externSoftware->Impurity2Concentration,
-                            ConfigureMeasurement->externSoftware->stockSolutions, PolarimetrySpectrometer->getMinimumWavelength(),
-                            PolarimetrySpectrometer->getMaximumWavelength());
-
-            }else{
-
-                /* Load Configuration */
-                ConfigureMeasurement->loadConfiguration();
-
-                /* Reset parameters */
-                setConfiguration();
+                ConfigureMeasurement->externSoftware->writeScripts();
 
             }
+
+            /* Load Configuration */
+            ConfigureMeasurement->loadConfiguration();
+
+            /* Reset parameters */
+            setConfiguration();
         }
     }
 }

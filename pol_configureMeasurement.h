@@ -99,13 +99,13 @@ public:
     /* Load configuration file */
     void loadConfiguration(void);
 
+    /* Get configuration data */
+    void GetConfigurationData(void);
+
     /* Destructor */
     ~configurePolMeasure(void);
 
 private slots:
-
-    /* Get configuration data */
-    void GetConfigurationData(void);
 
     /* Select path */
     void selectPath(void);
@@ -121,6 +121,8 @@ private slots:
 
     /* Get complete configuration data from file */
     void getConfigurationFromFile(QString data);
+
+public slots:
 
     /* Update parameters */
     void updateConfigurationValues(void);

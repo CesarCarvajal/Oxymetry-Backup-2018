@@ -573,6 +573,30 @@ void configurePolMeasure::loadConfiguration(void)
         timePoint.append(list[0].toInt());
         savingFilesNames.append(list[1]);
 
+        /* Get the concentration vectors from the loaded file names */
+        if(loadingConfigurationFromFile){
+
+            /* Save the name */
+            QString name = savingFilesNames.at(i);
+
+            /* Get the glucose concentration */
+            if(externSoftware->ConfigurationFileGenerator->glucoseActive){
+                externSoftware->GlucoseConcentration.replace(i, name.left(name.indexOf("C1")).toDouble());
+                name.remove(0, name.indexOf("C1")+3);
+            }
+
+            /* Get the impurity 1 concentration */
+            if(externSoftware->ConfigurationFileGenerator->Imp1Active){
+                externSoftware->Impurity1Concentration.replace(i, name.left(name.indexOf("C2")).toDouble());
+                name.remove(0, name.indexOf("C2")+3);
+            }
+
+            /* Get the impurity 2 concentration */
+            if(externSoftware->ConfigurationFileGenerator->Imp2Active){
+                externSoftware->Impurity2Concentration.replace(i, name.left(name.indexOf("C3")).toDouble());
+            }
+        }
+
         /* At least second entry? */
         if (i > 0)
         {
@@ -655,6 +679,10 @@ void configurePolMeasure::getConfigurationFromFile(QString data)
 
         externSoftware->ConfigurationFileGenerator->fillRefill = (((externSoftware->ConfigurationFileGenerator->absVol/externSoftware->ConfigurationFileGenerator->absoluteFlow)*60) / externSoftware->ConfigurationFileGenerator->NSteps)*1000;
         externSoftware->ConfigurationFileGenerator->NumberOfSubstances = externSoftware->ConfigurationFileGenerator->glucoseActive + externSoftware->ConfigurationFileGenerator->Imp1Active + externSoftware->ConfigurationFileGenerator->Imp2Active;
+
+        externSoftware->GlucoseConcentration.resize(externSoftware->ConfigurationFileGenerator->NConcentrations);
+        externSoftware->Impurity1Concentration.resize(externSoftware->ConfigurationFileGenerator->NConcentrations);
+        externSoftware->Impurity2Concentration.resize(externSoftware->ConfigurationFileGenerator->NConcentrations);
     }
 }
 
@@ -719,7 +747,7 @@ void configurePolMeasure::GetConfigurationData(void)
 
     /* Get the Breaks in ms */
     externSoftware->ConfigurationFileGenerator->shortBreak = (ui->spinBox_ShortBreak->value())*1000;
-    externSoftware->ConfigurationFileGenerator->longBreak = (ui->spinBox_LongBreak->value())*1000 + (externSoftware->ConfigurationFileGenerator->IntegrationTime*externSoftware->ConfigurationFileGenerator->NrSpectra);
+    externSoftware->ConfigurationFileGenerator->longBreak = (ui->spinBox_LongBreak->value())*1000 + (externSoftware->ConfigurationFileGenerator->IntegrationTime*externSoftware->ConfigurationFileGenerator->NrSpectra*externSoftware->ConfigurationFileGenerator->NrAverages);
 
     /* Stock Solutions */
     externSoftware->stockSolutions.replace(0,ui->lineEdit_StockGluc->text().toDouble());
@@ -769,7 +797,7 @@ void configurePolMeasure::updateConfigurationValues(void)
 
     /* Get the Breaks in ms */
     int ShortBreak = (ui->spinBox_ShortBreak->value())*1000;
-    int LongBreak = (ui->spinBox_LongBreak->value())*1000 + (ui->doubleSpinBox_intTime->value()*ui->spinBox_BNSpec->value());
+    int LongBreak = (ui->spinBox_LongBreak->value())*1000 + (ui->doubleSpinBox_intTime->value()*ui->spinBox_BNSpec->value()*ui->spinBox_BNAve->value());
 
     /* Are there substances left? */
     if(!ui->checkBox_Glucose->isChecked() && !ui->checkBox_Imp1->isChecked() && !ui->checkBox_Imp2->isChecked()){
@@ -842,7 +870,7 @@ void configurePolMeasure::updateConfigurationValues(void)
             +  (2 * fillRefill + 3*ShortBreak + LongBreak);
 
     /* Estimate the measurement time */
-    double measurementTime = cycleTime - (((LongBreak + (2*ui->doubleSpinBox_intTime->value()*ui->spinBox_BNSpec->value()))/3));
+    double measurementTime = cycleTime - (((LongBreak + (2*ui->doubleSpinBox_intTime->value()*ui->spinBox_BNSpec->value()*ui->spinBox_BNAve->value()))/3));
 
     /* Convert the time to minutes, hours or days */
     QStringList ConvertedTime = externSoftware->TimeConverter(measurementTime/1000);
@@ -920,7 +948,7 @@ void configurePolMeasure::updateForm(void)
     ui->lineEdit_MinImp1->setText(QString::number(externSoftware->minConcentrations.at(1)));
     ui->lineEdit_MinImp2->setText(QString::number(externSoftware->minConcentrations.at(2)));
     ui->spinBox_LongBreak->setValue((externSoftware->ConfigurationFileGenerator->longBreak -
-                                     (externSoftware->ConfigurationFileGenerator->IntegrationTime*externSoftware->ConfigurationFileGenerator->NrSpectra))/1000);
+                                     (externSoftware->ConfigurationFileGenerator->IntegrationTime*externSoftware->ConfigurationFileGenerator->NrSpectra*externSoftware->ConfigurationFileGenerator->NrAverages))/1000);
     ui->lineEdit_MaxGluc->setText(QString::number(externSoftware->maxConcentrations.at(0)));
     ui->lineEdit_MaxImp1->setText(QString::number(externSoftware->maxConcentrations.at(1)));
     ui->lineEdit_MaxImp2->setText(QString::number(externSoftware->maxConcentrations.at(2)));

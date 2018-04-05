@@ -130,7 +130,7 @@ void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFil
     double cycleTime = (2 * fillRefill + 4*shortBreak)*(NSteps + (NSteps-1)) +  (2 * fillRefill + 3*shortBreak + longBreak );
 
     /* Time intervals between measurements */
-    double measurementTime = cycleTime - (((longBreak + (2*IntegrationTime*NrSpectra))/3));
+    double measurementTime = cycleTime - (((longBreak + (2*IntegrationTime*NrSpectra*NrAverages))/3));
 
     /* Write measurement configuration for each concentration */
     for(int j = 0 ; j < NConcentrations; j++){

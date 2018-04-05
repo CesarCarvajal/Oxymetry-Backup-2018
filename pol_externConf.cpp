@@ -95,10 +95,10 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
     Impurity2Concentration.resize(ConfigurationFileGenerator->NConcentrations);
 
     /* Create vectors of Flows */
-    QVector <double> WaterFlow(ConfigurationFileGenerator->NConcentrations);
-    QVector <double> GlucoseFlow(ConfigurationFileGenerator->NConcentrations);
-    QVector <double> Impurity1Flow(ConfigurationFileGenerator->NConcentrations);
-    QVector <double> Impurity2Flow(ConfigurationFileGenerator->NConcentrations);
+    WaterFlow.resize(ConfigurationFileGenerator->NConcentrations);
+    GlucoseFlow.resize(ConfigurationFileGenerator->NConcentrations);
+    Impurity1Flow.resize(ConfigurationFileGenerator->NConcentrations);
+    Impurity2Flow.resize(ConfigurationFileGenerator->NConcentrations);
 
     /* Measurements vector */
     QVector <double> Nmeasurements(ConfigurationFileGenerator->NConcentrations);
@@ -209,6 +209,16 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
         WaterFlow.replace(i,ConfigurationFileGenerator->absoluteFlow - Flow);
 
     }
+
+    /* Write all scripts */
+    writeScripts();
+
+}
+
+/**
+ * @brief Write the scripts
+ */
+void Pol_ExternConf::writeScripts(void){
 
     /* Create the Spectrometer Script */
     ConfigurationFileGenerator->GenerateSpectrometerConfiguration(pathForScripts, GlucoseConcentration, Impurity1Concentration, Impurity2Concentration, stockSolutions, minWavelength, maxWavelength);

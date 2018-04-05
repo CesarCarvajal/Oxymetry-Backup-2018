@@ -282,7 +282,7 @@ void fft::getFFTfromRawData(QFileInfo fileInformation, bool Calibrating, double 
                 CalculateFFT(NrSpectra, counts);
 
                 /* What is the modulation frequency? */
-                f_w = NrSpectra*(IntTime/1000)*FrequencyF;
+                f_w = NrSpectra*(IntTime/1000)*FrequencyF*NrAverages;
 
                 /* From the Output array of FFT, save each of the frequency shares amplitude */
                 DCValue = sqrt(fabs((outputFFT[0][0]*outputFFT[0][0])) + fabs((outputFFT[0][1]*outputFFT[0][1])));
@@ -318,7 +318,7 @@ void fft::getFFTfromRawData(QFileInfo fileInformation, bool Calibrating, double 
                         fft_data.append(sqrt(fabs((outputFFT[i][0]*outputFFT[i][0])) + fabs((outputFFT[i][1]*outputFFT[i][1]))));
 
                         /* Which frequencies are shown in the FFT? */
-                        time.append(i/(NrSpectra*(IntTime/1000)));
+                        time.append(i/(NrAverages*NrSpectra*(IntTime/1000)));
                     }
                 }
                 /* Counter of File Lines */
