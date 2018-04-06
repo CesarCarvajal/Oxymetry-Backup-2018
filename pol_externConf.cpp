@@ -41,6 +41,24 @@ Pol_ExternConf::Pol_ExternConf()
 
     /* Configuration File generator object */
     ConfigurationFileGenerator = new Pol_configFilesGenerator();
+
+    /* Set size of the concentrations vectors */
+    GlucoseConcentration.resize(0);
+    Impurity1Concentration.resize(0);
+    Impurity2Concentration.resize(0);
+
+    /* Create vectors of Flows */
+    WaterFlow.resize(0);
+    GlucoseFlow.resize(0);
+    Impurity1Flow.resize(0);
+    Impurity2Flow.resize(0);
+
+    /* Restart paths */
+    pathForScripts = "";
+
+    /* Restart limits */
+    minWavelength = 200;
+    maxWavelength = 1200;
 }
 
 /**

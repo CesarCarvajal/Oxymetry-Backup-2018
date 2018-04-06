@@ -153,13 +153,12 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
         /* By Default, use the First Device checked on the List of Spectrometers from Preview Tab */
 
         /* Does the first spectrometer already have a readable name assigned? */
-        if (ptrSpectrometers[SpectrometerNumber]->hasReadableName())
-        {
+        if (ptrSpectrometers[SpectrometerNumber]->hasReadableName()){
+
             /* Yes. Add the spectrometer to the list using the readable name. */
             PolarimetrySpectrometer = new PanelItem_Pol(0, ptrSpectrometers[SpectrometerNumber]->getReadableName());
         }
-        else
-        {
+        else{
             /* No. Add the spectrometer to the list using the serial number. */
             PolarimetrySpectrometer = new PanelItem_Pol(0, ptrSpectrometers[SpectrometerNumber]->getSerialNumber());
         }
@@ -1348,17 +1347,17 @@ void PanelPolarimeter::change_Wavelength_FFT_Pol(void){
  */
 void PanelPolarimeter::clean_All_Pol(void){
 
+    /* Local */
+    Timeindex = 0;
+
+    /* Data loaded */
+    UserLoadDataPath = "";
+
     /* To run clear_Plot function */
     dataloaded = true;
 
     /* Remove some items from the GUI loaded when needed */
     showUI_Item(false);
-
-    /* Restart the flag to select automatically the wavelength for the FFT plot */
-    FFTL.changeFFTwavelength = true;
-
-    /* Restart maximum Intensity measured */
-    FFTL.MaximumIntensity = 0;
 
     /* Don't show total measurement bar */
     ui->TotalProgressBar_Pol->setVisible(false);
@@ -1370,11 +1369,6 @@ void PanelPolarimeter::clean_All_Pol(void){
     ui->label_prediction->setVisible(false);
     ui->line_comp->setVisible(false);
 
-    /* Restart FFT intensities plot */
-    ui->qwtPlot_Pol_FFT->setAxisScale(QwtPlot::xBottom, 0, 21, 7);
-    ui->qwtPlot_Pol_FFT->setAxisScale(QwtPlot::yLeft, 0, 3000, 1000);
-    ui->qwtPlot_Pol_FFT->updateAxes();
-
     /* Show starting plots */
     ui->qwtPlot_Pol->setVisible(true);
     ui->qwtPlot_Pol_Average->setVisible(true);
@@ -1385,7 +1379,6 @@ void PanelPolarimeter::clean_All_Pol(void){
     ui->currentProgressBar_Pol->setVisible(false);
 
     /* Restart total measurement time */
-    ConfigureMeasurement->totalMtime = 0;
     totalMeasuretime = 0;
 
     /* Is there any information ploted already? */
@@ -1398,13 +1391,15 @@ void PanelPolarimeter::clean_All_Pol(void){
     PolPlotter->clean_AllPlots();
 
     /* Clean the configuration */
-    ConfigureMeasurement->pathOfData = "";
-    ConfigureMeasurement->ui->lineEdit_path->setText("Please select a configuration file");
     ConfigureMeasurement->cleanAll();
-    ConfigureMeasurement->configured = false;
 
     /* Clear FFT plots */
     clear_Plot();
+
+    /* Restart FFT intensities plot */
+    ui->qwtPlot_Pol_FFT->setAxisScale(QwtPlot::xBottom, 0, 21, 7);
+    ui->qwtPlot_Pol_FFT->setAxisScale(QwtPlot::yLeft, 0, 3000, 1000);
+    ui->qwtPlot_Pol_FFT->updateAxes();
 
     /* Clear the configuration files profile table */
     for(int z =0; z<ConfigureMeasurement->savingFilesNames.length(); z++){
@@ -1413,23 +1408,33 @@ void PanelPolarimeter::clean_All_Pol(void){
         ui->Table_Measurements_Pol->removeRow(0);
     }
 
-    /* Nothing is running */
-    Runner->setMeasurementRunning(false);
-    Runner->setCalibrationRunning(false);
-
     /* Set all vectors to zero */
     FFTL.InitializeFFTArrays();
 
+    /* Restart the flag to select automatically the wavelength for the FFT plot */
+    FFTL.changeFFTwavelength = true;
+
+    /* Restart FFT parameters */
+    FFTL.MaximumIntensity = 0;
+    FFTL.NrSpectra = 1000;
+    FFTL.NrAverages = 1;
+    FFTL.IntTime = 8;
+    FFTL.FrequencyF = 7;
+    FFTL.f_w = 7;
+    FFTL.SelectedWaveL = -1;
+    FFTL.ConcentrationC1 = -1;
+    FFTL.ConcentrationC2 = -1;
+    FFTL.ConcentrationC3 = -1;
+
     /* Also restart plotting variables */
-    PolPlotter->time_plot = 400;
     minXAverage = 0;
     maxXAverage = PolPlotter->time_plot;
     maxYRaw = 0;
     maxYAverage = 0;
     ui->qwtPlot_Pol_Average->setXAxis(minXAverage, maxXAverage);
 
-    /* Restart configuration */
-    Runner->setConfigured(false);
+    /* Nothing is running */
+    Runner = new Pol_Measurements();
 
     /* There is no data loaded anymore or any FFT data in UI */
     dataloaded = false;
@@ -1440,16 +1445,8 @@ void PanelPolarimeter::clean_All_Pol(void){
     ui->qwtPlot_Pol_Average->updateLayout();
     ui->qwtPlot_Pol->update();
 
-    /* General Timer in seconds */
-    Runner->Timer_In_Seconds=0;
-
-    /* Restart the time intervals of average plot during the measurements */
-    Runner->measurementPlotTimeInterval = 0;
-
     /* Time busy with FFT */
-    Runner->liveFFT_Time = 0;
     ui->currentProgressBar_Pol->setValue(0);
-    Runner->Calibration_Progress = 0;
 
     /* Restart the range of the wavelengths for the measurements */
     unsigned int i = 0;
@@ -1485,6 +1482,12 @@ void PanelPolarimeter::clean_All_Pol(void){
     /* Update x-axis of graphs depending on Wavelengths */
     update_Wavelength_Range();
 
+    /* Restart configurations */
+    ConfigureMeasurement = new configurePolMeasure();
+
+    /* Restart plots */
+    PolPlotter = new Pol_Plot();
+
     /* Update information bar */
     ui->info->setText("");
 }
@@ -1512,6 +1515,7 @@ void PanelPolarimeter::clear_Plot(void) {
     ui->qwtPlot_Pol_Prediction->update();
     ui->qwtPlot_Pol_FFT->updateLayout();
     ui->waveToPlotFFT->setText("");
+
 }
 
 /**
@@ -1545,6 +1549,18 @@ void PanelPolarimeter::conf_Setup_Pol_Measurement(void) {
 
     /* Was there a configuration loaded? */
     if(ConfigureMeasurement->configured && !ConfigureMeasurement->Conf_canceled){
+
+        /* Is there any information ploted already? */
+        if(PolPlotter->Compensation_Signal!=nullptr)
+        {
+            /* Detach live curves */
+            PolPlotter->Compensation_Signal->detach();
+            PolPlotter-> FFT_oneWave->detach();
+            PolPlotter->FFT_DC->detach();
+            PolPlotter->FFT_W->detach();
+            PolPlotter->FFT_2W->detach();
+            PolPlotter->predictionSignal->detach();
+        }
 
         /* Set the configured values */
         setConfiguration();
@@ -3203,18 +3219,24 @@ void PanelPolarimeter::toggle_Load_Data(void)
     /* If user select FFT type data, then run load from FFT function */
     if (msgBox.clickedButton() == FFT) {
 
+        /* If loaded clean all */
+         clean_All_Pol();
+
         /* Load FFT */
         Load_From_FFT();
 
         /* If user select raw data, then load it */
     } else if (msgBox.clickedButton() == Raw) {
 
+        /* If loaded clean all */
+         clean_All_Pol();
+
         /* Load and analyze raw data */
         Load_From_Raw_Data();
     }
 
     /* Which button was pressed? */
-    if (msgBox.clickedButton() == Raw || msgBox.clickedButton() == FFT ) {
+    if ((msgBox.clickedButton() == Raw || msgBox.clickedButton() == FFT) && dataloaded) {
 
         /* Remove some items from the GUI loaded when needed */
         showUI_Item(false);
@@ -3266,6 +3288,18 @@ void PanelPolarimeter::toggle_Pol_Calibration(void)
 
         /* Clear all plots */
         clear_Plot();
+
+        /* Is there any information ploted already? */
+        if(PolPlotter->Compensation_Signal!=nullptr)
+        {
+            /* Detach live curves */
+            PolPlotter->Compensation_Signal->detach();
+            PolPlotter-> FFT_oneWave->detach();
+            PolPlotter->FFT_DC->detach();
+            PolPlotter->FFT_W->detach();
+            PolPlotter->FFT_2W->detach();
+            PolPlotter->predictionSignal->detach();
+        }
 
         /* Hide total measurement bar */
         ui->TotalProgressBar_Pol->setVisible(false);

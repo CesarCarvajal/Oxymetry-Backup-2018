@@ -57,10 +57,10 @@ public:
     QVector<double> fft_Compensation_Signal;
 
     /* Parameters from File */
-    int NrSpectra;
-    double IntTime;
+    int NrSpectra = 1000;
+    double IntTime = 8;
     double FrequencyF = 7;
-    int NrAverages = 0;
+    int NrAverages = 1;
 
     /* Concentrations */
     double ConcentrationC1=-1;

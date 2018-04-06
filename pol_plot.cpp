@@ -180,7 +180,13 @@ void Pol_Plot::clean_AllPlots(void){
         /* Detach live curves */
         Average_DC_Signal->detach();
         Average_W_Signal->detach();
-        Average_2W_Signal->detach();
+        Average_2W_Signal->detach();      
+        Compensation_Signal->detach();
+        FFT_oneWave->detach();
+        FFT_DC->detach();
+        FFT_W->detach();
+        FFT_2W->detach();
+        predictionSignal->detach();
     }
 
     /* Set all vectors to zero */

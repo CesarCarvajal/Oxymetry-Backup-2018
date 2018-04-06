@@ -41,10 +41,13 @@ WaitingDialog::WaitingDialog(QWidget *parent) :
     this->setFixedSize(this->size());
 
     /* Set window flags */
-    this->setWindowFlags(Qt::Tool | Qt::WindowStaysOnTopHint);
+    this->setWindowFlags(Qt::Dialog | Qt::WindowStaysOnTopHint | Qt::WindowTitleHint);
 
     /* Count the seconds */
     timerS = 0;
+
+    /* count down */
+    countDown = 6;
 
 }
 
@@ -67,7 +70,7 @@ void WaitingDialog::setCount(void){
 
             countDown = 6 - timerS;
 
-            if(countDown != 0){
+            if(countDown > 0){
             /* Show the counter back */
             ui->label_count->setText(QString::number(countDown));
             }else{

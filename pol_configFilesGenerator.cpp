@@ -33,6 +33,19 @@
 Pol_configFilesGenerator::Pol_configFilesGenerator()
 {
 
+    /* Initialize variables */
+    NConcentrations = 0;
+    NrSpectra = 1000;
+    Frequency = 7;
+    IntegrationTime = 8;
+    NrAverages = 1;
+    fillRefill = 0;
+    absVol = 0;
+    NSteps = 5;
+    absoluteFlow = 0;
+    shortBreak = 0;
+    longBreak = 0;
+
     /* Active substances flags */
     glucoseActive = false;
     Imp1Active = false;

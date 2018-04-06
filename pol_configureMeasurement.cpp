@@ -159,6 +159,10 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     ui->label_timeLabel->hide();
     ui->timeEdit_timeLabel->hide();
 
+    /* Initialize variables */
+    pathOfData = "";
+    ui->lineEdit_path->setText("Please select a configuration file");
+
 }
 
 /**
