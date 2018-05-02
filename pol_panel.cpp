@@ -349,13 +349,13 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
         /* Disable edition of Spectrometer Data until there is a calibration running */
         PolarimetrySpectrometer->enableComponents(false);
 
+        /* Update x-axis of graphs depending on Wavelengths */
+        update_Wavelength_Range();
+
+        /* Enable the opening of the pumps software */
+        ConfigureMeasurement->openPumps = true;
+
     }
-
-    /* Update x-axis of graphs depending on Wavelengths */
-    update_Wavelength_Range();
-
-    /* Enable the opening of the pumps software */
-    ConfigureMeasurement->openPumps = true;
 }
 
 /**
@@ -653,7 +653,7 @@ void PanelPolarimeter::adjust_Run_End(short int typeRunn){
         /* Show prediciton plot - NO YET */
         //ui->horizontalSpacer_Y->changeSize(20,12,QSizePolicy::Fixed,QSizePolicy::Fixed);
         //ui->label_prediction->setVisible(true);
-       // ui->line_comp->setVisible(true);
+        // ui->line_comp->setVisible(true);
         //ui->qwtPlot_Pol_Prediction->setVisible(true);
     }
 
@@ -805,6 +805,9 @@ void PanelPolarimeter::adjust_Wavelength_Range(void){
             /* If so, then stop */
             ptrSpectrometers[SpectrometerNumber]->stopMeasurement();
         }
+
+        /* Restart maximum Intensity measured */
+        FFTL.MaximumIntensity = 0;
 
         /* Get and set new range */
         PolarimetrySpectrometer->setWavelengthRange(changeDialog.getMinValue(), changeDialog.getMaxValue());
@@ -2167,7 +2170,14 @@ void PanelPolarimeter::Load_From_Raw_Data(void) {
     }
 
     /* Data Analysis by FFT */
-    FFTL.getFFTfromRawData(fileInfoLoad, false, PolarimetrySpectrometer->getMinimumWavelength(), PolarimetrySpectrometer->getMaximumWavelength());
+    if(m_NrDevices > 0){
+
+        /* Connected devices? Use it's wavelength range */
+        FFTL.getFFTfromRawData(fileInfoLoad, false, PolarimetrySpectrometer->getMinimumWavelength(), PolarimetrySpectrometer->getMaximumWavelength());
+    }else{
+        /* If not, then use a default range */
+        FFTL.getFFTfromRawData(fileInfoLoad, false, 200, 1100);
+    }
 
     /* Clear all the plots for a new load of data */
     clear_Plot();
@@ -3220,7 +3230,9 @@ void PanelPolarimeter::toggle_Load_Data(void)
     if (msgBox.clickedButton() == FFT) {
 
         /* If loaded clean all */
-         clean_All_Pol();
+        if(m_NrDevices > 0){
+            clean_All_Pol();
+        }
 
         /* Load FFT */
         Load_From_FFT();
@@ -3229,7 +3241,9 @@ void PanelPolarimeter::toggle_Load_Data(void)
     } else if (msgBox.clickedButton() == Raw) {
 
         /* If loaded clean all */
-         clean_All_Pol();
+        if(m_NrDevices > 0){
+            clean_All_Pol();
+        }
 
         /* Load and analyze raw data */
         Load_From_Raw_Data();

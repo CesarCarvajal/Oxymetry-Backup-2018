@@ -309,6 +309,9 @@
                 <height>16777215</height>
                </size>
               </property>
+              <property name="toolTip">
+               <string>Insert integration time</string>
+              </property>
               <property name="decimals">
                <number>1</number>
               </property>
@@ -389,7 +392,7 @@
                </font>
               </property>
               <property name="toolTip">
-               <string>Number of Spectra</string>
+               <string>Insert number of spectra</string>
               </property>
               <property name="wrapping">
                <bool>false</bool>
@@ -467,6 +470,9 @@
                 <height>16777215</height>
                </size>
               </property>
+              <property name="toolTip">
+               <string>Insert number of averages</string>
+              </property>
               <property name="minimum">
                <number>1</number>
               </property>
@@ -521,6 +527,9 @@
                 <width>100</width>
                 <height>16777215</height>
                </size>
+              </property>
+              <property name="toolTip">
+               <string>Insert maximum wavelength</string>
               </property>
               <property name="decimals">
                <number>1</number>
@@ -593,7 +602,7 @@
                </size>
               </property>
               <property name="toolTip">
-               <string>Number of Measurements</string>
+               <string>Insert number of concentrations</string>
               </property>
               <property name="minimum">
                <number>1</number>
@@ -658,6 +667,9 @@
                 <width>100</width>
                 <height>16777215</height>
                </size>
+              </property>
+              <property name="toolTip">
+               <string>Insert modulation frequency</string>
               </property>
               <property name="suffix">
                <string/>
@@ -748,6 +760,9 @@
                 <width>100</width>
                 <height>16777215</height>
                </size>
+              </property>
+              <property name="toolTip">
+               <string>Insert minimum wavelength</string>
               </property>
               <property name="decimals">
                <number>1</number>
@@ -1994,6 +2009,9 @@
                 <height>16777215</height>
                </size>
               </property>
+              <property name="toolTip">
+               <string>Set aboslute flow</string>
+              </property>
               <property name="maximum">
                <double>500.000000000000000</double>
               </property>
@@ -2051,6 +2069,9 @@
                 <width>100</width>
                 <height>16777215</height>
                </size>
+              </property>
+              <property name="toolTip">
+               <string>Set number of steps</string>
               </property>
               <property name="minimum">
                <number>1</number>
@@ -2115,6 +2136,9 @@
                 <width>100</width>
                 <height>16777215</height>
                </size>
+              </property>
+              <property name="toolTip">
+               <string>Set absolute volume</string>
               </property>
               <property name="maximum">
                <number>100000</number>
@@ -2293,6 +2317,9 @@
                 <height>16777215</height>
                </size>
               </property>
+              <property name="toolTip">
+               <string>Set short break time</string>
+              </property>
               <property name="maximum">
                <number>1000000</number>
               </property>
@@ -2344,6 +2371,9 @@
                 <width>100</width>
                 <height>16777215</height>
                </size>
+              </property>
+              <property name="toolTip">
+               <string>Add start delay in hours</string>
               </property>
               <property name="decimals">
                <number>3</number>
@@ -2408,6 +2438,9 @@
                 <width>100</width>
                 <height>16777215</height>
                </size>
+              </property>
+              <property name="toolTip">
+               <string>Set long break time</string>
               </property>
               <property name="maximum">
                <number>10000000</number>
@@ -2546,7 +2579,7 @@
                </size>
               </property>
               <property name="toolTip">
-               <string>Time Interval between measurements</string>
+               <string>Total measurement time</string>
               </property>
               <property name="text">
                <string>5.703</string>
@@ -2611,6 +2644,9 @@
                 <width>100</width>
                 <height>16777215</height>
                </size>
+              </property>
+              <property name="toolTip">
+               <string>Time between measurements</string>
               </property>
               <property name="text">
                <string>6.32</string>
@@ -2720,6 +2756,9 @@
               <height>16777215</height>
              </size>
             </property>
+            <property name="toolTip">
+             <string>Time starting the measurement...</string>
+            </property>
             <property name="frame">
              <bool>false</bool>
             </property>
@@ -2819,6 +2858,9 @@
            <width>150</width>
            <height>25</height>
           </size>
+         </property>
+         <property name="toolTip">
+          <string>Cancel configuration</string>
          </property>
          <property name="text">
           <string>Cancel</string>

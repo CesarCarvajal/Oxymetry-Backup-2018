@@ -1484,21 +1484,30 @@ public:
         label_BIntTime->setToolTip(QApplication::translate("configurePolMeasure", "What's the Integration Time?", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_BIntTime->setText(QApplication::translate("configurePolMeasure", "Integration Time: ", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        doubleSpinBox_intTime->setToolTip(QApplication::translate("configurePolMeasure", "Insert integration time", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         label_BIntTime2->setText(QApplication::translate("configurePolMeasure", "ms", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         label_BNSpec->setToolTip(QApplication::translate("configurePolMeasure", "How many spectra?", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_BNSpec->setText(QApplication::translate("configurePolMeasure", "Nr. Spectra: ", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        spinBox_BNSpec->setToolTip(QApplication::translate("configurePolMeasure", "Number of Spectra", Q_NULLPTR));
+        spinBox_BNSpec->setToolTip(QApplication::translate("configurePolMeasure", "Insert number of spectra", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_10->setText(QString());
 #ifndef QT_NO_TOOLTIP
         label_BNAve->setToolTip(QApplication::translate("configurePolMeasure", "How many averages?", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_BNAve->setText(QApplication::translate("configurePolMeasure", "Nr. Averages: ", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        spinBox_BNAve->setToolTip(QApplication::translate("configurePolMeasure", "Insert number of averages", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         label_11->setText(QString());
         label_maxW1->setText(QApplication::translate("configurePolMeasure", "Max. Wavelength:", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        doubleSpinBox_maxW->setToolTip(QApplication::translate("configurePolMeasure", "Insert maximum wavelength", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         label_maxW2->setText(QApplication::translate("configurePolMeasure", "nm", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         label_BNMeas->setToolTip(QApplication::translate("configurePolMeasure", "How many Concentrations to Measure?", Q_NULLPTR));
@@ -1511,16 +1520,22 @@ public:
 #endif // QT_NO_ACCESSIBILITY
         label_BNMeas->setText(QApplication::translate("configurePolMeasure", "Nr. Measurements:", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        spinBox_BNMeas->setToolTip(QApplication::translate("configurePolMeasure", "Number of Measurements", Q_NULLPTR));
+        spinBox_BNMeas->setToolTip(QApplication::translate("configurePolMeasure", "Insert number of concentrations", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_9->setText(QString());
 #ifndef QT_NO_TOOLTIP
         label_BFreq->setToolTip(QApplication::translate("configurePolMeasure", "What's the Modulation Frequency?", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_BFreq->setText(QApplication::translate("configurePolMeasure", "Frequency: ", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        spinBox_BFreq->setToolTip(QApplication::translate("configurePolMeasure", "Insert modulation frequency", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         spinBox_BFreq->setSuffix(QString());
         label_BFreq2->setText(QApplication::translate("configurePolMeasure", "Hz", Q_NULLPTR));
         label_minW1->setText(QApplication::translate("configurePolMeasure", "Min. Wavelength:", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        doubleSpinBox_minW->setToolTip(QApplication::translate("configurePolMeasure", "Insert minimum wavelength", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         label_minW2->setText(QApplication::translate("configurePolMeasure", "nm", Q_NULLPTR));
         label_SolConc->setText(QApplication::translate("configurePolMeasure", "Solutions Concentration:", Q_NULLPTR));
         label_VolGl1->setText(QApplication::translate("configurePolMeasure", "Volume Glucose:", Q_NULLPTR));
@@ -1630,16 +1645,25 @@ public:
         label_AbsFlow->setToolTip(QApplication::translate("configurePolMeasure", "Absolute Flow for Cuvette Filling", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_AbsFlow->setText(QApplication::translate("configurePolMeasure", "Absolute Flow:", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        doubleSpinBox_AbsFlow->setToolTip(QApplication::translate("configurePolMeasure", "Set aboslute flow", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         label_AbsFlow2->setText(QApplication::translate("configurePolMeasure", "ml/min", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         label_NSteps->setToolTip(QApplication::translate("configurePolMeasure", "Steps of cuvette flushing", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_NSteps->setText(QApplication::translate("configurePolMeasure", "Nr. Steps:", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        spinBox_NSteps->setToolTip(QApplication::translate("configurePolMeasure", "Set number of steps", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         label_2->setText(QString());
 #ifndef QT_NO_TOOLTIP
         label_AbsVol->setToolTip(QApplication::translate("configurePolMeasure", "Fill Refill Absolute Volume", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_AbsVol->setText(QApplication::translate("configurePolMeasure", "Absolute Volume: ", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        spinBox_AbsVol->setToolTip(QApplication::translate("configurePolMeasure", "Set absolute volume", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         label_AbsVol_2->setText(QApplication::translate("configurePolMeasure", "ml", Q_NULLPTR));
         label_MeasurementTime->setText(QApplication::translate("configurePolMeasure", "Measurement Time:", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
@@ -1655,13 +1679,22 @@ public:
         label_ShortBreak->setToolTip(QApplication::translate("configurePolMeasure", "Short Break in Seconds", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_ShortBreak->setText(QApplication::translate("configurePolMeasure", "Short Break: ", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        spinBox_ShortBreak->setToolTip(QApplication::translate("configurePolMeasure", "Set short break time", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         label_ShortBreak2->setText(QApplication::translate("configurePolMeasure", "sec", Q_NULLPTR));
         label_startDelay->setText(QApplication::translate("configurePolMeasure", "Start Delay:", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        doubleSpinBox_startDelay->setToolTip(QApplication::translate("configurePolMeasure", "Add start delay in hours", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         label_startDelay2->setText(QApplication::translate("configurePolMeasure", "hours", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         label_LongBreak->setToolTip(QApplication::translate("configurePolMeasure", "Calculation for time required for stable fluid", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_LongBreak->setText(QApplication::translate("configurePolMeasure", "Add. Long Break:", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        spinBox_LongBreak->setToolTip(QApplication::translate("configurePolMeasure", "Set long break time", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         label_longBreak2->setText(QApplication::translate("configurePolMeasure", "sec", Q_NULLPTR));
         label_NRepet->setText(QApplication::translate("configurePolMeasure", "Nr. of Repetitions", Q_NULLPTR));
         label_4->setText(QString());
@@ -1670,14 +1703,20 @@ public:
 #endif // QT_NO_TOOLTIP
         label_BtimeInt->setText(QApplication::translate("configurePolMeasure", "Total Time:", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        lineEdit_BtimeInterval->setToolTip(QApplication::translate("configurePolMeasure", "Time Interval between measurements", Q_NULLPTR));
+        lineEdit_BtimeInterval->setToolTip(QApplication::translate("configurePolMeasure", "Total measurement time", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         lineEdit_BtimeInterval->setText(QApplication::translate("configurePolMeasure", "5.703", Q_NULLPTR));
         label_BtimeInt2->setText(QApplication::translate("configurePolMeasure", "hours", Q_NULLPTR));
         label_timebetweenM->setText(QApplication::translate("configurePolMeasure", "Intervals:", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        lineEdit_timebetweenM->setToolTip(QApplication::translate("configurePolMeasure", "Time between measurements", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         lineEdit_timebetweenM->setText(QApplication::translate("configurePolMeasure", "6.32", Q_NULLPTR));
         label2_timebetweenM->setText(QApplication::translate("configurePolMeasure", "min", Q_NULLPTR));
         label_timeLabel->setText(QApplication::translate("configurePolMeasure", "Starting from now at:  ", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        timeEdit_timeLabel->setToolTip(QApplication::translate("configurePolMeasure", "Time starting the measurement...", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
 #ifndef QT_NO_TOOLTIP
         label_BFileNamePrev->setToolTip(QApplication::translate("configurePolMeasure", "File Name Preview", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
@@ -1686,6 +1725,9 @@ public:
         lineEdit_BFileNamePrev->setToolTip(QApplication::translate("configurePolMeasure", "File Name Preview", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         lineEdit_BFileNamePrev->setText(QApplication::translate("configurePolMeasure", "500C1_0C2_6ms_7Hz_1", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        pushButton_cancel->setToolTip(QApplication::translate("configurePolMeasure", "Cancel configuration", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         pushButton_cancel->setText(QApplication::translate("configurePolMeasure", "Cancel", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         pushButton_generate->setToolTip(QApplication::translate("configurePolMeasure", "Generate Configuration File", Q_NULLPTR));

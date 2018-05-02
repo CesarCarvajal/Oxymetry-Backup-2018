@@ -138,7 +138,7 @@ Please go to the button &quot;Configure&quot;, then fill the form with the label
 This option will save in the selected folder the configuration file with the measurement entries and the syringe pumps files to be loaded in the neMESYS User Interface.
 
 
-2.4 -&gt; What else is saved in this folder?
+2.4 -&gt; What else is saved in the folder?
 
 This folder also will contain all the measurement results as Raw Data and FFT values. 
  
@@ -150,7 +150,7 @@ After the configuration is loaded or created, a table with the measurement entri
 **  Please consider that this option requires a Shortcut Icon in the Desktop named &quot;NEMESYS&quot; or the default name &quot;neMESYS UserInterface&quot;, Otherwise this option might not work properly.
 
 
-2.6 -&gt; What the table &quot;Measurement Profile&quot; contains?
+2.6 -&gt; What contains the table &quot;Measurement Profile&quot; ?
 
 This table contains the time intervals between the measurements and the file name saved for each time interval.
 
@@ -173,64 +173,54 @@ The amplitudes of the components DC, W, 2W and the ratio W/2W.Also their corresp
 
 3.1 -&gt; How to start the calibration?
 
-Please go to the button &quot;Calibrate&quot;. If no configuration profile is loaded or created (see 2), the interface will ask to run a &quot;Free Calibration&quot; or to &quot;Load Configuration&quot;. Click in the desired type of calibration (See 3.2).
+Please go to the button &quot;Calibrate&quot;. The labels of the spectrometer will become editable and values could be changed.
 
 
-3.2 -&gt; What is a Free Calibration?
+3.2 -&gt; How to change values of the configuration?
 
-With this option, default values for the configuration will be loaded and the calibration will allow changes in the spectrometer settings only. This option is just a preview of the actual state of the setup.
-
-
-3.3 -&gt; What happens if a Configuration is loaded before starting the calibration?
-
-If there is a configuration already loaded in the interface, the calibration will start directly by taking the parameters of the previously  loaded or created configuration.
-
-
-3.4 -&gt; How to change values of the configuration?
-
-This option of only available during the calibration phase. The user can change the spectrometer integration time, number of averages and auto adjust by just doing click in the corresponding label and giving the corresponding desired value. The number of spectra and frequency can be modified by doing click in the corresponding cell of its table and pressing the key &quot;Enter&quot; after doin gthe change. With this action, the changes will be accepted by the interface. If no &quot;Enter&quot; is pressed, then the value will return to its original value automatically.
+Please click on the desired parameter and set the new value.
 
 ** The interface will restart the calibration automatically each time a parameter is modified.
 
 
-3.5 -&gt; Is the configuration profile modified during the calibration?
+3.3 -&gt; Is the configuration profile modified during the calibration?
 
 Yes. In this phase the user is free to change parameters of the spectrometer and they will be reflected in the loaded file names. However, for changes in the concentrations and time intervals, a new configuration file will have to be created or loaded.
 
 
-3.6 -&gt; When can I vary the spectrometer parameters?
+3.4 -&gt; When can I vary the spectrometer parameters?
 
 Only during the calibration phase, this to avoid changes for example when the measurement is running automatically.
 
 
-3.7 -&gt;   How long are the intervals in between the spectrometer measurements during the calibration?
+3.5 -&gt;   How long are the intervals in between the spectrometer measurements during the calibration?
 
 It depends on the actual settings, it can go up to minutes for large integration times, number of spectra or number of averages.
 
 
-3.8 -&gt; How the plots are arranged?
+3.6 -&gt; How the plots are arranged?
 
 During the calibration phase, first the plot of the raw signal is shown for an interval of time, then the FFT data is calculated and showed after processing. This cycle is repeated until the user stops the calibration.
 
 
-3.9 -&gt; Why is there a Temp.tmp file in my software folder &quot;data_polarimeter&quot;?
+3.7 -&gt; Why is there a Temp.tmp file in my software folder &quot;data_polarimeter&quot;?
 
 This file collects the data from the calibration but it is not preserved since it can become large in disk space.
 
 
-3.10 -&gt; Why it takes some time for the interface to get the FFT?
+3.8 -&gt; Why it takes some time for the interface to get the FFT?
 
 The Spectrometer needs certain amount of time to collect the data from the probe and save it as a temporal file during the calibration. Furthermore, this data is analyzed by the FFT and plotted in real time. The length of this time depends on (IntTime * Number of Averages * Number of Spectra). So for large values of any of this three variables, the system will take some time to process the data.
 
 ** Please consider that in general very large number of spectra or integration time will lead to larger measurement intervals, which could also overload the computer in use.
 
 
-3.11 -&gt; Why I can see the Live Raw data only a few seconds?
+3.9 -&gt; Why I can see the Live Raw data only a few seconds?
 
 It can be seen for approximatelly 7 seconds. This time is short in order to also reduce the total real time processing of data. Thus the real data time processing consists of the time of raw data + the time of spectra measurement + time of data processing and ploting.
 
 
-3.12 -&gt; What are those bars at the bottom when doing the calibration?
+3.10 -&gt; What are those bars at the bottom when doing the calibration?
 
 There is an information bar, which will inform about the current process of the interface. Also there is a progress bar which will show on which plot the interface is working during the cycles.
 
@@ -239,12 +229,12 @@ There is an information bar, which will inform about the current process of the 
 -&gt;  4. MEASUREMENTS
 
 
-4.1 -&gt; Why I can't start a measurement?
+4.1 -&gt; Why can't I start a measurement?
 
 Please check that the spectrometer is not in use in another function at that time. Also a configuration profile is required to start the measurements. (See 2).
 
 
-4.2 -&gt; How I do perform a measurement?
+4.2 -&gt; How do I perform a measurement?
 
 Click the button &quot;Start Measurement&quot;, the plots will be loaded automatically as well as the progress bars of the measurements. The resulting data will be saved in the same folder of the configuration file.
 
