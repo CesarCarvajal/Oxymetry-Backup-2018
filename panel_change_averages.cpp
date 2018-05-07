@@ -68,6 +68,34 @@ void PanelChangeAverages::setValue(int value)
 }
 
 /**
+ * @brief Set upper limit for number of averages
+ * @param[in] upper limit value Number of averages
+ */
+void PanelChangeAverages::setUpperLimit(int value)
+{
+    ui->spinbox_value->setMaximum(value);
+}
+
+/**
+ * @brief Set lower limit for number of averages
+ * @param[in] lower limit value Number of averages
+ */
+void PanelChangeAverages::setLowerLimit(int value)
+{
+    ui->spinbox_value->setMinimum(value);
+}
+
+/**
+ * @brief Set steps for number of averages
+ * @param[in] interval value Number of averages
+ */
+void PanelChangeAverages::setIntervals(int value)
+{
+    ui->spinbox_value->setSingleStep(value);
+}
+
+
+/**
  * @brief Accepts changed value
  */
 void PanelChangeAverages::applyButton(void)

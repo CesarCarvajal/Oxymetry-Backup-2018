@@ -42,6 +42,9 @@ public:
     /* Get or set number of averages */
     int getValue(void);
     void setValue(int value);
+    void setUpperLimit(int value);
+    void setLowerLimit(int value);
+    void setIntervals(int value);
 
     /* Destructor */
     ~PanelChangeAverages(void);

@@ -345,7 +345,7 @@ QStringList Pol_ExternConf::TimeConverter(double mTime){
         precision = 3;
 
         /* Days */
-    }else if(mTime > 86400){
+    }else if(mTime >= 86400){
 
         mTime = mTime/86400;
         unit = "days";

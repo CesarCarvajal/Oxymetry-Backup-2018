@@ -488,6 +488,9 @@
          <property name="toolTip">
           <string>Measurement Profile</string>
          </property>
+         <property name="lineWidth">
+          <number>1</number>
+         </property>
          <property name="horizontalScrollBarPolicy">
           <enum>Qt::ScrollBarAsNeeded</enum>
          </property>
@@ -498,7 +501,7 @@
           <bool>true</bool>
          </property>
          <property name="autoScrollMargin">
-          <number>18</number>
+          <number>10</number>
          </property>
          <property name="editTriggers">
           <set>QAbstractItemView::NoEditTriggers</set>
@@ -511,6 +514,9 @@
          </property>
          <property name="textElideMode">
           <enum>Qt::ElideRight</enum>
+         </property>
+         <property name="horizontalScrollMode">
+          <enum>QAbstractItemView::ScrollPerItem</enum>
          </property>
          <property name="showGrid">
           <bool>true</bool>
@@ -525,7 +531,10 @@
           <bool>false</bool>
          </attribute>
          <attribute name="horizontalHeaderDefaultSectionSize">
-          <number>54</number>
+          <number>81</number>
+         </attribute>
+         <attribute name="horizontalHeaderMinimumSectionSize">
+          <number>31</number>
          </attribute>
          <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
           <bool>false</bool>
@@ -535,6 +544,9 @@
          </attribute>
          <attribute name="verticalHeaderCascadingSectionResizes">
           <bool>false</bool>
+         </attribute>
+         <attribute name="verticalHeaderDefaultSectionSize">
+          <number>30</number>
          </attribute>
          <attribute name="verticalHeaderHighlightSections">
           <bool>true</bool>
@@ -550,7 +562,7 @@
          </attribute>
          <column>
           <property name="text">
-           <string>Time</string>
+           <string>HH:MM:SS</string>
           </property>
           <property name="toolTip">
            <string>Time Intervals</string>

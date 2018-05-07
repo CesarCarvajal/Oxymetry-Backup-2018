@@ -341,22 +341,26 @@ public:
         Table_Measurements_Pol->setSizePolicy(sizePolicy5);
         Table_Measurements_Pol->setMinimumSize(QSize(0, 50));
         Table_Measurements_Pol->setMaximumSize(QSize(290, 16777215));
+        Table_Measurements_Pol->setLineWidth(1);
         Table_Measurements_Pol->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
         Table_Measurements_Pol->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
         Table_Measurements_Pol->setAutoScroll(true);
-        Table_Measurements_Pol->setAutoScrollMargin(18);
+        Table_Measurements_Pol->setAutoScrollMargin(10);
         Table_Measurements_Pol->setEditTriggers(QAbstractItemView::NoEditTriggers);
         Table_Measurements_Pol->setSelectionMode(QAbstractItemView::NoSelection);
         Table_Measurements_Pol->setSelectionBehavior(QAbstractItemView::SelectItems);
         Table_Measurements_Pol->setTextElideMode(Qt::ElideRight);
+        Table_Measurements_Pol->setHorizontalScrollMode(QAbstractItemView::ScrollPerItem);
         Table_Measurements_Pol->setShowGrid(true);
         Table_Measurements_Pol->setRowCount(0);
         Table_Measurements_Pol->setColumnCount(2);
         Table_Measurements_Pol->horizontalHeader()->setCascadingSectionResizes(false);
-        Table_Measurements_Pol->horizontalHeader()->setDefaultSectionSize(54);
+        Table_Measurements_Pol->horizontalHeader()->setDefaultSectionSize(81);
+        Table_Measurements_Pol->horizontalHeader()->setMinimumSectionSize(31);
         Table_Measurements_Pol->horizontalHeader()->setProperty("showSortIndicator", QVariant(false));
         Table_Measurements_Pol->horizontalHeader()->setStretchLastSection(true);
         Table_Measurements_Pol->verticalHeader()->setCascadingSectionResizes(false);
+        Table_Measurements_Pol->verticalHeader()->setDefaultSectionSize(30);
         Table_Measurements_Pol->verticalHeader()->setHighlightSections(true);
         Table_Measurements_Pol->verticalHeader()->setMinimumSectionSize(39);
         Table_Measurements_Pol->verticalHeader()->setProperty("showSortIndicator", QVariant(false));
@@ -945,7 +949,7 @@ public:
 #endif // QT_NO_TOOLTIP
         label_Measurements_Pol->setText(QApplication::translate("PanelPolarimeter", "Measurement List:", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem = Table_Measurements_Pol->horizontalHeaderItem(0);
-        ___qtablewidgetitem->setText(QApplication::translate("PanelPolarimeter", "Time", Q_NULLPTR));
+        ___qtablewidgetitem->setText(QApplication::translate("PanelPolarimeter", "HH:MM:SS", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         ___qtablewidgetitem->setToolTip(QApplication::translate("PanelPolarimeter", "Time Intervals", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP

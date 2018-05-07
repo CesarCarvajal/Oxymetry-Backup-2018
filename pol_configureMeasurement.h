@@ -102,6 +102,9 @@ public:
     /* Get configuration data */
     void GetConfigurationData(void);
 
+    /* Get correct number of spectra values */
+    int NrSpectraSteps(int Fint);
+
     /* Destructor */
     ~configurePolMeasure(void);
 
@@ -126,6 +129,9 @@ public slots:
 
     /* Update parameters */
     void updateConfigurationValues(void);
+
+    /* Update parameters */
+    void updateStockValues(void);
 
 };
 

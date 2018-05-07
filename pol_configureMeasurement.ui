@@ -373,6 +373,9 @@
             </item>
             <item>
              <widget class="QSpinBox" name="spinBox_BNSpec">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>100</width>
@@ -394,6 +397,9 @@
               <property name="toolTip">
                <string>Insert number of spectra</string>
               </property>
+              <property name="inputMethodHints">
+               <set>Qt::ImhDigitsOnly</set>
+              </property>
               <property name="wrapping">
                <bool>false</bool>
               </property>
@@ -405,6 +411,9 @@
               </property>
               <property name="accelerated">
                <bool>false</bool>
+              </property>
+              <property name="keyboardTracking">
+               <bool>true</bool>
               </property>
               <property name="showGroupSeparator" stdset="0">
                <bool>false</bool>
@@ -947,13 +956,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEdit_MinImp1">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
+             <widget class="QDoubleSpinBox" name="doubleSpinBox_MinImp1">
               <property name="minimumSize">
                <size>
                 <width>100</width>
@@ -966,11 +969,14 @@
                 <height>16777215</height>
                </size>
               </property>
-              <property name="toolTip">
-               <string>Minimum Impurity 1 Concentration</string>
+              <property name="decimals">
+               <number>1</number>
               </property>
-              <property name="text">
-               <string>0</string>
+              <property name="maximum">
+               <double>100000000.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.100000000000000</double>
               </property>
              </widget>
             </item>
@@ -1095,13 +1101,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEdit_MaxGluc">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
+             <widget class="QDoubleSpinBox" name="doubleSpinBox_MaxGluc">
               <property name="minimumSize">
                <size>
                 <width>100</width>
@@ -1114,11 +1114,17 @@
                 <height>16777215</height>
                </size>
               </property>
-              <property name="toolTip">
-               <string>Maximum Glucose Concentration</string>
+              <property name="decimals">
+               <number>1</number>
               </property>
-              <property name="text">
-               <string>500</string>
+              <property name="maximum">
+               <double>1000000000000.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.100000000000000</double>
+              </property>
+              <property name="value">
+               <double>500.000000000000000</double>
               </property>
              </widget>
             </item>
@@ -1243,13 +1249,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEdit_Mingluc">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
+             <widget class="QDoubleSpinBox" name="doubleSpinBox_MinGluc">
               <property name="minimumSize">
                <size>
                 <width>100</width>
@@ -1262,11 +1262,14 @@
                 <height>16777215</height>
                </size>
               </property>
-              <property name="toolTip">
-               <string>Minimum Glucose Concentration</string>
+              <property name="decimals">
+               <number>1</number>
               </property>
-              <property name="text">
-               <string>0</string>
+              <property name="maximum">
+               <double>1000000.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.100000000000000</double>
               </property>
              </widget>
             </item>
@@ -1317,13 +1320,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEdit_MaxImp1">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
+             <widget class="QDoubleSpinBox" name="doubleSpinBox_MaxImp1">
               <property name="minimumSize">
                <size>
                 <width>100</width>
@@ -1336,11 +1333,17 @@
                 <height>16777215</height>
                </size>
               </property>
-              <property name="toolTip">
-               <string>Maximum Impurity 1 Concentration</string>
+              <property name="decimals">
+               <number>1</number>
               </property>
-              <property name="text">
-               <string>2</string>
+              <property name="maximum">
+               <double>1000000.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.100000000000000</double>
+              </property>
+              <property name="value">
+               <double>4.000000000000000</double>
               </property>
              </widget>
             </item>
@@ -1391,16 +1394,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEdit_MinImp2">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
+             <widget class="QDoubleSpinBox" name="doubleSpinBox_MinImp2">
               <property name="minimumSize">
                <size>
                 <width>100</width>
@@ -1413,11 +1407,14 @@
                 <height>16777215</height>
                </size>
               </property>
-              <property name="toolTip">
-               <string>Minimum Impurity 2 Concentration</string>
+              <property name="decimals">
+               <number>1</number>
               </property>
-              <property name="text">
-               <string>0</string>
+              <property name="maximum">
+               <double>100000000.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.100000000000000</double>
               </property>
              </widget>
             </item>
@@ -1474,16 +1471,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEdit_MaxImp2">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
+             <widget class="QDoubleSpinBox" name="doubleSpinBox_MaxImp2">
               <property name="minimumSize">
                <size>
                 <width>100</width>
@@ -1496,11 +1484,17 @@
                 <height>16777215</height>
                </size>
               </property>
-              <property name="toolTip">
-               <string>Maximum Impurity 2 Concentration</string>
+              <property name="decimals">
+               <number>1</number>
               </property>
-              <property name="text">
-               <string>500</string>
+              <property name="maximum">
+               <double>10000000.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.100000000000000</double>
+              </property>
+              <property name="value">
+               <double>500.000000000000000</double>
               </property>
              </widget>
             </item>

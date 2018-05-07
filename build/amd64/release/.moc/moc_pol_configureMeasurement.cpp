@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_configurePolMeasure_t {
-    QByteArrayData data[11];
-    char stringdata0[149];
+    QByteArrayData data[12];
+    char stringdata0[167];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -41,14 +41,15 @@ QT_MOC_LITERAL(6, 77, 8), // "QWidget*"
 QT_MOC_LITERAL(7, 86, 6), // "widget"
 QT_MOC_LITERAL(8, 93, 24), // "getConfigurationFromFile"
 QT_MOC_LITERAL(9, 118, 4), // "data"
-QT_MOC_LITERAL(10, 123, 25) // "updateConfigurationValues"
+QT_MOC_LITERAL(10, 123, 25), // "updateConfigurationValues"
+QT_MOC_LITERAL(11, 149, 17) // "updateStockValues"
 
     },
     "configurePolMeasure\0selectPath\0\0"
     "configurePolarimeter\0cancel\0"
     "handleClickEvent\0QWidget*\0widget\0"
     "getConfigurationFromFile\0data\0"
-    "updateConfigurationValues"
+    "updateConfigurationValues\0updateStockValues"
 };
 #undef QT_MOC_LITERAL
 
@@ -58,7 +59,7 @@ static const uint qt_meta_data_configurePolMeasure[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       6,   14, // methods
+       7,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -66,12 +67,13 @@ static const uint qt_meta_data_configurePolMeasure[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   44,    2, 0x08 /* Private */,
-       3,    0,   45,    2, 0x08 /* Private */,
-       4,    0,   46,    2, 0x08 /* Private */,
-       5,    1,   47,    2, 0x08 /* Private */,
-       8,    1,   50,    2, 0x08 /* Private */,
-      10,    0,   53,    2, 0x0a /* Public */,
+       1,    0,   49,    2, 0x08 /* Private */,
+       3,    0,   50,    2, 0x08 /* Private */,
+       4,    0,   51,    2, 0x08 /* Private */,
+       5,    1,   52,    2, 0x08 /* Private */,
+       8,    1,   55,    2, 0x08 /* Private */,
+      10,    0,   58,    2, 0x0a /* Public */,
+      11,    0,   59,    2, 0x0a /* Public */,
 
  // slots: parameters
     QMetaType::Void,
@@ -79,6 +81,7 @@ static const uint qt_meta_data_configurePolMeasure[] = {
     QMetaType::Void,
     QMetaType::Void, 0x80000000 | 6,    7,
     QMetaType::Void, QMetaType::QString,    9,
+    QMetaType::Void,
     QMetaType::Void,
 
        0        // eod
@@ -96,6 +99,7 @@ void configurePolMeasure::qt_static_metacall(QObject *_o, QMetaObject::Call _c, 
         case 3: _t->handleClickEvent((*reinterpret_cast< QWidget*(*)>(_a[1]))); break;
         case 4: _t->getConfigurationFromFile((*reinterpret_cast< QString(*)>(_a[1]))); break;
         case 5: _t->updateConfigurationValues(); break;
+        case 6: _t->updateStockValues(); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
@@ -137,13 +141,13 @@ int configurePolMeasure::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 6)
+        if (_id < 7)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 6;
+        _id -= 7;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 6)
+        if (_id < 7)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 6;
+        _id -= 7;
     }
     return _id;
 }

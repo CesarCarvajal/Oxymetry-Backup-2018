@@ -165,13 +165,19 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
 
         /* Polarimeter Setup Device Initialization */
         PolarimetrySpectrometer->setIntegrationTime(ptrSpectrometers[SpectrometerNumber]->getIntegrationTime());
-        PolarimetrySpectrometer->setNumberOfAverages(ptrSpectrometers[SpectrometerNumber]->getNumberOfAverages());
         PolarimetrySpectrometer->setIsSaturated(ptrSpectrometers[SpectrometerNumber]->isSaturated());
         PolarimetrySpectrometer->setIsEnabled(true);
 
         /* Set default values for the number of averages and frequency */
         PolarimetrySpectrometer->setNumberOfSpectra(1000);
         PolarimetrySpectrometer->setFrequency(7);
+
+        /* If the number of averages is greater than the maximum for polarimeter then set the maximum possible */
+        if(ptrSpectrometers[SpectrometerNumber]->getNumberOfAverages() > floor((1000)/(4*PolarimetrySpectrometer->getIntegrationTime()*PolarimetrySpectrometer->getFrequency()))){
+            PolarimetrySpectrometer->setNumberOfAverages(floor((1000)/(4*PolarimetrySpectrometer->getIntegrationTime()*PolarimetrySpectrometer->getFrequency())));
+        }else{
+            PolarimetrySpectrometer->setNumberOfAverages(ptrSpectrometers[SpectrometerNumber]->getNumberOfAverages());
+        }
 
         /* Don't allow resize of item */
         item_Pol->setSizeHint(PolarimetrySpectrometer->size());
@@ -620,8 +626,12 @@ void PanelPolarimeter::adjust_Run_End(short int typeRunn){
 
                 /* Change time to the proper units */
                 QStringList ConvertedTime = ConfigureMeasurement->externSoftware->TimeConverter(totalMeasuretime);
-                ui->label_RemainingTime->setText(QDateTime::fromTime_t(totalMeasuretime).toUTC().toString("hh:mm:ss") + " " + ConvertedTime.at(1));
-
+                if(ConvertedTime.at(1)!="days"){
+                    ui->label_RemainingTime->setText(QDateTime::fromTime_t(totalMeasuretime).toUTC().toString("hh:mm:ss") + " " + ConvertedTime.at(1));
+                }else{
+                    int nDays = ConvertedTime.at(0).toDouble();
+                    ui->label_RemainingTime->setText(QString::number(nDays) + ":" + QDateTime::fromTime_t(totalMeasuretime-(nDays*86400)).toUTC().toString("hh:mm:ss") + " " + ConvertedTime.at(1));
+                }
                 /* Plot 300 points for all the measurements */
                 if(t % Runner->measurementPlotTimeInterval == 0){
 
@@ -755,9 +765,15 @@ void PanelPolarimeter::adjust_Run_Start(short int typeRun){
         /* Load the length of the measurement */
         totalMeasuretime = ConfigureMeasurement->totalMtime;
 
-        /* Show remaining time */
+        /* Change time to the proper units */
         QStringList ConvertedTime = ConfigureMeasurement->externSoftware->TimeConverter(totalMeasuretime);
-        ui->label_RemainingTime->setText(QDateTime::fromTime_t(totalMeasuretime).toUTC().toString("hh:mm:ss") + " " + ConvertedTime.at(1));
+        if(ConvertedTime.at(1)!= "days"){
+            ui->label_RemainingTime->setText(QDateTime::fromTime_t(totalMeasuretime).toUTC().toString("hh:mm:ss") + " " + ConvertedTime.at(1));
+        }else{
+            int nDays = ConvertedTime.at(0).toDouble();
+            ui->label_RemainingTime->setText(QString::number(nDays) + ":" + QDateTime::fromTime_t(totalMeasuretime-(nDays*86400)).toUTC().toString("hh:mm:ss") + " " + ConvertedTime.at(1));
+        }
+
         ui->label_RemainingTime->setVisible(true);
     }
 
@@ -1150,6 +1166,7 @@ void PanelPolarimeter::change_Number_Averages_Pol(void){
 
     /* Get actual number of averages */
     changeDialog.setValue(PolarimetrySpectrometer->getNumberOfAverages());
+    changeDialog.setUpperLimit(floor((1000)/(4*PolarimetrySpectrometer->getIntegrationTime()*PolarimetrySpectrometer->getFrequency())));
 
     /* User pressed 'ok' */
     if (QDialog::Accepted == changeDialog.exec())
@@ -1207,11 +1224,17 @@ void PanelPolarimeter::change_Number_Spectra_Pol(void){
     /* Stop Calibration */
     Runner->AcceptParameterChanges();
 
+    int NumberSpectraStep = ConfigureMeasurement->NrSpectraSteps(PolarimetrySpectrometer->getIntegrationTime()*PolarimetrySpectrometer->getFrequency());
+
     /* Open the dialog to change the number of averages */
     PanelChangeAverages changeDialog(this);
 
     /* Get actual number of averages */
     changeDialog.setValue(PolarimetrySpectrometer->getNumberOfSpectra());
+
+    /* Select the correct number of spectra according to the frequency resolution */
+    changeDialog.setIntervals(NumberSpectraStep);
+    changeDialog.setLowerLimit(NumberSpectraStep);
 
     /* Change the dialog title */
     changeDialog.setWindowTitle("Change Number of Spectra");
@@ -1228,6 +1251,13 @@ void PanelPolarimeter::change_Number_Spectra_Pol(void){
 
         /* Get new number of averages */
         int NSpectra = changeDialog.getValue();
+
+        /* Is the input of the user valid? */
+        if(NSpectra % NumberSpectraStep !=0){
+
+            /* Use old value */
+            NSpectra = PolarimetrySpectrometer->getNumberOfSpectra();
+        }
 
         /* Set panel item and device number of spectra */
         PolarimetrySpectrometer->setNumberOfSpectra(NSpectra);
@@ -1532,8 +1562,12 @@ void PanelPolarimeter::conf_Setup_Pol_Measurement(void) {
     /* Set some values in the configuration form */
     ConfigureMeasurement->ui->doubleSpinBox_intTime->setValue(PolarimetrySpectrometer->getIntegrationTime());
     ConfigureMeasurement->ui->spinBox_BNAve->setValue(PolarimetrySpectrometer->getNumberOfAverages());
+    ConfigureMeasurement->ui->spinBox_BNAve->setMaximum(floor((1000)/(4*PolarimetrySpectrometer->getIntegrationTime()*PolarimetrySpectrometer->getFrequency())));
     ConfigureMeasurement->ui->spinBox_BFreq->setValue(PolarimetrySpectrometer->getFrequency());
     ConfigureMeasurement->ui->spinBox_BNSpec->setValue(PolarimetrySpectrometer->getNumberOfSpectra());
+    /* Select the correct number of spectra according to the frequency resolution */
+    ConfigureMeasurement->ui->spinBox_BNSpec->setSingleStep(ConfigureMeasurement->NrSpectraSteps(PolarimetrySpectrometer->getIntegrationTime()*PolarimetrySpectrometer->getFrequency()));
+    ConfigureMeasurement->ui->spinBox_BNSpec->setMinimum(ConfigureMeasurement->NrSpectraSteps(PolarimetrySpectrometer->getIntegrationTime()*PolarimetrySpectrometer->getFrequency()));
     ConfigureMeasurement->ui->doubleSpinBox_minW->setValue(PolarimetrySpectrometer->getMinimumWavelength());
     ConfigureMeasurement->ui->doubleSpinBox_maxW->setValue(PolarimetrySpectrometer->getMaximumWavelength());
 
@@ -1611,7 +1645,7 @@ void PanelPolarimeter::delay_Pol_Measurements(void){
         ConfigureMeasurement->startTime = QDateTime::currentDateTime().addSecs(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->startDelay);
 
         /* Tell the user that there is a delay in the start */
-        ui->info->setText("Starting at " + ConfigureMeasurement->startTime.toString("hh:mm:ss ap"));
+        ui->info->setText("Start " + ConfigureMeasurement->startTime.toString("dddd, d MMMM yy, hh:mm:ss ap"));
 
         /* Count the seconds */
         int timer = 0;
@@ -1623,7 +1657,7 @@ void PanelPolarimeter::delay_Pol_Measurements(void){
         Runner->timerMS.start();
 
         /* Run until the time is complete or the user cancel the measurement */
-        while(timer < ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->startDelay && Runner->PolMeasuring){
+        while(timer < ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->startDelay && Runner->PolMeasuring && !abort_everything){
 
             /* Count seconds */
             if(Runner->timerMS.elapsed()/1000 > timer){
@@ -1633,7 +1667,21 @@ void PanelPolarimeter::delay_Pol_Measurements(void){
 
                 /* Show remaining time */
                 ConvertedTime1 = ConfigureMeasurement->externSoftware->TimeConverter(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->startDelay - timer);
-                ui->label_RemainingTime->setText(QDateTime::fromTime_t(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->startDelay - timer).toUTC().toString("hh:mm:ss") + " " + ConvertedTime1.at(1));
+
+                /* Is the remaining time in hours? */
+                if(ConvertedTime1.at(1)!= "days"){
+                    ui->label_RemainingTime->setText(QDateTime::fromTime_t(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->startDelay - timer).toUTC().toString("hh:mm:ss") + " " + ConvertedTime1.at(1));
+                }else{
+                    /* If it's days, then get the number of days */
+                    int nDays = (ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->startDelay - timer)/86400;
+                    double remaining = ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->startDelay -(nDays*86400)-timer;
+                    if(remaining < 0){
+                        remaining = 0;
+                    }
+                    /* Present the time including the days */
+                    ui->label_RemainingTime->setText(QString::number(nDays) + ":" + QDateTime::fromTime_t(remaining).toUTC().toString("hh:mm:ss") + " " + ConvertedTime1.at(1));
+                }
+
                 ui->label_RemainingTime->setVisible(true);
 
                 /* Show remaining time in loading bar */
@@ -2384,8 +2432,15 @@ void PanelPolarimeter::pol_Measure(void){
 
         /* Show remaining time */
         totalMeasuretime = totalMeasuretime -1;
+
+        /* Change time to the proper units */
         QStringList ConvertedTime = ConfigureMeasurement->externSoftware->TimeConverter(totalMeasuretime);
-        ui->label_RemainingTime->setText(QDateTime::fromTime_t(totalMeasuretime).toUTC().toString("hh:mm:ss") + " " + ConvertedTime.at(1));
+        if(ConvertedTime.at(1)!= "days"){
+            ui->label_RemainingTime->setText(QDateTime::fromTime_t(totalMeasuretime).toUTC().toString("hh:mm:ss") + " " + ConvertedTime.at(1));
+        }else{
+            int nDays = ConvertedTime.at(0).toDouble();
+            ui->label_RemainingTime->setText(QString::number(nDays) + ":" + QDateTime::fromTime_t(totalMeasuretime-(nDays*86400)).toUTC().toString("hh:mm:ss") + " " + ConvertedTime.at(1));
+        }
 
         /* Plot 300 points for all the measurements */
         if(Runner->Timer_In_Seconds % Runner->measurementPlotTimeInterval == 0){
@@ -2985,8 +3040,8 @@ void PanelPolarimeter::setConfiguration(void){
     ui->Table_Measurements_Pol->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     /* Adjust table widget */
-    ui->Table_Measurements_Pol->setColumnWidth(0, 60);
-    ui->Table_Measurements_Pol->setColumnWidth(1, 150);
+    ui->Table_Measurements_Pol->setColumnWidth(0, 70);
+    ui->Table_Measurements_Pol->setColumnWidth(1, 140);
 
     /* Zero row count of measurement list */
     ui->Table_Measurements_Pol->setRowCount(0);
@@ -3419,13 +3474,20 @@ void PanelPolarimeter::toggle_Pol_Measurement(void)
  */
 void PanelPolarimeter::update()
 {
-    /* Update parameters changes from other Tabs */
-    PolarimetrySpectrometer->setIntegrationTime(ptrSpectrometers[SpectrometerNumber]->getIntegrationTime());
-    PolarimetrySpectrometer->setNumberOfAverages(ptrSpectrometers[SpectrometerNumber]->getNumberOfAverages());
-    PolarimetrySpectrometer->setName(ptrSpectrometers[SpectrometerNumber]->getReadableName());
-
     /* Is there a new spectrometer selected to be used in Polarimetry? */
     selected_Spectrometer_Pol();
+
+    /* Update parameters changes from other Tabs */
+    PolarimetrySpectrometer->setIntegrationTime(ptrSpectrometers[SpectrometerNumber]->getIntegrationTime());
+    PolarimetrySpectrometer->setName(ptrSpectrometers[SpectrometerNumber]->getReadableName());
+
+    /* If the number of averages is greater than the maximum for polarimeter then set the maximum possible */
+    if(ptrSpectrometers[SpectrometerNumber]->getNumberOfAverages() > floor((1000)/(4*PolarimetrySpectrometer->getIntegrationTime()*PolarimetrySpectrometer->getFrequency()))){
+        PolarimetrySpectrometer->setNumberOfAverages(floor((1000)/(4*PolarimetrySpectrometer->getIntegrationTime()*PolarimetrySpectrometer->getFrequency())));
+    }else{
+        PolarimetrySpectrometer->setNumberOfAverages(ptrSpectrometers[SpectrometerNumber]->getNumberOfAverages());
+    }
+
 }
 
 /**
