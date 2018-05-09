@@ -992,7 +992,7 @@ int configurePolMeasure::NrSpectraSteps(int Fint){
     while(true){
 
         /* Multiple of 2? */
-        if(Fint % 2 == 0 && two < 8){
+        if(Fint % 2 == 0 && two < 4){
             two = two * 2;
             Fint = Fint/2;
         }
@@ -1007,7 +1007,7 @@ int configurePolMeasure::NrSpectraSteps(int Fint){
     }
 
     /* Return the interval of change for the possible number of spectra values */
-    return 1000/(two*five);
+    return 500/(two*five);
 }
 
 /**

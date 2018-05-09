@@ -624,6 +624,9 @@ void PanelPolarimeter::adjust_Run_End(short int typeRunn){
                     totalMeasuretime = 0;
                 }
 
+                /* Handle events and update UI */
+                Application::processEvents();
+
                 /* Change time to the proper units */
                 QStringList ConvertedTime = ConfigureMeasurement->externSoftware->TimeConverter(totalMeasuretime);
                 if(ConvertedTime.at(1)!="days"){
