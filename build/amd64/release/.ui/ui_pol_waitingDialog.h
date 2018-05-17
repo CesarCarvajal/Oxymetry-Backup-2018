@@ -29,6 +29,7 @@ public:
     {
         if (WaitingDialog->objectName().isEmpty())
             WaitingDialog->setObjectName(QStringLiteral("WaitingDialog"));
+        WaitingDialog->setWindowModality(Qt::WindowModal);
         WaitingDialog->resize(233, 98);
         label_message = new QLabel(WaitingDialog);
         label_message->setObjectName(QStringLiteral("label_message"));

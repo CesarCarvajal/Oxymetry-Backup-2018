@@ -138,8 +138,7 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     ui->label_remaining->setVisible(false);
     ui->horizontalSpacer_Y->changeSize(20,12,QSizePolicy::Expanding,QSizePolicy::Fixed);
     ui->currentProgressBar_Pol->setVisible(false);
-    ui->label_prediction->setVisible(false);
-    ui->line_comp->setVisible(false);
+    ui->Tabs_Plots->setTabEnabled(1,false);
 
     /* Set window flags */
     this->setWindowFlags(Qt::Window);
@@ -573,6 +572,8 @@ void PanelPolarimeter::adjust_Measurements_Saving_Folder(void)
                 /* Change the folder's name to the next name in the list */
                 folderForData = "Measurement Data " + QDate::currentDate().toString("dd MM yyyy") + "_" + QString::number(i);
 
+                Application::processEvents();
+
                 /* The new name doesn't exists, so stop creating new folders */
                 if(QDir(ConfigureMeasurement->pathDataMeasurements.absolutePath()).mkdir(folderForData))
                 {
@@ -664,10 +665,7 @@ void PanelPolarimeter::adjust_Run_End(short int typeRunn){
         stop_Run_Polarimetry();
 
         /* Show prediciton plot - NO YET */
-        //ui->horizontalSpacer_Y->changeSize(20,12,QSizePolicy::Fixed,QSizePolicy::Fixed);
-        //ui->label_prediction->setVisible(true);
-        // ui->line_comp->setVisible(true);
-        //ui->qwtPlot_Pol_Prediction->setVisible(true);
+        ui->Tabs_Plots->setTabEnabled(1, true);
     }
 
     /* Stop the measurements */
@@ -1402,8 +1400,6 @@ void PanelPolarimeter::clean_All_Pol(void){
     ui->horizontalSpacer_Y->changeSize(20,12,QSizePolicy::Expanding,QSizePolicy::Fixed);
     ui->qwtPlot_Pol_Prediction->setVisible(false);
     ui->label_RemainingTime->setVisible(false);
-    ui->label_prediction->setVisible(false);
-    ui->line_comp->setVisible(false);
 
     /* Show starting plots */
     ui->qwtPlot_Pol->setVisible(true);
@@ -1966,7 +1962,7 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
         }else{
 
             /* Now the user can hide the lateral panel */
-            ui->label_hideConf->setText("<< Hide");
+            ui->label_hideConf->setText("<< Hide Panel");
             ui->label_hideConf->setMinimumWidth(290);
 
             /* Show the lateral panel again */
@@ -3320,8 +3316,6 @@ void PanelPolarimeter::toggle_Load_Data(void)
         ui->horizontalSpacer_Y->changeSize(20,12,QSizePolicy::Expanding,QSizePolicy::Fixed);
         ui->qwtPlot_Pol_Prediction->setVisible(false);
         ui->label_RemainingTime->setVisible(false);
-        ui->label_prediction->setVisible(false);
-        ui->line_comp->setVisible(false);
         ui->qwtPlot_Pol->setVisible(false);
         ui->qwtPlot_Pol_Average->setVisible(false);
         ui->qwtPlot_Pol_Compensation->setVisible(true);
@@ -3380,8 +3374,6 @@ void PanelPolarimeter::toggle_Pol_Calibration(void)
         ui->horizontalSpacer_Y->changeSize(20,12,QSizePolicy::Expanding,QSizePolicy::Fixed);
         ui->qwtPlot_Pol_Prediction->setVisible(false);
         ui->label_RemainingTime->setVisible(false);
-        ui->label_prediction->setVisible(false);
-        ui->line_comp->setVisible(false);
 
         /* Show needed plots */
         ui->qwtPlot_Pol->setVisible(true);

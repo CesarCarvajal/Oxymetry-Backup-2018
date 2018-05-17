@@ -277,7 +277,7 @@ public:
         lineEdit_path->setEnabled(true);
         lineEdit_path->setMinimumSize(QSize(0, 20));
         lineEdit_path->setMaximumSize(QSize(16777215, 20));
-        lineEdit_path->setFrame(false);
+        lineEdit_path->setFrame(true);
         lineEdit_path->setReadOnly(true);
 
         horizontalLayout_2->addWidget(lineEdit_path);
@@ -1393,7 +1393,7 @@ public:
         timeEdit_timeLabel->setSizePolicy(sizePolicy3);
         timeEdit_timeLabel->setMinimumSize(QSize(0, 0));
         timeEdit_timeLabel->setMaximumSize(QSize(16777215, 16777215));
-        timeEdit_timeLabel->setFrame(false);
+        timeEdit_timeLabel->setFrame(true);
         timeEdit_timeLabel->setReadOnly(true);
 
         timeLayout->addWidget(timeEdit_timeLabel);
@@ -1414,7 +1414,7 @@ public:
         lineEdit_BFileNamePrev = new QLineEdit(ConfigurationLayout);
         lineEdit_BFileNamePrev->setObjectName(QStringLiteral("lineEdit_BFileNamePrev"));
         lineEdit_BFileNamePrev->setEnabled(true);
-        lineEdit_BFileNamePrev->setFrame(false);
+        lineEdit_BFileNamePrev->setFrame(true);
         lineEdit_BFileNamePrev->setReadOnly(true);
 
         horizontalLayout_3->addWidget(lineEdit_BFileNamePrev);

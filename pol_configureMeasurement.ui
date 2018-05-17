@@ -136,7 +136,7 @@
            <string>Please select a configuration file</string>
           </property>
           <property name="frame">
-           <bool>false</bool>
+           <bool>true</bool>
           </property>
           <property name="readOnly">
            <bool>true</bool>
@@ -2754,7 +2754,7 @@
              <string>Time starting the measurement...</string>
             </property>
             <property name="frame">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
             <property name="readOnly">
              <bool>true</bool>
@@ -2799,7 +2799,7 @@
              <string>500C1_0C2_6ms_7Hz_1</string>
             </property>
             <property name="frame">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
             <property name="readOnly">
              <bool>true</bool>
