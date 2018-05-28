@@ -3039,8 +3039,8 @@ void PanelPolarimeter::setConfiguration(void){
     ui->Table_Measurements_Pol->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     /* Adjust table widget */
-    ui->Table_Measurements_Pol->setColumnWidth(0, 70);
-    ui->Table_Measurements_Pol->setColumnWidth(1, 140);
+    ui->Table_Measurements_Pol->setColumnWidth(0, 80);
+    ui->Table_Measurements_Pol->setColumnWidth(1, 130);
 
     /* Zero row count of measurement list */
     ui->Table_Measurements_Pol->setRowCount(0);

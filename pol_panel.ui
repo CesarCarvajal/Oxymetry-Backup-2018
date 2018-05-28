@@ -1130,7 +1130,7 @@
                     <string>Hide/Show Raw Signal Plot</string>
                    </property>
                    <property name="text">
-                    <string>Raw Signal</string>
+                    <string>Live Raw Signal</string>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignCenter</set>
@@ -1428,10 +1428,19 @@
                     <string>Hide/Show Average Signal Plot</string>
                    </property>
                    <property name="text">
-                    <string>Average Signal</string>
+                    <string>Live Average Signal</string>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignCenter</set>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>false</bool>
+                   </property>
+                   <property name="margin">
+                    <number>0</number>
+                   </property>
+                   <property name="indent">
+                    <number>-1</number>
                    </property>
                   </widget>
                  </item>

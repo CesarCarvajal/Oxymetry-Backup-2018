@@ -87,71 +87,62 @@ public:
     QLabel *label_VolGl1;
     QLineEdit *lineEdit_VolG;
     QLabel *label_VolG2;
-    QSpacerItem *horizontalSpacer_17;
     QHBoxLayout *horizontalLayout_4;
     QLabel *label_MinImp1;
     QDoubleSpinBox *doubleSpinBox_MinImp1;
     QLabel *label_MinImp1_2;
-    QSpacerItem *horizontalSpacer_4;
     QHBoxLayout *horizontalLayout_12;
     QLabel *label_StockImp1;
     QLineEdit *lineEdit_StockImp1;
     QLabel *label_StockImp1_2;
-    QSpacerItem *horizontalSpacer_9;
     QHBoxLayout *horizontalLayout_17;
     QLabel *label_MaxGluc;
     QDoubleSpinBox *doubleSpinBox_MaxGluc;
     QLabel *label_MaxGluc2;
-    QSpacerItem *horizontalSpacer_15;
     QHBoxLayout *horizontalLayout_18;
     QLabel *label_StockGluc;
     QLineEdit *lineEdit_StockGluc;
     QLabel *label_StockGluc2;
-    QSpacerItem *horizontalSpacer_16;
     QHBoxLayout *horizontalLayout_15;
     QLabel *label_MinGluc;
     QDoubleSpinBox *doubleSpinBox_MinGluc;
     QLabel *label_MinGluc2;
-    QSpacerItem *horizontalSpacer_14;
     QHBoxLayout *horizontalLayout_6;
     QLabel *label_MaxImp1;
     QDoubleSpinBox *doubleSpinBox_MaxImp1;
     QLabel *label_MaxImp1_2;
-    QSpacerItem *horizontalSpacer_8;
     QHBoxLayout *horizontalLayout_14;
     QLabel *label_MinImp2;
     QDoubleSpinBox *doubleSpinBox_MinImp2;
     QLabel *label_MinImp2_2;
-    QSpacerItem *horizontalSpacer_5;
     QHBoxLayout *horizontalLayout_16;
     QLabel *label_MaxImp2;
     QDoubleSpinBox *doubleSpinBox_MaxImp2;
     QLabel *label_MaxImp2_2;
-    QSpacerItem *horizontalSpacer_11;
     QHBoxLayout *horizontalLayout_19;
     QLabel *label_StockImp2;
     QLineEdit *lineEdit_StockImp2;
     QLabel *label_StockImp2_2;
-    QSpacerItem *horizontalSpacer_12;
     QHBoxLayout *horizontalLayout_33;
     QLabel *label_VolI2;
     QLineEdit *lineEdit_VolI2;
     QLabel *label_VolI22;
-    QSpacerItem *horizontalSpacer_13;
     QHBoxLayout *horizontalLayout_30;
     QLabel *label_VolI1;
     QLineEdit *lineEdit_VolI1;
     QLabel *label_VolI12;
-    QSpacerItem *horizontalSpacer_10;
     QHBoxLayout *horizontalLayout_5;
     QCheckBox *checkBox_Glucose;
-    QSpacerItem *horizontalSpacer_18;
+    QLabel *label;
+    QLabel *label_5;
     QHBoxLayout *horizontalLayout_10;
     QCheckBox *checkBox_Imp1;
-    QSpacerItem *horizontalSpacer_19;
+    QLabel *label_6;
+    QLabel *label_7;
     QHBoxLayout *horizontalLayout_20;
     QCheckBox *checkBox_Imp2;
-    QSpacerItem *horizontalSpacer_20;
+    QLabel *label_8;
+    QLabel *label_12;
     QSpacerItem *verticalSpacer_6;
     QFrame *line_3;
     QLabel *label_PumpFlow;
@@ -284,8 +275,8 @@ public:
 
         pushButton_select = new QPushButton(LoadWidget);
         pushButton_select->setObjectName(QStringLiteral("pushButton_select"));
-        pushButton_select->setMinimumSize(QSize(150, 25));
-        pushButton_select->setMaximumSize(QSize(16777215, 25));
+        pushButton_select->setMinimumSize(QSize(150, 30));
+        pushButton_select->setMaximumSize(QSize(16777215, 30));
         pushButton_select->setAutoDefault(false);
 
         horizontalLayout_2->addWidget(pushButton_select);
@@ -555,7 +546,7 @@ public:
 
         verticalLayout_fileconf->addLayout(gridLayout_2);
 
-        verticalSpacer_13 = new QSpacerItem(20, 10, QSizePolicy::Minimum, QSizePolicy::Fixed);
+        verticalSpacer_13 = new QSpacerItem(20, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         verticalLayout_fileconf->addItem(verticalSpacer_13);
 
@@ -607,10 +598,6 @@ public:
 
         horizontalLayout_32->addWidget(label_VolG2);
 
-        horizontalSpacer_17 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_32->addItem(horizontalSpacer_17);
-
 
         gridLayout_3->addLayout(horizontalLayout_32, 4, 0, 1, 1);
 
@@ -638,10 +625,6 @@ public:
 
         horizontalLayout_4->addWidget(label_MinImp1_2);
 
-        horizontalSpacer_4 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_4->addItem(horizontalSpacer_4);
-
 
         gridLayout_3->addLayout(horizontalLayout_4, 1, 2, 1, 1);
 
@@ -667,10 +650,6 @@ public:
         label_StockImp1_2->setMinimumSize(QSize(30, 0));
 
         horizontalLayout_12->addWidget(label_StockImp1_2);
-
-        horizontalSpacer_9 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_12->addItem(horizontalSpacer_9);
 
 
         gridLayout_3->addLayout(horizontalLayout_12, 3, 2, 1, 1);
@@ -700,10 +679,6 @@ public:
 
         horizontalLayout_17->addWidget(label_MaxGluc2);
 
-        horizontalSpacer_15 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_17->addItem(horizontalSpacer_15);
-
 
         gridLayout_3->addLayout(horizontalLayout_17, 2, 0, 1, 1);
 
@@ -729,10 +704,6 @@ public:
         label_StockGluc2->setMinimumSize(QSize(30, 0));
 
         horizontalLayout_18->addWidget(label_StockGluc2);
-
-        horizontalSpacer_16 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_18->addItem(horizontalSpacer_16);
 
 
         gridLayout_3->addLayout(horizontalLayout_18, 3, 0, 1, 1);
@@ -760,10 +731,6 @@ public:
         label_MinGluc2->setMinimumSize(QSize(30, 0));
 
         horizontalLayout_15->addWidget(label_MinGluc2);
-
-        horizontalSpacer_14 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_15->addItem(horizontalSpacer_14);
 
 
         gridLayout_3->addLayout(horizontalLayout_15, 1, 0, 1, 1);
@@ -793,10 +760,6 @@ public:
 
         horizontalLayout_6->addWidget(label_MaxImp1_2);
 
-        horizontalSpacer_8 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_6->addItem(horizontalSpacer_8);
-
 
         gridLayout_3->addLayout(horizontalLayout_6, 2, 2, 1, 1);
 
@@ -824,10 +787,6 @@ public:
         label_MinImp2_2->setMinimumSize(QSize(30, 0));
 
         horizontalLayout_14->addWidget(label_MinImp2_2);
-
-        horizontalSpacer_5 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_14->addItem(horizontalSpacer_5);
 
 
         gridLayout_3->addLayout(horizontalLayout_14, 1, 3, 1, 1);
@@ -859,10 +818,6 @@ public:
 
         horizontalLayout_16->addWidget(label_MaxImp2_2);
 
-        horizontalSpacer_11 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_16->addItem(horizontalSpacer_11);
-
 
         gridLayout_3->addLayout(horizontalLayout_16, 2, 3, 1, 1);
 
@@ -891,10 +846,6 @@ public:
         label_StockImp2_2->setMinimumSize(QSize(30, 0));
 
         horizontalLayout_19->addWidget(label_StockImp2_2);
-
-        horizontalSpacer_12 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_19->addItem(horizontalSpacer_12);
 
 
         gridLayout_3->addLayout(horizontalLayout_19, 3, 3, 1, 1);
@@ -925,10 +876,6 @@ public:
 
         horizontalLayout_33->addWidget(label_VolI22);
 
-        horizontalSpacer_13 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_33->addItem(horizontalSpacer_13);
-
 
         gridLayout_3->addLayout(horizontalLayout_33, 4, 3, 1, 1);
 
@@ -958,10 +905,6 @@ public:
 
         horizontalLayout_30->addWidget(label_VolI12);
 
-        horizontalSpacer_10 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_30->addItem(horizontalSpacer_10);
-
 
         gridLayout_3->addLayout(horizontalLayout_30, 4, 2, 1, 1);
 
@@ -969,8 +912,13 @@ public:
         horizontalLayout_5->setObjectName(QStringLiteral("horizontalLayout_5"));
         checkBox_Glucose = new QCheckBox(ConfigurationLayout);
         checkBox_Glucose->setObjectName(QStringLiteral("checkBox_Glucose"));
-        checkBox_Glucose->setMinimumSize(QSize(240, 0));
-        checkBox_Glucose->setMaximumSize(QSize(230, 16777215));
+        QSizePolicy sizePolicy3(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        sizePolicy3.setHorizontalStretch(0);
+        sizePolicy3.setVerticalStretch(0);
+        sizePolicy3.setHeightForWidth(checkBox_Glucose->sizePolicy().hasHeightForWidth());
+        checkBox_Glucose->setSizePolicy(sizePolicy3);
+        checkBox_Glucose->setMinimumSize(QSize(100, 0));
+        checkBox_Glucose->setMaximumSize(QSize(16777215, 16777215));
         checkBox_Glucose->setLayoutDirection(Qt::LeftToRight);
         checkBox_Glucose->setAutoFillBackground(false);
         checkBox_Glucose->setChecked(true);
@@ -978,9 +926,21 @@ public:
 
         horizontalLayout_5->addWidget(checkBox_Glucose);
 
-        horizontalSpacer_18 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        label = new QLabel(ConfigurationLayout);
+        label->setObjectName(QStringLiteral("label"));
+        sizePolicy2.setHeightForWidth(label->sizePolicy().hasHeightForWidth());
+        label->setSizePolicy(sizePolicy2);
+        label->setMinimumSize(QSize(100, 0));
+        label->setMaximumSize(QSize(100, 16777215));
 
-        horizontalLayout_5->addItem(horizontalSpacer_18);
+        horizontalLayout_5->addWidget(label);
+
+        label_5 = new QLabel(ConfigurationLayout);
+        label_5->setObjectName(QStringLiteral("label_5"));
+        label_5->setMinimumSize(QSize(30, 0));
+        label_5->setMaximumSize(QSize(30, 16777215));
+
+        horizontalLayout_5->addWidget(label_5);
 
 
         gridLayout_3->addLayout(horizontalLayout_5, 0, 0, 1, 1);
@@ -989,15 +949,29 @@ public:
         horizontalLayout_10->setObjectName(QStringLiteral("horizontalLayout_10"));
         checkBox_Imp1 = new QCheckBox(ConfigurationLayout);
         checkBox_Imp1->setObjectName(QStringLiteral("checkBox_Imp1"));
-        checkBox_Imp1->setMinimumSize(QSize(240, 0));
-        checkBox_Imp1->setMaximumSize(QSize(230, 16777215));
+        sizePolicy3.setHeightForWidth(checkBox_Imp1->sizePolicy().hasHeightForWidth());
+        checkBox_Imp1->setSizePolicy(sizePolicy3);
+        checkBox_Imp1->setMinimumSize(QSize(100, 0));
+        checkBox_Imp1->setMaximumSize(QSize(16777215, 16777215));
         checkBox_Imp1->setChecked(true);
 
         horizontalLayout_10->addWidget(checkBox_Imp1);
 
-        horizontalSpacer_19 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        label_6 = new QLabel(ConfigurationLayout);
+        label_6->setObjectName(QStringLiteral("label_6"));
+        sizePolicy2.setHeightForWidth(label_6->sizePolicy().hasHeightForWidth());
+        label_6->setSizePolicy(sizePolicy2);
+        label_6->setMinimumSize(QSize(100, 0));
+        label_6->setMaximumSize(QSize(100, 16777215));
 
-        horizontalLayout_10->addItem(horizontalSpacer_19);
+        horizontalLayout_10->addWidget(label_6);
+
+        label_7 = new QLabel(ConfigurationLayout);
+        label_7->setObjectName(QStringLiteral("label_7"));
+        label_7->setMinimumSize(QSize(30, 0));
+        label_7->setMaximumSize(QSize(30, 16777215));
+
+        horizontalLayout_10->addWidget(label_7);
 
 
         gridLayout_3->addLayout(horizontalLayout_10, 0, 2, 1, 1);
@@ -1007,14 +981,28 @@ public:
         checkBox_Imp2 = new QCheckBox(ConfigurationLayout);
         checkBox_Imp2->setObjectName(QStringLiteral("checkBox_Imp2"));
         checkBox_Imp2->setEnabled(true);
-        checkBox_Imp2->setMinimumSize(QSize(240, 0));
-        checkBox_Imp2->setMaximumSize(QSize(230, 16777215));
+        sizePolicy3.setHeightForWidth(checkBox_Imp2->sizePolicy().hasHeightForWidth());
+        checkBox_Imp2->setSizePolicy(sizePolicy3);
+        checkBox_Imp2->setMinimumSize(QSize(100, 0));
+        checkBox_Imp2->setMaximumSize(QSize(16777215, 16777215));
 
         horizontalLayout_20->addWidget(checkBox_Imp2);
 
-        horizontalSpacer_20 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        label_8 = new QLabel(ConfigurationLayout);
+        label_8->setObjectName(QStringLiteral("label_8"));
+        sizePolicy2.setHeightForWidth(label_8->sizePolicy().hasHeightForWidth());
+        label_8->setSizePolicy(sizePolicy2);
+        label_8->setMinimumSize(QSize(100, 0));
+        label_8->setMaximumSize(QSize(100, 16777215));
 
-        horizontalLayout_20->addItem(horizontalSpacer_20);
+        horizontalLayout_20->addWidget(label_8);
+
+        label_12 = new QLabel(ConfigurationLayout);
+        label_12->setObjectName(QStringLiteral("label_12"));
+        label_12->setMinimumSize(QSize(30, 0));
+        label_12->setMaximumSize(QSize(30, 16777215));
+
+        horizontalLayout_20->addWidget(label_12);
 
 
         gridLayout_3->addLayout(horizontalLayout_20, 0, 3, 1, 1);
@@ -1022,7 +1010,7 @@ public:
 
         verticalLayout_fileconf->addLayout(gridLayout_3);
 
-        verticalSpacer_6 = new QSpacerItem(20, 10, QSizePolicy::Minimum, QSizePolicy::Fixed);
+        verticalSpacer_6 = new QSpacerItem(20, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         verticalLayout_fileconf->addItem(verticalSpacer_6);
 
@@ -1133,7 +1121,7 @@ public:
 
         verticalLayout_fileconf->addLayout(gridLayout_4);
 
-        verticalSpacer_12 = new QSpacerItem(20, 10, QSizePolicy::Minimum, QSizePolicy::Fixed);
+        verticalSpacer_12 = new QSpacerItem(20, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         verticalLayout_fileconf->addItem(verticalSpacer_12);
 
@@ -1167,11 +1155,11 @@ public:
         checkBox = new QCheckBox(ConfigurationLayout);
         checkBox->setObjectName(QStringLiteral("checkBox"));
         checkBox->setEnabled(false);
-        QSizePolicy sizePolicy3(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        sizePolicy3.setHorizontalStretch(0);
-        sizePolicy3.setVerticalStretch(0);
-        sizePolicy3.setHeightForWidth(checkBox->sizePolicy().hasHeightForWidth());
-        checkBox->setSizePolicy(sizePolicy3);
+        QSizePolicy sizePolicy4(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        sizePolicy4.setHorizontalStretch(0);
+        sizePolicy4.setVerticalStretch(0);
+        sizePolicy4.setHeightForWidth(checkBox->sizePolicy().hasHeightForWidth());
+        checkBox->setSizePolicy(sizePolicy4);
         checkBox->setMinimumSize(QSize(100, 0));
         checkBox->setMaximumSize(QSize(100, 16777215));
 
@@ -1370,7 +1358,7 @@ public:
 
         verticalLayout_fileconf->addLayout(gridLayout_5);
 
-        verticalSpacer_5 = new QSpacerItem(20, 10, QSizePolicy::Minimum, QSizePolicy::Fixed);
+        verticalSpacer_5 = new QSpacerItem(20, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         verticalLayout_fileconf->addItem(verticalSpacer_5);
 
@@ -1378,19 +1366,19 @@ public:
         timeLayout->setObjectName(QStringLiteral("timeLayout"));
         label_timeLabel = new QLabel(ConfigurationLayout);
         label_timeLabel->setObjectName(QStringLiteral("label_timeLabel"));
-        QSizePolicy sizePolicy4(QSizePolicy::Minimum, QSizePolicy::Preferred);
-        sizePolicy4.setHorizontalStretch(0);
-        sizePolicy4.setVerticalStretch(0);
-        sizePolicy4.setHeightForWidth(label_timeLabel->sizePolicy().hasHeightForWidth());
-        label_timeLabel->setSizePolicy(sizePolicy4);
+        QSizePolicy sizePolicy5(QSizePolicy::Minimum, QSizePolicy::Preferred);
+        sizePolicy5.setHorizontalStretch(0);
+        sizePolicy5.setVerticalStretch(0);
+        sizePolicy5.setHeightForWidth(label_timeLabel->sizePolicy().hasHeightForWidth());
+        label_timeLabel->setSizePolicy(sizePolicy5);
         label_timeLabel->setMinimumSize(QSize(150, 0));
 
         timeLayout->addWidget(label_timeLabel);
 
         timeEdit_timeLabel = new QLineEdit(ConfigurationLayout);
         timeEdit_timeLabel->setObjectName(QStringLiteral("timeEdit_timeLabel"));
-        sizePolicy3.setHeightForWidth(timeEdit_timeLabel->sizePolicy().hasHeightForWidth());
-        timeEdit_timeLabel->setSizePolicy(sizePolicy3);
+        sizePolicy4.setHeightForWidth(timeEdit_timeLabel->sizePolicy().hasHeightForWidth());
+        timeEdit_timeLabel->setSizePolicy(sizePolicy4);
         timeEdit_timeLabel->setMinimumSize(QSize(0, 0));
         timeEdit_timeLabel->setMaximumSize(QSize(16777215, 16777215));
         timeEdit_timeLabel->setFrame(true);
@@ -1405,8 +1393,8 @@ public:
         horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
         label_BFileNamePrev = new QLabel(ConfigurationLayout);
         label_BFileNamePrev->setObjectName(QStringLiteral("label_BFileNamePrev"));
-        sizePolicy4.setHeightForWidth(label_BFileNamePrev->sizePolicy().hasHeightForWidth());
-        label_BFileNamePrev->setSizePolicy(sizePolicy4);
+        sizePolicy5.setHeightForWidth(label_BFileNamePrev->sizePolicy().hasHeightForWidth());
+        label_BFileNamePrev->setSizePolicy(sizePolicy5);
         label_BFileNamePrev->setMinimumSize(QSize(150, 0));
 
         horizontalLayout_3->addWidget(label_BFileNamePrev);
@@ -1437,7 +1425,7 @@ public:
 
         pushButton_cancel = new QPushButton(configurePolMeasure);
         pushButton_cancel->setObjectName(QStringLiteral("pushButton_cancel"));
-        pushButton_cancel->setMinimumSize(QSize(150, 25));
+        pushButton_cancel->setMinimumSize(QSize(150, 30));
         pushButton_cancel->setAutoDefault(false);
 
         horizontalLayout_9->addWidget(pushButton_cancel);
@@ -1449,7 +1437,7 @@ public:
         pushButton_generate = new QPushButton(configurePolMeasure);
         pushButton_generate->setObjectName(QStringLiteral("pushButton_generate"));
         pushButton_generate->setEnabled(true);
-        pushButton_generate->setMinimumSize(QSize(150, 25));
+        pushButton_generate->setMinimumSize(QSize(150, 30));
         pushButton_generate->setAutoDefault(false);
 
         horizontalLayout_9->addWidget(pushButton_generate);
@@ -1618,14 +1606,20 @@ public:
         checkBox_Glucose->setToolTip(QApplication::translate("configurePolMeasure", "Include/Remove Glucose", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         checkBox_Glucose->setText(QApplication::translate("configurePolMeasure", "Glucose", Q_NULLPTR));
+        label->setText(QString());
+        label_5->setText(QString());
 #ifndef QT_NO_TOOLTIP
         checkBox_Imp1->setToolTip(QApplication::translate("configurePolMeasure", "Include/Remove Impurity 1", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         checkBox_Imp1->setText(QApplication::translate("configurePolMeasure", "Impurity 1", Q_NULLPTR));
+        label_6->setText(QString());
+        label_7->setText(QString());
 #ifndef QT_NO_TOOLTIP
         checkBox_Imp2->setToolTip(QApplication::translate("configurePolMeasure", "Include/Remove Impurity 2", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         checkBox_Imp2->setText(QApplication::translate("configurePolMeasure", "Impurity 2", Q_NULLPTR));
+        label_8->setText(QString());
+        label_12->setText(QString());
         label_PumpFlow->setText(QApplication::translate("configurePolMeasure", "Pumps Flow:", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         label_AbsFlow->setToolTip(QApplication::translate("configurePolMeasure", "Absolute Flow for Cuvette Filling", Q_NULLPTR));

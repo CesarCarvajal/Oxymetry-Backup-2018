@@ -718,6 +718,9 @@ public:
         label_average->setFont(font7);
         label_average->setCursor(QCursor(Qt::PointingHandCursor));
         label_average->setAlignment(Qt::AlignCenter);
+        label_average->setWordWrap(false);
+        label_average->setMargin(0);
+        label_average->setIndent(-1);
 
         verticalLayout_14->addWidget(label_average);
 
@@ -1041,7 +1044,7 @@ public:
 #ifndef QT_NO_TOOLTIP
         label_raw->setToolTip(QApplication::translate("PanelPolarimeter", "Hide/Show Raw Signal Plot", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        label_raw->setText(QApplication::translate("PanelPolarimeter", "Raw Signal", Q_NULLPTR));
+        label_raw->setText(QApplication::translate("PanelPolarimeter", "Live Raw Signal", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         qwtPlot_Pol->setToolTip(QApplication::translate("PanelPolarimeter", "Raw Signal Plot", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
@@ -1062,7 +1065,7 @@ public:
 #ifndef QT_NO_TOOLTIP
         label_average->setToolTip(QApplication::translate("PanelPolarimeter", "Hide/Show Average Signal Plot", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        label_average->setText(QApplication::translate("PanelPolarimeter", "Average Signal", Q_NULLPTR));
+        label_average->setText(QApplication::translate("PanelPolarimeter", "Live Average Signal", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         qwtPlot_Pol_Average->setToolTip(QApplication::translate("PanelPolarimeter", "Average Signal Plot", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
