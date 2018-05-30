@@ -474,7 +474,13 @@ void fft::CalculateFFT(int N, QVector<double> Data)
     /* Get the data from the function input and save it as the input for FFT */
     for (int j=0; j < N; j++){
         in[j][1] = 0;
-        in[j][0] = Data.at(j);
+
+        /* Normalize the measured counts? */
+        if(normalizeCounts){
+            in[j][0] = (Data.at(j)*1000)/(IntTime);
+        }else{
+            in[j][0] = Data.at(j);
+        }
     }
 
     /* Calculate the FFT of the given data */

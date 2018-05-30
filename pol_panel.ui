@@ -142,13 +142,13 @@
          <property name="minimumSize">
           <size>
            <width>290</width>
-           <height>0</height>
+           <height>221</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
            <width>290</width>
-           <height>189</height>
+           <height>221</height>
           </size>
          </property>
          <property name="toolTip">
@@ -221,7 +221,7 @@
            </property>
            <property name="minimumSize">
             <size>
-             <width>130</width>
+             <width>145</width>
              <height>0</height>
             </size>
            </property>
@@ -237,19 +237,20 @@
              <weight>75</weight>
              <bold>true</bold>
              <underline>true</underline>
+             <kerning>true</kerning>
             </font>
            </property>
            <property name="cursor">
             <cursorShape>PointingHandCursor</cursorShape>
            </property>
            <property name="toolTip">
-            <string>Hide/Show FFT Plot</string>
+            <string>Hide FFT Plot</string>
            </property>
            <property name="layoutDirection">
             <enum>Qt::LeftToRight</enum>
            </property>
            <property name="text">
-            <string>Maximum Intensity at</string>
+            <string>&lt; Maximum Intensity at</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -335,7 +336,7 @@
            </property>
            <property name="sizeHint" stdset="0">
             <size>
-             <width>80</width>
+             <width>65</width>
              <height>5</height>
             </size>
            </property>
@@ -414,7 +415,7 @@
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>30</height>
+           <height>10</height>
           </size>
          </property>
         </spacer>
@@ -450,10 +451,10 @@
           <cursorShape>PointingHandCursor</cursorShape>
          </property>
          <property name="toolTip">
-          <string>Hide/Show Measurement Profile</string>
+          <string>Hide Measurement Profile</string>
          </property>
          <property name="text">
-          <string>Measurement List:</string>
+          <string>&lt; Measurement List:</string>
          </property>
         </widget>
        </item>
@@ -622,10 +623,10 @@
           <cursorShape>PointingHandCursor</cursorShape>
          </property>
          <property name="toolTip">
-          <string>Hide/Show Saving Options</string>
+          <string>Hide Saving Options</string>
          </property>
          <property name="text">
-          <string>Saving Options:</string>
+          <string>&lt; Saving Options:</string>
          </property>
         </widget>
        </item>
@@ -1127,13 +1128,63 @@
                     <cursorShape>PointingHandCursor</cursorShape>
                    </property>
                    <property name="toolTip">
-                    <string>Hide/Show Raw Signal Plot</string>
+                    <string>Hide Raw Signal Plot</string>
                    </property>
                    <property name="text">
-                    <string>Live Raw Signal</string>
+                    <string>&lt; Live Raw Signal</string>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_PlotSaturated">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="font">
+                    <font>
+                     <pointsize>12</pointsize>
+                     <weight>75</weight>
+                     <italic>false</italic>
+                     <bold>true</bold>
+                     <underline>false</underline>
+                     <strikeout>false</strikeout>
+                    </font>
+                   </property>
+                   <property name="layoutDirection">
+                    <enum>Qt::LeftToRight</enum>
+                   </property>
+                   <property name="frameShape">
+                    <enum>QFrame::NoFrame</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Plain</enum>
+                   </property>
+                   <property name="text">
+                    <string>Saturated!</string>
+                   </property>
+                   <property name="textFormat">
+                    <enum>Qt::AutoText</enum>
+                   </property>
+                   <property name="scaledContents">
+                    <bool>false</bool>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>false</bool>
+                   </property>
+                   <property name="margin">
+                    <number>0</number>
+                   </property>
+                   <property name="indent">
+                    <number>-1</number>
                    </property>
                   </widget>
                  </item>
@@ -1219,10 +1270,10 @@
                     <cursorShape>PointingHandCursor</cursorShape>
                    </property>
                    <property name="toolTip">
-                    <string>Hide/Show Compensation Plot</string>
+                    <string>Hide Compensation Plot</string>
                    </property>
                    <property name="text">
-                    <string>W/2W</string>
+                    <string>&lt; Ratio I(W)/I(2W)</string>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignCenter</set>
@@ -1258,6 +1309,7 @@
                    <property name="frameShadow">
                     <enum>QFrame::Raised</enum>
                    </property>
+                   <zorder></zorder>
                   </widget>
                  </item>
                 </layout>
@@ -1327,10 +1379,10 @@
                     <cursorShape>PointingHandCursor</cursorShape>
                    </property>
                    <property name="toolTip">
-                    <string>Hide/Show FFT Profile Plot</string>
+                    <string>Hide FFT Profile Plot</string>
                    </property>
                    <property name="text">
-                    <string>FFT Profile</string>
+                    <string>&lt; FFT Profile</string>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignCenter</set>
@@ -1425,10 +1477,10 @@
                     <cursorShape>PointingHandCursor</cursorShape>
                    </property>
                    <property name="toolTip">
-                    <string>Hide/Show Average Signal Plot</string>
+                    <string>Hide Average Signal Plot</string>
                    </property>
                    <property name="text">
-                    <string>Live Average Signal</string>
+                    <string>&lt; Live Average Signal</string>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignCenter</set>

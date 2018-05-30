@@ -621,6 +621,7 @@ release/.moc/moc_light_control.cpp: ../../include/libusb.h \
 
 release/.moc/moc_pol_configureMeasurement.cpp: ../../pol_externConf.h \
 		../../pol_configFilesGenerator.h \
+		../../pol_panelItem.h \
 		../../pol_configureMeasurement.h \
 		release/.moc/moc_predefs.h \
 		D:/msys64/mingw64/bin/moc.exe
@@ -1666,6 +1667,7 @@ release/.obj/pol_configureMeasurement.o: ../../pol_configureMeasurement.cpp ../.
 		../../pol_configureMeasurement.h \
 		../../pol_externConf.h \
 		../../pol_configFilesGenerator.h \
+		../../pol_panelItem.h \
 		release/.ui/ui_pol_configureMeasurement.h \
 		../../clickablelabel.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\.obj\pol_configureMeasurement.o ..\..\pol_configureMeasurement.cpp

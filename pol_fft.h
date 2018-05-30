@@ -76,6 +76,9 @@ public:
     /* Maximum Intensity measured */
     double MaximumIntensity = 0;
 
+    /* Normalize Counts? */
+    bool normalizeCounts = false;
+
     /* Change the selected wavelength for the FFT plot */
     bool changeFFTwavelength = true;
 

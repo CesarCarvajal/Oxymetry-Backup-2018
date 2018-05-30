@@ -46,7 +46,7 @@ PanelItem_Pol::PanelItem_Pol(QWidget *parent, QString name) :
     ui->label_integrationTime->setStyleSheet("QLabel { color: blue; }");
     ui->label_setWranges->setStyleSheet("QLabel { color: blue; }");
     ui->label_frequency->setStyleSheet("QLabel { color: blue; }");
-    ui->label_Nspectra->setStyleSheet("QLabel { color: blue; }");
+    ui->label_Nspectra->setStyleSheet("QLabel { color: blue }");
     ui->label_autoAdjust->setStyleSheet("QLabel { color: blue; }");
     ui->label_numberOfAverages->setStyleSheet("QLabel { color: blue; }");
     ui->label_saturatedPixels->setText(QString("Not saturated"));
@@ -129,6 +129,7 @@ void PanelItem_Pol::enableComponents(bool value)
     ui->label_numberOfAverages->setEnabled(value);
     ui->label_frequency->setEnabled(value);
     ui->label_Nspectra->setEnabled(value);
+    ui->checkBox_normalize->setEnabled(value);
 
     /* Change how they look for editing */
     if(value){

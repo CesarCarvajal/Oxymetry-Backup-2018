@@ -38,6 +38,7 @@
 #include "pol_configureMeasurement.h"
 #include "ui_pol_configureMeasurement.h"
 #include "pol_externConf.h"
+#include "pol_panelItem.h"
 
 /*
  * Global variables
@@ -1008,6 +1009,34 @@ int configurePolMeasure::NrSpectraSteps(int Fint){
 
     /* Return the interval of change for the possible number of spectra values */
     return 500/(two*five);
+}
+
+/**
+ * @brief Initialize the configuration according to the new spectrometer settings
+ * @param[in] Spectrometer settings Item
+ */
+void configurePolMeasure::InitializeForm(PanelItem_Pol* PolarimetrySpectrometer){
+    /* Set some values in the configuration form */
+    ui->doubleSpinBox_intTime->setValue(PolarimetrySpectrometer->getIntegrationTime());
+    ui->spinBox_BNAve->setValue(PolarimetrySpectrometer->getNumberOfAverages());
+    ui->spinBox_BNAve->setMaximum(floor((1000)/(4*PolarimetrySpectrometer->getIntegrationTime()*PolarimetrySpectrometer->getFrequency())));
+    ui->spinBox_BFreq->setValue(PolarimetrySpectrometer->getFrequency());
+    ui->spinBox_BNSpec->setValue(PolarimetrySpectrometer->getNumberOfSpectra());
+    /* Select the correct number of spectra according to the frequency resolution */
+    ui->spinBox_BNSpec->setSingleStep(NrSpectraSteps(PolarimetrySpectrometer->getIntegrationTime()*PolarimetrySpectrometer->getFrequency()));
+    ui->spinBox_BNSpec->setMinimum(NrSpectraSteps(PolarimetrySpectrometer->getIntegrationTime()*PolarimetrySpectrometer->getFrequency()));
+    ui->doubleSpinBox_minW->setValue(PolarimetrySpectrometer->getMinimumWavelength());
+    ui->doubleSpinBox_maxW->setValue(PolarimetrySpectrometer->getMaximumWavelength());
+
+    /* Keep loaded and saved values despite canceled changes: alloes edition of previously loaded configuration */
+    if(configured){
+
+        /* Update values in the configuration form */
+        updateForm();
+    }
+
+    /* Did the user cancel the loading of a configuration? */
+    Conf_canceled = false;
 }
 
 /**

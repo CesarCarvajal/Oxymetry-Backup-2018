@@ -29,6 +29,9 @@
 #include "pol_externConf.h"
 #include <QFileInfo>
 
+/* Internal includes */
+#include "pol_panelItem.h"
+
 namespace Ui {
 class configurePolMeasure;
 }
@@ -104,6 +107,9 @@ public:
 
     /* Get correct number of spectra values */
     int NrSpectraSteps(int Fint);
+
+    /* Initialize the form according to the actual spectrometer settings */
+    void InitializeForm(PanelItem_Pol *PolarimetrySpectrometer);
 
     /* Destructor */
     ~configurePolMeasure(void);
