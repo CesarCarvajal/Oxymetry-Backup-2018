@@ -45,6 +45,7 @@ Pol_configFilesGenerator::Pol_configFilesGenerator()
     absoluteFlow = 0;
     shortBreak = 0;
     longBreak = 0;
+    repetition = 0;
 
     /* Active substances flags */
     glucoseActive = false;
@@ -102,7 +103,7 @@ void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFil
     FILE *file = fopen(pathFile.toLatin1().data(), "wt");
 
     /* Write in file */
-    fprintf(file, "%s", "Nr_M;Nr_Sp;Int_T;Nr_Av;Freq;MinW;MaxW;Ab_F;Ab_V;N_Ste;S_Break;L_Break;St_Del;C1?;C2?;C3?;mC1;MC1;StC1;mC2;MC2;StC2;mC3;MC3;StC3;\n");
+    fprintf(file, "%s", "Nr_M;Nr_Sp;Int_T;Nr_Av;Freq;MinW;MaxW;Ab_F;Ab_V;N_Ste;S_Break;L_Break;St_Del;C1?;C2?;C3?;mC1;MC1;StC1;mC2;MC2;StC2;mC3;MC3;StC3;Rep;\n");
 
     /* Write all the configuration data */
     QString configurationData = "";
@@ -131,7 +132,8 @@ void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFil
     configurationData.append(QString::number(StockSolutions.at(1)) + ";");
     configurationData.append(QString::number(*std::min_element(Impurity2Concentration.begin(), Impurity2Concentration.end()))+ ";");
     configurationData.append(QString::number(*std::max_element(Impurity2Concentration.begin(), Impurity2Concentration.end()))+ ";");
-    configurationData.append(QString::number(StockSolutions.at(2)) + "\n");
+    configurationData.append(QString::number(StockSolutions.at(2)) + ";");
+    configurationData.append(QString::number(repetition) + "\n");
 
     /* Write in file */
     fprintf(file, "%s", configurationData.toLatin1().data());

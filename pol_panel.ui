@@ -221,7 +221,7 @@
            </property>
            <property name="minimumSize">
             <size>
-             <width>145</width>
+             <width>160</width>
              <height>0</height>
             </size>
            </property>
@@ -250,7 +250,7 @@
             <enum>Qt::LeftToRight</enum>
            </property>
            <property name="text">
-            <string>&lt; Maximum Intensity at</string>
+            <string>&lt; Maximum DC Intensity at</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -336,7 +336,7 @@
            </property>
            <property name="sizeHint" stdset="0">
             <size>
-             <width>65</width>
+             <width>50</width>
              <height>5</height>
             </size>
            </property>
@@ -414,8 +414,8 @@
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>20</width>
-           <height>10</height>
+           <width>10</width>
+           <height>5</height>
           </size>
          </property>
         </spacer>
@@ -768,7 +768,7 @@
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>15</height>
+           <height>20</height>
           </size>
          </property>
          <property name="font">
@@ -863,7 +863,7 @@
             </size>
            </property>
            <property name="toolTip">
-            <string>Start/Stop Calibration</string>
+            <string>Start Calibration</string>
            </property>
            <property name="text">
             <string> Calibrate</string>
@@ -943,7 +943,7 @@
             </font>
            </property>
            <property name="toolTip">
-            <string>Start/Stop Measurements</string>
+            <string>Start Measurements</string>
            </property>
            <property name="text">
             <string> Start Measurement</string>
@@ -1309,7 +1309,6 @@
                    <property name="frameShadow">
                     <enum>QFrame::Raised</enum>
                    </property>
-                   <zorder></zorder>
                   </widget>
                  </item>
                 </layout>

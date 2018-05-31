@@ -248,7 +248,7 @@ public:
         sizePolicy4.setVerticalStretch(0);
         sizePolicy4.setHeightForWidth(FFT_label_Pol->sizePolicy().hasHeightForWidth());
         FFT_label_Pol->setSizePolicy(sizePolicy4);
-        FFT_label_Pol->setMinimumSize(QSize(145, 0));
+        FFT_label_Pol->setMinimumSize(QSize(160, 0));
         FFT_label_Pol->setMaximumSize(QSize(95, 100));
         QFont font2;
         font2.setPointSize(8);
@@ -291,7 +291,7 @@ public:
 
         horizontalLayout_2->addWidget(label_n);
 
-        HSpaceX = new QSpacerItem(65, 5, QSizePolicy::Fixed, QSizePolicy::Minimum);
+        HSpaceX = new QSpacerItem(50, 5, QSizePolicy::Fixed, QSizePolicy::Minimum);
 
         horizontalLayout_2->addItem(HSpaceX);
 
@@ -322,7 +322,7 @@ public:
 
         verticalLayout_8->addWidget(line_c2);
 
-        verticalSpacerX = new QSpacerItem(20, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
+        verticalSpacerX = new QSpacerItem(10, 5, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         verticalLayout_8->addItem(verticalSpacerX);
 
@@ -448,7 +448,7 @@ public:
         sizePolicy1.setHeightForWidth(label_5_Pol_settings->sizePolicy().hasHeightForWidth());
         label_5_Pol_settings->setSizePolicy(sizePolicy1);
         label_5_Pol_settings->setMinimumSize(QSize(0, 0));
-        label_5_Pol_settings->setMaximumSize(QSize(16777215, 15));
+        label_5_Pol_settings->setMaximumSize(QSize(16777215, 20));
         label_5_Pol_settings->setFont(font1);
 
         verticalLayout_8->addWidget(label_5_Pol_settings);
@@ -1016,7 +1016,7 @@ public:
 #ifndef QT_NO_TOOLTIP
         FFT_label_Pol->setToolTip(QApplication::translate("PanelPolarimeter", "Hide FFT Plot", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        FFT_label_Pol->setText(QApplication::translate("PanelPolarimeter", "< Maximum Intensity at", Q_NULLPTR));
+        FFT_label_Pol->setText(QApplication::translate("PanelPolarimeter", "< Maximum DC Intensity at", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         waveToPlotFFT->setToolTip(QApplication::translate("PanelPolarimeter", "Change Wavelength", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
@@ -1060,11 +1060,11 @@ public:
 #endif // QT_NO_TOOLTIP
         button_Pol_ConfigureMeasurement->setText(QApplication::translate("PanelPolarimeter", " Configure", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        button_calibrate->setToolTip(QApplication::translate("PanelPolarimeter", "Start/Stop Calibration", Q_NULLPTR));
+        button_calibrate->setToolTip(QApplication::translate("PanelPolarimeter", "Start Calibration", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         button_calibrate->setText(QApplication::translate("PanelPolarimeter", " Calibrate", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        button_Start_Meas_Pol->setToolTip(QApplication::translate("PanelPolarimeter", "Start/Stop Measurements", Q_NULLPTR));
+        button_Start_Meas_Pol->setToolTip(QApplication::translate("PanelPolarimeter", "Start Measurements", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         button_Start_Meas_Pol->setText(QApplication::translate("PanelPolarimeter", " Start Measurement", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP

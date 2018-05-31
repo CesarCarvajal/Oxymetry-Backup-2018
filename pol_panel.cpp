@@ -597,7 +597,7 @@ void PanelPolarimeter::adjust_Run_End(short int typeRunn){
         int t = 0;
 
         /* Update information bar */
-        ui->info->setText("Finishing Measurements...");
+        ui->info->setText("Finishing Measurements... Please wait");
 
         /* Set the stop of the measurement to true, so the long term Measurement can be stopped */
         Runner->setMeasurementRunning(true);
@@ -731,6 +731,7 @@ void PanelPolarimeter::adjust_Run_Start(short int typeRun){
 
         /* Update polarimetric Measurement button */
         ui->button_Start_Meas_Pol->setText("Stop Measurement");
+        ui->button_Start_Meas_Pol->setToolTip("Stop Measurement");
         ui->button_Start_Meas_Pol->setStyleSheet(RedButton);
         ui->button_Start_Meas_Pol->setEnabled(true);
 
@@ -834,7 +835,7 @@ void PanelPolarimeter::adjust_Wavelength_Range(void){
     ui->currentProgressBar_Pol->setValue(0);
 
     /* Update information bar */
-    ui->info->setText("Setting Spectrometer...");
+    ui->info->setText("Setting Spectrometer... Please wait");
 
     /* Update configuration */
     if(ConfigureMeasurement->configured){
@@ -936,7 +937,7 @@ void PanelPolarimeter::change_Auto_Integration_Time_Pol(void){
     ui->currentProgressBar_Pol->setValue(0);
 
     /* Update information bar */
-    ui->info->setText("Setting Spectrometer...");
+    ui->info->setText("Setting Spectrometer... Please wait");
 
     /* Update configuration */
     if(ConfigureMeasurement->configured){
@@ -1025,7 +1026,7 @@ void PanelPolarimeter::change_Integration_Time_Pol(void){
     ui->currentProgressBar_Pol->setValue(0);
 
     /* Update information bar */
-    ui->info->setText("Setting Spectrometer...");
+    ui->info->setText("Setting Spectrometer... Please wait");
 
     /* Update configuration */
     if(ConfigureMeasurement->configured){
@@ -1146,7 +1147,7 @@ void PanelPolarimeter::change_Frequency_Pol(void){
     ui->currentProgressBar_Pol->setValue(0);
 
     /* Update information bar */
-    ui->info->setText("Setting Spectrometer...");
+    ui->info->setText("Setting Spectrometer... Please wait");
 
     /* Update configuration */
     if(ConfigureMeasurement->configured){
@@ -1216,7 +1217,7 @@ void PanelPolarimeter::change_Number_Averages_Pol(void){
     ui->currentProgressBar_Pol->setValue(0);
 
     /* Update information bar */
-    ui->info->setText("Setting Spectrometer...");
+    ui->info->setText("Setting Spectrometer... Please wait");
 
     /* Update configuration */
     if(ConfigureMeasurement->configured){
@@ -1297,7 +1298,7 @@ void PanelPolarimeter::change_Number_Spectra_Pol(void){
     ui->currentProgressBar_Pol->setValue(0);
 
     /* Update information bar */
-    ui->info->setText("Setting Spectrometer...");
+    ui->info->setText("Setting Spectrometer... Please wait");
 
     /* Update configuration */
     if(ConfigureMeasurement->configured){
@@ -1893,13 +1894,13 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
 
             /* Hide FFT Plot if clicked */
             ui->qwtPlot_Pol_FFT->setVisible(false);
-            ui->FFT_label_Pol->setText("> Maximum Intensity at");
+            ui->FFT_label_Pol->setText("> Maximum DC Intensity at");
             ui->FFT_label_Pol->setToolTip("Show FFT Plot");
         }else{
 
             /* Show FFT Plot again */
             ui->qwtPlot_Pol_FFT->setVisible(true);
-            ui->FFT_label_Pol->setText("< Maximum Intensity at");
+            ui->FFT_label_Pol->setText("< Maximum DC Intensity at");
             ui->FFT_label_Pol->setToolTip("Hide FFT Plot");
         }
 
@@ -2112,7 +2113,7 @@ void PanelPolarimeter::initialize_Calibration(void){
     Runner->setCalibrationRunning(true);
 
     /* Update information bar */
-    ui->info->setText("Initializing Spectrometer...");
+    ui->info->setText("Initializing Spectrometer... Please wait");
 
     /* Enable edition of Spectrometer Data until there is no calibration running */
     PolarimetrySpectrometer->enableComponents(true);
@@ -2120,6 +2121,7 @@ void PanelPolarimeter::initialize_Calibration(void){
     /* Update Polarimeter Calibration buttons */
     ui->button_calibrate->setText("Stop Calibration");
     ui->button_calibrate->setStyleSheet(RedButton);
+    ui->button_calibrate->setToolTip("Stop Calibration");
     ui->button_calibrate->setEnabled(true);
     ui->button_Start_Meas_Pol->setStyleSheet(grayButton);
 
@@ -2341,7 +2343,7 @@ void PanelPolarimeter::pol_Calibrate(void){
             Timer::msleep(1);
 
             /* Update information bar */
-            ui->info->setText("Waiting for Spectrometer...");
+            ui->info->setText("Preparing Spectrometer... Please wait");
         }
     }
 
@@ -2712,7 +2714,7 @@ void PanelPolarimeter::process_Received_Data_Pol(QString Path)
         }
 
         /* Update information bar */
-        ui->info->setText("Waiting for Spectrometer...");
+        ui->info->setText("Preparing Spectrometer... Please wait");
 
         /* Clear all the plots for a new loaded data */
         clear_Plot();
@@ -3215,7 +3217,7 @@ void PanelPolarimeter::stop_Run_Polarimetry(void) {
         }
 
         /* Update information bar */
-        ui->info->setText("Stopping Spectrometer...");
+        ui->info->setText("Stopping Spectrometer... Please wait");
 
         /* No polarimetric Calibration running anymore */
         Runner->setCalibrationRunning(false);
@@ -3242,6 +3244,7 @@ void PanelPolarimeter::stop_Run_Polarimetry(void) {
         /* Update pol meas button */
         ui->button_calibrate->setText("Calibrate");
         ui->button_calibrate->setStyleSheet("black");
+        ui->button_calibrate->setToolTip("Stat Calibration");
         ui->button_calibrate->setEnabled(true);
         ui->button_Start_Meas_Pol->setStyleSheet(greenButton);
 
@@ -3256,7 +3259,7 @@ void PanelPolarimeter::stop_Run_Polarimetry(void) {
         Runner->Stopped = true;
 
         /* Update information bar */
-        ui->info->setText("Stopping the Measurement...");
+        ui->info->setText("Stopping the Measurement... Please wait");
 
         /* No polarimetric Measurement running anymore */
         Runner->setMeasurementRunning(false);
@@ -3266,6 +3269,7 @@ void PanelPolarimeter::stop_Run_Polarimetry(void) {
 
         /* Update Polarimeter Measurement button */
         ui->button_Start_Meas_Pol->setText("Start Measurement");
+        ui->button_Start_Meas_Pol->setToolTip("Start Measurement");
         ui->button_Start_Meas_Pol->setStyleSheet(greenButton);
         ui->button_Start_Meas_Pol->setEnabled(true);
         ui->button_calibrate->setEnabled(true);

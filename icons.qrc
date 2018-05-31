@@ -9,6 +9,10 @@
 		<file>Calibrate.ico</file>
 		<file>Load.ico</file>
 		<file>PDF.ico</file>
+		<file>Pump.ico</file>
+		<file>Stock.ico</file>
+		<file>Time.ico</file>
+		<file>PC.ico</file>
     </qresource>
     <qresource prefix="/fluidic">
         <file>colorbar_flush.png</file>

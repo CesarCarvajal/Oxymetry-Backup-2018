@@ -628,6 +628,9 @@
      <layout class="QHBoxLayout" name="horizontalLayout_10">
       <item>
        <widget class="QCheckBox" name="checkBox_normalize">
+        <property name="toolTip">
+         <string>Normalize the Counts</string>
+        </property>
         <property name="autoFillBackground">
          <bool>false</bool>
         </property>

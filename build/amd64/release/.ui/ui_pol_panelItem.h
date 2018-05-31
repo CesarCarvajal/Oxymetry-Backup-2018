@@ -454,6 +454,9 @@ public:
 #endif // QT_NO_TOOLTIP
         label_saturatedPixels->setText(QApplication::translate("PanelItem_Pol", "<saturated pixels>", Q_NULLPTR));
         label_Nspectra2->setText(QApplication::translate("PanelItem_Pol", "Number of Spectra:", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        checkBox_normalize->setToolTip(QApplication::translate("PanelItem_Pol", "Normalize the Counts", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         checkBox_normalize->setText(QString());
         label_normalize->setText(QApplication::translate("PanelItem_Pol", "Normalize Counts:", Q_NULLPTR));
     } // retranslateUi

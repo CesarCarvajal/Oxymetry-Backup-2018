@@ -64,7 +64,7 @@ Pol_Plot::Pol_Plot()
 
     /* Plot the FFT at the wavelength selected by the user */
     FFT_oneWave = new QwtPlotCurve("");
-    FFT_oneWave->setPen(QPen("blue"));
+    FFT_oneWave->setPen(QPen("magenta"));
     FFT_oneWave->setItemAttribute(QwtPlotItem::Legend, false);
 
     /* Plot the concentration prediction */

@@ -72,6 +72,9 @@ public:
     /* Start delay */
     double startDelay;
 
+    /* Repetitions */
+    int repetition;
+
 public:
 
     /* Generate pump files */

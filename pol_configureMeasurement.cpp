@@ -71,8 +71,6 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
 
     /* Connect buttons to signal mapper */
     connect(ui->pushButton_select, SIGNAL(clicked()), this, SLOT(selectPath()));
-    connect(ui->label_load, SIGNAL(clicked()), signalMapperC, SLOT(map()));
-    connect(ui->label_basicConf, SIGNAL(clicked()), signalMapperC, SLOT(map()));
 
     /* Connect configuration edition */
 
@@ -93,10 +91,12 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     connect(ui->doubleSpinBox_MaxGluc, SIGNAL(valueChanged(double)), this, SLOT(updateStockValues()));
     connect(ui->doubleSpinBox_MaxImp1, SIGNAL(valueChanged(double)), this, SLOT(updateStockValues()));
     connect(ui->doubleSpinBox_MaxImp2, SIGNAL(valueChanged(double)), this, SLOT(updateStockValues()));
+    connect(ui->doubleSpinBox_StockGlucose, SIGNAL(editingFinished()), this, SLOT(updateConfigurationValues()));
+    connect(ui->doubleSpinBox_StockImp1, SIGNAL(editingFinished()), this, SLOT(updateConfigurationValues()));
+    connect(ui->doubleSpinBox_StockImp2, SIGNAL(editingFinished()), this, SLOT(updateConfigurationValues()));
 
-    connect(ui->lineEdit_StockGluc, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
-    connect(ui->lineEdit_StockImp1, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
-    connect(ui->lineEdit_StockImp2, SIGNAL(returnPressed()), signalMapperC, SLOT(map()));
+    /* Repetitions */
+    connect(ui->spinBox_Nrepet, SIGNAL(valueChanged(int)), this, SLOT(updateConfigurationValues()));
 
     /* Select the components */
     connect(ui->checkBox_Imp2, SIGNAL(clicked()), signalMapperC, SLOT(map()));
@@ -110,14 +110,7 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     connect(ui->spinBox_AbsVol, SIGNAL(valueChanged(int)), this, SLOT(updateConfigurationValues()));
     connect(ui->spinBox_NSteps, SIGNAL(valueChanged(int)), this, SLOT(updateConfigurationValues()));
 
-    /* Map of connections */
-    signalMapperC->setMapping(ui->label_load, ui->label_load);
-    signalMapperC->setMapping(ui->label_basicConf, ui->label_basicConf);
-
     /* Solutions Concentrations */
-    signalMapperC->setMapping(ui->lineEdit_StockGluc, ui->lineEdit_StockGluc);
-    signalMapperC->setMapping(ui->lineEdit_StockImp1, ui->lineEdit_StockImp1);
-    signalMapperC->setMapping(ui->lineEdit_StockImp2, ui->lineEdit_StockImp2);
     signalMapperC->setMapping(ui->checkBox_Imp2, ui->checkBox_Imp2);
     signalMapperC->setMapping(ui->checkBox_Imp1, ui->checkBox_Imp1);
     signalMapperC->setMapping(ui->checkBox_Glucose, ui->checkBox_Glucose);
@@ -138,7 +131,7 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     totalMtime = 0;
 
     /* Hide Solution 2 at the beginning */
-    ui->lineEdit_StockImp2->setVisible(false);
+    ui->doubleSpinBox_StockImp2->setVisible(false);
     ui->label_StockImp2->setVisible(false);
     ui->label_StockImp2_2->setVisible(false);
     ui->doubleSpinBox_MaxImp2->setVisible(false);
@@ -229,124 +222,16 @@ void configurePolMeasure::cleanAll(void)
  */
 void configurePolMeasure::handleClickEvent(QWidget *widget)
 {
-    QLabel *label = qobject_cast<QLabel *>(widget);
-    QLineEdit *LineLabel = qobject_cast<QLineEdit *>(widget);
     QCheckBox *checkBox = qobject_cast<QCheckBox *>(widget);
 
     /* Number of substances */
     int NumberOfSubstances = ui->checkBox_Glucose->isChecked() + ui->checkBox_Imp1->isChecked() + ui->checkBox_Imp2->isChecked();
 
-    /* Is it a valid number? */
-    bool ok;
-
-    /* Hide / Show GUI Elements */
-    if (label == ui->label_load)
-    {
-        /* Hide the GUI elements for loading configuration */
-        if(ui->LoadWidget->isVisible()){
-
-            ui->label_load->setText("> Load Configuration:");
-            ui->LoadWidget->hide();
-
-        }else{
-
-            /* Show the GUI elements for loading configuration */
-            ui->label_load->setText("< Load Configuration:");
-            ui->LoadWidget->show();
-        }
-
-        /* The basic configuration label has been clicked */
-    }else if (label == ui->label_basicConf)
-    {
-        /* Hide GUI elements */
-        if(ui->label_BIntTime->isVisible()){
-
-            /* Change label name */
-            ui->label_basicConf->setText("> Create Configuration:");
-
-            /* hide the labels */
-            ui->ConfigurationLayout->hide();
-
-        }else{
-
-            /* Change label name */
-            ui->label_basicConf->setText("< Create Configuration:");
-
-            /* Show labels */
-            ui->ConfigurationLayout->show();
-
-        }
-
-    }
-
-    /* Solutions Concentrations Settings */
-
-    /* The user decide to change the stock glucose */
-    if(LineLabel == ui->lineEdit_StockGluc && ui->lineEdit_StockGluc->text().toDouble(&ok) >= 0){
-
-        /* Is there a valid number */
-        if(!ok){
-            /* If not, then set back default value */
-            ui->lineEdit_StockGluc->setText("1000");
-        }
-
-        /* Show critical message if the concentration of the stock is inappropriate */
-        if(ui->lineEdit_StockGluc->text().toDouble() < ui->doubleSpinBox_MaxGluc->value()*(NumberOfSubstances) ){
-
-            QString message = "The stock of Glucose should have a minimum concentration of " + QString::number(ui->doubleSpinBox_MaxGluc->value()*(NumberOfSubstances)) + " mg/dl";
-            showCritical(message, "");
-
-            /* Set back default value */
-            ui->lineEdit_StockGluc->setText(QString::number( ui->doubleSpinBox_MaxGluc->value()*(NumberOfSubstances) ));
-        }
-
-    }else
-        /* The user decide to change the stock Impurity 1 */
-        if(LineLabel == ui->lineEdit_StockImp1 && ui->lineEdit_StockImp1->text().toDouble(&ok) >= 0){
-
-            /* Is there a valid number */
-            if(!ok){
-                /* If not, then set back default value */
-                ui->lineEdit_StockImp1->setText("4");
-            }
-
-            /* Show critical message if the concentration of the stock is inappropriate */
-            if(ui->lineEdit_StockImp1->text().toDouble() < ui->doubleSpinBox_MaxImp1->value()*(NumberOfSubstances) ){
-
-                QString message = "The stock of Impurity 1 should have a minimum concentration of " + QString::number(ui->doubleSpinBox_MaxImp1->value()*(NumberOfSubstances)) + " mg/dl";
-                showCritical(message, "");
-
-                /* Set back default value */
-                ui->lineEdit_StockImp1->setText(QString::number(ui->doubleSpinBox_MaxImp1->value()*(NumberOfSubstances)));
-            }
-
-        }else
-            /* The user decide to change the stock Impurity 2 */
-            if(LineLabel == ui->lineEdit_StockImp2 && ui->lineEdit_StockImp2->text().toDouble(&ok) >= 0){
-
-                /* Is there a valid number */
-                if(!ok){
-                    /* If not, then set back default value */
-                    ui->lineEdit_StockImp2->setText("0");
-                }
-
-                /* Show critical message if the concentration of the stock is inappropriate */
-                if(ui->lineEdit_StockImp2->text().toDouble() < ui->doubleSpinBox_MaxImp2->value()*(NumberOfSubstances) ){
-
-                    QString message = "The stock of Impurity 2 should have a minimum concentration of " + QString::number(ui->doubleSpinBox_MaxImp2->value()*(NumberOfSubstances)) + " mg/dl";
-                    showCritical(message, "");
-
-                    /* Set back default value */
-                    ui->lineEdit_StockImp2->setText(QString::number(ui->doubleSpinBox_MaxImp2->value()*(NumberOfSubstances)));
-                }
-
-            }
-
     /* Check the substances */
     if(checkBox == ui->checkBox_Imp2 || checkBox == ui->checkBox_Imp1 || checkBox == ui->checkBox_Glucose){
 
         /* Show/Hide Impurity 2 values */
-        ui->lineEdit_StockImp2->setVisible(ui->checkBox_Imp2->isChecked());
+        ui->doubleSpinBox_StockImp2->setVisible(ui->checkBox_Imp2->isChecked());
         ui->label_StockImp2->setVisible(ui->checkBox_Imp2->isChecked());
         ui->label_StockImp2_2->setVisible(ui->checkBox_Imp2->isChecked());
         ui->doubleSpinBox_MaxImp2->setVisible(ui->checkBox_Imp2->isChecked());
@@ -360,7 +245,7 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
         ui->lineEdit_VolI2->setVisible(ui->checkBox_Imp2->isChecked());
 
         /* Show/Hide Impurity 1 values */
-        ui->lineEdit_StockImp1->setVisible(ui->checkBox_Imp1->isChecked());
+        ui->doubleSpinBox_StockImp1->setVisible(ui->checkBox_Imp1->isChecked());
         ui->label_StockImp1->setVisible(ui->checkBox_Imp1->isChecked());
         ui->label_StockImp1_2->setVisible(ui->checkBox_Imp1->isChecked());
         ui->doubleSpinBox_MaxImp1->setVisible(ui->checkBox_Imp1->isChecked());
@@ -374,7 +259,7 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
         ui->lineEdit_VolI1->setVisible(ui->checkBox_Imp1->isChecked());
 
         /* Show/Hide Glucose values */
-        ui->lineEdit_StockGluc->setVisible(ui->checkBox_Glucose->isChecked());
+        ui->doubleSpinBox_StockGlucose->setVisible(ui->checkBox_Glucose->isChecked());
         ui->label_StockGluc->setVisible(ui->checkBox_Glucose->isChecked());
         ui->label_StockGluc2->setVisible(ui->checkBox_Glucose->isChecked());
         ui->doubleSpinBox_MaxGluc->setVisible(ui->checkBox_Glucose->isChecked());
@@ -390,9 +275,9 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
         if(NumberOfSubstances!=0){
 
             /* Adjust the Stock solutions or maximum concentration accordingly */
-            ui->lineEdit_StockGluc->setText(QString::number(ui->doubleSpinBox_MaxGluc->value()*(NumberOfSubstances)));
-            ui->lineEdit_StockImp1->setText(QString::number(ui->doubleSpinBox_MaxImp1->value()*(NumberOfSubstances)));
-            ui->lineEdit_StockImp2->setText(QString::number(ui->doubleSpinBox_MaxImp2->value()*(NumberOfSubstances)));
+            ui->doubleSpinBox_StockGlucose->setValue(ui->doubleSpinBox_MaxGluc->value()*(NumberOfSubstances));
+            ui->doubleSpinBox_StockImp1->setValue(ui->doubleSpinBox_MaxImp1->value()*(NumberOfSubstances));
+            ui->doubleSpinBox_StockImp2->setValue(ui->doubleSpinBox_MaxImp2->value()*(NumberOfSubstances));
         }
     }
 
@@ -477,7 +362,7 @@ void configurePolMeasure::loadConfiguration(void)
     cleanAll();
 
     /* Check format of configuration file; we need at least 5 semicolons per line */
-    if (wordList[0].count(QLatin1Char(';')) != 24)
+    if (wordList[0].count(QLatin1Char(';')) != 25)
     {
         /* Show message */
         showWarning("Malformed configuration file!", "");
@@ -609,6 +494,7 @@ void configurePolMeasure::getConfigurationFromFile(QString data)
         externSoftware->minConcentrations.replace(2, dataList.at(22).toDouble());
         externSoftware->maxConcentrations.replace(2, dataList.at(23).toDouble());
         externSoftware->stockSolutions.replace(2, dataList.at(24).toDouble());
+        externSoftware->ConfigurationFileGenerator->repetition = dataList.at(25).toInt();
 
         externSoftware->ConfigurationFileGenerator->fillRefill = (((externSoftware->ConfigurationFileGenerator->absVol/externSoftware->ConfigurationFileGenerator->absoluteFlow)*60) / externSoftware->ConfigurationFileGenerator->NSteps)*1000;
         externSoftware->ConfigurationFileGenerator->NumberOfSubstances = externSoftware->ConfigurationFileGenerator->glucoseActive + externSoftware->ConfigurationFileGenerator->Imp1Active + externSoftware->ConfigurationFileGenerator->Imp2Active;
@@ -616,6 +502,8 @@ void configurePolMeasure::getConfigurationFromFile(QString data)
         externSoftware->GlucoseConcentration.resize(externSoftware->ConfigurationFileGenerator->NConcentrations);
         externSoftware->Impurity1Concentration.resize(externSoftware->ConfigurationFileGenerator->NConcentrations);
         externSoftware->Impurity2Concentration.resize(externSoftware->ConfigurationFileGenerator->NConcentrations);
+
+
     }
 }
 
@@ -665,6 +553,9 @@ void configurePolMeasure::GetConfigurationData(void)
     /* Get Number of Steps */
     externSoftware->ConfigurationFileGenerator->NSteps = ui->spinBox_NSteps->value();
 
+    /* Get Number of Repetitions */
+    externSoftware->ConfigurationFileGenerator->repetition = ui->spinBox_Nrepet->value();
+
     /* Get absolute Flow */
     externSoftware->ConfigurationFileGenerator->absoluteFlow = ui->doubleSpinBox_AbsFlow->value();
 
@@ -683,9 +574,9 @@ void configurePolMeasure::GetConfigurationData(void)
     externSoftware->ConfigurationFileGenerator->longBreak = (ui->spinBox_LongBreak->value())*1000 + (externSoftware->ConfigurationFileGenerator->IntegrationTime*externSoftware->ConfigurationFileGenerator->NrSpectra*externSoftware->ConfigurationFileGenerator->NrAverages);
 
     /* Stock Solutions */
-    externSoftware->stockSolutions.replace(0,ui->lineEdit_StockGluc->text().toDouble());
-    externSoftware->stockSolutions.replace(1,ui->lineEdit_StockImp1->text().toDouble());
-    externSoftware->stockSolutions.replace(2,ui->lineEdit_StockImp2->text().toDouble());
+    externSoftware->stockSolutions.replace(0,ui->doubleSpinBox_StockGlucose->value());
+    externSoftware->stockSolutions.replace(1,ui->doubleSpinBox_StockImp1->value());
+    externSoftware->stockSolutions.replace(2,ui->doubleSpinBox_StockImp2->value());
 
     /* Minimum Concentrations */
     externSoftware->minConcentrations.replace(0,ui->doubleSpinBox_MinGluc->value());
@@ -725,6 +616,9 @@ void configurePolMeasure::GetConfigurationData(void)
 void configurePolMeasure::updateConfigurationValues(void)
 {
 
+    /* Number of substances */
+    int NumberOfSubstances = ui->checkBox_Glucose->isChecked() + ui->checkBox_Imp1->isChecked() + ui->checkBox_Imp2->isChecked();
+
     /* Get Refilling Times in ms */
     int fillRefill = (((ui->spinBox_AbsVol->value()/ui->doubleSpinBox_AbsFlow->value())*60) / ui->spinBox_NSteps->value())*1000;
 
@@ -742,7 +636,7 @@ void configurePolMeasure::updateConfigurationValues(void)
         ui->checkBox_Glucose->setChecked(true);
 
         /* Enable glucose by default */
-        ui->lineEdit_StockGluc->setVisible(true);
+        ui->doubleSpinBox_StockGlucose->setVisible(true);
         ui->label_StockGluc->setVisible(true);
         ui->label_StockGluc2->setVisible(true);
         ui->doubleSpinBox_MaxGluc->setVisible(true);
@@ -824,13 +718,13 @@ void configurePolMeasure::updateConfigurationValues(void)
 
     /* Minimum volume per stock solution */
     double volumeG = (ui->doubleSpinBox_MinGluc->value() + ui->doubleSpinBox_MaxGluc->value())/(2);
-    volumeG = (volumeG/ ui->lineEdit_StockGluc->text().toDouble())* double(ui->spinBox_BNMeas->value())* double(ui->spinBox_AbsVol->value());
+    volumeG = (volumeG/ ui->doubleSpinBox_StockGlucose->value())* double(ui->spinBox_BNMeas->value())* double(ui->spinBox_AbsVol->value());
 
     double volumeI1 = (ui->doubleSpinBox_MinImp1->value() + ui->doubleSpinBox_MaxImp1->value())/(2);
-    volumeI1 = (volumeI1/ ui->lineEdit_StockImp1->text().toDouble())*double(ui->spinBox_BNMeas->value())*double(ui->spinBox_AbsVol->value());
+    volumeI1 = (volumeI1/ ui->doubleSpinBox_StockImp1->value())*double(ui->spinBox_BNMeas->value())*double(ui->spinBox_AbsVol->value());
 
     double volumeI2 = (ui->doubleSpinBox_MinImp2->value() + ui->doubleSpinBox_MaxImp2->value())/(2);
-    volumeI2 = (volumeI2/ ui->lineEdit_StockImp2->text().toDouble())*double(ui->spinBox_BNMeas->value())*double(ui->spinBox_AbsVol->value());
+    volumeI2 = (volumeI2/ ui->doubleSpinBox_StockImp2->value())*double(ui->spinBox_BNMeas->value())*double(ui->spinBox_AbsVol->value());
 
     /* Show the user how much is needed minimum */
     ui->lineEdit_VolG->setText(QString::number(volumeG));
@@ -857,6 +751,12 @@ void configurePolMeasure::updateConfigurationValues(void)
         ui->timeEdit_timeLabel->hide();
     }
 
+    /* Show the end time of the measurements */
+    QDateTime endTime = QDateTime::currentDateTime().addSecs(ui->doubleSpinBox_startDelay->value()*3600+ totalMtimer);
+
+    /* Show the time when the measurements are finish */
+    ui->lineEdit_EndTime->setText(endTime.toString("dddd, d MMMM yyyy, hh:mm:ss ap"));
+
     /* Set range limits */
     ui->doubleSpinBox_minW->setMaximum(ui->doubleSpinBox_maxW->value());
     ui->doubleSpinBox_maxW->setMinimum(ui->doubleSpinBox_minW->value());
@@ -881,6 +781,37 @@ void configurePolMeasure::updateConfigurationValues(void)
         ui->spinBox_BNSpec->setValue(externSoftware->ConfigurationFileGenerator->NrSpectra);
     }
 
+    /* Show critical message if the concentration of the stock is inappropriate */
+    if(ui->doubleSpinBox_StockGlucose->value() < ui->doubleSpinBox_MaxGluc->value()*(NumberOfSubstances) && ui->checkBox_Glucose->isChecked()){
+
+        QString message = "The stock of Glucose should have a minimum concentration of " + QString::number(ui->doubleSpinBox_MaxGluc->value()*(NumberOfSubstances)) + " mg/dl";
+        showCritical(message, "");
+
+        /* Set back default value */
+        ui->doubleSpinBox_StockGlucose->setValue(ui->doubleSpinBox_MaxGluc->value()*(NumberOfSubstances));
+    }
+
+    /* Show critical message if the concentration of the stock is inappropriate */
+    if(ui->doubleSpinBox_StockImp1->value() < ui->doubleSpinBox_MaxImp1->value()*(NumberOfSubstances) && ui->checkBox_Imp1->isChecked()){
+
+        QString message = "The stock of Impurity 1 should have a minimum concentration of " + QString::number(ui->doubleSpinBox_MaxImp1->value()*(NumberOfSubstances)) + " mg/dl";
+        showCritical(message, "");
+
+        /* Set back default value */
+        ui->doubleSpinBox_StockImp1->setValue(ui->doubleSpinBox_MaxImp1->value()*(NumberOfSubstances));
+    }
+
+    /* Show critical message if the concentration of the stock is inappropriate */
+    if(ui->doubleSpinBox_StockImp2->value() < ui->doubleSpinBox_MaxImp2->value()*(NumberOfSubstances) && ui->checkBox_Imp2->isChecked() ){
+
+        QString message = "The stock of Impurity 2 should have a minimum concentration of " + QString::number(ui->doubleSpinBox_MaxImp2->value()*(NumberOfSubstances)) + " mg/dl";
+        showCritical(message, "");
+
+        /* Set back default value */
+        ui->doubleSpinBox_StockImp2->setValue(ui->doubleSpinBox_MaxImp2->value()*(NumberOfSubstances));
+    }
+
+
 }
 
 /**
@@ -892,13 +823,13 @@ void configurePolMeasure::updateStockValues(void)
     int NumberOfSubstances = ui->checkBox_Glucose->isChecked() + ui->checkBox_Imp1->isChecked() + ui->checkBox_Imp2->isChecked();
 
     /* Adjust stock solutions concentration accordingly */
-    ui->lineEdit_StockGluc->setText(QString::number(ui->doubleSpinBox_MaxGluc->value()*(NumberOfSubstances)));
+    ui->doubleSpinBox_StockGlucose->setValue(ui->doubleSpinBox_MaxGluc->value()*(NumberOfSubstances));
 
     /* Adjust stock solutions concentration accordingly */
-    ui->lineEdit_StockImp1->setText(QString::number(ui->doubleSpinBox_MaxImp1->value()*(NumberOfSubstances)));
+    ui->doubleSpinBox_StockImp1->setValue(ui->doubleSpinBox_MaxImp1->value()*(NumberOfSubstances));
 
     /* Adjust stock solutions concentration accordingly */
-    ui->lineEdit_StockImp2->setText(QString::number(ui->doubleSpinBox_MaxImp2->value()*(NumberOfSubstances)));
+    ui->doubleSpinBox_StockImp2->setValue(ui->doubleSpinBox_MaxImp2->value()*(NumberOfSubstances));
 
     updateConfigurationValues();
 }
@@ -927,15 +858,16 @@ void configurePolMeasure::updateForm(void)
     ui->doubleSpinBox_MaxGluc->setValue(externSoftware->maxConcentrations.at(0));
     ui->doubleSpinBox_MaxImp1->setValue(externSoftware->maxConcentrations.at(1));
     ui->doubleSpinBox_MaxImp2->setValue(externSoftware->maxConcentrations.at(2));
-    ui->lineEdit_StockGluc->setText(QString::number(externSoftware->stockSolutions.at(0)));
-    ui->lineEdit_StockImp1->setText(QString::number(externSoftware->stockSolutions.at(1)));
-    ui->lineEdit_StockImp2->setText(QString::number(externSoftware->stockSolutions.at(2)));
+    ui->doubleSpinBox_StockGlucose->setValue(externSoftware->stockSolutions.at(0));
+    ui->doubleSpinBox_StockImp1->setValue(externSoftware->stockSolutions.at(1));
+    ui->doubleSpinBox_StockImp2->setValue(externSoftware->stockSolutions.at(2));
+    ui->spinBox_Nrepet->setValue(externSoftware->ConfigurationFileGenerator->repetition);
 
     /* Update calculable parameters */
     updateConfigurationValues();
 
     /* Show/Hide Impurity 2 values */
-    ui->lineEdit_StockImp2->setVisible(ui->checkBox_Imp2->isChecked());
+    ui->doubleSpinBox_StockImp2->setVisible(ui->checkBox_Imp2->isChecked());
     ui->label_StockImp2->setVisible(ui->checkBox_Imp2->isChecked());
     ui->label_StockImp2_2->setVisible(ui->checkBox_Imp2->isChecked());
     ui->doubleSpinBox_MaxImp2->setVisible(ui->checkBox_Imp2->isChecked());
@@ -949,7 +881,7 @@ void configurePolMeasure::updateForm(void)
     ui->lineEdit_VolI2->setVisible(ui->checkBox_Imp2->isChecked());
 
     /* Show/Hide Impurity 1 values */
-    ui->lineEdit_StockImp1->setVisible(ui->checkBox_Imp1->isChecked());
+    ui->doubleSpinBox_StockImp1->setVisible(ui->checkBox_Imp1->isChecked());
     ui->label_StockImp1->setVisible(ui->checkBox_Imp1->isChecked());
     ui->label_StockImp1_2->setVisible(ui->checkBox_Imp1->isChecked());
     ui->doubleSpinBox_MaxImp1->setVisible(ui->checkBox_Imp1->isChecked());
@@ -963,7 +895,7 @@ void configurePolMeasure::updateForm(void)
     ui->lineEdit_VolI1->setVisible(ui->checkBox_Imp1->isChecked());
 
     /* Show/Hide Glucose values */
-    ui->lineEdit_StockGluc->setVisible(ui->checkBox_Glucose->isChecked());
+    ui->doubleSpinBox_StockGlucose->setVisible(ui->checkBox_Glucose->isChecked());
     ui->label_StockGluc->setVisible(ui->checkBox_Glucose->isChecked());
     ui->label_StockGluc2->setVisible(ui->checkBox_Glucose->isChecked());
     ui->doubleSpinBox_MaxGluc->setVisible(ui->checkBox_Glucose->isChecked());
