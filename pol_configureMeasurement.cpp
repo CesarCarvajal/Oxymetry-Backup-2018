@@ -554,7 +554,8 @@ void configurePolMeasure::GetConfigurationData(void)
     externSoftware->ConfigurationFileGenerator->NSteps = ui->spinBox_NSteps->value();
 
     /* Get Number of Repetitions */
-    externSoftware->ConfigurationFileGenerator->repetition = ui->spinBox_Nrepet->value();
+    /* Repetition plus 1, because 0 repetitions means 1 measurement */
+    externSoftware->ConfigurationFileGenerator->repetition = ui->spinBox_Nrepet->value() + 1;
 
     /* Get absolute Flow */
     externSoftware->ConfigurationFileGenerator->absoluteFlow = ui->doubleSpinBox_AbsFlow->value();
@@ -707,7 +708,7 @@ void configurePolMeasure::updateConfigurationValues(void)
     ui->label2_timebetweenM->setText(ConvertedTime.at(1));
 
     /* Estimate the total measurement time */
-    double totalMtimer = (measurementTime + (cycleTime * ui->spinBox_BNMeas->value()))/1000;
+    double totalMtimer = ((measurementTime + (cycleTime * ui->spinBox_BNMeas->value()))/1000)*(ui->spinBox_Nrepet->value() + 1);
 
     /* Convert the time to minutes, hours or days */
     ConvertedTime = externSoftware->TimeConverter(totalMtimer);
@@ -742,7 +743,7 @@ void configurePolMeasure::updateConfigurationValues(void)
         startTime = QDateTime::currentDateTime().addSecs(ui->doubleSpinBox_startDelay->value()*3600);
 
         /* Print it in format of h:m:s AM/PM */
-        ui->timeEdit_timeLabel->setText(startTime.toString("dddd, d MMMM yyyy, hh:mm:ss ap"));
+        ui->timeEdit_timeLabel->setText(startTime.toString("dddd, d MMMM yyyy, hh:mm ap"));
 
     }else{
 
@@ -755,7 +756,7 @@ void configurePolMeasure::updateConfigurationValues(void)
     QDateTime endTime = QDateTime::currentDateTime().addSecs(ui->doubleSpinBox_startDelay->value()*3600+ totalMtimer);
 
     /* Show the time when the measurements are finish */
-    ui->lineEdit_EndTime->setText(endTime.toString("dddd, d MMMM yyyy, hh:mm:ss ap"));
+    ui->lineEdit_EndTime->setText(endTime.toString("dddd, d MMMM yyyy, hh:mm ap"));
 
     /* Set range limits */
     ui->doubleSpinBox_minW->setMaximum(ui->doubleSpinBox_maxW->value());
@@ -861,7 +862,8 @@ void configurePolMeasure::updateForm(void)
     ui->doubleSpinBox_StockGlucose->setValue(externSoftware->stockSolutions.at(0));
     ui->doubleSpinBox_StockImp1->setValue(externSoftware->stockSolutions.at(1));
     ui->doubleSpinBox_StockImp2->setValue(externSoftware->stockSolutions.at(2));
-    ui->spinBox_Nrepet->setValue(externSoftware->ConfigurationFileGenerator->repetition);
+    /* Repetition minus 1, because 1 measurement means 0 repetitions */
+    ui->spinBox_Nrepet->setValue(externSoftware->ConfigurationFileGenerator->repetition - 1);
 
     /* Update calculable parameters */
     updateConfigurationValues();

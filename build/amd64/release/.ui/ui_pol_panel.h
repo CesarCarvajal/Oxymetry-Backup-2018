@@ -173,8 +173,8 @@ public:
         sizePolicy1.setVerticalStretch(0);
         sizePolicy1.setHeightForWidth(label_hideConf->sizePolicy().hasHeightForWidth());
         label_hideConf->setSizePolicy(sizePolicy1);
-        label_hideConf->setMinimumSize(QSize(290, 7));
-        label_hideConf->setMaximumSize(QSize(290, 7));
+        label_hideConf->setMinimumSize(QSize(300, 7));
+        label_hideConf->setMaximumSize(QSize(300, 7));
         QFont font;
         font.setPointSize(6);
         font.setUnderline(true);
@@ -210,8 +210,8 @@ public:
         list_devices_Pol->setObjectName(QStringLiteral("list_devices_Pol"));
         sizePolicy2.setHeightForWidth(list_devices_Pol->sizePolicy().hasHeightForWidth());
         list_devices_Pol->setSizePolicy(sizePolicy2);
-        list_devices_Pol->setMinimumSize(QSize(290, 221));
-        list_devices_Pol->setMaximumSize(QSize(290, 221));
+        list_devices_Pol->setMinimumSize(QSize(300, 221));
+        list_devices_Pol->setMaximumSize(QSize(300, 221));
         list_devices_Pol->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
         list_devices_Pol->setSizeAdjustPolicy(QAbstractScrollArea::AdjustIgnored);
         list_devices_Pol->setAutoScroll(true);
@@ -291,7 +291,7 @@ public:
 
         horizontalLayout_2->addWidget(label_n);
 
-        HSpaceX = new QSpacerItem(50, 5, QSizePolicy::Fixed, QSizePolicy::Minimum);
+        HSpaceX = new QSpacerItem(60, 5, QSizePolicy::Fixed, QSizePolicy::Minimum);
 
         horizontalLayout_2->addItem(HSpaceX);
 
@@ -306,8 +306,8 @@ public:
         qwtPlot_Pol_FFT->setObjectName(QStringLiteral("qwtPlot_Pol_FFT"));
         sizePolicy1.setHeightForWidth(qwtPlot_Pol_FFT->sizePolicy().hasHeightForWidth());
         qwtPlot_Pol_FFT->setSizePolicy(sizePolicy1);
-        qwtPlot_Pol_FFT->setMinimumSize(QSize(280, 130));
-        qwtPlot_Pol_FFT->setMaximumSize(QSize(280, 130));
+        qwtPlot_Pol_FFT->setMinimumSize(QSize(300, 130));
+        qwtPlot_Pol_FFT->setMaximumSize(QSize(300, 130));
         qwtPlot_Pol_FFT->setFrameShape(QFrame::StyledPanel);
         qwtPlot_Pol_FFT->setFrameShadow(QFrame::Raised);
 
@@ -342,12 +342,14 @@ public:
         verticalLayout_8->addItem(verticalSpacer_3);
 
         Table_Measurements_Pol = new QTableWidget(PanelPolarimeter);
-        if (Table_Measurements_Pol->columnCount() < 2)
-            Table_Measurements_Pol->setColumnCount(2);
+        if (Table_Measurements_Pol->columnCount() < 3)
+            Table_Measurements_Pol->setColumnCount(3);
         QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
         Table_Measurements_Pol->setHorizontalHeaderItem(0, __qtablewidgetitem);
         QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
         Table_Measurements_Pol->setHorizontalHeaderItem(1, __qtablewidgetitem1);
+        QTableWidgetItem *__qtablewidgetitem2 = new QTableWidgetItem();
+        Table_Measurements_Pol->setHorizontalHeaderItem(2, __qtablewidgetitem2);
         Table_Measurements_Pol->setObjectName(QStringLiteral("Table_Measurements_Pol"));
         QSizePolicy sizePolicy5(QSizePolicy::Preferred, QSizePolicy::Expanding);
         sizePolicy5.setHorizontalStretch(0);
@@ -355,7 +357,7 @@ public:
         sizePolicy5.setHeightForWidth(Table_Measurements_Pol->sizePolicy().hasHeightForWidth());
         Table_Measurements_Pol->setSizePolicy(sizePolicy5);
         Table_Measurements_Pol->setMinimumSize(QSize(0, 50));
-        Table_Measurements_Pol->setMaximumSize(QSize(290, 16777215));
+        Table_Measurements_Pol->setMaximumSize(QSize(300, 16777215));
         Table_Measurements_Pol->setLineWidth(1);
         Table_Measurements_Pol->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
         Table_Measurements_Pol->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
@@ -368,12 +370,13 @@ public:
         Table_Measurements_Pol->setHorizontalScrollMode(QAbstractItemView::ScrollPerItem);
         Table_Measurements_Pol->setShowGrid(true);
         Table_Measurements_Pol->setRowCount(0);
-        Table_Measurements_Pol->setColumnCount(2);
+        Table_Measurements_Pol->setColumnCount(3);
         Table_Measurements_Pol->horizontalHeader()->setCascadingSectionResizes(false);
-        Table_Measurements_Pol->horizontalHeader()->setDefaultSectionSize(81);
+        Table_Measurements_Pol->horizontalHeader()->setDefaultSectionSize(78);
         Table_Measurements_Pol->horizontalHeader()->setMinimumSectionSize(31);
         Table_Measurements_Pol->horizontalHeader()->setProperty("showSortIndicator", QVariant(false));
         Table_Measurements_Pol->horizontalHeader()->setStretchLastSection(true);
+        Table_Measurements_Pol->verticalHeader()->setVisible(false);
         Table_Measurements_Pol->verticalHeader()->setCascadingSectionResizes(false);
         Table_Measurements_Pol->verticalHeader()->setDefaultSectionSize(30);
         Table_Measurements_Pol->verticalHeader()->setHighlightSections(true);
@@ -1030,14 +1033,16 @@ public:
 #endif // QT_NO_TOOLTIP
         label_Measurements_Pol->setText(QApplication::translate("PanelPolarimeter", "< Measurement List:", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem = Table_Measurements_Pol->horizontalHeaderItem(0);
-        ___qtablewidgetitem->setText(QApplication::translate("PanelPolarimeter", "Time (h:m:s)", Q_NULLPTR));
-#ifndef QT_NO_TOOLTIP
-        ___qtablewidgetitem->setToolTip(QApplication::translate("PanelPolarimeter", "Time Intervals", Q_NULLPTR));
-#endif // QT_NO_TOOLTIP
+        ___qtablewidgetitem->setText(QApplication::translate("PanelPolarimeter", "#", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem1 = Table_Measurements_Pol->horizontalHeaderItem(1);
-        ___qtablewidgetitem1->setText(QApplication::translate("PanelPolarimeter", "File Name", Q_NULLPTR));
+        ___qtablewidgetitem1->setText(QApplication::translate("PanelPolarimeter", "Time (h:m:s)", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        ___qtablewidgetitem1->setToolTip(QApplication::translate("PanelPolarimeter", "File Name", Q_NULLPTR));
+        ___qtablewidgetitem1->setToolTip(QApplication::translate("PanelPolarimeter", "Time Intervals", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        QTableWidgetItem *___qtablewidgetitem2 = Table_Measurements_Pol->horizontalHeaderItem(2);
+        ___qtablewidgetitem2->setText(QApplication::translate("PanelPolarimeter", "File Name", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        ___qtablewidgetitem2->setToolTip(QApplication::translate("PanelPolarimeter", "File Name", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
 #ifndef QT_NO_TOOLTIP
         Table_Measurements_Pol->setToolTip(QApplication::translate("PanelPolarimeter", "Measurement Profile", Q_NULLPTR));
@@ -1078,7 +1083,7 @@ public:
 #ifndef QT_NO_TOOLTIP
         label_compensation->setToolTip(QApplication::translate("PanelPolarimeter", "Hide Compensation Plot", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        label_compensation->setText(QApplication::translate("PanelPolarimeter", "< Ratio I(W)/I(2W)", Q_NULLPTR));
+        label_compensation->setText(QApplication::translate("PanelPolarimeter", "< Ratio I(\317\211)/I(2\317\211)", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         qwtPlot_Pol_Compensation->setToolTip(QApplication::translate("PanelPolarimeter", "Compensation Plot", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP

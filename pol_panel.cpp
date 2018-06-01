@@ -284,18 +284,18 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     /* Plots */
 
     /* Raw Signal plot for Polarimeter */
-    ui->qwtPlot_Pol->setXAxisTitle("Wavelength (nm)");
+    ui->qwtPlot_Pol->setXAxisTitle("Wavelength λ (nm)");
     ui->qwtPlot_Pol->setYAxisTitle("ADC (Counts)");
     maxYRaw = 65535.0;
     ui->qwtPlot_Pol->setYAxis(0.0, maxYRaw);
 
     /* Compensated Signal plot for Polarimeter */
-    ui->qwtPlot_Pol_Compensation->setXAxisTitle("Wavelength (nm)");
+    ui->qwtPlot_Pol_Compensation->setXAxisTitle("Wavelength λ (nm)");
     ui->qwtPlot_Pol_Compensation->setYAxisTitle("Ratio");
     ui->qwtPlot_Pol_Compensation->setYAxis(0.0, 3);
 
     /* FFT Profile plot for Polarimeter */
-    ui->qwtPlot_Pol_w_2w->setXAxisTitle("Wavelength (nm)");
+    ui->qwtPlot_Pol_w_2w->setXAxisTitle("Wavelength λ (nm)");
     ui->qwtPlot_Pol_w_2w->setYAxisTitle("FFT Intensity (Counts)");
     ui->qwtPlot_Pol_w_2w->setYAxis(0.0, 40000);
 
@@ -311,7 +311,7 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     /* FFT Curve at a certain Wavelength */
     ui->qwtPlot_Pol_FFT->setXAxis(0.0, 21);
     ui->qwtPlot_Pol_FFT->setYAxis(0.0, 3000);
-    QwtText bottomTitle = QString("Frequency (Hz)");
+    QwtText bottomTitle = QString("Frequency ƒ (Hz)");
     ui->qwtPlot_Pol_FFT->axisFont.setPointSize(8);
     bottomTitle.setFont(ui->qwtPlot_Pol_FFT->axisFont);
     ui->qwtPlot_Pol_FFT->setAxisTitle(QwtPlot::xBottom, bottomTitle);
@@ -1062,7 +1062,7 @@ void PanelPolarimeter::change_File_Name(void){
                                                            + QString::number(PolarimetrySpectrometer->getFrequency()) + "Hz_" + QString::number(j+1));
 
             /* Remove the actual data on table */
-            ui->Table_Measurements_Pol->removeCellWidget(j, 1);
+            ui->Table_Measurements_Pol->removeCellWidget(j, 2);
 
             /* Update label for file name */
             QLabel *newt3 = new QLabel();
@@ -1070,7 +1070,7 @@ void PanelPolarimeter::change_File_Name(void){
             newt3->setStyleSheet("QLabel { margin-left: 2px; }");
 
             /* Add new data to the table */
-            ui->Table_Measurements_Pol->setCellWidget(j, 1, newt3);
+            ui->Table_Measurements_Pol->setCellWidget(j, 2, newt3);
         }
     }
 }
@@ -3085,21 +3085,22 @@ void PanelPolarimeter::setConfiguration(void){
     /* Save if the Measurement has been configured */
     Runner->setConfigured(true);
 
-    /* Prevent user from resizing the header */
-    ui->Table_Measurements_Pol->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
-
     /* Left align column titles */
-    ui->Table_Measurements_Pol->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
+    ui->Table_Measurements_Pol->horizontalHeader()->setDefaultAlignment(Qt::AlignCenter);
 
     /* Prevent user from editing the cells */
     ui->Table_Measurements_Pol->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     /* Adjust table widget */
-    ui->Table_Measurements_Pol->setColumnWidth(0, 80);
-    ui->Table_Measurements_Pol->setColumnWidth(1, 130);
+    ui->Table_Measurements_Pol->setColumnWidth(0, 25);
+    ui->Table_Measurements_Pol->setColumnWidth(1, 90);
+    ui->Table_Measurements_Pol->setColumnWidth(2, 110);
 
     /* Zero row count of measurement list */
     ui->Table_Measurements_Pol->setRowCount(0);
+
+    /*  Count rows */
+    int rowcounter = 0;
 
     unsigned int i = 0;
 
@@ -3121,20 +3122,57 @@ void PanelPolarimeter::setConfiguration(void){
             }
         }
 
-        /* Increase current row count */
-        ui->Table_Measurements_Pol->setRowCount(ui->Table_Measurements_Pol->rowCount() + 1);
+        /* Count measurement number */
+        rowcounter = rowcounter + 1;
+
+        /* Set rows */
+        ui->Table_Measurements_Pol->setRowCount(i+1);
+
+        /* Create label for measurement number */
+        QLabel *ntn = new QLabel();
+        ntn->setText(QString::number(rowcounter));
+        ntn->setStyleSheet("QLabel { margin-left: 2px; }");
+        ui->Table_Measurements_Pol->setCellWidget(i, 0, ntn);
 
         /* Create label for time point */
         QLabel *nt2 = new QLabel();
-        nt2->setText(QDateTime::fromTime_t(ConfigureMeasurement->timePoint.at(i)/1000).toUTC().toString("hh:mm:ss"));
+
+        /* Change time to the proper units */
+        QStringList ConvertedTime = ConfigureMeasurement->externSoftware->TimeConverter(ConfigureMeasurement->timePoint.at(i)/1000);
+
+        /* In case of less than 1 day measuring */
+        if(ConvertedTime.at(1)=="hours"){
+            nt2->setText(QDateTime::fromTime_t(ConfigureMeasurement->timePoint.at(i)/1000).toUTC().toString("hh:mm:ss"));
+            ui->Table_Measurements_Pol->horizontalHeaderItem(1)->setText("Time (h:m:s)");
+        }
+        else if (ConvertedTime.at(1)=="min"){
+            nt2->setText(QDateTime::fromTime_t(ConfigureMeasurement->timePoint.at(i)/1000).toUTC().toString("mm:ss"));
+            ui->Table_Measurements_Pol->horizontalHeaderItem(1)->setText("Time (m:s)");
+
+        }else if (ConvertedTime.at(1)=="sec"){
+            nt2->setText(QDateTime::fromTime_t(ConfigureMeasurement->timePoint.at(i)/1000).toUTC().toString("ss"));
+            ui->Table_Measurements_Pol->horizontalHeaderItem(1)->setText("Time (s)");
+
+        }else{
+
+            ui->Table_Measurements_Pol->horizontalHeaderItem(1)->setText("Time (d:h:m:s)");
+            int nDays = ConvertedTime.at(0).toDouble();
+            nt2->setText(QString::number(nDays) + ":" +QDateTime::fromTime_t((ConfigureMeasurement->timePoint.at(i)/1000)-86400*nDays).toUTC().toString("hh:mm:ss"));
+        }
+
         nt2->setStyleSheet("QLabel { margin-left: 2px; }");
-        ui->Table_Measurements_Pol->setCellWidget(i, 0, nt2);
+        ui->Table_Measurements_Pol->setCellWidget(i, 1, nt2);
 
         /* Create label for file name */
         QLabel *nt3 = new QLabel();
         nt3->setText(ConfigureMeasurement->savingFilesNames.at(i));
         nt3->setStyleSheet("QLabel { margin-left: 2px; }");
-        ui->Table_Measurements_Pol->setCellWidget(i, 1, nt3);
+        ui->Table_Measurements_Pol->setCellWidget(i, 2, nt3);
+
+        /* Are there repetitions? */
+        if((i+1) % (unsigned int) ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->NConcentrations == 0){
+            rowcounter = 0;
+        }
     }
 
     /* Label for number of spectra */

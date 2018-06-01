@@ -334,6 +334,8 @@ void PanelItem_Pol::setClickableLabelsEnabled(bool value)
     ui->label->setVisible(value);
     ui->label_2->setVisible(value);
     ui->label_timeBase->setVisible(value);
+    ui->checkBox_normalize->setVisible(value);
+    ui->label_normalize->setVisible(value);
     ui->label_frequency->setVisible(value);
     ui->label_freq2->setVisible(value);
     ui->label_freq3->setVisible(value);

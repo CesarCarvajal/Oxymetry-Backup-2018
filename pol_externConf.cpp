@@ -129,6 +129,13 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
     gapImpurity1 = (maxConcentrations.at(1) - minConcentrations.at(1))/(ConfigurationFileGenerator->NConcentrations-1);
     gapImpurity2 = (maxConcentrations.at(2) - minConcentrations.at(2))/(ConfigurationFileGenerator->NConcentrations-1);
 
+    /* Don't get gap when the number of concentrations is 1 */
+    if(ConfigurationFileGenerator->NConcentrations == 1){
+        gapGlucose = 0;
+        gapImpurity1 = 0;
+        gapImpurity2 = 0;
+    }
+
     /* Create vectors with indexes and solution concentrations */
     for(int k =0; k < ConfigurationFileGenerator->NConcentrations; k++){
 

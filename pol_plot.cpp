@@ -43,15 +43,15 @@ Pol_Plot::Pol_Plot()
     /* Dc, W and 2w Averages */
     Average_DC_Signal = new QwtPlotCurve("I(DC)");
     Average_DC_Signal->setPen(QPen("magenta"));
-    Average_W_Signal = new QwtPlotCurve("I(W)");
+    Average_W_Signal = new QwtPlotCurve("I(ω)");
     Average_W_Signal->setPen(QPen(QColor( 0,179,0 )));
-    Average_2W_Signal = new QwtPlotCurve("I(2W)");
+    Average_2W_Signal = new QwtPlotCurve("I(2ω)");
     Average_2W_Signal->setPen(QPen(QColor( 230,92,0 )));
 
     /* Create the DC, W and 2W plots */
     FFT_DC = new QwtPlotCurve("I(DC)");
-    FFT_W = new QwtPlotCurve("I(W)");
-    FFT_2W = new QwtPlotCurve("I(2W)");
+    FFT_W = new QwtPlotCurve("I(ω)");
+    FFT_2W = new QwtPlotCurve("I(2ω)");
 
     /* Set colors for the plots */
     FFT_DC->setPen(QPen("magenta"));
@@ -161,11 +161,11 @@ void Pol_Plot::plotAverages(bool dataloaded, QVector<double> FFTLfft_DC, QVector
 
     /* DC, W and 2W plots */
     Average_DC_Signal->setSamples(averaged_Signal_time, AverageDC);
-    Average_DC_Signal->setTitle(" I(DC) = " + QString().setNum(AverageDC.last(), 'f', 2) + " ");
+    Average_DC_Signal->setTitle(" Ī(DC) = " + QString().setNum(AverageDC.last(), 'f', 2) + " ");
     Average_W_Signal->setSamples(averaged_Signal_time, AverageW);
-    Average_W_Signal->setTitle(" I(W) = " + QString().setNum(AverageW.last(), 'f', 2) + " ");
+    Average_W_Signal->setTitle(" Ī(ω) = " + QString().setNum(AverageW.last(), 'f', 2) + " ");
     Average_2W_Signal->setSamples(averaged_Signal_time, Average2W);
-    Average_2W_Signal->setTitle(" I(2W) = " + QString().setNum(Average2W.last(), 'f', 2) + " ");
+    Average_2W_Signal->setTitle(" Ī(2ω) = " + QString().setNum(Average2W.last(), 'f', 2) + " ");
 
     /* Whats the maximum time reached on the vector until now? */
     maxXtime = *std::max_element(averaged_Signal_time.begin(), averaged_Signal_time.end());

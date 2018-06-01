@@ -147,47 +147,57 @@ void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFil
     /* Time intervals between measurements */
     double measurementTime = cycleTime - (((longBreak + (2*IntegrationTime*NrSpectra*NrAverages))/3));
 
-    /* Write measurement configuration for each concentration */
-    for(int j = 0 ; j < NConcentrations; j++){
+    /* Set initial time for repetitions in case they are present */
+    int initialTime = 0;
+
+    /* Repeat the scripts when there are repetitions */
+    for(int rep =0; rep < repetition; rep++){
+
+        /* Write measurement configuration for each concentration */
+        for(int j = 0 ; j < NConcentrations; j++){
+
+            /* Measurement cycle time */
+            int mTime = initialTime + measurementTime + (cycleTime * j);
+
+            /* Configuration line */
+            QString line = QString::number(mTime) + ";" ;
+
+            /* If glucose is active call it Concentration 1 or C1 */
+            if(glucoseActive){
+
+                /* Add C1 to the file name */
+                line.append(QString::number(GlucoseConcentration.at(j)) + "C1_");
+
+            }
+
+            /* If Impurity 1 is active call it Concentration 2 or C2 */
+            if(Imp1Active){
+
+                /* Add C2 to the file name */
+                line.append(QString::number(Impurity1Concentration.at(j)) + "C2_");
+            }
+
+            /* If Impurity 2 is active call it Concentration 3 or C3 */
+            if(Imp2Active){
+
+                /* Add C3 to the file name */
+                line.append(QString::number(Impurity2Concentration.at(j)) + "C3_");
+            }
+
+            /* Complete the file name */
+            line = line.append(QString::number(IntegrationTime) + "ms_" + QString::number(Frequency) + "Hz_" + QString::number(j+1));
+
+            /* At end of line */
+            line.append(";\n");
+
+            /* Write in file */
+            fprintf(file, "%s", line.toLatin1().data());
+        }
 
         /* Measurement cycle time */
-        int mTime = measurementTime + (cycleTime * j);
+        initialTime = initialTime + measurementTime + (cycleTime * NConcentrations-1);
 
-        /* Configuration line */
-        QString line = QString::number(mTime) + ";" ;
-
-        /* If glucose is active call it Concentration 1 or C1 */
-        if(glucoseActive){
-
-            /* Add C1 to the file name */
-            line.append(QString::number(GlucoseConcentration.at(j)) + "C1_");
-
-        }
-
-        /* If Impurity 1 is active call it Concentration 2 or C2 */
-        if(Imp1Active){
-
-            /* Add C2 to the file name */
-            line.append(QString::number(Impurity1Concentration.at(j)) + "C2_");
-        }
-
-        /* If Impurity 2 is active call it Concentration 3 or C3 */
-        if(Imp2Active){
-
-            /* Add C3 to the file name */
-            line.append(QString::number(Impurity2Concentration.at(j)) + "C3_");
-        }
-
-        /* Complete the file name */
-        line = line.append(QString::number(IntegrationTime) + "ms_" + QString::number(Frequency) + "Hz_" + QString::number(j+1));
-
-        /* At end of line */
-        line.append(";\n");
-
-        /* Write in file */
-        fprintf(file, "%s", line.toLatin1().data());
     }
-
     /* Close file */
     fclose(file);
     file = nullptr;
@@ -200,20 +210,23 @@ void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFil
  */
 void Pol_configFilesGenerator::writePumpFile(FILE *pumpFile, QString filetype, QVector <double> FlowVector){
 
-    /* Flow Calculation */
-    for(int k =0; k < NConcentrations; k++){
+    /* Repeat the scripts when there are repetitions */
+    for(int rep =0; rep < repetition; rep++){
 
-        /* Write flushing pattern */
+        /* Flow Calculation */
+        for(int k =0; k < NConcentrations; k++){
+
+            /* Write flushing pattern */
+            writeFlushing(pumpFile, filetype);
+
+            /* Write Filling pattern */
+            writeFilling(pumpFile, FlowVector, k);
+
+        }
+
+        /* Write flushing pattern for cleaning the cuvette at the end */
         writeFlushing(pumpFile, filetype);
-
-        /* Write Filling pattern */
-        writeFilling(pumpFile, FlowVector, k);
-
     }
-
-    /* Write flushing pattern for cleaning the cuvette at the end */
-    writeFlushing(pumpFile, filetype);
-
 }
 
 /**

@@ -360,10 +360,10 @@ public:
         doubleSpinBox_intTime->setObjectName(QStringLiteral("doubleSpinBox_intTime"));
         doubleSpinBox_intTime->setMinimumSize(QSize(80, 0));
         doubleSpinBox_intTime->setMaximumSize(QSize(80, 16777215));
-        doubleSpinBox_intTime->setDecimals(1);
+        doubleSpinBox_intTime->setDecimals(2);
         doubleSpinBox_intTime->setMinimum(1);
         doubleSpinBox_intTime->setMaximum(20000);
-        doubleSpinBox_intTime->setSingleStep(0.1);
+        doubleSpinBox_intTime->setSingleStep(0.01);
         doubleSpinBox_intTime->setValue(6);
 
         horizontalLayout_24->addWidget(doubleSpinBox_intTime);
