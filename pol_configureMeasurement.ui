@@ -1206,7 +1206,7 @@
                    <double>0.100000000000000</double>
                   </property>
                   <property name="value">
-                   <double>8.000000000000000</double>
+                   <double>4.000000000000000</double>
                   </property>
                  </widget>
                 </item>
@@ -1447,7 +1447,7 @@
                    <double>0.100000000000000</double>
                   </property>
                   <property name="value">
-                   <double>4.000000000000000</double>
+                   <double>2.000000000000000</double>
                   </property>
                  </widget>
                 </item>
@@ -3506,7 +3506,7 @@
               <item>
                <widget class="QLabel" name="label_timeLabel">
                 <property name="sizePolicy">
-                 <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
@@ -3630,7 +3630,7 @@
               <item>
                <widget class="QLabel" name="label_endTime">
                 <property name="sizePolicy">
-                 <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>

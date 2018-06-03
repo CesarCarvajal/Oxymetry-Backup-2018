@@ -150,7 +150,7 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
 
     /* Initialize variables */
     pathOfData = "";
-    ui->lineEdit_path->setText("Please select a configuration file");
+    ui->lineEdit_path->setText("Select a Path when Loading or Creating a Configuration File");
 
 }
 
@@ -175,7 +175,7 @@ void configurePolMeasure::selectPath(void)
     }
 
     /* Did the user select a new path? */
-    if (pathDataM  != ui->lineEdit_path->text() && !pathDataM.isEmpty() && ui->lineEdit_path->text() != "Please select a configuration file")
+    if (pathDataM  != ui->lineEdit_path->text() && !pathDataM.isEmpty() && ui->lineEdit_path->text() != "Select a Path when Loading or Creating a Configuration Files")
     {
         /* If a new file was loaded, clear all the configuration */
         cleanAll();

@@ -721,7 +721,7 @@ public:
         doubleSpinBox_StockImp1->setDecimals(1);
         doubleSpinBox_StockImp1->setMaximum(1e+6);
         doubleSpinBox_StockImp1->setSingleStep(0.1);
-        doubleSpinBox_StockImp1->setValue(8);
+        doubleSpinBox_StockImp1->setValue(4);
 
         horizontalLayout_12->addWidget(doubleSpinBox_StockImp1);
 
@@ -832,7 +832,7 @@ public:
         doubleSpinBox_MaxImp1->setDecimals(1);
         doubleSpinBox_MaxImp1->setMaximum(1e+6);
         doubleSpinBox_MaxImp1->setSingleStep(0.1);
-        doubleSpinBox_MaxImp1->setValue(4);
+        doubleSpinBox_MaxImp1->setValue(2);
 
         horizontalLayout_6->addWidget(doubleSpinBox_MaxImp1);
 
@@ -1579,8 +1579,8 @@ public:
         timeLayout->setObjectName(QStringLiteral("timeLayout"));
         label_timeLabel = new QLabel(ConfigurationLayout);
         label_timeLabel->setObjectName(QStringLiteral("label_timeLabel"));
-        sizePolicy1.setHeightForWidth(label_timeLabel->sizePolicy().hasHeightForWidth());
-        label_timeLabel->setSizePolicy(sizePolicy1);
+        sizePolicy5.setHeightForWidth(label_timeLabel->sizePolicy().hasHeightForWidth());
+        label_timeLabel->setSizePolicy(sizePolicy5);
         label_timeLabel->setMinimumSize(QSize(100, 0));
         QPalette palette15;
         QBrush brush3(QColor(170, 0, 0, 255));
@@ -1612,8 +1612,8 @@ public:
 
         label_endTime = new QLabel(ConfigurationLayout);
         label_endTime->setObjectName(QStringLiteral("label_endTime"));
-        sizePolicy1.setHeightForWidth(label_endTime->sizePolicy().hasHeightForWidth());
-        label_endTime->setSizePolicy(sizePolicy1);
+        sizePolicy5.setHeightForWidth(label_endTime->sizePolicy().hasHeightForWidth());
+        label_endTime->setSizePolicy(sizePolicy5);
         label_endTime->setMinimumSize(QSize(100, 0));
         QPalette palette17;
         palette17.setBrush(QPalette::Active, QPalette::WindowText, brush);

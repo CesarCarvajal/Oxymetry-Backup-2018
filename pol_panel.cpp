@@ -233,10 +233,10 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
         signalMapper->setMapping(ui->checkBox_AutoSave_Pol, ui->checkBox_AutoSave_Pol);
         signalMapper->setMapping(PolarimetrySpectrometer->ui->lineEdit_name, PolarimetrySpectrometer->ui->lineEdit_name);
         signalMapper->setMapping(ui->label_clearAll, ui->label_clearAll);
-        signalMapper->setMapping(ui->label_raw, ui->label_raw);
-        signalMapper->setMapping(ui->label_compensation, ui->label_compensation);
-        signalMapper->setMapping(ui->label_fftprofile, ui->label_fftprofile);
-        signalMapper->setMapping(ui->label_average, ui->label_average);
+        signalMapper->setMapping(ui->label_hideLiveRaw, ui->label_hideLiveRaw);
+        signalMapper->setMapping(ui->label_HideRatio, ui->label_HideRatio);
+        signalMapper->setMapping(ui->label_HideFFTProfile, ui->label_HideFFTProfile);
+        signalMapper->setMapping(ui->label_HIdeLiveAverage, ui->label_HIdeLiveAverage);
         signalMapper->setMapping(ui->label_prediction, ui->label_prediction);
         signalMapper->setMapping(ui->FFT_label_Pol, ui->FFT_label_Pol);
         signalMapper->setMapping(ui->label_Measurements_Pol, ui->label_Measurements_Pol);
@@ -258,13 +258,13 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     connect(ui->help, SIGNAL(clicked()), this, SLOT(help_Pol()));
     connect(ui->waveToPlotFFT, SIGNAL(clicked()), signalMapper, SLOT(map()));
     connect(ui->label_clearAll, SIGNAL(clicked()), signalMapper, SLOT(map()));
-    connect(ui->label_raw, SIGNAL(clicked()), signalMapper, SLOT(map()));
-    connect(ui->label_compensation, SIGNAL(clicked()), signalMapper, SLOT(map()));
+    connect(ui->label_hideLiveRaw, SIGNAL(clicked()), signalMapper, SLOT(map()));
+    connect(ui->label_HideRatio, SIGNAL(clicked()), signalMapper, SLOT(map()));
     connect(ui->Button_Save_Graphs_Pol, SIGNAL(clicked()), this, SLOT(save_Graph_Pol()));
     connect(ui->button_calibrate, SIGNAL(clicked()), this, SLOT(toggle_Pol_Calibration()));
     connect(ui->button_Pol_ConfigureMeasurement, SIGNAL(clicked()), this, SLOT(conf_Setup_Pol_Measurement()));
-    connect(ui->label_fftprofile, SIGNAL(clicked()), signalMapper, SLOT(map()));
-    connect(ui->label_average, SIGNAL(clicked()), signalMapper, SLOT(map()));
+    connect(ui->label_HideFFTProfile, SIGNAL(clicked()), signalMapper, SLOT(map()));
+    connect(ui->label_HIdeLiveAverage, SIGNAL(clicked()), signalMapper, SLOT(map()));
     connect(ui->label_prediction, SIGNAL(clicked()), signalMapper, SLOT(map()));
     connect(ui->FFT_label_Pol, SIGNAL(clicked()), signalMapper, SLOT(map()));
     connect(ui->label_Measurements_Pol, SIGNAL(clicked()), signalMapper, SLOT(map()));
@@ -1428,6 +1428,16 @@ void PanelPolarimeter::clean_All_Pol(void){
     ui->qwtPlot_Pol_Average->setVisible(true);
     ui->qwtPlot_Pol_Compensation->setVisible(true);
     ui->qwtPlot_Pol_w_2w->setVisible(true);
+    ui->label_raw->setVisible(true);
+    ui->label_average->setVisible(true);
+    ui->label_compensation->setVisible(true);
+    ui->label_fftprofile->setVisible(true);
+    ui->label_RS->setVisible(true);
+    ui->label_HAver->setVisible(true);
+    ui->label_HProf->setVisible(true);
+    ui->label_Rat->setVisible(true);
+    ui->line_rawratio->setVisible(true);
+    ui->line_FFT->setVisible(true);
 
     /* Show current progress bar*/
     ui->currentProgressBar_Pol->setVisible(false);
@@ -1792,84 +1802,109 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
 
     }
     /* The label to show/Hide the plots have been clicked */
-    else if(label == ui->label_raw){
+    else if(label == ui->label_hideLiveRaw){
 
         /* Is the raw data plot visible? */
         if(ui->qwtPlot_Pol->isVisible()){
 
             /* Hide raw data plot if clicked */
             ui->qwtPlot_Pol->setVisible(false);
-            ui->label_raw->setToolTip("Show Raw Signal Plot");
-            ui->label_raw->setText("> Live Raw Signal");
+            ui->label_hideLiveRaw->setToolTip("Show Raw Signal Plot");
+            ui->label_hideLiveRaw->setText(">> Show Live Raw Signal");
+            ui->label_raw->setVisible(false);
+            ui->line_rawratio->setVisible(false);
+            ui->label_RS->setVisible(false);
 
         }else{
 
             /* Show raw data plot again */
             ui->qwtPlot_Pol->setVisible(true);
-            ui->label_raw->setToolTip("Hide Raw Signal Plot");
-            ui->label_raw->setText("< Live Raw Signal");
-
-        }
+            ui->label_hideLiveRaw->setToolTip("Hide Raw Signal Plot");
+            ui->label_hideLiveRaw->setText("<< Hide Live Raw Signal");
+            ui->label_raw->setVisible(true);
+            ui->line_rawratio->setVisible(ui->qwtPlot_Pol_Compensation->isVisible());
+            ui->label_RS->setVisible(true);
+         }
     }
     /* Show/Hide Compensation Plot */
-    else if(label == ui->label_compensation){
+    else if(label == ui->label_HideRatio){
 
         /* Is the Compensation plot visible? */
         if(ui->qwtPlot_Pol_Compensation->isVisible()){
 
             /* Hide Compensation Plot if clicked */
             ui->qwtPlot_Pol_Compensation->setVisible(false);
-            ui->label_compensation->setToolTip("Show Compensation Plot");
-            ui->label_compensation->setText("> Ratio I(W)/I(2W)");
+            ui->label_HideRatio->setToolTip("Show Compensation Plot");
+            ui->label_HideRatio->setText(">> Show Ratio");
+            ui->label_compensation->setVisible(false);
+            ui->line_rawratio->setVisible(false);
+            ui->label_Rat->setVisible(false);
 
         }else{
 
             /* Show Compensation Plot again */
             ui->qwtPlot_Pol_Compensation->setVisible(true);
-            ui->label_compensation->setToolTip("Hide Compensation Plot");
-            ui->label_compensation->setText("< Ratio I(W)/I(2W)");
+            ui->label_HideRatio->setToolTip("Hide Compensation Plot");
+            ui->label_HideRatio->setText("<< Hide Ratio");
+            ui->label_compensation->setVisible(true);
+            ui->line_rawratio->setVisible(ui->qwtPlot_Pol->isVisible());
+            ui->label_Rat->setVisible(true);
+
         }
 
     }
     /* Show/Hide FFT profile Plot */
-    else if(label == ui->label_fftprofile){
+    else if(label == ui->label_HideFFTProfile){
 
         /* Is the FFT profile plot visible? */
         if(ui->qwtPlot_Pol_w_2w->isVisible()){
 
             /* Hide FFT profile plot if clicked */
             ui->qwtPlot_Pol_w_2w->setVisible(false);
-            ui->label_fftprofile->setToolTip("Show FFT Profile Plot");
-            ui->label_fftprofile->setText("> FFT Profile");
+            ui->label_HideFFTProfile->setToolTip("Show FFT Profile Plot");
+            ui->label_HideFFTProfile->setText(">> Show FFT Profile");
+            ui->label_fftprofile->setVisible(false);
+            ui->line_FFT->setVisible(false);
+            ui->label_HProf->setVisible(false);
+
         }else{
 
             /* Show FFT profile plot again */
             ui->qwtPlot_Pol_w_2w->setVisible(true);
-            ui->label_fftprofile->setToolTip("Hide FFT Profile Plot");
-            ui->label_fftprofile->setText("< FFT Profile");
+            ui->label_HideFFTProfile->setToolTip("Hide FFT Profile Plot");
+            ui->label_HideFFTProfile->setText("<< Hide FFT Profile");
+            ui->label_fftprofile->setVisible(true);
+            ui->line_FFT->setVisible(ui->qwtPlot_Pol_Average->isVisible());
+            ui->label_HProf->setVisible(true);
 
         }
 
     }
     /* Show/Hide Average Plot */
-    else if(label == ui->label_average){
+    else if(label == ui->label_HIdeLiveAverage){
 
         /* Is the Average plot visible? */
         if(ui->qwtPlot_Pol_Average->isVisible()){
 
             /* Hide Average plot if clicked */
             ui->qwtPlot_Pol_Average->setVisible(false);
-            ui->label_average->setToolTip("Show Average Signal Plot");
-            ui->label_average->setText("> Live Average Signal");
+            ui->label_HIdeLiveAverage->setToolTip("Show Average Signal Plot");
+            ui->label_HIdeLiveAverage->setText(">> Show Live Average");
+            ui->label_average->setVisible(false);
+            ui->line_FFT->setVisible(false);
+            ui->label_HAver->setVisible(false);
+
         }else{
 
             /* Show  Average plot again */
             ui->qwtPlot_Pol_Average->setVisible(true);
-            ui->label_average->setToolTip("Hide Average Signal Plot");
-            ui->label_average->setText("< Live Average Signal");
+            ui->label_HIdeLiveAverage->setToolTip("Hide Average Signal Plot");
+            ui->label_HIdeLiveAverage->setText("<< Hide Live Average");
+            ui->label_average->setVisible(true);
+            ui->line_FFT->setVisible(ui->qwtPlot_Pol_w_2w->isVisible());
+            ui->label_HAver->setVisible(true);
 
         }
-
     }
     /* Show/Hide Prediction Plot */
     else if(label == ui->label_prediction){
@@ -2013,6 +2048,30 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
             }
             ui->HSpaceX->changeSize(80,5,QSizePolicy::Fixed,QSizePolicy::Fixed);
         }
+    }
+
+    /* Hide Horizontal lines */
+    if(!ui->qwtPlot_Pol->isVisible() && !ui->qwtPlot_Pol_Compensation->isVisible()){
+
+        /* Hide line */
+        ui->line_HLiveRatio->setVisible(false);
+
+    }else{
+
+        /* Show line */
+        ui->line_HLiveRatio->setVisible(true);
+    }
+
+    /* Hide Horizontal lines */
+    if(!ui->qwtPlot_Pol_w_2w->isVisible() && !ui->qwtPlot_Pol_Average->isVisible()){
+
+        /* Hide line */
+        ui->line_HFFTAverage->setVisible(false);
+
+    }else{
+
+        /* Show line */
+        ui->line_HFFTAverage->setVisible(true);
     }
 
     /* Change the Spectrometer name */
@@ -3417,12 +3476,28 @@ void PanelPolarimeter::toggle_Load_Data(void)
         ui->label_totalM->setVisible(false);
         ui->label_remaining->setVisible(false);
         ui->horizontalSpacer_Y->changeSize(20,12,QSizePolicy::Expanding,QSizePolicy::Fixed);
-        ui->qwtPlot_Pol_Prediction->setVisible(false);
         ui->label_RemainingTime->setVisible(false);
+
         ui->qwtPlot_Pol->setVisible(false);
+        ui->label_raw->setVisible(false);
+        ui->label_hideLiveRaw->setText(">> Show Live Raw Signal");
+        ui->line_rawratio->setVisible(false);
+
         ui->qwtPlot_Pol_Average->setVisible(false);
+        ui->label_average->setVisible(false);
+        ui->label_HIdeLiveAverage->setText(">> Show Live Average");
+        ui->line_HLiveRatio->setVisible(false);
+
         ui->qwtPlot_Pol_Compensation->setVisible(true);
+        ui->label_compensation->setVisible(true);
+        ui->label_HideRatio->setText("<< Hide Ratio");
+
         ui->qwtPlot_Pol_w_2w->setVisible(true);
+        ui->label_fftprofile->setVisible(true);
+        ui->label_HideFFTProfile->setText("<< Hide FFT Profile");
+
+        ui->line_HLiveRatio->setVisible(true);
+        ui->line_HFFTAverage->setVisible(true);
 
         /* Show current progress bar*/
         ui->currentProgressBar_Pol->setVisible(false);
@@ -3478,11 +3553,23 @@ void PanelPolarimeter::toggle_Pol_Calibration(void)
         ui->qwtPlot_Pol_Prediction->setVisible(false);
         ui->label_RemainingTime->setVisible(false);
 
-        /* Show needed plots */
+        /* Show starting plots */
         ui->qwtPlot_Pol->setVisible(true);
         ui->qwtPlot_Pol_Average->setVisible(true);
         ui->qwtPlot_Pol_Compensation->setVisible(true);
         ui->qwtPlot_Pol_w_2w->setVisible(true);
+        ui->label_raw->setVisible(true);
+        ui->label_average->setVisible(true);
+        ui->label_compensation->setVisible(true);
+        ui->label_fftprofile->setVisible(true);
+        ui->label_RS->setVisible(true);
+        ui->label_HAver->setVisible(true);
+        ui->label_HProf->setVisible(true);
+        ui->label_Rat->setVisible(true);
+        ui->line_rawratio->setVisible(true);
+        ui->line_FFT->setVisible(true);
+        ui->line_HLiveRatio->setVisible(true);
+        ui->line_HFFTAverage->setVisible(true);
 
         /* Run type calibration with 0: Calibrating */
         run_Polarimetry(0);
@@ -3542,11 +3629,23 @@ void PanelPolarimeter::toggle_Pol_Measurement(void)
             ui->TotalProgressBar_Pol->setVisible(true);
             ui->label_totalM->setVisible(true);
 
-            /* Make all plots visible */
+            /* Show starting plots */
             ui->qwtPlot_Pol->setVisible(true);
             ui->qwtPlot_Pol_Average->setVisible(true);
             ui->qwtPlot_Pol_Compensation->setVisible(true);
             ui->qwtPlot_Pol_w_2w->setVisible(true);
+            ui->label_raw->setVisible(true);
+            ui->label_average->setVisible(true);
+            ui->label_compensation->setVisible(true);
+            ui->label_fftprofile->setVisible(true);
+            ui->label_RS->setVisible(true);
+            ui->label_HAver->setVisible(true);
+            ui->label_HProf->setVisible(true);
+            ui->label_Rat->setVisible(true);
+            ui->line_rawratio->setVisible(true);
+            ui->line_FFT->setVisible(true);
+            ui->line_HLiveRatio->setVisible(true);
+            ui->line_HFFTAverage->setVisible(true);
 
             /* Restart the flag of interrupted measurement */
             Runner->Stopped = false;

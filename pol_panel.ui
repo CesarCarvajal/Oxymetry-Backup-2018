@@ -1085,6 +1085,182 @@
             </attribute>
             <layout class="QVBoxLayout" name="verticalLayout_3">
              <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_7">
+               <item>
+                <spacer name="horizontalSpacer_22">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeType">
+                  <enum>QSizePolicy::Fixed</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>5</width>
+                   <height>7</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_8">
+                 <item>
+                  <widget class="ClickableLabel" name="label_hideLiveRaw">
+                   <property name="minimumSize">
+                    <size>
+                     <width>100</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="font">
+                    <font>
+                     <pointsize>6</pointsize>
+                    </font>
+                   </property>
+                   <property name="cursor">
+                    <cursorShape>PointingHandCursor</cursorShape>
+                   </property>
+                   <property name="toolTip">
+                    <string>Hide live Raw Signal</string>
+                   </property>
+                   <property name="text">
+                    <string>&lt;&lt; Hide Live Raw Signal</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_RS">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_26">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeType">
+                  <enum>QSizePolicy::Fixed</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>2</width>
+                   <height>7</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="Line" name="line_3">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_27">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeType">
+                  <enum>QSizePolicy::Fixed</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>2</width>
+                   <height>7</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_11">
+                 <item>
+                  <widget class="QLabel" name="label_Rat">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="ClickableLabel" name="label_HideRatio">
+                   <property name="minimumSize">
+                    <size>
+                     <width>100</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="font">
+                    <font>
+                     <pointsize>6</pointsize>
+                    </font>
+                   </property>
+                   <property name="cursor">
+                    <cursorShape>PointingHandCursor</cursorShape>
+                   </property>
+                   <property name="toolTip">
+                    <string>Hide Ratio</string>
+                   </property>
+                   <property name="text">
+                    <string>         &lt;&lt; Hide Ratio</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_24">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeType">
+                  <enum>QSizePolicy::Fixed</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>5</width>
+                   <height>7</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="Line" name="line_HLiveRatio">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
               <layout class="QHBoxLayout" name="horizontalLayout_13">
                <item>
                 <spacer name="horizontalSpacer_10">
@@ -1105,7 +1281,7 @@
                <item>
                 <layout class="QVBoxLayout" name="verticalLayout_10">
                  <item>
-                  <widget class="ClickableLabel" name="label_raw">
+                  <widget class="QLabel" name="label_raw">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                      <horstretch>0</horstretch>
@@ -1129,17 +1305,17 @@
                      <pointsize>9</pointsize>
                      <weight>75</weight>
                      <bold>true</bold>
-                     <underline>true</underline>
+                     <underline>false</underline>
                     </font>
                    </property>
                    <property name="cursor">
-                    <cursorShape>PointingHandCursor</cursorShape>
+                    <cursorShape>ArrowCursor</cursorShape>
                    </property>
                    <property name="toolTip">
-                    <string>Hide Raw Signal Plot</string>
+                    <string>Raw Signal Plot</string>
                    </property>
                    <property name="text">
-                    <string>&lt; Live Raw Signal</string>
+                    <string>Live Raw Signal</string>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignCenter</set>
@@ -1240,7 +1416,7 @@
                 </spacer>
                </item>
                <item>
-                <widget class="Line" name="line_9">
+                <widget class="Line" name="line_rawratio">
                  <property name="orientation">
                   <enum>Qt::Vertical</enum>
                  </property>
@@ -1265,23 +1441,23 @@
                <item>
                 <layout class="QVBoxLayout" name="verticalLayout_11">
                  <item>
-                  <widget class="ClickableLabel" name="label_compensation">
+                  <widget class="QLabel" name="label_compensation">
                    <property name="font">
                     <font>
                      <pointsize>9</pointsize>
                      <weight>75</weight>
                      <bold>true</bold>
-                     <underline>true</underline>
+                     <underline>false</underline>
                     </font>
                    </property>
                    <property name="cursor">
-                    <cursorShape>PointingHandCursor</cursorShape>
+                    <cursorShape>ArrowCursor</cursorShape>
                    </property>
                    <property name="toolTip">
-                    <string>Hide Compensation Plot</string>
+                    <string>Compensation Plot</string>
                    </property>
                    <property name="text">
-                    <string>&lt; Ratio I(ω)/I(2ω)</string>
+                    <string>Ratio I(ω)/I(2ω)</string>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignCenter</set>
@@ -1340,7 +1516,7 @@
               </layout>
              </item>
              <item>
-              <widget class="Line" name="line">
+              <widget class="Line" name="line_HLive">
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
                </property>
@@ -1379,17 +1555,17 @@
                      <pointsize>9</pointsize>
                      <weight>75</weight>
                      <bold>true</bold>
-                     <underline>true</underline>
+                     <underline>false</underline>
                     </font>
                    </property>
                    <property name="cursor">
-                    <cursorShape>PointingHandCursor</cursorShape>
+                    <cursorShape>ArrowCursor</cursorShape>
                    </property>
                    <property name="toolTip">
-                    <string>Hide FFT Profile Plot</string>
+                    <string>FFT Profile Plot</string>
                    </property>
                    <property name="text">
-                    <string>&lt; FFT Profile</string>
+                    <string>FFT Profile</string>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignCenter</set>
@@ -1440,7 +1616,7 @@
                 </spacer>
                </item>
                <item>
-                <widget class="Line" name="line_8">
+                <widget class="Line" name="line_FFT">
                  <property name="orientation">
                   <enum>Qt::Vertical</enum>
                  </property>
@@ -1477,17 +1653,17 @@
                      <pointsize>9</pointsize>
                      <weight>75</weight>
                      <bold>true</bold>
-                     <underline>true</underline>
+                     <underline>false</underline>
                     </font>
                    </property>
                    <property name="cursor">
-                    <cursorShape>PointingHandCursor</cursorShape>
+                    <cursorShape>ArrowCursor</cursorShape>
                    </property>
                    <property name="toolTip">
-                    <string>Hide Average Signal Plot</string>
+                    <string>Average Signal Plot</string>
                    </property>
                    <property name="text">
-                    <string>&lt; Live Average Signal</string>
+                    <string>Live Average Signal</string>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignCenter</set>
@@ -1548,6 +1724,170 @@
                   <size>
                    <width>5</width>
                    <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="Line" name="line_HFFTAverage">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_12">
+               <item>
+                <spacer name="horizontalSpacer_16">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeType">
+                  <enum>QSizePolicy::Fixed</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>5</width>
+                   <height>5</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_15">
+                 <item>
+                  <widget class="ClickableLabel" name="label_HideFFTProfile">
+                   <property name="minimumSize">
+                    <size>
+                     <width>100</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="font">
+                    <font>
+                     <pointsize>6</pointsize>
+                    </font>
+                   </property>
+                   <property name="cursor">
+                    <cursorShape>PointingHandCursor</cursorShape>
+                   </property>
+                   <property name="toolTip">
+                    <string>Hide FFT Profile</string>
+                   </property>
+                   <property name="text">
+                    <string>&lt;&lt; Hide FFT Profile</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_HProf">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_21">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeType">
+                  <enum>QSizePolicy::Fixed</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>2</width>
+                   <height>7</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="Line" name="line_9">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_23">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeType">
+                  <enum>QSizePolicy::Fixed</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>2</width>
+                   <height>7</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_14">
+                 <item>
+                  <widget class="QLabel" name="label_HAver">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="ClickableLabel" name="label_HIdeLiveAverage">
+                   <property name="minimumSize">
+                    <size>
+                     <width>100</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="font">
+                    <font>
+                     <pointsize>6</pointsize>
+                    </font>
+                   </property>
+                   <property name="cursor">
+                    <cursorShape>PointingHandCursor</cursorShape>
+                   </property>
+                   <property name="toolTip">
+                    <string>Hide Live Average Signal</string>
+                   </property>
+                   <property name="text">
+                    <string>&lt;&lt; Hide Live Average</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_25">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeType">
+                  <enum>QSizePolicy::Fixed</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>5</width>
+                   <height>7</height>
                   </size>
                  </property>
                 </spacer>
