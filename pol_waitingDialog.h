@@ -51,6 +51,9 @@ public:
     /* Count down seconds */
     int countDown;
 
+    /* Canceled count? */
+    bool cancelCountDown;
+
     /* Run the couter back */
     void setCount(void);
 
@@ -63,6 +66,10 @@ public slots:
     {
         QDialog::activateWindow();
     }
+
+private slots:
+
+    void cancelCount(void);
 
 };
 

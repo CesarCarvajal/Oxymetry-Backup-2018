@@ -43,12 +43,30 @@ WaitingDialog::WaitingDialog(QWidget *parent) :
     /* Set window flags */
     this->setWindowFlags(Qt::Dialog | Qt::WindowStaysOnTopHint | Qt::WindowTitleHint);
 
+    /* Cancel the count down */
+    connect(ui->pushButton_cancel, SIGNAL(clicked()), this, SLOT(cancelCount()));
+
     /* Count the seconds */
     timerS = 0;
+
+    /* Restart cancel flag */
+    cancelCountDown = false;
 
     /* count down */
     countDown = 6;
 
+}
+
+/**
+* @brief  Cancel all
+*/
+void WaitingDialog::cancelCount(void){
+
+    /* Cancel all */
+    cancelCountDown = true;
+
+    /* Close dialog */
+    reject();
 }
 
 /**
@@ -60,7 +78,7 @@ void WaitingDialog::setCount(void){
     timerMS.start();
 
     /* Run until the time is complete or the user cancel the measurement */
-    while(timerS < 7){
+    while(timerS < 7 && !cancelCountDown){
 
         /* Count seconds */
         if(timerMS.elapsed()/1000 > timerS){

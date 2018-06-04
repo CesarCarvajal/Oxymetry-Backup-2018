@@ -185,6 +185,9 @@ private slots:
     /* Change the Integration time manually during calibration */
     void change_Integration_Time_Pol(void);
 
+    /* Show initial plots UI */
+    void showAllPlots();
+
     /* Clean all the configuration, plots, etc */
     void clean_All_Pol(void);
 

@@ -270,6 +270,7 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     connect(ui->label_Measurements_Pol, SIGNAL(clicked()), signalMapper, SLOT(map()));
     connect(ui->label_Save_Pol, SIGNAL(clicked()), signalMapper, SLOT(map()));
     connect(ui->label_hideConf, SIGNAL(clicked()), signalMapper, SLOT(map()));
+    ui->label_hideConf->setStyleSheet("QLabel { color: blue; }");
 
     /* If there are spectrometers connected, allow Polarimetry Measurement or Calibration */
     ui->button_Start_Meas_Pol->setDisabled((!m_NrDevices) ? true : false);
@@ -327,6 +328,9 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     ui->qwtPlot_Pol_Prediction->setYAxis(0.0, 500);
     ui->qwtPlot_Pol_Prediction->setVisible(false);
     ui->label_RemainingTime->setVisible(false);
+
+    /* Show and format all plots */
+    showAllPlots();
 
     /* Are there any spectrometers connected? */
     if (m_NrDevices > 0)
@@ -1424,20 +1428,7 @@ void PanelPolarimeter::clean_All_Pol(void){
     ui->label_RemainingTime->setVisible(false);
 
     /* Show starting plots */
-    ui->qwtPlot_Pol->setVisible(true);
-    ui->qwtPlot_Pol_Average->setVisible(true);
-    ui->qwtPlot_Pol_Compensation->setVisible(true);
-    ui->qwtPlot_Pol_w_2w->setVisible(true);
-    ui->label_raw->setVisible(true);
-    ui->label_average->setVisible(true);
-    ui->label_compensation->setVisible(true);
-    ui->label_fftprofile->setVisible(true);
-    ui->label_RS->setVisible(true);
-    ui->label_HAver->setVisible(true);
-    ui->label_HProf->setVisible(true);
-    ui->label_Rat->setVisible(true);
-    ui->line_rawratio->setVisible(true);
-    ui->line_FFT->setVisible(true);
+    showAllPlots();
 
     /* Show current progress bar*/
     ui->currentProgressBar_Pol->setVisible(false);
@@ -1637,8 +1628,16 @@ void PanelPolarimeter::delay_Pol_Measurements(void){
     /* Start counting */
     dialog.setCount();
 
+    /* If canceled stop the measurement */
+    if(dialog.cancelCountDown){
+
+        /* Abort running polarimetry */
+        stop_Run_Polarimetry();
+
+   }
+
     /* Is there a delay time on the measurement? */
-    if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->startDelay != 0){
+    if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->startDelay != 0 && !dialog.cancelCountDown){
 
         /* Get the actual time and add the delay time */
         ConfigureMeasurement->startTime = QDateTime::currentDateTime().addSecs(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->startDelay);
@@ -1669,7 +1668,8 @@ void PanelPolarimeter::delay_Pol_Measurements(void){
 
                 /* Is the remaining time in hours? */
                 if(ConvertedTime1.at(1)!= "days"){
-                    ui->label_RemainingTime->setText(QDateTime::fromTime_t(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->startDelay - timer).toUTC().toString("hh:mm:ss") + " " + ConvertedTime1.at(1));
+                    ui->label_RemainingTime->setText(QDateTime::fromTime_t(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->startDelay - timer).toUTC().toString("hh:mm:ss")
+                                                     + " " + ConvertedTime1.at(1));
                 }else{
                     /* If it's days, then get the number of days */
                     int nDays = (ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->startDelay - timer)/86400;
@@ -1684,7 +1684,8 @@ void PanelPolarimeter::delay_Pol_Measurements(void){
                 ui->label_RemainingTime->setVisible(true);
 
                 /* Show remaining time in loading bar */
-                ui->currentProgressBar_Pol->setValue(100 - ((ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->startDelay - timer)*100)/ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->startDelay);
+                ui->currentProgressBar_Pol->setValue(100 - ((ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->startDelay - timer)*100)/
+                                                     ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->startDelay);
             }
 
             /* Don't lock the user interface */
@@ -1811,6 +1812,8 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
             ui->qwtPlot_Pol->setVisible(false);
             ui->label_hideLiveRaw->setToolTip("Show Raw Signal Plot");
             ui->label_hideLiveRaw->setText(">> Show Live Raw Signal");
+            ui->label_hideLiveRaw->setFrameShape(QFrame::Box);
+            ui->label_hideLiveRaw->setStyleSheet("QLabel { color: red; }");
             ui->label_raw->setVisible(false);
             ui->line_rawratio->setVisible(false);
             ui->label_RS->setVisible(false);
@@ -1821,10 +1824,12 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
             ui->qwtPlot_Pol->setVisible(true);
             ui->label_hideLiveRaw->setToolTip("Hide Raw Signal Plot");
             ui->label_hideLiveRaw->setText("<< Hide Live Raw Signal");
+            ui->label_hideLiveRaw->setStyleSheet("QLabel { color: blue; }");
+            ui->label_hideLiveRaw->setFrameShape(QFrame::NoFrame);
             ui->label_raw->setVisible(true);
             ui->line_rawratio->setVisible(ui->qwtPlot_Pol_Compensation->isVisible());
             ui->label_RS->setVisible(true);
-         }
+        }
     }
     /* Show/Hide Compensation Plot */
     else if(label == ui->label_HideRatio){
@@ -1835,7 +1840,9 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
             /* Hide Compensation Plot if clicked */
             ui->qwtPlot_Pol_Compensation->setVisible(false);
             ui->label_HideRatio->setToolTip("Show Compensation Plot");
-            ui->label_HideRatio->setText(">> Show Ratio");
+            ui->label_HideRatio->setText(">> Show Ratio I(ω)/I(2ω)");
+            ui->label_HideRatio->setFrameShape(QFrame::Box);
+            ui->label_HideRatio->setStyleSheet("QLabel { color: red; }");
             ui->label_compensation->setVisible(false);
             ui->line_rawratio->setVisible(false);
             ui->label_Rat->setVisible(false);
@@ -1845,7 +1852,9 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
             /* Show Compensation Plot again */
             ui->qwtPlot_Pol_Compensation->setVisible(true);
             ui->label_HideRatio->setToolTip("Hide Compensation Plot");
-            ui->label_HideRatio->setText("<< Hide Ratio");
+            ui->label_HideRatio->setText("<< Hide Ratio I(ω)/I(2ω)");
+            ui->label_HideRatio->setFrameShape(QFrame::NoFrame);
+            ui->label_HideRatio->setStyleSheet("QLabel { color: blue; }");
             ui->label_compensation->setVisible(true);
             ui->line_rawratio->setVisible(ui->qwtPlot_Pol->isVisible());
             ui->label_Rat->setVisible(true);
@@ -1863,6 +1872,8 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
             ui->qwtPlot_Pol_w_2w->setVisible(false);
             ui->label_HideFFTProfile->setToolTip("Show FFT Profile Plot");
             ui->label_HideFFTProfile->setText(">> Show FFT Profile");
+            ui->label_HideFFTProfile->setFrameShape(QFrame::Box);
+            ui->label_HideFFTProfile->setStyleSheet("QLabel { color: red; }");
             ui->label_fftprofile->setVisible(false);
             ui->line_FFT->setVisible(false);
             ui->label_HProf->setVisible(false);
@@ -1873,6 +1884,8 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
             ui->qwtPlot_Pol_w_2w->setVisible(true);
             ui->label_HideFFTProfile->setToolTip("Hide FFT Profile Plot");
             ui->label_HideFFTProfile->setText("<< Hide FFT Profile");
+            ui->label_HideFFTProfile->setFrameShape(QFrame::NoFrame);
+            ui->label_HideFFTProfile->setStyleSheet("QLabel { color: blue; }");
             ui->label_fftprofile->setVisible(true);
             ui->line_FFT->setVisible(ui->qwtPlot_Pol_Average->isVisible());
             ui->label_HProf->setVisible(true);
@@ -1890,6 +1903,8 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
             ui->qwtPlot_Pol_Average->setVisible(false);
             ui->label_HIdeLiveAverage->setToolTip("Show Average Signal Plot");
             ui->label_HIdeLiveAverage->setText(">> Show Live Average");
+            ui->label_HIdeLiveAverage->setFrameShape(QFrame::Box);
+            ui->label_HIdeLiveAverage->setStyleSheet("QLabel { color: red; }");
             ui->label_average->setVisible(false);
             ui->line_FFT->setVisible(false);
             ui->label_HAver->setVisible(false);
@@ -1900,6 +1915,8 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
             ui->qwtPlot_Pol_Average->setVisible(true);
             ui->label_HIdeLiveAverage->setToolTip("Hide Average Signal Plot");
             ui->label_HIdeLiveAverage->setText("<< Hide Live Average");
+            ui->label_HIdeLiveAverage->setFrameShape(QFrame::NoFrame);
+            ui->label_HIdeLiveAverage->setStyleSheet("QLabel { color: blue; }");
             ui->label_average->setVisible(true);
             ui->line_FFT->setVisible(ui->qwtPlot_Pol_w_2w->isVisible());
             ui->label_HAver->setVisible(true);
@@ -1989,8 +2006,11 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
         if(ui->list_devices_Pol->isVisible()){
 
             /* Change label to show lateral panel */
-            ui->label_hideConf->setText("Show >>");
-            ui->label_hideConf->setMinimumWidth(40);
+            ui->label_hideConf->setText("Show Panel >>");
+            ui->label_hideConf->setFrameShape(QFrame::Box);
+            ui->label_hideConf->setMinimumWidth(80);
+            ui->label_hideConf->setStyleSheet("QLabel { color: red; }");
+            ui->label_hideConf->setToolTip("Show Lateral Panel");
 
             /* Hide the lateral panel items if clicked */
             ui->label_Set_Spec_Pol->hide();
@@ -2021,7 +2041,10 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
 
             /* Now the user can hide the lateral panel */
             ui->label_hideConf->setText("<< Hide Panel");
-            ui->label_hideConf->setMinimumWidth(290);
+            ui->label_hideConf->setMinimumWidth(300);
+            ui->label_hideConf->setStyleSheet("QLabel { color: blue; }");
+            ui->label_hideConf->setFrameShape(QFrame::NoFrame);
+            ui->label_hideConf->setToolTip("Hide Lateral Panel");
 
             /* Show the lateral panel again */
             ui->label_Set_Spec_Pol->show();
@@ -2046,7 +2069,7 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
                 ui->label_Save_Pol->show();
                 ui->checkBox_AutoSave_Pol_Raw->show();
             }
-            ui->HSpaceX->changeSize(80,5,QSizePolicy::Fixed,QSizePolicy::Fixed);
+            ui->HSpaceX->changeSize(60,5,QSizePolicy::Fixed,QSizePolicy::Fixed);
         }
     }
 
@@ -3150,16 +3173,12 @@ void PanelPolarimeter::setConfiguration(void){
     /* Prevent user from editing the cells */
     ui->Table_Measurements_Pol->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
-    /* Adjust table widget */
-    ui->Table_Measurements_Pol->setColumnWidth(0, 25);
-    ui->Table_Measurements_Pol->setColumnWidth(1, 90);
-    ui->Table_Measurements_Pol->setColumnWidth(2, 110);
-
     /* Zero row count of measurement list */
     ui->Table_Measurements_Pol->setRowCount(0);
 
     /*  Count rows */
     int rowcounter = 0;
+    int repetitions = 1;
 
     unsigned int i = 0;
 
@@ -3189,7 +3208,22 @@ void PanelPolarimeter::setConfiguration(void){
 
         /* Create label for measurement number */
         QLabel *ntn = new QLabel();
-        ntn->setText(QString::number(rowcounter));
+        /* Are there repetitions? */
+        if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->repetition > 1){
+            ntn->setText("R" + QString::number(repetitions) + " - " + QString::number(rowcounter));
+
+            /* Adjust table widget */
+            ui->Table_Measurements_Pol->setColumnWidth(0, 45);
+            ui->Table_Measurements_Pol->setColumnWidth(1, 80);
+            ui->Table_Measurements_Pol->setColumnWidth(2, 100);
+        }else{
+            ntn->setText(QString::number(rowcounter));
+
+            /* Adjust table widget */
+            ui->Table_Measurements_Pol->setColumnWidth(0, 25);
+            ui->Table_Measurements_Pol->setColumnWidth(1, 90);
+            ui->Table_Measurements_Pol->setColumnWidth(2, 110);
+        }
         ntn->setStyleSheet("QLabel { margin-left: 2px; }");
         ui->Table_Measurements_Pol->setCellWidget(i, 0, ntn);
 
@@ -3231,6 +3265,7 @@ void PanelPolarimeter::setConfiguration(void){
         /* Are there repetitions? */
         if((i+1) % (unsigned int) ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->NConcentrations == 0){
             rowcounter = 0;
+            repetitions = repetitions + 1;
         }
     }
 
@@ -3266,7 +3301,7 @@ void PanelPolarimeter::setConfiguration(void){
     updateTabs();
 
     /* Update information bar */
-    ui->info->setText("Configuration ready...");
+    ui->info->setText("Configuration ready... Please Set Pumps Software");
 
 }
 
@@ -3481,20 +3516,28 @@ void PanelPolarimeter::toggle_Load_Data(void)
         ui->qwtPlot_Pol->setVisible(false);
         ui->label_raw->setVisible(false);
         ui->label_hideLiveRaw->setText(">> Show Live Raw Signal");
+        ui->label_hideLiveRaw->setFrameShape(QFrame::Box);
+        ui->label_hideLiveRaw->setStyleSheet("QLabel { color: red; }");
         ui->line_rawratio->setVisible(false);
 
         ui->qwtPlot_Pol_Average->setVisible(false);
         ui->label_average->setVisible(false);
         ui->label_HIdeLiveAverage->setText(">> Show Live Average");
+        ui->label_HIdeLiveAverage->setFrameShape(QFrame::Box);
+        ui->label_HIdeLiveAverage->setStyleSheet("QLabel { color: red; }");
         ui->line_HLiveRatio->setVisible(false);
 
         ui->qwtPlot_Pol_Compensation->setVisible(true);
         ui->label_compensation->setVisible(true);
-        ui->label_HideRatio->setText("<< Hide Ratio");
+        ui->label_HideRatio->setText("<< Hide Ratio I(ω)/I(2ω)");
+        ui->label_HideRatio->setFrameShape(QFrame::NoFrame);
+        ui->label_HideRatio->setStyleSheet("QLabel { color: blue; }");
 
         ui->qwtPlot_Pol_w_2w->setVisible(true);
         ui->label_fftprofile->setVisible(true);
         ui->label_HideFFTProfile->setText("<< Hide FFT Profile");
+        ui->label_HideFFTProfile->setFrameShape(QFrame::NoFrame);
+        ui->label_HideFFTProfile->setStyleSheet("QLabel { color: blue; }");
 
         ui->line_HLiveRatio->setVisible(true);
         ui->line_HFFTAverage->setVisible(true);
@@ -3554,22 +3597,7 @@ void PanelPolarimeter::toggle_Pol_Calibration(void)
         ui->label_RemainingTime->setVisible(false);
 
         /* Show starting plots */
-        ui->qwtPlot_Pol->setVisible(true);
-        ui->qwtPlot_Pol_Average->setVisible(true);
-        ui->qwtPlot_Pol_Compensation->setVisible(true);
-        ui->qwtPlot_Pol_w_2w->setVisible(true);
-        ui->label_raw->setVisible(true);
-        ui->label_average->setVisible(true);
-        ui->label_compensation->setVisible(true);
-        ui->label_fftprofile->setVisible(true);
-        ui->label_RS->setVisible(true);
-        ui->label_HAver->setVisible(true);
-        ui->label_HProf->setVisible(true);
-        ui->label_Rat->setVisible(true);
-        ui->line_rawratio->setVisible(true);
-        ui->line_FFT->setVisible(true);
-        ui->line_HLiveRatio->setVisible(true);
-        ui->line_HFFTAverage->setVisible(true);
+        showAllPlots();
 
         /* Run type calibration with 0: Calibrating */
         run_Polarimetry(0);
@@ -3630,22 +3658,7 @@ void PanelPolarimeter::toggle_Pol_Measurement(void)
             ui->label_totalM->setVisible(true);
 
             /* Show starting plots */
-            ui->qwtPlot_Pol->setVisible(true);
-            ui->qwtPlot_Pol_Average->setVisible(true);
-            ui->qwtPlot_Pol_Compensation->setVisible(true);
-            ui->qwtPlot_Pol_w_2w->setVisible(true);
-            ui->label_raw->setVisible(true);
-            ui->label_average->setVisible(true);
-            ui->label_compensation->setVisible(true);
-            ui->label_fftprofile->setVisible(true);
-            ui->label_RS->setVisible(true);
-            ui->label_HAver->setVisible(true);
-            ui->label_HProf->setVisible(true);
-            ui->label_Rat->setVisible(true);
-            ui->line_rawratio->setVisible(true);
-            ui->line_FFT->setVisible(true);
-            ui->line_HLiveRatio->setVisible(true);
-            ui->line_HFFTAverage->setVisible(true);
+            showAllPlots();
 
             /* Restart the flag of interrupted measurement */
             Runner->Stopped = false;
@@ -3790,6 +3803,42 @@ void PanelPolarimeter::write_To_File(FILE *file, double *a_pSpectrum, int WParam
         }
         fprintf(file, "\n");
     }
+}
+
+/**
+ * @brief Show All the initial UI of plots
+ */
+void PanelPolarimeter::showAllPlots() {
+
+    ui->qwtPlot_Pol->setVisible(true);
+    ui->qwtPlot_Pol_Average->setVisible(true);
+    ui->qwtPlot_Pol_Compensation->setVisible(true);
+    ui->qwtPlot_Pol_w_2w->setVisible(true);
+    ui->label_raw->setVisible(true);
+    ui->label_average->setVisible(true);
+    ui->label_compensation->setVisible(true);
+    ui->label_fftprofile->setVisible(true);
+    ui->label_RS->setVisible(true);
+    ui->label_HAver->setVisible(true);
+    ui->label_HProf->setVisible(true);
+    ui->label_Rat->setVisible(true);
+    ui->line_rawratio->setVisible(true);
+    ui->line_FFT->setVisible(true);
+    ui->line_HLiveRatio->setVisible(true);
+    ui->line_HFFTAverage->setVisible(true);
+    ui->label_HideFFTProfile->setText("<< Hide FFT Profile");
+    ui->label_HideFFTProfile->setStyleSheet("QLabel { color: blue; }");
+    ui->label_HideFFTProfile->setFrameShape(QFrame::NoFrame);
+    ui->label_HIdeLiveAverage->setText("<< Hide Live Average");
+    ui->label_HIdeLiveAverage->setStyleSheet("QLabel { color: blue; }");
+    ui->label_HIdeLiveAverage->setFrameShape(QFrame::NoFrame);
+    ui->label_hideLiveRaw->setText("<< Hide Live Raw Signal");
+    ui->label_hideLiveRaw->setStyleSheet("QLabel { color: blue; }");
+    ui->label_hideLiveRaw->setFrameShape(QFrame::NoFrame);
+    ui->label_HideRatio->setText("<< Hide Ratio I(ω)/I(2ω)");
+    ui->label_HideRatio->setStyleSheet("QLabel { color: blue; }");
+    ui->label_HideRatio->setFrameShape(QFrame::NoFrame);
+
 }
 
 /**

@@ -151,7 +151,7 @@ void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFil
     int initialTime = 0;
 
     /* Repeat the scripts when there are repetitions */
-    for(int rep =0; rep < repetition; rep++){
+    for(int rep =1; rep <= repetition; rep++){
 
         /* Write measurement configuration for each concentration */
         for(int j = 0 ; j < NConcentrations; j++){
@@ -185,7 +185,7 @@ void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFil
             }
 
             /* Complete the file name */
-            line = line.append(QString::number(IntegrationTime) + "ms_" + QString::number(Frequency) + "Hz_" + QString::number(j+1));
+            line = line.append(QString::number(IntegrationTime) + "ms_" + QString::number(Frequency) + "Hz_" + QString::number(j+1) + "_R" + QString::number(rep));
 
             /* At end of line */
             line.append(";\n");
