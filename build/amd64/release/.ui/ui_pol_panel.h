@@ -1038,7 +1038,7 @@ public:
         horizontalLayout_5->setObjectName(QStringLiteral("horizontalLayout_5"));
         button_AnalizeData = new QPushButton(PanelPolarimeter);
         button_AnalizeData->setObjectName(QStringLiteral("button_AnalizeData"));
-        button_AnalizeData->setEnabled(false);
+        button_AnalizeData->setEnabled(true);
         button_AnalizeData->setMinimumSize(QSize(120, 30));
         button_AnalizeData->setMaximumSize(QSize(120, 30));
         QIcon icon3;

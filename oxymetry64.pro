@@ -71,7 +71,8 @@ SOURCES += \
     pol_configFilesGenerator.cpp \
     pol_set_wavelength_ranges.cpp \
     pol_changeWaveOrFreq.cpp \
-    pol_waitingDialog.cpp
+    pol_waitingDialog.cpp \
+    pol_analizeData.cpp
 
 HEADERS += \
     application.h \
@@ -117,7 +118,8 @@ HEADERS += \
     pol_configFilesGenerator.h \
     pol_set_wavelength_ranges.h \
     pol_changeWaveOrFreq.h \
-    pol_waitingDialog.h
+    pol_waitingDialog.h \
+    pol_analizeData.h
 
 FORMS += \
     initial_setup.ui \
@@ -146,7 +148,8 @@ FORMS += \
     pol_panel.ui \
     pol_set_wavelength_ranges.ui \
     pol_changeWaveOrFreq.ui \
-    pol_waitingDialog.ui
+    pol_waitingDialog.ui \
+    pol_AnalizeData.ui
 
 DISTFILES += \
     oxymetry.rc

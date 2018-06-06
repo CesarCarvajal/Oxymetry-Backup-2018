@@ -239,6 +239,9 @@ private slots:
     /* Configuration of Measurements for Polarimeter */
     void conf_Setup_Pol_Measurement(void);
 
+    /* Select the data to be analized */
+    void select_Analize_Pol_Measurement(void);
+
     /* The user wants to calibrate before to start the measurement */
     void toggle_Pol_Calibration(void);
 

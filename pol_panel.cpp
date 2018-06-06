@@ -62,6 +62,7 @@
 #include "pol_measurements.h"
 #include "pol_waitingDialog.h"
 #include "ui_pol_ConfigureMeasurement.h"
+#include "pol_analizeData.h"
 
 /* Panel stuff */
 #include "panel_change_averages.h"
@@ -263,6 +264,7 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     connect(ui->Button_Save_Graphs_Pol, SIGNAL(clicked()), this, SLOT(save_Graph_Pol()));
     connect(ui->button_calibrate, SIGNAL(clicked()), this, SLOT(toggle_Pol_Calibration()));
     connect(ui->button_Pol_ConfigureMeasurement, SIGNAL(clicked()), this, SLOT(conf_Setup_Pol_Measurement()));
+    connect(ui->button_AnalizeData, SIGNAL(clicked()), this, SLOT(select_Analize_Pol_Measurement()));
     connect(ui->label_HideFFTProfile, SIGNAL(clicked()), signalMapper, SLOT(map()));
     connect(ui->label_HIdeLiveAverage, SIGNAL(clicked()), signalMapper, SLOT(map()));
     connect(ui->label_prediction, SIGNAL(clicked()), signalMapper, SLOT(map()));
@@ -661,7 +663,11 @@ void PanelPolarimeter::adjust_Run_End(short int typeRunn){
 
         /* Set progress bars to 100 percent */
         ui->currentProgressBar_Pol->setValue(0);
+        ui->currentProgressBar_Pol->hide();
         ui->TotalProgressBar_Pol->setValue(0);
+        ui->TotalProgressBar_Pol->hide();
+        ui->label_remaining->hide();
+        ui->label_RemainingTime->hide();
 
         /* If the Measurement is done by no more entries, then just stop the measurement */
         stop_Run_Polarimetry();
@@ -3067,6 +3073,8 @@ void PanelPolarimeter::run_Polarimetry(short int runType) {
  */
 void PanelPolarimeter::save_Graph_Pol(void) {
 
+    QString oldstatus = ui->info->text();
+
     /* Update information bar */
     ui->info->setText("Saving graphs to file...");
 
@@ -3093,7 +3101,7 @@ void PanelPolarimeter::save_Graph_Pol(void) {
     }
 
     /* Update information bar */
-    ui->info->setText("");
+    ui->info->setText(oldstatus);
 }
 
 /**
@@ -3810,6 +3818,7 @@ void PanelPolarimeter::write_To_File(FILE *file, double *a_pSpectrum, int WParam
  */
 void PanelPolarimeter::showAllPlots() {
 
+    /* Hide or Show plot items */
     ui->qwtPlot_Pol->setVisible(true);
     ui->qwtPlot_Pol_Average->setVisible(true);
     ui->qwtPlot_Pol_Compensation->setVisible(true);
@@ -3838,6 +3847,17 @@ void PanelPolarimeter::showAllPlots() {
     ui->label_HideRatio->setText("<< Hide Ratio I(ω)/I(2ω)");
     ui->label_HideRatio->setStyleSheet("QLabel { color: blue; }");
     ui->label_HideRatio->setFrameShape(QFrame::NoFrame);
+
+}
+
+/**
+ * @brief Show the Analize data dialog
+ */
+void PanelPolarimeter::select_Analize_Pol_Measurement() {
+
+    selectAnalizeData *DataSelector = new selectAnalizeData();
+
+    DataSelector->exec();
 
 }
 

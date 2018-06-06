@@ -184,8 +184,14 @@ void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFil
                 line.append(QString::number(Impurity2Concentration.at(j)) + "C3_");
             }
 
-            /* Complete the file name */
-            line = line.append(QString::number(IntegrationTime) + "ms_" + QString::number(Frequency) + "Hz_" + QString::number(j+1) + "_R" + QString::number(rep));
+            /* If there are repetitions then change the name */
+            if(rep > 1){
+                /* Complete the file name */
+                line = line.append(QString::number(IntegrationTime) + "ms_" + QString::number(Frequency) + "Hz_" + QString::number(j+1) + "_R" + QString::number(rep));
+            }else{
+                /* Complete the file name */
+                line = line.append(QString::number(IntegrationTime) + "ms_" + QString::number(Frequency) + "Hz_" + QString::number(j+1));
+            }
 
             /* At end of line */
             line.append(";\n");

@@ -243,13 +243,13 @@ public:
     {
         if (configurePolMeasure->objectName().isEmpty())
             configurePolMeasure->setObjectName(QStringLiteral("configurePolMeasure"));
-        configurePolMeasure->resize(922, 700);
+        configurePolMeasure->resize(922, 790);
         QSizePolicy sizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(configurePolMeasure->sizePolicy().hasHeightForWidth());
         configurePolMeasure->setSizePolicy(sizePolicy);
-        configurePolMeasure->setMinimumSize(QSize(922, 700));
+        configurePolMeasure->setMinimumSize(QSize(0, 0));
         gridLayout = new QGridLayout(configurePolMeasure);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         gridLayout->setSizeConstraint(QLayout::SetDefaultConstraint);
