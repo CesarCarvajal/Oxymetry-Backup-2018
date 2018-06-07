@@ -23,6 +23,7 @@
 #include <QDialog>
 #include <QWidget>
 #include <QSignalMapper>
+#include <QFileInfo>
 
 /* Internal includes */
 
@@ -50,6 +51,15 @@ private:
     /* Own signal mapper for buttons and labels in configuration window */
     QSignalMapper *signalMapperC;
 
+    /* File information for saving data of measurements */
+    QFileInfo dataPath;
+
+    /* Files for calibration */
+    QStringList FFTFilesCalibration, FFTFilesValidation;
+
+    /* How many repetitions are there?  */
+    int repetitions;
+
 public:
 
     /* Destructor */
@@ -62,6 +72,22 @@ private slots:
 
     /* Handle click events */
     void handleClickEvent(QWidget *widget);
+
+    /* Select files path */
+    void selectPath(void);
+
+    /* Sort files */
+    QStringList sortFiles(QStringList List);
+
+    /* Add files to the lists */
+    void addFilesToList(void);
+
+    /* Find repetitions */
+    void findRepetitions(void);
+
+    /* Clean lists */
+    void cleanList(void);
+
 
 };
 

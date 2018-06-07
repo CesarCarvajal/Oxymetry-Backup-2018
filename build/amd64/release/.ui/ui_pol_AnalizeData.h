@@ -19,6 +19,7 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
 #include <QtWidgets/QListWidget>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
@@ -43,18 +44,21 @@ public:
     QRadioButton *radiobutton_selectData;
     QWidget *SelectFiles;
     QVBoxLayout *verticalLayout_fileconf;
+    QHBoxLayout *repetitionManualLayout;
+    QLabel *label_repselec;
+    QSpinBox *spinBox_repselec;
+    QSpacerItem *horizontalSpacer_10;
     QGridLayout *gridLayout_2;
     QVBoxLayout *verticalLayout_3;
     QLabel *label;
     QSpacerItem *verticalSpacer;
-    QListWidget *listWidget;
+    QListWidget *listWidget_Calibration;
     QVBoxLayout *verticalLayout_8;
     QLabel *label_2;
     QSpacerItem *verticalSpacer_2;
-    QListWidget *listWidget_2;
+    QListWidget *listWidget_Validation;
     QSpacerItem *horizontalSpacer_4;
     ClickableLabel *label_restart;
-    QFrame *line_6;
     QHBoxLayout *horizontalLayout_3;
     QSpacerItem *horizontalSpacer_3;
     QRadioButton *radiobutton_selectSet;
@@ -70,6 +74,11 @@ public:
     QSpinBox *spinBox_calSet;
     QSpacerItem *horizontalSpacer_7;
     QSpacerItem *horizontalSpacer_5;
+    QFrame *line;
+    QSpacerItem *verticalSpacer_5;
+    QHBoxLayout *horizontalLayout;
+    QLabel *label_currentPath;
+    QLineEdit *lineEdit_currentDataPath;
     QSpacerItem *verticalSpacer_4;
     QHBoxLayout *horizontalLayout_9;
     QPushButton *pushButton_cancel;
@@ -83,7 +92,7 @@ public:
     {
         if (selectAnalizeData->objectName().isEmpty())
             selectAnalizeData->setObjectName(QStringLiteral("selectAnalizeData"));
-        selectAnalizeData->resize(573, 487);
+        selectAnalizeData->resize(672, 657);
         QSizePolicy sizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -143,7 +152,7 @@ public:
         SelectFiles = new QWidget(selectAnalizeData);
         SelectFiles->setObjectName(QStringLiteral("SelectFiles"));
         SelectFiles->setEnabled(true);
-        QSizePolicy sizePolicy1(QSizePolicy::Minimum, QSizePolicy::Preferred);
+        QSizePolicy sizePolicy1(QSizePolicy::Minimum, QSizePolicy::Expanding);
         sizePolicy1.setHorizontalStretch(0);
         sizePolicy1.setVerticalStretch(0);
         sizePolicy1.setHeightForWidth(SelectFiles->sizePolicy().hasHeightForWidth());
@@ -151,6 +160,32 @@ public:
         SelectFiles->setMinimumSize(QSize(0, 0));
         verticalLayout_fileconf = new QVBoxLayout(SelectFiles);
         verticalLayout_fileconf->setObjectName(QStringLiteral("verticalLayout_fileconf"));
+        repetitionManualLayout = new QHBoxLayout();
+        repetitionManualLayout->setObjectName(QStringLiteral("repetitionManualLayout"));
+        label_repselec = new QLabel(SelectFiles);
+        label_repselec->setObjectName(QStringLiteral("label_repselec"));
+        label_repselec->setMinimumSize(QSize(100, 0));
+        label_repselec->setMaximumSize(QSize(100, 16777215));
+
+        repetitionManualLayout->addWidget(label_repselec);
+
+        spinBox_repselec = new QSpinBox(SelectFiles);
+        spinBox_repselec->setObjectName(QStringLiteral("spinBox_repselec"));
+        spinBox_repselec->setMinimumSize(QSize(100, 0));
+        spinBox_repselec->setMaximumSize(QSize(100, 16777215));
+        spinBox_repselec->setMinimum(1);
+        spinBox_repselec->setMaximum(1000);
+        spinBox_repselec->setValue(1);
+
+        repetitionManualLayout->addWidget(spinBox_repselec);
+
+        horizontalSpacer_10 = new QSpacerItem(40, 1, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        repetitionManualLayout->addItem(horizontalSpacer_10);
+
+
+        verticalLayout_fileconf->addLayout(repetitionManualLayout);
+
         gridLayout_2 = new QGridLayout();
         gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
         verticalLayout_3 = new QVBoxLayout();
@@ -165,10 +200,22 @@ public:
 
         verticalLayout_3->addItem(verticalSpacer);
 
-        listWidget = new QListWidget(SelectFiles);
-        listWidget->setObjectName(QStringLiteral("listWidget"));
+        listWidget_Calibration = new QListWidget(SelectFiles);
+        listWidget_Calibration->setObjectName(QStringLiteral("listWidget_Calibration"));
+        listWidget_Calibration->setMinimumSize(QSize(0, 300));
+        listWidget_Calibration->viewport()->setProperty("cursor", QVariant(QCursor(Qt::PointingHandCursor)));
+        listWidget_Calibration->setFrameShape(QFrame::StyledPanel);
+        listWidget_Calibration->setFrameShadow(QFrame::Sunken);
+        listWidget_Calibration->setLineWidth(1);
+        listWidget_Calibration->setMidLineWidth(0);
+        listWidget_Calibration->setEditTriggers(QAbstractItemView::SelectedClicked);
+        listWidget_Calibration->setDragEnabled(false);
+        listWidget_Calibration->setDefaultDropAction(Qt::MoveAction);
+        listWidget_Calibration->setMovement(QListView::Static);
+        listWidget_Calibration->setSpacing(2);
+        listWidget_Calibration->setSelectionRectVisible(true);
 
-        verticalLayout_3->addWidget(listWidget);
+        verticalLayout_3->addWidget(listWidget_Calibration);
 
 
         gridLayout_2->addLayout(verticalLayout_3, 0, 0, 1, 1);
@@ -185,11 +232,13 @@ public:
 
         verticalLayout_8->addItem(verticalSpacer_2);
 
-        listWidget_2 = new QListWidget(SelectFiles);
-        listWidget_2->setObjectName(QStringLiteral("listWidget_2"));
-        listWidget_2->setEnabled(true);
+        listWidget_Validation = new QListWidget(SelectFiles);
+        listWidget_Validation->setObjectName(QStringLiteral("listWidget_Validation"));
+        listWidget_Validation->setEnabled(true);
+        listWidget_Validation->setMinimumSize(QSize(0, 300));
+        listWidget_Validation->viewport()->setProperty("cursor", QVariant(QCursor(Qt::PointingHandCursor)));
 
-        verticalLayout_8->addWidget(listWidget_2);
+        verticalLayout_8->addWidget(listWidget_Validation);
 
 
         gridLayout_2->addLayout(verticalLayout_8, 0, 2, 1, 1);
@@ -213,18 +262,6 @@ public:
 
 
         verticalLayout->addWidget(SelectFiles);
-
-        line_6 = new QFrame(selectAnalizeData);
-        line_6->setObjectName(QStringLiteral("line_6"));
-        QSizePolicy sizePolicy2(QSizePolicy::Preferred, QSizePolicy::Fixed);
-        sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(0);
-        sizePolicy2.setHeightForWidth(line_6->sizePolicy().hasHeightForWidth());
-        line_6->setSizePolicy(sizePolicy2);
-        line_6->setFrameShape(QFrame::HLine);
-        line_6->setFrameShadow(QFrame::Sunken);
-
-        verticalLayout->addWidget(line_6);
 
         horizontalLayout_3 = new QHBoxLayout();
         horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
@@ -308,7 +345,45 @@ public:
 
         verticalLayout->addWidget(SelectSet);
 
-        verticalSpacer_4 = new QSpacerItem(20, 13, QSizePolicy::Minimum, QSizePolicy::Expanding);
+        line = new QFrame(selectAnalizeData);
+        line->setObjectName(QStringLiteral("line"));
+        line->setFrameShape(QFrame::HLine);
+        line->setFrameShadow(QFrame::Sunken);
+
+        verticalLayout->addWidget(line);
+
+        verticalSpacer_5 = new QSpacerItem(20, 15, QSizePolicy::Minimum, QSizePolicy::Fixed);
+
+        verticalLayout->addItem(verticalSpacer_5);
+
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
+        label_currentPath = new QLabel(selectAnalizeData);
+        label_currentPath->setObjectName(QStringLiteral("label_currentPath"));
+        label_currentPath->setMinimumSize(QSize(100, 0));
+        label_currentPath->setMaximumSize(QSize(100, 16777215));
+        QPalette palette;
+        QBrush brush(QColor(0, 85, 0, 255));
+        brush.setStyle(Qt::SolidPattern);
+        palette.setBrush(QPalette::Active, QPalette::WindowText, brush);
+        palette.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
+        QBrush brush1(QColor(120, 120, 120, 255));
+        brush1.setStyle(Qt::SolidPattern);
+        palette.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        label_currentPath->setPalette(palette);
+
+        horizontalLayout->addWidget(label_currentPath);
+
+        lineEdit_currentDataPath = new QLineEdit(selectAnalizeData);
+        lineEdit_currentDataPath->setObjectName(QStringLiteral("lineEdit_currentDataPath"));
+        lineEdit_currentDataPath->setReadOnly(true);
+
+        horizontalLayout->addWidget(lineEdit_currentDataPath);
+
+
+        verticalLayout->addLayout(horizontalLayout);
+
+        verticalSpacer_4 = new QSpacerItem(20, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         verticalLayout->addItem(verticalSpacer_4);
 
@@ -316,6 +391,9 @@ public:
         horizontalLayout_9->setObjectName(QStringLiteral("horizontalLayout_9"));
         pushButton_cancel = new QPushButton(selectAnalizeData);
         pushButton_cancel->setObjectName(QStringLiteral("pushButton_cancel"));
+        QSizePolicy sizePolicy2(QSizePolicy::Preferred, QSizePolicy::Fixed);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
         sizePolicy2.setHeightForWidth(pushButton_cancel->sizePolicy().hasHeightForWidth());
         pushButton_cancel->setSizePolicy(sizePolicy2);
         pushButton_cancel->setMinimumSize(QSize(150, 30));
@@ -375,12 +453,15 @@ public:
         selectAnalizeData->setWindowTitle(QApplication::translate("selectAnalizeData", "Data Analizer", Q_NULLPTR));
         label_18->setText(QApplication::translate("selectAnalizeData", "Data Analysis", Q_NULLPTR));
         radiobutton_selectData->setText(QApplication::translate("selectAnalizeData", "Select Calibration and Validation Data:", Q_NULLPTR));
+        label_repselec->setText(QApplication::translate("selectAnalizeData", "Select Repetition:", Q_NULLPTR));
         label->setText(QApplication::translate("selectAnalizeData", "Calibration Data:", Q_NULLPTR));
         label_2->setText(QApplication::translate("selectAnalizeData", "Validation Data:", Q_NULLPTR));
         label_restart->setText(QApplication::translate("selectAnalizeData", "Restart", Q_NULLPTR));
         radiobutton_selectSet->setText(QApplication::translate("selectAnalizeData", "Select a Set of Data or Repetition as Calibration and Validation", Q_NULLPTR));
         label_3->setText(QApplication::translate("selectAnalizeData", "Validation Set:", Q_NULLPTR));
         label_4->setText(QApplication::translate("selectAnalizeData", "Calibration Set:", Q_NULLPTR));
+        label_currentPath->setText(QApplication::translate("selectAnalizeData", "Current Data Path:", Q_NULLPTR));
+        lineEdit_currentDataPath->setText(QApplication::translate("selectAnalizeData", "Please Select a FFT Data Files Path", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         pushButton_cancel->setToolTip(QApplication::translate("selectAnalizeData", "Cancel Data Analysis", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP

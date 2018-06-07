@@ -149,7 +149,6 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     ui->timeEdit_timeLabel->hide();
 
     /* Initialize variables */
-    pathOfData = "";
     ui->lineEdit_path->setText("Select a Path when Loading or Creating a Configuration File");
 
 }

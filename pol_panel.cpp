@@ -707,6 +707,7 @@ void PanelPolarimeter::adjust_Run_Start(short int typeRun){
 
     /* Disable buttons and labels when running polarimetry */
     ui->button_LoadData->setEnabled(false);
+    ui->button_AnalizeData->setEnabled(false);
     ui->button_Start_Meas_Pol->setEnabled(false);
     ui->checkBox_AutoSave_Pol->setEnabled(false);
     ui->checkBox_AutoSave_Pol_Raw->setEnabled(false);
@@ -3434,6 +3435,7 @@ void PanelPolarimeter::stop_Run_Polarimetry(void) {
     ui->checkBox_AutoSave_Pol_Raw->setEnabled(true);
     ui->button_Pol_ConfigureMeasurement->setEnabled(true);
     ui->button_LoadData->setEnabled(true);
+    ui->button_AnalizeData->setEnabled(true);
     ui->label_clearAll->setEnabled(true);
     ui->label_clearAll->setStyleSheet("QLabel { color: blue;}");
 
@@ -3855,8 +3857,10 @@ void PanelPolarimeter::showAllPlots() {
  */
 void PanelPolarimeter::select_Analize_Pol_Measurement() {
 
+    /* Create the analize data window */
     selectAnalizeData *DataSelector = new selectAnalizeData();
 
+    /* Show the window */
     DataSelector->exec();
 
 }

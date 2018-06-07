@@ -65,9 +65,6 @@ public:
     /* Was the pumps software open already? */
     bool openPumps;
 
-    /* Path for the files */
-    QString pathOfData;
-
     /* File information for saving data of measurements */
     QFileInfo pathDataMeasurements;
 
