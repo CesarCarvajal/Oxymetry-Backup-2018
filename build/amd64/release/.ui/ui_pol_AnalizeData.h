@@ -92,7 +92,7 @@ public:
     {
         if (selectAnalizeData->objectName().isEmpty())
             selectAnalizeData->setObjectName(QStringLiteral("selectAnalizeData"));
-        selectAnalizeData->resize(672, 657);
+        selectAnalizeData->resize(672, 685);
         QSizePolicy sizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -208,6 +208,7 @@ public:
         listWidget_Calibration->setFrameShadow(QFrame::Sunken);
         listWidget_Calibration->setLineWidth(1);
         listWidget_Calibration->setMidLineWidth(0);
+        listWidget_Calibration->setAutoScrollMargin(25);
         listWidget_Calibration->setEditTriggers(QAbstractItemView::SelectedClicked);
         listWidget_Calibration->setDragEnabled(false);
         listWidget_Calibration->setDefaultDropAction(Qt::MoveAction);
@@ -425,7 +426,7 @@ public:
 
         pushButton_generate = new QPushButton(selectAnalizeData);
         pushButton_generate->setObjectName(QStringLiteral("pushButton_generate"));
-        pushButton_generate->setEnabled(true);
+        pushButton_generate->setEnabled(false);
         sizePolicy2.setHeightForWidth(pushButton_generate->sizePolicy().hasHeightForWidth());
         pushButton_generate->setSizePolicy(sizePolicy2);
         pushButton_generate->setMinimumSize(QSize(150, 30));

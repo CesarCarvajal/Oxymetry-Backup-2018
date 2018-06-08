@@ -62,6 +62,9 @@ selectAnalizeData::selectAnalizeData(QWidget *parent) :
     /* Connect Button of cancel */
     connect(ui->pushButton_select, SIGNAL(clicked()), this, SLOT(selectPath()));
     connect(ui->pushButton_cancel, SIGNAL(clicked()), this, SLOT(cancel()));
+    connect(ui->spinBox_repselec, SIGNAL(valueChanged(int)), this, SLOT(updateSelectionList()));
+    connect(ui->spinBox_calSet, SIGNAL(valueChanged(int)), this, SLOT(setDataSets()));
+    connect(ui->spinBox_ValSet, SIGNAL(valueChanged(int)), this, SLOT(setDataSets()));
 
     /* Connect signals */
     connect(ui->radiobutton_selectData, SIGNAL(clicked()), signalMapperC, SLOT(map()));
@@ -88,11 +91,36 @@ selectAnalizeData::selectAnalizeData(QWidget *parent) :
     /* Set repetitions in 0 */
     repetitions = 0;
 
+    /* set maximum repetitions */
+    ui->spinBox_repselec->setMaximum(1);
+    ui->spinBox_calSet->setMaximum(1);
+    ui->spinBox_ValSet->setMaximum(1);
+
     /* Hide items */
     ui->label_repselec->hide();
     ui->spinBox_repselec->hide();
 }
 
+
+/**
+ * @brief Update selection list of files according to the selected repetition if there are some
+ */
+void selectAnalizeData::updateSelectionList(void){
+
+    /* Empty vector */
+    FFTFilesCalibration.clear();
+    FFTFilesValidation.clear();
+
+    /* Clean Lists */
+    cleanList();
+
+    /* Add the FFT files to the list */
+    FFTFilesCalibration = Dir.entryList(QStringList() << "*R"+QString::number(ui->spinBox_repselec->value())+".FFT",QDir::Files | QDir::NoSymLinks, QDir::Time | QDir::Reversed);
+
+    /* Add files to the list */
+    addFilesToList();
+
+}
 
 /**
  * @brief Select path for files
@@ -109,7 +137,7 @@ void selectAnalizeData::selectPath(void)
     if(!pathDataM.isEmpty()){
 
         /* Open the Folder */
-        QDir Dir(pathDataM);
+        Dir = QDir(pathDataM);
 
         /* Check that it's not an empty folder */
         if(Dir.isEmpty()){
@@ -129,17 +157,45 @@ void selectAnalizeData::selectPath(void)
         FFTFilesCalibration.clear();
         FFTFilesValidation.clear();
 
+        /* Disable button to analyze */
+        ui->pushButton_generate->setEnabled(false);
+
         /* Clean Lists */
         cleanList();
 
         /* Find if there are repetitions */
         findRepetitions();
 
+        /* If there are repetitions */
+        if(repetitions > 0){
+            /* Add the FFT files to the list */
+            FFTFilesCalibration = Dir.entryList(QStringList() << "*R1.FFT",QDir::Files | QDir::NoSymLinks, QDir::Time | QDir::Reversed);
+        }else{
+            /* Add the FFT files to the list */
+            FFTFilesCalibration = Dir.entryList(QStringList() << "*.FFT",QDir::Files | QDir::NoSymLinks, QDir::Time | QDir::Reversed);
+        }
+
+        /* If there aren't calibration files */
+        if(FFTFilesCalibration.isEmpty()){
+
+            /* Show message if its empty */
+            showCritical("No FFT data files found in this directory, please select a folder with FFT data", "");
+            return;
+        }
+
         /* Add initial files to the list */
         addFilesToList();
 
-    }
+        /* If the selection of data is enabled */
+        if(ui->radiobutton_selectSet->isChecked()){
 
+            /* Add the FFT files to the list */
+            setDataSets();
+
+            /* Disable button to analyze */
+            ui->pushButton_generate->setEnabled(true);
+        }
+    }
 }
 
 /**
@@ -149,14 +205,6 @@ void selectAnalizeData::addFilesToList()
 {
     /* Sort Files */
     FFTFilesCalibration = sortFiles(FFTFilesCalibration);
-
-    /* If there aren't calibration files */
-    if(FFTFilesCalibration.isEmpty()){
-
-        /* Show message if its empty */
-        showCritical("No FFT data files found in this directory, please select a folder with FFT data", "");
-        return;
-    }
 
     /* Add items to the list */
     ui->listWidget_Calibration->addItems(FFTFilesCalibration);
@@ -184,6 +232,31 @@ void selectAnalizeData::handleClickEvent(QWidget *widget)
         ui->SelectFiles->setEnabled(ui->radiobutton_selectData->isChecked());
         ui->SelectSet->setEnabled(ui->radiobutton_selectSet->isChecked());
 
+        /* If there is an existing data path then add the data to the lists */
+        if(dataPath.exists()){
+
+            /* Empty vector */
+            FFTFilesCalibration.clear();
+            FFTFilesValidation.clear();
+
+            /* Disable button to analyze */
+            ui->pushButton_generate->setEnabled(false);
+
+            /* Clean Lists */
+            cleanList();
+
+            /* Are there repetitions */
+            if(repetitions > 0){
+                /* Add the FFT files to the list */
+                FFTFilesCalibration = Dir.entryList(QStringList() << "*R"+QString::number(ui->spinBox_repselec->value())+".FFT",QDir::Files | QDir::NoSymLinks, QDir::Time | QDir::Reversed);
+            }else{
+                /* Add the FFT files to the list */
+                FFTFilesCalibration = Dir.entryList(QStringList() << "*.FFT",QDir::Files | QDir::NoSymLinks, QDir::Time | QDir::Reversed);
+            }
+
+            /* Add initial files to the list */
+            addFilesToList();
+        }
     }
 
     /* Check which option is active */
@@ -193,9 +266,15 @@ void selectAnalizeData::handleClickEvent(QWidget *widget)
         ui->SelectFiles->setEnabled(ui->radiobutton_selectData->isChecked());
         ui->SelectSet->setEnabled(ui->radiobutton_selectSet->isChecked());
 
+        /* Empty vector */
+        FFTFilesCalibration.clear();
+        FFTFilesValidation.clear();
+
+        /* Choose data sets for the calibration and validation */
+        setDataSets();
     }
 
-    /* Click in the calibration ot validation list */
+    /* Click in the calibration or validation list */
     if(listItem == ui->listWidget_Calibration || listItem == ui->listWidget_Validation || label == ui->label_restart){
 
         if(listItem == ui->listWidget_Calibration){
@@ -223,6 +302,16 @@ void selectAnalizeData::handleClickEvent(QWidget *widget)
 
     }
 
+    /* Enable analize */
+    if(!FFTFilesCalibration.isEmpty() && !FFTFilesValidation.isEmpty()){
+
+        /* Enable the button to analyze data */
+        ui->pushButton_generate->setEnabled(true);
+    }else{
+
+        /* Disable button to analyze */
+        ui->pushButton_generate->setEnabled(false);
+    }
 }
 
 /**
@@ -249,13 +338,46 @@ QStringList selectAnalizeData::sortFiles(QStringList List)
 }
 
 /**
+ * @brief Set sets of data as calibration or validation
+ */
+void selectAnalizeData::setDataSets(void)
+{
+    /* If there is an existing data path then add the data to the lists */
+    if(dataPath.exists()){
+
+        /* Are there more repetitions */
+        if(repetitions > 0){
+            /* Add the FFT files to the list */
+            FFTFilesCalibration = Dir.entryList(QStringList() << "*R"+QString::number(ui->spinBox_calSet->value())+".FFT",QDir::Files | QDir::NoSymLinks, QDir::Time | QDir::Reversed);
+
+            /* Sort file names */
+            sortFiles(FFTFilesCalibration);
+
+            /* Add the FFT files to the list */
+            FFTFilesValidation = Dir.entryList(QStringList() << "*R"+QString::number(ui->spinBox_ValSet->value())+".FFT",QDir::Files | QDir::NoSymLinks, QDir::Time | QDir::Reversed);
+
+            /* Sort file names */
+            sortFiles(FFTFilesValidation);
+
+        }else{
+
+            /* Add the FFT files to the list */
+            FFTFilesCalibration = Dir.entryList(QStringList() << "*.FFT",QDir::Files | QDir::NoSymLinks, QDir::Time | QDir::Reversed);
+
+            /* Sort file names */
+            sortFiles(FFTFilesCalibration);
+
+            /* Add the FFT files to the list */
+            FFTFilesValidation = FFTFilesCalibration;
+        }
+    }
+}
+
+/**
  * @brief Find Repetitions
  */
 void selectAnalizeData::findRepetitions(void)
 {
-    /* Open the Folder */
-    QDir Dir(dataPath.absoluteFilePath());
-
     /* How many repetitions are there? */
     for(int i = 1; i < 1000; i++){
 
@@ -270,37 +392,32 @@ void selectAnalizeData::findRepetitions(void)
     /* No repetitions found */
     if(repetitions == 0){
 
-        /* Add the FFT files to the list */
-        FFTFilesCalibration = Dir.entryList(QStringList() << "*.FFT",QDir::Files | QDir::NoSymLinks, QDir::Time | QDir::Reversed);
-
-        /* Hide items */
-        ui->label_repselec->hide();
-        ui->spinBox_repselec->hide();
-
         /* Set repetitions */
         repetitions = 0;
 
         /* set maximum repetitions */
         ui->spinBox_repselec->setMaximum(1);
+        ui->spinBox_repselec->setValue(1);
         ui->spinBox_calSet->setMaximum(1);
+        ui->spinBox_calSet->setValue(1);
         ui->spinBox_ValSet->setMaximum(1);
+        ui->spinBox_ValSet->setValue(1);
 
-        return;
+        /* Hide items */
+        ui->label_repselec->hide();
+        ui->spinBox_repselec->hide();
 
+    }else{
+
+        /* Show items */
+        ui->label_repselec->show();
+        ui->spinBox_repselec->show();
+
+        /* set maximum repetitions */
+        ui->spinBox_repselec->setMaximum(repetitions);
+        ui->spinBox_calSet->setMaximum(repetitions);
+        ui->spinBox_ValSet->setMaximum(repetitions);
     }
-
-    /* Show items */
-    ui->label_repselec->show();
-    ui->spinBox_repselec->show();
-
-    /* set maximum repetitions */
-    ui->spinBox_repselec->setMaximum(repetitions);
-    ui->spinBox_calSet->setMaximum(repetitions);
-    ui->spinBox_ValSet->setMaximum(repetitions);
-
-    /* Add the FFT files to the list */
-    FFTFilesCalibration = Dir.entryList(QStringList() << "*R1.FFT",QDir::Files | QDir::NoSymLinks, QDir::Time | QDir::Reversed);
-
 }
 
 /**
@@ -327,8 +444,10 @@ void selectAnalizeData::cleanList(void){
     ui->listWidget_Validation->clear();
 
     /* Sort lists */
-    FFTFilesCalibration = sortFiles(FFTFilesCalibration);
-    FFTFilesValidation = sortFiles(FFTFilesValidation);
+    if(!FFTFilesCalibration.isEmpty()){
+        FFTFilesCalibration = sortFiles(FFTFilesCalibration);
+        FFTFilesValidation = sortFiles(FFTFilesValidation);
+    }
 
     /* Add the new items for calibration */
     ui->listWidget_Calibration->addItems(FFTFilesCalibration);

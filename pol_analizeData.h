@@ -24,6 +24,7 @@
 #include <QWidget>
 #include <QSignalMapper>
 #include <QFileInfo>
+#include <QDir>
 
 /* Internal includes */
 
@@ -54,6 +55,8 @@ private:
     /* File information for saving data of measurements */
     QFileInfo dataPath;
 
+    QDir Dir;
+
     /* Files for calibration */
     QStringList FFTFilesCalibration, FFTFilesValidation;
 
@@ -82,11 +85,17 @@ private slots:
     /* Add files to the lists */
     void addFilesToList(void);
 
+    /* Update list according to the selected repetition */
+    void updateSelectionList(void);
+
     /* Find repetitions */
     void findRepetitions(void);
 
     /* Clean lists */
     void cleanList(void);
+
+    /* Set data sets for calibration and validation */
+    void setDataSets(void);
 
 
 };

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>672</width>
-    <height>657</height>
+    <height>685</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -253,6 +253,9 @@
               </property>
               <property name="midLineWidth">
                <number>0</number>
+              </property>
+              <property name="autoScrollMargin">
+               <number>25</number>
               </property>
               <property name="editTriggers">
                <set>QAbstractItemView::SelectedClicked</set>
@@ -754,7 +757,7 @@
        <item>
         <widget class="QPushButton" name="pushButton_generate">
          <property name="enabled">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">

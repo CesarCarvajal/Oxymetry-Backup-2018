@@ -666,6 +666,7 @@ void PanelPolarimeter::adjust_Run_End(short int typeRunn){
         ui->currentProgressBar_Pol->hide();
         ui->TotalProgressBar_Pol->setValue(0);
         ui->TotalProgressBar_Pol->hide();
+        ui->label_totalM->hide();
         ui->label_remaining->hide();
         ui->label_RemainingTime->hide();
 
@@ -1731,6 +1732,16 @@ void PanelPolarimeter::enable_Polarimeter_Measurement(bool activate)
     ui->button_calibrate->setEnabled(activate);
     ui->button_calibrate->setStyleSheet(activate ? "black" : grayButton);
     ui->button_Pol_ConfigureMeasurement->setEnabled(activate);
+    ui->button_AnalizeData->setEnabled(activate);
+
+    /* Update information bar */
+    if(!activate){
+
+        ui->info->setText("Busy with Preview...");
+    }else{
+
+        ui->info->setText("");
+    }
 
 }
 
