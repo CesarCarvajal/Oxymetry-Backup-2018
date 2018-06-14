@@ -69,6 +69,9 @@ public:
     bool Imp1Active;
     bool Imp2Active;
 
+    /* Normalized counts? */
+    bool normalizedCounts;
+
     /* Start delay */
     double startDelay;
 

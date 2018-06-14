@@ -103,6 +103,9 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     connect(ui->checkBox_Imp1, SIGNAL(clicked()), signalMapperC, SLOT(map()));
     connect(ui->checkBox_Glucose, SIGNAL(clicked()), signalMapperC, SLOT(map()));
 
+    /* Normalize the counts? */
+    connect(ui->checkBox_NormalizeCountsConfig, SIGNAL(clicked()), signalMapperC, SLOT(map()));
+
     /* Pump Flow */
     connect(ui->spinBox_ShortBreak, SIGNAL(valueChanged(int)), this, SLOT(updateConfigurationValues()));
     connect(ui->spinBox_LongBreak, SIGNAL(valueChanged(int)), this, SLOT(updateConfigurationValues()));
@@ -114,6 +117,7 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     signalMapperC->setMapping(ui->checkBox_Imp2, ui->checkBox_Imp2);
     signalMapperC->setMapping(ui->checkBox_Imp1, ui->checkBox_Imp1);
     signalMapperC->setMapping(ui->checkBox_Glucose, ui->checkBox_Glucose);
+    signalMapperC->setMapping(ui->checkBox_NormalizeCountsConfig, ui->checkBox_NormalizeCountsConfig);
 
     /* Connect Button of configuration */
     connect(ui->pushButton_generate, SIGNAL(clicked()), this, SLOT(configurePolarimeter()));
@@ -279,6 +283,13 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
             ui->doubleSpinBox_StockImp2->setValue(ui->doubleSpinBox_MaxImp2->value()*(NumberOfSubstances));
         }
     }
+
+    /* Check the normalization of counts */
+    if(checkBox == ui->checkBox_NormalizeCountsConfig){
+
+        /* Is it checked? */
+        externSoftware->ConfigurationFileGenerator->normalizedCounts = ui->checkBox_NormalizeCountsConfig->isChecked();
+}
 
     /* Update all parameters */
     updateConfigurationValues();
@@ -595,6 +606,9 @@ void configurePolMeasure::GetConfigurationData(void)
     externSoftware->minWavelength = ui->doubleSpinBox_minW->value();
     externSoftware->maxWavelength = ui->doubleSpinBox_maxW->value();
 
+    /* Get normalize counts */
+    externSoftware->ConfigurationFileGenerator->normalizedCounts = ui->checkBox_NormalizeCountsConfig->isChecked();
+
     /* Very long Int Time? */
     if(externSoftware->ConfigurationFileGenerator->IntegrationTime > 200){
 
@@ -863,6 +877,9 @@ void configurePolMeasure::updateForm(void)
     ui->doubleSpinBox_StockImp2->setValue(externSoftware->stockSolutions.at(2));
     /* Repetition minus 1, because 1 measurement means 0 repetitions */
     ui->spinBox_Nrepet->setValue(externSoftware->ConfigurationFileGenerator->repetition - 1);
+
+    /* Update normalized counts */
+    ui->checkBox_NormalizeCountsConfig->setChecked(externSoftware->ConfigurationFileGenerator->normalizedCounts);
 
     /* Update calculable parameters */
     updateConfigurationValues();

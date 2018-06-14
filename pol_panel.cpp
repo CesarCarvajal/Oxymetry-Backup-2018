@@ -106,6 +106,9 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     /* Restart FFT flag */
     isFFTData = true;
 
+    /* Restart the flag for edition of configuration during the calibration */
+    editedConf = false;
+
     /* Default selected spectrometer is the first on the list */
     SpectrometerNumber = 0;
 
@@ -836,6 +839,9 @@ void PanelPolarimeter::adjust_Wavelength_Range(void){
         /* Get and set new range */
         PolarimetrySpectrometer->setWavelengthRange(changeDialog.getMinValue(), changeDialog.getMaxValue());
 
+        /* The value was changed*/
+        editedConf = true;
+
         /* Update the wavelength range */
         update_Wavelength_Range();
     }
@@ -855,6 +861,7 @@ void PanelPolarimeter::adjust_Wavelength_Range(void){
         ConfigureMeasurement->ui->doubleSpinBox_maxW->setValue(PolarimetrySpectrometer->getMaximumWavelength());
         ConfigureMeasurement->updateConfigurationValues();
         ConfigureMeasurement->GetConfigurationData();
+
     }
 
     /* Restart the calibration */
@@ -942,6 +949,9 @@ void PanelPolarimeter::change_Auto_Integration_Time_Pol(void){
     /* If there is a configuration loaded, then change the file names */
     change_File_Name();
 
+    /* The value was changed*/
+    editedConf = true;
+
     /* Restart Y axis of raw data plot */
     Runner->maxRawCounts=-1;
 
@@ -956,6 +966,7 @@ void PanelPolarimeter::change_Auto_Integration_Time_Pol(void){
         ConfigureMeasurement->ui->doubleSpinBox_intTime->setValue(PolarimetrySpectrometer->getIntegrationTime());
         ConfigureMeasurement->updateConfigurationValues();
         ConfigureMeasurement->GetConfigurationData();
+
     }
 
     /* Restart the calibration */
@@ -1020,6 +1031,9 @@ void PanelPolarimeter::change_Integration_Time_Pol(void){
         /* If there is a configuration loaded, then change the file names */
         change_File_Name();
 
+        /* The value was changed*/
+        editedConf = true;
+
         /* Ajust X axis of time plotting */
         adjust_Average_Plot_Time();
 
@@ -1045,6 +1059,7 @@ void PanelPolarimeter::change_Integration_Time_Pol(void){
         ConfigureMeasurement->ui->doubleSpinBox_intTime->setValue(PolarimetrySpectrometer->getIntegrationTime());
         ConfigureMeasurement->updateConfigurationValues();
         ConfigureMeasurement->GetConfigurationData();
+
     }
 
     /* Restart the calibration */
@@ -1150,6 +1165,9 @@ void PanelPolarimeter::change_Frequency_Pol(void){
         ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->Frequency = Freq;
         PolarimetrySpectrometer->setFrequency(Freq);
 
+        /* The value was changed*/
+        editedConf = true;
+
     }
 
     /* Change name of files if there is a configuration loaded */
@@ -1166,6 +1184,7 @@ void PanelPolarimeter::change_Frequency_Pol(void){
         ConfigureMeasurement->ui->spinBox_BFreq->setValue(PolarimetrySpectrometer->getFrequency());
         ConfigureMeasurement->updateConfigurationValues();
         ConfigureMeasurement->GetConfigurationData();
+
     }
 
     /* Restart the calibration */
@@ -1217,6 +1236,9 @@ void PanelPolarimeter::change_Number_Averages_Pol(void){
         /* Save changes on the number of averages */
         ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->NrAverages = numberOfAverages;
         FFTL.NrAverages = numberOfAverages;
+
+        /* The value was changed*/
+        editedConf = true;
 
         /* Ajust X axis of time plotting */
         adjust_Average_Plot_Time();
@@ -1299,6 +1321,9 @@ void PanelPolarimeter::change_Number_Spectra_Pol(void){
         FFTL.NrSpectra = NSpectra;
         ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->NrSpectra = NSpectra;
 
+        /* The value was changed*/
+        editedConf = true;
+
         /* Ajust X axis of time plotting */
         adjust_Average_Plot_Time();
     }
@@ -1317,6 +1342,7 @@ void PanelPolarimeter::change_Number_Spectra_Pol(void){
         ConfigureMeasurement->ui->spinBox_BNSpec->setValue(PolarimetrySpectrometer->getNumberOfSpectra());
         ConfigureMeasurement->updateConfigurationValues();
         ConfigureMeasurement->GetConfigurationData();
+
     }
 
     /* Restart the calibration */
@@ -1642,7 +1668,7 @@ void PanelPolarimeter::delay_Pol_Measurements(void){
         /* Abort running polarimetry */
         stop_Run_Polarimetry();
 
-   }
+    }
 
     /* Is there a delay time on the measurement? */
     if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->startDelay != 0 && !dialog.cancelCountDown){
@@ -2164,26 +2190,40 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
     /* Catch check box event */
     if(Checkbox == PolarimetrySpectrometer->ui->checkBox_normalize && !Runner->doingLiveFFT && Runner->PolCalibrating){
 
-        /* Normalize counts? */
-        FFTL.normalizeCounts = PolarimetrySpectrometer->ui->checkBox_normalize->isChecked();
+        /* Set the normalize counts */
+        ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->normalizedCounts = PolarimetrySpectrometer->ui->checkBox_normalize->isChecked();
 
-        /* Change plots axes */
-        if(FFTL.normalizeCounts){
-
-            /* Change Y axis title */
-            ui->qwtPlot_Pol_Average->setYAxisTitle("Average FFT Intensity (Counts / Second)");
-            ui->qwtPlot_Pol_w_2w->setYAxisTitle("FFT Intensity (Counts / Second)");
-        }
-        else{
-
-            /* Set back Y axes title */
-            ui->qwtPlot_Pol_Average->setYAxisTitle("Average FFT Intensity (Counts)");
-            ui->qwtPlot_Pol_w_2w->setYAxisTitle("FFT Intensity (Counts)");
-        }
+        /* Normalize Counts */
+        normalizeCounts();
     }
 
     /* Emit signal to update changes in preview tab */
     updateTabs();
+}
+
+/**
+ * @brief Normalize the counts
+ */
+void PanelPolarimeter::normalizeCounts(void){
+    /* Normalize counts? */
+    FFTL.normalizeCounts = PolarimetrySpectrometer->ui->checkBox_normalize->isChecked();
+
+    /* Change plots axes */
+    if(FFTL.normalizeCounts){
+
+        /* Change Y axis title */
+        ui->qwtPlot_Pol_Average->setYAxisTitle("Average FFT Intensity (Counts / Second)");
+        ui->qwtPlot_Pol_w_2w->setYAxisTitle("FFT Intensity (Counts / Second)");
+    }
+    else{
+
+        /* Set back Y axes title */
+        ui->qwtPlot_Pol_Average->setYAxisTitle("Average FFT Intensity (Counts)");
+        ui->qwtPlot_Pol_w_2w->setYAxisTitle("FFT Intensity (Counts)");
+    }
+
+    /* The value was changed*/
+    editedConf = true;
 }
 
 /**
@@ -3314,6 +3354,10 @@ void PanelPolarimeter::setConfiguration(void){
     PolarimetrySpectrometer->ui->label_numberOfAverages->setText(QString::number(ptrSpectrometers[SpectrometerNumber]->getNumberOfAverages()));
     FFTL.NrAverages = ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->NrAverages;
 
+    /* Set normalized counts */
+    PolarimetrySpectrometer->ui->checkBox_normalize->setChecked(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->normalizedCounts);
+    normalizeCounts();
+
     /* Select the first row */
     ui->Table_Measurements_Pol->selectRow(0);
 
@@ -3617,6 +3661,9 @@ void PanelPolarimeter::toggle_Pol_Calibration(void)
         ui->qwtPlot_Pol_Prediction->setVisible(false);
         ui->label_RemainingTime->setVisible(false);
 
+        /* Restart flag for edition of configuration during the calibration */
+        editedConf = false;
+
         /* Show starting plots */
         showAllPlots();
 
@@ -3633,7 +3680,7 @@ void PanelPolarimeter::toggle_Pol_Calibration(void)
         ui->currentProgressBar_Pol->setVisible(false);
 
         /* If a configuration was loaded then, get the changes */
-        if(Runner->PolConfigured){
+        if(Runner->PolConfigured && editedConf){
 
             /* Do you want to save the changes */
             if (QMessageBox::Yes == QMessageBox::question(this, "Save Changes", "Would you like to save the changes in the loaded configuration file?",

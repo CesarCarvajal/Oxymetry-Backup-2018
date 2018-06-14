@@ -52,6 +52,9 @@ Pol_configFilesGenerator::Pol_configFilesGenerator()
     Imp1Active = false;
     Imp2Active = false;
 
+    /* Normalizd counts? */
+    normalizedCounts = false;
+
     /* Delay on starting the measurements */
     startDelay = 0;
 

@@ -104,6 +104,9 @@ private:
     /* Start measurement button color */
     QString greenButton = "color: rgb(0,128,0)", RedButton = "color: rgb(250,0,0)", grayButton = "color: rgb(211,211,211)";
 
+    /* The configuration was edited during the calibration?*/
+    bool editedConf;
+
 private:
 
     /* Get current path to executable */
@@ -286,6 +289,9 @@ private slots:
 
     /* Adjust the wavelengths range */
     void adjust_Wavelength_Range(void);
+
+    /* Normalize Counts */
+    void normalizeCounts(void);
 
 public slots:
 

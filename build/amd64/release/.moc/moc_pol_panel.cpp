@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_PanelPolarimeter_t {
-    QByteArrayData data[64];
-    char stringdata0[1067];
+    QByteArrayData data[65];
+    char stringdata0[1083];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -93,8 +93,9 @@ QT_MOC_LITERAL(58, 958, 4), // "Path"
 QT_MOC_LITERAL(59, 963, 22), // "delay_Pol_Measurements"
 QT_MOC_LITERAL(60, 986, 23), // "update_Wavelength_Range"
 QT_MOC_LITERAL(61, 1010, 23), // "adjust_Wavelength_Range"
-QT_MOC_LITERAL(62, 1034, 15), // "enable_Help_Pol"
-QT_MOC_LITERAL(63, 1050, 16) // "setConfiguration"
+QT_MOC_LITERAL(62, 1034, 15), // "normalizeCounts"
+QT_MOC_LITERAL(63, 1050, 15), // "enable_Help_Pol"
+QT_MOC_LITERAL(64, 1066, 16) // "setConfiguration"
 
     },
     "PanelPolarimeter\0updateTabs\0\0"
@@ -126,8 +127,8 @@ QT_MOC_LITERAL(63, 1050, 16) // "setConfiguration"
     "adjust_Measurements_Saving_Folder\0"
     "process_Received_Data_Pol\0Path\0"
     "delay_Pol_Measurements\0update_Wavelength_Range\0"
-    "adjust_Wavelength_Range\0enable_Help_Pol\0"
-    "setConfiguration"
+    "adjust_Wavelength_Range\0normalizeCounts\0"
+    "enable_Help_Pol\0setConfiguration"
 };
 #undef QT_MOC_LITERAL
 
@@ -137,7 +138,7 @@ static const uint qt_meta_data_PanelPolarimeter[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      47,   14, // methods
+      48,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -145,55 +146,56 @@ static const uint qt_meta_data_PanelPolarimeter[] = {
        2,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    0,  249,    2, 0x06 /* Public */,
-       3,    1,  250,    2, 0x06 /* Public */,
+       1,    0,  254,    2, 0x06 /* Public */,
+       3,    1,  255,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       4,    1,  253,    2, 0x08 /* Private */,
-       6,    0,  256,    2, 0x08 /* Private */,
-       7,    0,  257,    2, 0x08 /* Private */,
-       8,    0,  258,    2, 0x08 /* Private */,
-       9,    0,  259,    2, 0x08 /* Private */,
-      10,    0,  260,    2, 0x08 /* Private */,
-      11,    0,  261,    2, 0x08 /* Private */,
-      12,    0,  262,    2, 0x08 /* Private */,
-      13,    0,  263,    2, 0x08 /* Private */,
-      14,    0,  264,    2, 0x08 /* Private */,
-      15,    0,  265,    2, 0x08 /* Private */,
-      16,    0,  266,    2, 0x08 /* Private */,
-      17,    1,  267,    2, 0x08 /* Private */,
-      19,    0,  270,    2, 0x08 /* Private */,
-      20,    0,  271,    2, 0x08 /* Private */,
-      21,    0,  272,    2, 0x08 /* Private */,
-      22,    0,  273,    2, 0x08 /* Private */,
-      23,    0,  274,    2, 0x08 /* Private */,
-      24,    1,  275,    2, 0x08 /* Private */,
-      27,    2,  278,    2, 0x08 /* Private */,
-      30,    0,  283,    2, 0x08 /* Private */,
-      31,    0,  284,    2, 0x08 /* Private */,
-      32,    3,  285,    2, 0x08 /* Private */,
-      37,    0,  292,    2, 0x08 /* Private */,
-      38,    0,  293,    2, 0x08 /* Private */,
-      39,    0,  294,    2, 0x08 /* Private */,
-      40,    0,  295,    2, 0x08 /* Private */,
-      41,    0,  296,    2, 0x08 /* Private */,
-      42,    0,  297,    2, 0x08 /* Private */,
-      43,    1,  298,    2, 0x08 /* Private */,
-      45,    0,  301,    2, 0x08 /* Private */,
-      46,    0,  302,    2, 0x08 /* Private */,
-      47,    0,  303,    2, 0x08 /* Private */,
-      48,    0,  304,    2, 0x08 /* Private */,
-      49,    0,  305,    2, 0x08 /* Private */,
-      50,    0,  306,    2, 0x08 /* Private */,
-      51,    1,  307,    2, 0x08 /* Private */,
-      54,    1,  310,    2, 0x08 /* Private */,
-      56,    0,  313,    2, 0x08 /* Private */,
-      57,    1,  314,    2, 0x08 /* Private */,
-      59,    0,  317,    2, 0x08 /* Private */,
-      60,    0,  318,    2, 0x08 /* Private */,
-      61,    0,  319,    2, 0x08 /* Private */,
-      62,    0,  320,    2, 0x0a /* Public */,
-      63,    0,  321,    2, 0x0a /* Public */,
+       4,    1,  258,    2, 0x08 /* Private */,
+       6,    0,  261,    2, 0x08 /* Private */,
+       7,    0,  262,    2, 0x08 /* Private */,
+       8,    0,  263,    2, 0x08 /* Private */,
+       9,    0,  264,    2, 0x08 /* Private */,
+      10,    0,  265,    2, 0x08 /* Private */,
+      11,    0,  266,    2, 0x08 /* Private */,
+      12,    0,  267,    2, 0x08 /* Private */,
+      13,    0,  268,    2, 0x08 /* Private */,
+      14,    0,  269,    2, 0x08 /* Private */,
+      15,    0,  270,    2, 0x08 /* Private */,
+      16,    0,  271,    2, 0x08 /* Private */,
+      17,    1,  272,    2, 0x08 /* Private */,
+      19,    0,  275,    2, 0x08 /* Private */,
+      20,    0,  276,    2, 0x08 /* Private */,
+      21,    0,  277,    2, 0x08 /* Private */,
+      22,    0,  278,    2, 0x08 /* Private */,
+      23,    0,  279,    2, 0x08 /* Private */,
+      24,    1,  280,    2, 0x08 /* Private */,
+      27,    2,  283,    2, 0x08 /* Private */,
+      30,    0,  288,    2, 0x08 /* Private */,
+      31,    0,  289,    2, 0x08 /* Private */,
+      32,    3,  290,    2, 0x08 /* Private */,
+      37,    0,  297,    2, 0x08 /* Private */,
+      38,    0,  298,    2, 0x08 /* Private */,
+      39,    0,  299,    2, 0x08 /* Private */,
+      40,    0,  300,    2, 0x08 /* Private */,
+      41,    0,  301,    2, 0x08 /* Private */,
+      42,    0,  302,    2, 0x08 /* Private */,
+      43,    1,  303,    2, 0x08 /* Private */,
+      45,    0,  306,    2, 0x08 /* Private */,
+      46,    0,  307,    2, 0x08 /* Private */,
+      47,    0,  308,    2, 0x08 /* Private */,
+      48,    0,  309,    2, 0x08 /* Private */,
+      49,    0,  310,    2, 0x08 /* Private */,
+      50,    0,  311,    2, 0x08 /* Private */,
+      51,    1,  312,    2, 0x08 /* Private */,
+      54,    1,  315,    2, 0x08 /* Private */,
+      56,    0,  318,    2, 0x08 /* Private */,
+      57,    1,  319,    2, 0x08 /* Private */,
+      59,    0,  322,    2, 0x08 /* Private */,
+      60,    0,  323,    2, 0x08 /* Private */,
+      61,    0,  324,    2, 0x08 /* Private */,
+      62,    0,  325,    2, 0x08 /* Private */,
+      63,    0,  326,    2, 0x0a /* Public */,
+      64,    0,  327,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void,
@@ -240,6 +242,7 @@ static const uint qt_meta_data_PanelPolarimeter[] = {
     QMetaType::Void, 0x80000000 | 52,   55,
     QMetaType::Void,
     QMetaType::Void, QMetaType::QString,   58,
+    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -300,8 +303,9 @@ void PanelPolarimeter::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         case 42: _t->delay_Pol_Measurements(); break;
         case 43: _t->update_Wavelength_Range(); break;
         case 44: _t->adjust_Wavelength_Range(); break;
-        case 45: _t->enable_Help_Pol(); break;
-        case 46: _t->setConfiguration(); break;
+        case 45: _t->normalizeCounts(); break;
+        case 46: _t->enable_Help_Pol(); break;
+        case 47: _t->setConfiguration(); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
@@ -360,13 +364,13 @@ int PanelPolarimeter::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 47)
+        if (_id < 48)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 47;
+        _id -= 48;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 47)
+        if (_id < 48)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 47;
+        _id -= 48;
     }
     return _id;
 }

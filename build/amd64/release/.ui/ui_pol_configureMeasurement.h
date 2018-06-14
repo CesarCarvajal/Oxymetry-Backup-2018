@@ -49,7 +49,9 @@ public:
     QHBoxLayout *horizontalLayout_40;
     QSpacerItem *horizontalSpacer_2;
     QHBoxLayout *horizontalLayout_31;
-    QSpacerItem *horizontalSpacer_7;
+    QLabel *label_19;
+    QCheckBox *checkBox_NormalizeCountsConfig;
+    QLabel *label_20;
     QHBoxLayout *horizontalLayout_24;
     QLabel *label_BIntTime;
     QDoubleSpinBox *doubleSpinBox_intTime;
@@ -243,7 +245,7 @@ public:
     {
         if (configurePolMeasure->objectName().isEmpty())
             configurePolMeasure->setObjectName(QStringLiteral("configurePolMeasure"));
-        configurePolMeasure->resize(922, 790);
+        configurePolMeasure->resize(842, 790);
         QSizePolicy sizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -341,9 +343,29 @@ public:
 
         horizontalLayout_31 = new QHBoxLayout();
         horizontalLayout_31->setObjectName(QStringLiteral("horizontalLayout_31"));
-        horizontalSpacer_7 = new QSpacerItem(215, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
+        label_19 = new QLabel(ConfigurationLayout);
+        label_19->setObjectName(QStringLiteral("label_19"));
+        label_19->setMinimumSize(QSize(100, 0));
 
-        horizontalLayout_31->addItem(horizontalSpacer_7);
+        horizontalLayout_31->addWidget(label_19);
+
+        checkBox_NormalizeCountsConfig = new QCheckBox(ConfigurationLayout);
+        checkBox_NormalizeCountsConfig->setObjectName(QStringLiteral("checkBox_NormalizeCountsConfig"));
+        QSizePolicy sizePolicy4(QSizePolicy::Minimum, QSizePolicy::Fixed);
+        sizePolicy4.setHorizontalStretch(0);
+        sizePolicy4.setVerticalStretch(0);
+        sizePolicy4.setHeightForWidth(checkBox_NormalizeCountsConfig->sizePolicy().hasHeightForWidth());
+        checkBox_NormalizeCountsConfig->setSizePolicy(sizePolicy4);
+        checkBox_NormalizeCountsConfig->setMinimumSize(QSize(80, 0));
+        checkBox_NormalizeCountsConfig->setMaximumSize(QSize(80, 16777215));
+
+        horizontalLayout_31->addWidget(checkBox_NormalizeCountsConfig);
+
+        label_20 = new QLabel(ConfigurationLayout);
+        label_20->setObjectName(QStringLiteral("label_20"));
+        label_20->setMinimumSize(QSize(30, 0));
+
+        horizontalLayout_31->addWidget(label_20);
 
 
         gridLayout_2->addLayout(horizontalLayout_31, 3, 2, 1, 1);
@@ -637,9 +659,6 @@ public:
         lineEdit_VolG = new QLineEdit(ConfigurationLayout);
         lineEdit_VolG->setObjectName(QStringLiteral("lineEdit_VolG"));
         lineEdit_VolG->setEnabled(true);
-        QSizePolicy sizePolicy4(QSizePolicy::Minimum, QSizePolicy::Fixed);
-        sizePolicy4.setHorizontalStretch(0);
-        sizePolicy4.setVerticalStretch(0);
         sizePolicy4.setHeightForWidth(lineEdit_VolG->sizePolicy().hasHeightForWidth());
         lineEdit_VolG->setSizePolicy(sizePolicy4);
         lineEdit_VolG->setMinimumSize(QSize(80, 0));
@@ -1835,6 +1854,9 @@ public:
         label_18->setText(QApplication::translate("configurePolMeasure", "Measurement Configuration", Q_NULLPTR));
         label_13->setText(QString());
         label_Spectrometer->setText(QApplication::translate("configurePolMeasure", "Spectrometer:", Q_NULLPTR));
+        label_19->setText(QApplication::translate("configurePolMeasure", "Normalize Counts:", Q_NULLPTR));
+        checkBox_NormalizeCountsConfig->setText(QString());
+        label_20->setText(QString());
 #ifndef QT_NO_TOOLTIP
         label_BIntTime->setToolTip(QApplication::translate("configurePolMeasure", "What's the Integration Time?", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
