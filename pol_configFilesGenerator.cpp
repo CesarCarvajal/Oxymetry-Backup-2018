@@ -106,7 +106,7 @@ void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFil
     FILE *file = fopen(pathFile.toLatin1().data(), "wt");
 
     /* Write in file */
-    fprintf(file, "%s", "Nr_M;Nr_Sp;Int_T;Nr_Av;Freq;MinW;MaxW;Ab_F;Ab_V;N_Ste;S_Break;L_Break;St_Del;C1?;C2?;C3?;mC1;MC1;StC1;mC2;MC2;StC2;mC3;MC3;StC3;Rep;\n");
+    fprintf(file, "%s", "1Nr_M;2Nr_Sp;3Int_T;4Nr_Av;5Freq;6MinW;7MaxW;8Ab_F;9Ab_V;10N_Ste;11S_Break;12L_Break;13St_Del;14C1?;15C2?;16C3?;17mC1;18MC1;19StC1;20mC2;21MC2;22StC2;23mC3;MC3;24StC3;25Rep;26NormC\n");
 
     /* Write all the configuration data */
     QString configurationData = "";
@@ -136,7 +136,8 @@ void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFil
     configurationData.append(QString::number(*std::min_element(Impurity2Concentration.begin(), Impurity2Concentration.end()))+ ";");
     configurationData.append(QString::number(*std::max_element(Impurity2Concentration.begin(), Impurity2Concentration.end()))+ ";");
     configurationData.append(QString::number(StockSolutions.at(2)) + ";");
-    configurationData.append(QString::number(repetition) + "\n");
+    configurationData.append(QString::number(repetition) + ";");
+    configurationData.append(QString::number(normalizedCounts) + "\n");
 
     /* Write in file */
     fprintf(file, "%s", configurationData.toLatin1().data());

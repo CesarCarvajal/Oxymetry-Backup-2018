@@ -58,7 +58,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Oxymetry 0.6</string>
+    <string>Oxymetry 0.7</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_compiler">
@@ -163,7 +163,28 @@
       <bool>true</bool>
      </property>
      <property name="plainText">
-      <string>Version 0.6.1: (17.01.2018)
+      <string>Version 0.7: (15.06.2018)
++ Zoom of Average signal plot, now the user is able to zoom in the plots.
++ New interface to hide/show plots.
++ The user can now Normalize the measurements in counts per second.
++ New interface for the configuration of the measurements.
++ The configuration information is now saved into a file, which allows the user to load a complete measurement setting.
++ The user can now modify the configuration file during the calibration phase.
++ Now the plots are divided in tabs, which will allow a separation between phases of the measurement.
++ New user interface for the selection of files for validation and calibration called &quot;Analize Data&quot;.
++ More user friendly status bar.
++ The configuration interface now shows more precisely the required time for a measurement, as well as the time of start and end.
++ The user can select a delay in the start of the measurement in the configuration, for example 8 hours of waiting until the measurement starts.
++ The user can change the size of the columns in the Measurement List in order to read the file names more easily.
++ The user can create up to 2 impurities plus the glucose concentration.
++ Loading old data now shows only the needed plots.
++ Now the user has a dialog counting down 5 seconds before the start of the measurements.
++ The average plot shows numerically the average value of the signals.
++ The Maximum DC intensity and it's wavelength are now shown in the FFT plots in the side panel.
+- Plot of Concentration prediction in main plots window. It's now present in a different plots tab.
+* Several bugs fixed during calibration, measurement and configuration.
+
+Version 0.6.1: (17.01.2018)
 
 + Plots and GUI elements selection.
 + GUI elements by demand.

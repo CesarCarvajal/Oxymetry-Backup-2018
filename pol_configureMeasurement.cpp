@@ -371,11 +371,11 @@ void configurePolMeasure::loadConfiguration(void)
     /* Clear lists */
     cleanAll();
 
-    /* Check format of configuration file; we need at least 5 semicolons per line */
-    if (wordList[0].count(QLatin1Char(';')) != 25)
+    /* Check format of configuration file; we need at least 26 semicolons per line */
+    if (wordList[0].count(QLatin1Char(';')) != 26)
     {
         /* Show message */
-        showWarning("Malformed configuration file!", "");
+        showWarning("Malformed configuration file. Please check the file version. It should contain 26 configuration values or 25 semicolons", "");
         configured = false;
         return;
     }
@@ -429,7 +429,8 @@ void configurePolMeasure::loadConfiguration(void)
         if (i > 0)
         {
             /* Calculate duration of entry before current entry */
-            double duration = externSoftware->ConfigurationFileGenerator->NrSpectra * externSoftware->ConfigurationFileGenerator->IntegrationTime * externSoftware->ConfigurationFileGenerator->NrAverages;
+            double duration = externSoftware->ConfigurationFileGenerator->NrSpectra * externSoftware->ConfigurationFileGenerator->IntegrationTime
+                    * externSoftware->ConfigurationFileGenerator->NrAverages;
 
             /* Check if there's a time overlap between last and current entry */
             if ((timePoint[i - 1] + duration) > timePoint[i])
@@ -486,6 +487,8 @@ void configurePolMeasure::getConfigurationFromFile(QString data)
 
     /* If loading from file then get all the values, otherwise it's not necessary and save time */
     if(loadingConfigurationFromFile){
+
+        /* Load information from file */
         externSoftware->ConfigurationFileGenerator->absoluteFlow = dataList.at(7).toDouble();
         externSoftware->ConfigurationFileGenerator->absVol = dataList.at(8).toInt();
         externSoftware->ConfigurationFileGenerator->NSteps = dataList.at(9).toInt();
@@ -505,14 +508,18 @@ void configurePolMeasure::getConfigurationFromFile(QString data)
         externSoftware->maxConcentrations.replace(2, dataList.at(23).toDouble());
         externSoftware->stockSolutions.replace(2, dataList.at(24).toDouble());
         externSoftware->ConfigurationFileGenerator->repetition = dataList.at(25).toInt();
+        externSoftware->ConfigurationFileGenerator->normalizedCounts = dataList.at(26).toInt();
 
-        externSoftware->ConfigurationFileGenerator->fillRefill = (((externSoftware->ConfigurationFileGenerator->absVol/externSoftware->ConfigurationFileGenerator->absoluteFlow)*60) / externSoftware->ConfigurationFileGenerator->NSteps)*1000;
-        externSoftware->ConfigurationFileGenerator->NumberOfSubstances = externSoftware->ConfigurationFileGenerator->glucoseActive + externSoftware->ConfigurationFileGenerator->Imp1Active + externSoftware->ConfigurationFileGenerator->Imp2Active;
+        /* Calculate some parameters according to the loaded information */
+        externSoftware->ConfigurationFileGenerator->fillRefill = (((externSoftware->ConfigurationFileGenerator->absVol/externSoftware->ConfigurationFileGenerator->absoluteFlow)
+                                                                   *60) / externSoftware->ConfigurationFileGenerator->NSteps)*1000;
+
+        externSoftware->ConfigurationFileGenerator->NumberOfSubstances = externSoftware->ConfigurationFileGenerator->glucoseActive +
+                externSoftware->ConfigurationFileGenerator->Imp1Active + externSoftware->ConfigurationFileGenerator->Imp2Active;
 
         externSoftware->GlucoseConcentration.resize(externSoftware->ConfigurationFileGenerator->NConcentrations);
         externSoftware->Impurity1Concentration.resize(externSoftware->ConfigurationFileGenerator->NConcentrations);
         externSoftware->Impurity2Concentration.resize(externSoftware->ConfigurationFileGenerator->NConcentrations);
-
 
     }
 }
@@ -825,7 +832,6 @@ void configurePolMeasure::updateConfigurationValues(void)
         ui->doubleSpinBox_StockImp2->setValue(ui->doubleSpinBox_MaxImp2->value()*(NumberOfSubstances));
     }
 
-
 }
 
 /**
@@ -875,6 +881,7 @@ void configurePolMeasure::updateForm(void)
     ui->doubleSpinBox_StockGlucose->setValue(externSoftware->stockSolutions.at(0));
     ui->doubleSpinBox_StockImp1->setValue(externSoftware->stockSolutions.at(1));
     ui->doubleSpinBox_StockImp2->setValue(externSoftware->stockSolutions.at(2));
+
     /* Repetition minus 1, because 1 measurement means 0 repetitions */
     ui->spinBox_Nrepet->setValue(externSoftware->ConfigurationFileGenerator->repetition - 1);
 
