@@ -606,7 +606,7 @@ void PanelPolarimeter::adjust_Run_End(short int typeRunn){
         int t = 0;
 
         /* Update information bar */
-        ui->info->setText("Finishing Measurements... Please wait");
+        ui->info->setText("Finishing Measurements... Please Wait");
 
         /* Set the stop of the measurement to true, so the long term Measurement can be stopped */
         Runner->setMeasurementRunning(true);
@@ -707,7 +707,6 @@ void PanelPolarimeter::adjust_Run_Start(short int typeRun){
 
     /* Restart delayed stop flags for Calibration */
     Runner->delayedStop = false;
-    Runner->delayStop = false;
 
     /* Disable buttons and labels when running polarimetry */
     ui->button_LoadData->setEnabled(false);
@@ -853,7 +852,7 @@ void PanelPolarimeter::adjust_Wavelength_Range(void){
     ui->currentProgressBar_Pol->setValue(0);
 
     /* Update information bar */
-    ui->info->setText("Setting Spectrometer... Please wait");
+    ui->info->setText("Setting Spectrometer... Please Wait");
 
     /* Update configuration */
     if(ConfigureMeasurement->configured){
@@ -959,7 +958,7 @@ void PanelPolarimeter::change_Auto_Integration_Time_Pol(void){
     ui->currentProgressBar_Pol->setValue(0);
 
     /* Update information bar */
-    ui->info->setText("Setting Spectrometer... Please wait");
+    ui->info->setText("Setting Spectrometer... Please Wait");
 
     /* Update configuration */
     if(ConfigureMeasurement->configured){
@@ -1052,7 +1051,7 @@ void PanelPolarimeter::change_Integration_Time_Pol(void){
     ui->currentProgressBar_Pol->setValue(0);
 
     /* Update information bar */
-    ui->info->setText("Setting Spectrometer... Please wait");
+    ui->info->setText("Setting Spectrometer... Please Wait");
 
     /* Update configuration */
     if(ConfigureMeasurement->configured){
@@ -1177,7 +1176,7 @@ void PanelPolarimeter::change_Frequency_Pol(void){
     ui->currentProgressBar_Pol->setValue(0);
 
     /* Update information bar */
-    ui->info->setText("Setting Spectrometer... Please wait");
+    ui->info->setText("Setting Spectrometer... Please Wait");
 
     /* Update configuration */
     if(ConfigureMeasurement->configured){
@@ -1251,7 +1250,7 @@ void PanelPolarimeter::change_Number_Averages_Pol(void){
     ui->currentProgressBar_Pol->setValue(0);
 
     /* Update information bar */
-    ui->info->setText("Setting Spectrometer... Please wait");
+    ui->info->setText("Setting Spectrometer... Please Wait");
 
     /* Update configuration */
     if(ConfigureMeasurement->configured){
@@ -1335,7 +1334,7 @@ void PanelPolarimeter::change_Number_Spectra_Pol(void){
     ui->currentProgressBar_Pol->setValue(0);
 
     /* Update information bar */
-    ui->info->setText("Setting Spectrometer... Please wait");
+    ui->info->setText("Setting Spectrometer... Please Wait");
 
     /* Update configuration */
     if(ConfigureMeasurement->configured){
@@ -1653,14 +1652,11 @@ void PanelPolarimeter::conf_Setup_Pol_Measurement(void) {
  */
 void PanelPolarimeter::delay_Pol_Measurements(void){
 
-    /* Start the waiting dialog of 5 seconds to press the buttons in the syringe pumps software */
+    /* Start the Waiting dialog of 5 seconds to press the buttons in the syringe pumps software */
     WaitingDialog dialog(this);
 
-    /* Run waiting dialog */
-    dialog.show();
-
-    /* Start counting */
-    dialog.setCount();
+    /* Run Waiting dialog */
+    dialog.run();
 
     /* If canceled stop the measurement */
     if(dialog.cancelCountDown){
@@ -1758,7 +1754,6 @@ void PanelPolarimeter::enable_Polarimeter_Measurement(bool activate)
     ui->button_calibrate->setEnabled(activate);
     ui->button_calibrate->setStyleSheet(activate ? "black" : grayButton);
     ui->button_Pol_ConfigureMeasurement->setEnabled(activate);
-    ui->button_AnalizeData->setEnabled(activate);
 
     /* Update information bar */
     if(!activate){
@@ -2253,7 +2248,7 @@ void PanelPolarimeter::initialize_Calibration(void){
     Runner->setCalibrationRunning(true);
 
     /* Update information bar */
-    ui->info->setText("Initializing Spectrometer... Please wait");
+    ui->info->setText("Initializing Spectrometer... Please Wait");
 
     /* Enable edition of Spectrometer Data until there is no calibration running */
     PolarimetrySpectrometer->enableComponents(true);
@@ -2483,7 +2478,7 @@ void PanelPolarimeter::pol_Calibrate(void){
             Timer::msleep(1);
 
             /* Update information bar */
-            ui->info->setText("Preparing Spectrometer... Please wait");
+            ui->info->setText("Preparing Spectrometer... Please Wait");
         }
     }
 
@@ -2519,13 +2514,15 @@ void PanelPolarimeter::pol_Calibrate(void){
             ptrSpectrometers[SpectrometerNumber]->setIntegrationTime(ptrSpectrometers[SpectrometerNumber]->getIntegrationTime());
             ptrSpectrometers[SpectrometerNumber]->setNumberOfAverages(ptrSpectrometers[SpectrometerNumber]->getNumberOfAverages());
 
+            /* If the system is busy and the user stops the calibration, Wait until it finishes what it's doing and then stop. */
+            if(Runner->delayedStop){
+                return;
+            }
+
             /* Prepare StoreToRAM measurement */
             ptrSpectrometers[SpectrometerNumber]->forceStoreToRAM(path, ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->NrSpectra);
             if (ptrSpectrometers[SpectrometerNumber]->prepareMeasurement())
             {
-                /* If the system is busy and the user stops the calibration, wait until it finishes what it's doing and then stop. */
-                Runner->delayStop = true;
-
                 /* Start the calibration similar as measuring for long time */
                 ptrSpectrometers[SpectrometerNumber]->startMeasurement(2);
 
@@ -2638,7 +2635,7 @@ void PanelPolarimeter::pol_Measure(void){
         }
     }
 
-    /* During the Measurements if the spectrometer isn't measuring then it's waiting for the pumps */
+    /* During the Measurements if the spectrometer isn't measuring then it's Waiting for the pumps */
     if(!ptrSpectrometers[SpectrometerNumber]->isMeasuring()){
 
         /* Update information bar */
@@ -2836,7 +2833,6 @@ void PanelPolarimeter::process_Received_Data_Pol(QString Path)
     if(Runner->delayedStop){
 
         /* Restart the flags */
-        Runner->delayStop = false;
         Runner->delayedStop = false;
 
     }else{
@@ -2854,7 +2850,7 @@ void PanelPolarimeter::process_Received_Data_Pol(QString Path)
         }
 
         /* Update information bar */
-        ui->info->setText("Preparing Spectrometer... Please wait");
+        ui->info->setText("Preparing Spectrometer... Please Wait");
 
         /* Clear all the plots for a new loaded data */
         clear_Plot();
@@ -2967,6 +2963,11 @@ void PanelPolarimeter::receive_Data_Pol(int WParam, int LParam)
                 /* Loop through number of measurements */
                 for (j = 1; j <= (unsigned int)WParam; j++)
                 {
+                    /* Avoid this if the user stopped the calibration */
+                    if(Runner->delayedStop){
+                        break;
+                    }
+
                     /* Did the current spectrometer in polarimeter sent the data? */
                     if ((LParam == ptrSpectrometers[SpectrometerNumber]->getHandle()) && (ptrSpectrometers[SpectrometerNumber]->getNumberOfPixels() > 0))
                     {
@@ -3365,7 +3366,7 @@ void PanelPolarimeter::setConfiguration(void){
     updateTabs();
 
     /* Update information bar */
-    ui->info->setText("Configuration ready... Please Set Pumps Software");
+    ui->info->setText("Configured... Please Load Files to the Pumps Software");
 
 }
 
@@ -3401,22 +3402,14 @@ void PanelPolarimeter::stop_Run_Polarimetry(void) {
     /* Stop Calibrating */
     if(Runner->PolCalibrating){
 
-        /* If the user decides to stop the Calibration when the system is busy */
-        if(Runner->delayStop)
-        {
-            /* Set the Calibration button disabled since it was already pressed */
-            ui->button_calibrate->setEnabled(false);
+        /* Set the Calibration button disabled since it was already pressed */
+        ui->button_calibrate->setEnabled(false);
 
-            /* Delay the stop of the Calibration */
-            Runner->delayedStop = true;
-
-        }
+        /* Delay the stop of the Calibration */
+        Runner->delayedStop = true;
 
         /* Update information bar */
-        ui->info->setText("Stopping Spectrometer... Please wait");
-
-        /* No polarimetric Calibration running anymore */
-        Runner->setCalibrationRunning(false);
+        ui->info->setText("Busy Stopping the Spectrometer... Please Wait");
 
         /* This temporal file for the calibration has to be removed */
         QFile file(fileInfoCalibration.absoluteFilePath()+"/Pol_tmp.tmp");
@@ -3433,6 +3426,9 @@ void PanelPolarimeter::stop_Run_Polarimetry(void) {
 
         /* Disable edition of Spectrometer Data until there is a Calibration running */
         PolarimetrySpectrometer->enableComponents(false);
+
+        /* No polarimetric Calibration running anymore */
+        Runner->setCalibrationRunning(false);
 
         /* Enable Polarimeter Buttons */
         ui->button_Start_Meas_Pol->setEnabled(true);
@@ -3455,7 +3451,7 @@ void PanelPolarimeter::stop_Run_Polarimetry(void) {
         Runner->Stopped = true;
 
         /* Update information bar */
-        ui->info->setText("Stopping the Measurement... Please wait");
+        ui->info->setText("Stopping the Measurement... Please Wait");
 
         /* No polarimetric Measurement running anymore */
         Runner->setMeasurementRunning(false);
@@ -3476,6 +3472,8 @@ void PanelPolarimeter::stop_Run_Polarimetry(void) {
 
     /* Stop the measurement */
     if(ptrSpectrometers[SpectrometerNumber]->isMeasuring()){
+
+        /* Stop the spectrometer */
         ptrSpectrometers[SpectrometerNumber]->stopMeasurement();
 
         /* Handle events and update UI */

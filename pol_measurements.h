@@ -49,7 +49,7 @@ public:
     bool showRaw;
 
     /* Stop the calibration in the right time */
-    bool delayStop, delayedStop;
+    bool delayedStop;
 
     /* Stop calibration and restart it after any change */
     bool AcceptChanges;

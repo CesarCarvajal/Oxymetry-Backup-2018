@@ -760,7 +760,7 @@ void configurePolMeasure::updateConfigurationValues(void)
         ui->timeEdit_timeLabel->show();
 
         /* Get the actual time and add the delay time */
-        startTime = QDateTime::currentDateTime().addSecs(ui->doubleSpinBox_startDelay->value()*3600);
+        startTime = QDateTime::currentDateTime().addSecs(ui->doubleSpinBox_startDelay->value()*3600+20);
 
         /* Print it in format of h:m:s AM/PM */
         ui->timeEdit_timeLabel->setText(startTime.toString("dddd, d MMMM yyyy, hh:mm ap"));

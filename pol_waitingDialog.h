@@ -54,8 +54,8 @@ public:
     /* Canceled count? */
     bool cancelCountDown;
 
-    /* Run the couter back */
-    void setCount(void);
+    /* Skipped the count? */
+    bool skipCountDown;
 
     /* Destructor */
     ~WaitingDialog(void);
@@ -67,9 +67,19 @@ public slots:
         QDialog::activateWindow();
     }
 
+    /* Run the dialog */
+    void run(void);
+
 private slots:
 
+    /* Cancel count down */
     void cancelCount(void);
+
+    /* Skip the count down */
+    void skipCount(void);
+
+    /* Run the couter back */
+    void setCount(void);
 
 };
 

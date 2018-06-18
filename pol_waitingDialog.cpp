@@ -45,15 +45,17 @@ WaitingDialog::WaitingDialog(QWidget *parent) :
 
     /* Cancel the count down */
     connect(ui->pushButton_cancel, SIGNAL(clicked()), this, SLOT(cancelCount()));
+    connect(ui->pushButton_skip, SIGNAL(clicked()), this, SLOT(skipCount()));
 
     /* Count the seconds */
     timerS = 0;
 
     /* Restart cancel flag */
     cancelCountDown = false;
+    skipCountDown = false;
 
     /* count down */
-    countDown = 6;
+    countDown = 11;
 
 }
 
@@ -70,6 +72,17 @@ void WaitingDialog::cancelCount(void){
 }
 
 /**
+* @brief  skip count
+*/
+void WaitingDialog::skipCount(void){
+
+    /* Cancel all */
+    skipCountDown = true;
+
+}
+
+
+/**
 * @brief  Give the user 5 seconds to press the start button in the syringe pump software
 */
 void WaitingDialog::setCount(void){
@@ -78,7 +91,13 @@ void WaitingDialog::setCount(void){
     timerMS.start();
 
     /* Run until the time is complete or the user cancel the measurement */
-    while(timerS < 7 && !cancelCountDown){
+    while(timerS < 12 && !cancelCountDown){
+
+        /* The user skipped the count down */
+        if(skipCountDown){
+
+            break;
+        }
 
         /* Count seconds */
         if(timerMS.elapsed()/1000 > timerS){
@@ -86,11 +105,11 @@ void WaitingDialog::setCount(void){
             /* Time in seconds */
             timerS = timerS + 1;
 
-            countDown = 6 - timerS;
+            countDown = 11 - timerS;
 
             if(countDown > 0){
-            /* Show the counter back */
-            ui->label_count->setText(QString::number(countDown));
+                /* Show the counter back */
+                ui->label_count->setText(QString::number(countDown));
             }else{
                 ui->label_count->setText("PRESS OK");
             }
@@ -99,6 +118,19 @@ void WaitingDialog::setCount(void){
         /* Don't lock the user interface */
         Application::processEvents();
     }
+
+}
+
+/**
+* @brief  Run dialog
+*/
+void WaitingDialog::run(void){
+
+    /* How dialog */
+    this->show();
+
+    /* Start counting */
+    setCount();
 
     accept();
 

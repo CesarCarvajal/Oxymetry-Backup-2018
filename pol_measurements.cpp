@@ -43,7 +43,6 @@ Pol_Measurements::Pol_Measurements()
     showRaw = false;
 
     /* Not delayed stop */
-    delayStop = false;
     delayedStop = false;
 
     /* Any measurement interrupted */
