@@ -516,7 +516,7 @@ void fft::saveFFTtoFile(QFileInfo FileDetails, bool userSaving)
     }else{
 
         /* Create a Date Folder automatically */
-        QString folder = "FFT Data " + QDate::currentDate().toString("dd MM yyyy");
+        QString folder = "FFT Data";
 
         /* Create Folder */
         QDir(FileDetails.absolutePath()).mkdir(folder);

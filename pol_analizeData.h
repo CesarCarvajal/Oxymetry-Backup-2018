@@ -47,6 +47,12 @@ public:
     /* User interface */
     Ui::selectAnalizeData *ui;
 
+    /* Is this an automatic load after the measurements? */
+    bool automaticLoading;
+
+    /* Data path */
+    QString pathDataM;
+
 private:
 
     /* Own signal mapper for buttons and labels in configuration window */
@@ -55,6 +61,7 @@ private:
     /* File information for saving data of measurements */
     QFileInfo dataPath;
 
+    /* The folder with the FFT files */
     QDir Dir;
 
     /* Files for calibration */
@@ -76,9 +83,6 @@ private slots:
     /* Handle click events */
     void handleClickEvent(QWidget *widget);
 
-    /* Select files path */
-    void selectPath(void);
-
     /* Sort files */
     QStringList sortFiles(QStringList List);
 
@@ -97,6 +101,10 @@ private slots:
     /* Set data sets for calibration and validation */
     void setDataSets(void);
 
+public slots:
+
+    /* Select files path */
+    void selectPath(void);
 
 };
 

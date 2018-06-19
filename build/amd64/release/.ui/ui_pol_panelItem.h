@@ -42,6 +42,7 @@ public:
     QLabel *label_timeBase;
     QSpacerItem *horizontalSpacer_6;
     ClickableLabel *label_autoAdjust;
+    QSpacerItem *horizontalSpacer_13;
     QHBoxLayout *horizontalLayout_5;
     QSpacerItem *horizontalSpacer_5;
     QLabel *label;
@@ -183,6 +184,10 @@ public:
         label_autoAdjust->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
 
         horizontalLayout_7->addWidget(label_autoAdjust);
+
+        horizontalSpacer_13 = new QSpacerItem(5, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        horizontalLayout_7->addItem(horizontalSpacer_13);
 
 
         gridLayout->addLayout(horizontalLayout_7, 1, 2, 1, 1);

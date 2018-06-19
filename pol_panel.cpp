@@ -179,7 +179,8 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
         PolarimetrySpectrometer->setFrequency(7);
 
         /* If the number of averages is greater than the maximum for polarimeter then set the maximum possible */
-        if(ptrSpectrometers[SpectrometerNumber]->getNumberOfAverages() > floor((1000)/(4*PolarimetrySpectrometer->getIntegrationTime()*PolarimetrySpectrometer->getFrequency()))){
+        if(ptrSpectrometers[SpectrometerNumber]->getNumberOfAverages() > floor((1000)/(4*PolarimetrySpectrometer->getIntegrationTime()
+                                                                                       *PolarimetrySpectrometer->getFrequency()))){
             PolarimetrySpectrometer->setNumberOfAverages(floor((1000)/(4*PolarimetrySpectrometer->getIntegrationTime()*PolarimetrySpectrometer->getFrequency())));
         }else{
             PolarimetrySpectrometer->setNumberOfAverages(ptrSpectrometers[SpectrometerNumber]->getNumberOfAverages());
@@ -676,8 +677,18 @@ void PanelPolarimeter::adjust_Run_End(short int typeRunn){
         /* If the Measurement is done by no more entries, then just stop the measurement */
         stop_Run_Polarimetry();
 
-        /* Show prediciton plot - NO YET */
-        ui->Tabs_Plots->setTabEnabled(1, true);
+        /* If the measurement stopped by itself */
+        if(!Runner->Stopped){
+
+            /* Allow the automatic loading of files to the analize data window after the measurement */
+            Runner->automaticData = true;
+
+            /* Open the data analizer window */
+            select_Analize_Pol_Measurement();
+
+            /* Show prediciton plot - NO YET */
+            ui->Tabs_Plots->setTabEnabled(1, true);
+        }
     }
 
     /* Stop the measurements */
@@ -1660,6 +1671,9 @@ void PanelPolarimeter::delay_Pol_Measurements(void){
 
     /* If canceled stop the measurement */
     if(dialog.cancelCountDown){
+
+        /* Measurement canceled */
+        Runner->Stopped = true;
 
         /* Abort running polarimetry */
         stop_Run_Polarimetry();
@@ -3447,9 +3461,6 @@ void PanelPolarimeter::stop_Run_Polarimetry(void) {
     /* Stop Long Term Measurement */
     if(Runner->PolMeasuring){
 
-        /* Measurement interrupted */
-        Runner->Stopped = true;
-
         /* Update information bar */
         ui->info->setText("Stopping the Measurement... Please Wait");
 
@@ -3742,6 +3753,9 @@ void PanelPolarimeter::toggle_Pol_Measurement(void)
     {
         /* Polarimeter Measurement running at the moment. Stop it. */
         stop_Run_Polarimetry();
+
+        /* Measurement interrupted */
+        Runner->Stopped = true;
     }
 }
 
@@ -3915,6 +3929,19 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
 
     /* Create the analize data window */
     selectAnalizeData *DataSelector = new selectAnalizeData();
+
+    /* After the measurement, open the analize data window automatically */
+    if(Runner->automaticData && !fileInfoSaving.absolutePath().isEmpty()){
+
+        /* Set the automatic loading on */
+        DataSelector->automaticLoading = true;
+
+        /* Give the path for the files */
+        DataSelector->pathDataM = fileInfoSaving.absolutePath() + "/FFT Data/";
+
+        /* Select the path from the measured data */
+        DataSelector->selectPath();
+    }
 
     /* Show the window */
     DataSelector->exec();

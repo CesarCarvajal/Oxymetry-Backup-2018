@@ -96,6 +96,9 @@ selectAnalizeData::selectAnalizeData(QWidget *parent) :
     ui->spinBox_calSet->setMaximum(1);
     ui->spinBox_ValSet->setMaximum(1);
 
+    /* Assume no automatic load of data */
+    automaticLoading = false;
+
     /* Hide items */
     ui->label_repselec->hide();
     ui->spinBox_repselec->hide();
@@ -127,11 +130,13 @@ void selectAnalizeData::updateSelectionList(void){
  */
 void selectAnalizeData::selectPath(void)
 {
-    QString pathDataM = "";
+    /* The user wants to analize data */
+    if(!automaticLoading){
 
-    /* Get path of configuration file */
-    pathDataM = QFileDialog::getExistingDirectory(this, tr("Open FFT Files Directory"), "", QFileDialog::ShowDirsOnly
-                                                  | QFileDialog::DontResolveSymlinks);
+        /* Get path of configuration file */
+        pathDataM = QFileDialog::getExistingDirectory(this, tr("Open FFT Files Directory"), "", QFileDialog::ShowDirsOnly
+                                                      | QFileDialog::DontResolveSymlinks);
+    }
 
     /* Is there a path? */
     if(!pathDataM.isEmpty()){

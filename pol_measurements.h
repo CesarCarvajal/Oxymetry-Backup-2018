@@ -54,6 +54,9 @@ public:
     /* Stop calibration and restart it after any change */
     bool AcceptChanges;
 
+    /* Load the data after the measurement */
+    bool automaticData;
+
     /* Show raw signal also when long term measuring running */
     double maxRawCounts;
 

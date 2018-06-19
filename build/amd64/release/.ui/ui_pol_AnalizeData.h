@@ -13,6 +13,7 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGridLayout>
@@ -44,10 +45,19 @@ public:
     QRadioButton *radiobutton_selectData;
     QWidget *SelectFiles;
     QVBoxLayout *verticalLayout_fileconf;
-    QHBoxLayout *repetitionManualLayout;
+    QGridLayout *gridLayout_3;
+    QHBoxLayout *horizontalLayout_4;
+    QCheckBox *checkBox_stepsSelec;
+    QSpinBox *spinBox_stepsSelec;
+    QSpacerItem *horizontalSpacer_12;
+    QHBoxLayout *horizontalLayout_5;
     QLabel *label_repselec;
     QSpinBox *spinBox_repselec;
     QSpacerItem *horizontalSpacer_10;
+    QHBoxLayout *horizontalLayout_8;
+    QCheckBox *checkBox_RandomSort;
+    QSpacerItem *horizontalSpacer_11;
+    QSpacerItem *verticalSpacer_6;
     QGridLayout *gridLayout_2;
     QVBoxLayout *verticalLayout_3;
     QLabel *label;
@@ -92,7 +102,7 @@ public:
     {
         if (selectAnalizeData->objectName().isEmpty())
             selectAnalizeData->setObjectName(QStringLiteral("selectAnalizeData"));
-        selectAnalizeData->resize(672, 685);
+        selectAnalizeData->resize(706, 689);
         QSizePolicy sizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -160,14 +170,42 @@ public:
         SelectFiles->setMinimumSize(QSize(0, 0));
         verticalLayout_fileconf = new QVBoxLayout(SelectFiles);
         verticalLayout_fileconf->setObjectName(QStringLiteral("verticalLayout_fileconf"));
-        repetitionManualLayout = new QHBoxLayout();
-        repetitionManualLayout->setObjectName(QStringLiteral("repetitionManualLayout"));
+        gridLayout_3 = new QGridLayout();
+        gridLayout_3->setObjectName(QStringLiteral("gridLayout_3"));
+        horizontalLayout_4 = new QHBoxLayout();
+        horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
+        checkBox_stepsSelec = new QCheckBox(SelectFiles);
+        checkBox_stepsSelec->setObjectName(QStringLiteral("checkBox_stepsSelec"));
+        checkBox_stepsSelec->setMinimumSize(QSize(100, 0));
+        checkBox_stepsSelec->setMaximumSize(QSize(100, 16777215));
+
+        horizontalLayout_4->addWidget(checkBox_stepsSelec);
+
+        spinBox_stepsSelec = new QSpinBox(SelectFiles);
+        spinBox_stepsSelec->setObjectName(QStringLiteral("spinBox_stepsSelec"));
+        spinBox_stepsSelec->setEnabled(true);
+        spinBox_stepsSelec->setMinimumSize(QSize(100, 0));
+        spinBox_stepsSelec->setMaximumSize(QSize(100, 16777215));
+        spinBox_stepsSelec->setMinimum(2);
+        spinBox_stepsSelec->setMaximum(10000000);
+
+        horizontalLayout_4->addWidget(spinBox_stepsSelec);
+
+        horizontalSpacer_12 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_4->addItem(horizontalSpacer_12);
+
+
+        gridLayout_3->addLayout(horizontalLayout_4, 0, 0, 1, 1);
+
+        horizontalLayout_5 = new QHBoxLayout();
+        horizontalLayout_5->setObjectName(QStringLiteral("horizontalLayout_5"));
         label_repselec = new QLabel(SelectFiles);
         label_repselec->setObjectName(QStringLiteral("label_repselec"));
         label_repselec->setMinimumSize(QSize(100, 0));
         label_repselec->setMaximumSize(QSize(100, 16777215));
 
-        repetitionManualLayout->addWidget(label_repselec);
+        horizontalLayout_5->addWidget(label_repselec);
 
         spinBox_repselec = new QSpinBox(SelectFiles);
         spinBox_repselec->setObjectName(QStringLiteral("spinBox_repselec"));
@@ -177,14 +215,37 @@ public:
         spinBox_repselec->setMaximum(1000);
         spinBox_repselec->setValue(1);
 
-        repetitionManualLayout->addWidget(spinBox_repselec);
+        horizontalLayout_5->addWidget(spinBox_repselec);
 
-        horizontalSpacer_10 = new QSpacerItem(40, 1, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        horizontalSpacer_10 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        repetitionManualLayout->addItem(horizontalSpacer_10);
+        horizontalLayout_5->addItem(horizontalSpacer_10);
 
 
-        verticalLayout_fileconf->addLayout(repetitionManualLayout);
+        gridLayout_3->addLayout(horizontalLayout_5, 0, 2, 1, 1);
+
+        horizontalLayout_8 = new QHBoxLayout();
+        horizontalLayout_8->setObjectName(QStringLiteral("horizontalLayout_8"));
+        checkBox_RandomSort = new QCheckBox(SelectFiles);
+        checkBox_RandomSort->setObjectName(QStringLiteral("checkBox_RandomSort"));
+        checkBox_RandomSort->setMinimumSize(QSize(100, 0));
+        checkBox_RandomSort->setMaximumSize(QSize(100, 16777215));
+
+        horizontalLayout_8->addWidget(checkBox_RandomSort);
+
+        horizontalSpacer_11 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_8->addItem(horizontalSpacer_11);
+
+
+        gridLayout_3->addLayout(horizontalLayout_8, 0, 1, 1, 1);
+
+
+        verticalLayout_fileconf->addLayout(gridLayout_3);
+
+        verticalSpacer_6 = new QSpacerItem(20, 5, QSizePolicy::Minimum, QSizePolicy::Fixed);
+
+        verticalLayout_fileconf->addItem(verticalSpacer_6);
 
         gridLayout_2 = new QGridLayout();
         gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
@@ -454,7 +515,9 @@ public:
         selectAnalizeData->setWindowTitle(QApplication::translate("selectAnalizeData", "Data Analizer", Q_NULLPTR));
         label_18->setText(QApplication::translate("selectAnalizeData", "Data Analysis", Q_NULLPTR));
         radiobutton_selectData->setText(QApplication::translate("selectAnalizeData", "Select Calibration and Validation Data:", Q_NULLPTR));
+        checkBox_stepsSelec->setText(QApplication::translate("selectAnalizeData", "Sort in Steps:", Q_NULLPTR));
         label_repselec->setText(QApplication::translate("selectAnalizeData", "Select Repetition:", Q_NULLPTR));
+        checkBox_RandomSort->setText(QApplication::translate("selectAnalizeData", "Sort Randomly", Q_NULLPTR));
         label->setText(QApplication::translate("selectAnalizeData", "Calibration Data:", Q_NULLPTR));
         label_2->setText(QApplication::translate("selectAnalizeData", "Validation Data:", Q_NULLPTR));
         label_restart->setText(QApplication::translate("selectAnalizeData", "Restart", Q_NULLPTR));

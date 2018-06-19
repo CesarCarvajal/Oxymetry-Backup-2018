@@ -57,6 +57,9 @@ Pol_Measurements::Pol_Measurements()
     /* Temporal File Name for Calibration */
     TempFileName = "Pol_tmp.tmp";
 
+    /* Analize data after the measurement */
+    automaticData = false;
+
     /* General Timer in seconds */
     Timer_In_Seconds=0;
 
