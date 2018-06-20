@@ -273,7 +273,7 @@ private slots:
     void adjust_Run_Start(short int typeRun);
 
     /* Adjust the polarimeter tab running End */
-    void adjust_Run_End(short int typeRunn);
+    void adjust_Run_End(void);
 
     /* Adjust the folder where the measurments data is going to be saved */
     void adjust_Measurements_Saving_Folder(void);

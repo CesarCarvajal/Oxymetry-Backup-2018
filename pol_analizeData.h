@@ -89,6 +89,9 @@ private slots:
     /* Add files to the lists */
     void addFilesToList(void);
 
+    /* Allow the user to load data manually */
+    void allowSelectPath(void);
+
     /* Update list according to the selected repetition */
     void updateSelectionList(void);
 

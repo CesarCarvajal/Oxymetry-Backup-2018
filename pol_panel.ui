@@ -43,7 +43,7 @@
        <item>
         <widget class="ClickableLabel" name="label_hideConf">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -86,7 +86,7 @@
        <item>
         <widget class="QLabel" name="label_Set_Spec_Pol">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -142,12 +142,18 @@
          <property name="minimumSize">
           <size>
            <width>300</width>
-           <height>0</height>
+           <height>180</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
            <width>300</width>
+           <height>221</height>
+          </size>
+         </property>
+         <property name="baseSize">
+          <size>
+           <width>0</width>
            <height>221</height>
           </size>
          </property>
@@ -430,7 +436,7 @@
          <property name="sizeHint" stdset="0">
           <size>
            <width>10</width>
-           <height>5</height>
+           <height>100</height>
           </size>
          </property>
         </spacer>
@@ -438,7 +444,7 @@
        <item>
         <widget class="ClickableLabel" name="label_Measurements_Pol">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -492,21 +498,21 @@
        <item>
         <widget class="QTableWidget" name="Table_Measurements_Pol">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
          <property name="minimumSize">
           <size>
-           <width>0</width>
+           <width>300</width>
            <height>50</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
            <width>300</width>
-           <height>16777215</height>
+           <height>400</height>
           </size>
          </property>
          <property name="toolTip">
@@ -538,6 +544,9 @@
          </property>
          <property name="textElideMode">
           <enum>Qt::ElideRight</enum>
+         </property>
+         <property name="verticalScrollMode">
+          <enum>QAbstractItemView::ScrollPerPixel</enum>
          </property>
          <property name="horizontalScrollMode">
           <enum>QAbstractItemView::ScrollPerItem</enum>
@@ -628,6 +637,12 @@
        </item>
        <item>
         <widget class="ClickableLabel" name="label_Save_Pol">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="maximumSize">
           <size>
            <width>16777215</width>
@@ -698,13 +713,13 @@
            <property name="minimumSize">
             <size>
              <width>110</width>
-             <height>28</height>
+             <height>25</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
              <width>110</width>
-             <height>28</height>
+             <height>25</height>
             </size>
            </property>
            <property name="toolTip">
@@ -723,13 +738,13 @@
            <property name="minimumSize">
             <size>
              <width>110</width>
-             <height>28</height>
+             <height>25</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
              <width>110</width>
-             <height>28</height>
+             <height>25</height>
             </size>
            </property>
            <property name="toolTip">
@@ -752,6 +767,13 @@
         </layout>
        </item>
        <item>
+        <widget class="Line" name="line_m">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="verticalSpacer_10">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -766,13 +788,6 @@
           </size>
          </property>
         </spacer>
-       </item>
-       <item>
-        <widget class="Line" name="line_m">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
        </item>
        <item>
         <widget class="QLabel" name="label_5_Pol_settings">
@@ -950,13 +965,13 @@
            <property name="minimumSize">
             <size>
              <width>260</width>
-             <height>55</height>
+             <height>50</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>120</width>
-             <height>55</height>
+             <width>260</width>
+             <height>50</height>
             </size>
            </property>
            <property name="font">
@@ -1068,7 +1083,7 @@
             <enum>QTabWidget::Rounded</enum>
            </property>
            <property name="currentIndex">
-            <number>1</number>
+            <number>0</number>
            </property>
            <property name="iconSize">
             <size>
@@ -1252,7 +1267,7 @@
                     <string>Hide Ratio</string>
                    </property>
                    <property name="text">
-                    <string>&lt;&lt; Hide Ratio I(ω)/I(2ω)</string>
+                    <string>&gt;&gt; Hide Ratio I(ω)/I(2ω)</string>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -1939,7 +1954,7 @@
                     <enum>Qt::LeftToRight</enum>
                    </property>
                    <property name="text">
-                    <string> &lt;&lt; Hide Live Average</string>
+                    <string>&gt;&gt; Hide Live Average</string>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>

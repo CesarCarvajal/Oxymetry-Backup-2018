@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>706</width>
-    <height>689</height>
+    <width>782</width>
+    <height>698</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -139,19 +139,19 @@
        <layout class="QVBoxLayout" name="verticalLayout_fileconf">
         <item>
          <layout class="QGridLayout" name="gridLayout_3">
-          <item row="0" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item row="0" column="2">
+           <layout class="QHBoxLayout" name="horizontalLayout_10">
             <item>
              <widget class="QCheckBox" name="checkBox_stepsSelec">
               <property name="minimumSize">
                <size>
-                <width>100</width>
+                <width>90</width>
                 <height>0</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>100</width>
+                <width>90</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -167,13 +167,13 @@
               </property>
               <property name="minimumSize">
                <size>
-                <width>100</width>
+                <width>60</width>
                 <height>0</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>100</width>
+                <width>60</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -192,27 +192,27 @@
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>40</width>
-                <height>20</height>
+                <width>20</width>
+                <height>1</height>
                </size>
               </property>
              </spacer>
             </item>
            </layout>
           </item>
-          <item row="0" column="2">
+          <item row="0" column="6">
            <layout class="QHBoxLayout" name="horizontalLayout_5">
             <item>
              <widget class="QLabel" name="label_repselec">
               <property name="minimumSize">
                <size>
-                <width>100</width>
+                <width>90</width>
                 <height>0</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>100</width>
+                <width>90</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -225,13 +225,13 @@
              <widget class="QSpinBox" name="spinBox_repselec">
               <property name="minimumSize">
                <size>
-                <width>100</width>
+                <width>60</width>
                 <height>0</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>100</width>
+                <width>60</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -253,27 +253,66 @@
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>40</width>
-                <height>20</height>
+                <width>20</width>
+                <height>1</height>
                </size>
               </property>
              </spacer>
             </item>
            </layout>
           </item>
-          <item row="0" column="1">
-           <layout class="QHBoxLayout" name="horizontalLayout_8">
+          <item row="0" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
             <item>
-             <widget class="QCheckBox" name="checkBox_RandomSort">
+             <widget class="QCheckBox" name="checkBox_SelecManual">
               <property name="minimumSize">
                <size>
-                <width>100</width>
+                <width>150</width>
                 <height>0</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>100</width>
+                <width>150</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Manual</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_13">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>1</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item row="0" column="5">
+           <layout class="QHBoxLayout" name="horizontalLayout_8">
+            <item>
+             <widget class="QCheckBox" name="checkBox_RandomSort">
+              <property name="minimumSize">
+               <size>
+                <width>150</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>150</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -289,8 +328,8 @@
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>40</width>
-                <height>20</height>
+                <width>20</width>
+                <height>1</height>
                </size>
               </property>
              </spacer>

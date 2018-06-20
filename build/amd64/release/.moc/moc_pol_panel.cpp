@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_PanelPolarimeter_t {
-    QByteArrayData data[65];
-    char stringdata0[1083];
+    QByteArrayData data[64];
+    char stringdata0[1074];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -86,16 +86,15 @@ QT_MOC_LITERAL(51, 839, 16), // "adjust_Run_Start"
 QT_MOC_LITERAL(52, 856, 9), // "short int"
 QT_MOC_LITERAL(53, 866, 7), // "typeRun"
 QT_MOC_LITERAL(54, 874, 14), // "adjust_Run_End"
-QT_MOC_LITERAL(55, 889, 8), // "typeRunn"
-QT_MOC_LITERAL(56, 898, 33), // "adjust_Measurements_Saving_Fo..."
-QT_MOC_LITERAL(57, 932, 25), // "process_Received_Data_Pol"
-QT_MOC_LITERAL(58, 958, 4), // "Path"
-QT_MOC_LITERAL(59, 963, 22), // "delay_Pol_Measurements"
-QT_MOC_LITERAL(60, 986, 23), // "update_Wavelength_Range"
-QT_MOC_LITERAL(61, 1010, 23), // "adjust_Wavelength_Range"
-QT_MOC_LITERAL(62, 1034, 15), // "normalizeCounts"
-QT_MOC_LITERAL(63, 1050, 15), // "enable_Help_Pol"
-QT_MOC_LITERAL(64, 1066, 16) // "setConfiguration"
+QT_MOC_LITERAL(55, 889, 33), // "adjust_Measurements_Saving_Fo..."
+QT_MOC_LITERAL(56, 923, 25), // "process_Received_Data_Pol"
+QT_MOC_LITERAL(57, 949, 4), // "Path"
+QT_MOC_LITERAL(58, 954, 22), // "delay_Pol_Measurements"
+QT_MOC_LITERAL(59, 977, 23), // "update_Wavelength_Range"
+QT_MOC_LITERAL(60, 1001, 23), // "adjust_Wavelength_Range"
+QT_MOC_LITERAL(61, 1025, 15), // "normalizeCounts"
+QT_MOC_LITERAL(62, 1041, 15), // "enable_Help_Pol"
+QT_MOC_LITERAL(63, 1057, 16) // "setConfiguration"
 
     },
     "PanelPolarimeter\0updateTabs\0\0"
@@ -123,8 +122,7 @@ QT_MOC_LITERAL(64, 1066, 16) // "setConfiguration"
     "toggle_Load_Data\0plot_FFT\0clear_Plot\0"
     "save_Graph_Pol\0plot_Average\0"
     "adjust_Run_Start\0short int\0typeRun\0"
-    "adjust_Run_End\0typeRunn\0"
-    "adjust_Measurements_Saving_Folder\0"
+    "adjust_Run_End\0adjust_Measurements_Saving_Folder\0"
     "process_Received_Data_Pol\0Path\0"
     "delay_Pol_Measurements\0update_Wavelength_Range\0"
     "adjust_Wavelength_Range\0normalizeCounts\0"
@@ -187,15 +185,15 @@ static const uint qt_meta_data_PanelPolarimeter[] = {
       49,    0,  310,    2, 0x08 /* Private */,
       50,    0,  311,    2, 0x08 /* Private */,
       51,    1,  312,    2, 0x08 /* Private */,
-      54,    1,  315,    2, 0x08 /* Private */,
-      56,    0,  318,    2, 0x08 /* Private */,
-      57,    1,  319,    2, 0x08 /* Private */,
-      59,    0,  322,    2, 0x08 /* Private */,
-      60,    0,  323,    2, 0x08 /* Private */,
-      61,    0,  324,    2, 0x08 /* Private */,
-      62,    0,  325,    2, 0x08 /* Private */,
-      63,    0,  326,    2, 0x0a /* Public */,
-      64,    0,  327,    2, 0x0a /* Public */,
+      54,    0,  315,    2, 0x08 /* Private */,
+      55,    0,  316,    2, 0x08 /* Private */,
+      56,    1,  317,    2, 0x08 /* Private */,
+      58,    0,  320,    2, 0x08 /* Private */,
+      59,    0,  321,    2, 0x08 /* Private */,
+      60,    0,  322,    2, 0x08 /* Private */,
+      61,    0,  323,    2, 0x08 /* Private */,
+      62,    0,  324,    2, 0x0a /* Public */,
+      63,    0,  325,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void,
@@ -239,9 +237,9 @@ static const uint qt_meta_data_PanelPolarimeter[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, 0x80000000 | 52,   53,
-    QMetaType::Void, 0x80000000 | 52,   55,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::QString,   58,
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::QString,   57,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -297,7 +295,7 @@ void PanelPolarimeter::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         case 36: _t->save_Graph_Pol(); break;
         case 37: _t->plot_Average(); break;
         case 38: _t->adjust_Run_Start((*reinterpret_cast< short int(*)>(_a[1]))); break;
-        case 39: _t->adjust_Run_End((*reinterpret_cast< short int(*)>(_a[1]))); break;
+        case 39: _t->adjust_Run_End(); break;
         case 40: _t->adjust_Measurements_Saving_Folder(); break;
         case 41: _t->process_Received_Data_Pol((*reinterpret_cast< QString(*)>(_a[1]))); break;
         case 42: _t->delay_Pol_Measurements(); break;

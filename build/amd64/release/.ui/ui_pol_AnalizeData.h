@@ -46,7 +46,7 @@ public:
     QWidget *SelectFiles;
     QVBoxLayout *verticalLayout_fileconf;
     QGridLayout *gridLayout_3;
-    QHBoxLayout *horizontalLayout_4;
+    QHBoxLayout *horizontalLayout_10;
     QCheckBox *checkBox_stepsSelec;
     QSpinBox *spinBox_stepsSelec;
     QSpacerItem *horizontalSpacer_12;
@@ -54,6 +54,9 @@ public:
     QLabel *label_repselec;
     QSpinBox *spinBox_repselec;
     QSpacerItem *horizontalSpacer_10;
+    QHBoxLayout *horizontalLayout_4;
+    QCheckBox *checkBox_SelecManual;
+    QSpacerItem *horizontalSpacer_13;
     QHBoxLayout *horizontalLayout_8;
     QCheckBox *checkBox_RandomSort;
     QSpacerItem *horizontalSpacer_11;
@@ -102,7 +105,7 @@ public:
     {
         if (selectAnalizeData->objectName().isEmpty())
             selectAnalizeData->setObjectName(QStringLiteral("selectAnalizeData"));
-        selectAnalizeData->resize(706, 689);
+        selectAnalizeData->resize(782, 698);
         QSizePolicy sizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -172,73 +175,90 @@ public:
         verticalLayout_fileconf->setObjectName(QStringLiteral("verticalLayout_fileconf"));
         gridLayout_3 = new QGridLayout();
         gridLayout_3->setObjectName(QStringLiteral("gridLayout_3"));
-        horizontalLayout_4 = new QHBoxLayout();
-        horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
+        horizontalLayout_10 = new QHBoxLayout();
+        horizontalLayout_10->setObjectName(QStringLiteral("horizontalLayout_10"));
         checkBox_stepsSelec = new QCheckBox(SelectFiles);
         checkBox_stepsSelec->setObjectName(QStringLiteral("checkBox_stepsSelec"));
-        checkBox_stepsSelec->setMinimumSize(QSize(100, 0));
-        checkBox_stepsSelec->setMaximumSize(QSize(100, 16777215));
+        checkBox_stepsSelec->setMinimumSize(QSize(90, 0));
+        checkBox_stepsSelec->setMaximumSize(QSize(90, 16777215));
 
-        horizontalLayout_4->addWidget(checkBox_stepsSelec);
+        horizontalLayout_10->addWidget(checkBox_stepsSelec);
 
         spinBox_stepsSelec = new QSpinBox(SelectFiles);
         spinBox_stepsSelec->setObjectName(QStringLiteral("spinBox_stepsSelec"));
         spinBox_stepsSelec->setEnabled(true);
-        spinBox_stepsSelec->setMinimumSize(QSize(100, 0));
-        spinBox_stepsSelec->setMaximumSize(QSize(100, 16777215));
+        spinBox_stepsSelec->setMinimumSize(QSize(60, 0));
+        spinBox_stepsSelec->setMaximumSize(QSize(60, 16777215));
         spinBox_stepsSelec->setMinimum(2);
         spinBox_stepsSelec->setMaximum(10000000);
 
-        horizontalLayout_4->addWidget(spinBox_stepsSelec);
+        horizontalLayout_10->addWidget(spinBox_stepsSelec);
 
-        horizontalSpacer_12 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        horizontalSpacer_12 = new QSpacerItem(20, 1, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        horizontalLayout_4->addItem(horizontalSpacer_12);
+        horizontalLayout_10->addItem(horizontalSpacer_12);
 
 
-        gridLayout_3->addLayout(horizontalLayout_4, 0, 0, 1, 1);
+        gridLayout_3->addLayout(horizontalLayout_10, 0, 2, 1, 1);
 
         horizontalLayout_5 = new QHBoxLayout();
         horizontalLayout_5->setObjectName(QStringLiteral("horizontalLayout_5"));
         label_repselec = new QLabel(SelectFiles);
         label_repselec->setObjectName(QStringLiteral("label_repselec"));
-        label_repselec->setMinimumSize(QSize(100, 0));
-        label_repselec->setMaximumSize(QSize(100, 16777215));
+        label_repselec->setMinimumSize(QSize(90, 0));
+        label_repselec->setMaximumSize(QSize(90, 16777215));
 
         horizontalLayout_5->addWidget(label_repselec);
 
         spinBox_repselec = new QSpinBox(SelectFiles);
         spinBox_repselec->setObjectName(QStringLiteral("spinBox_repselec"));
-        spinBox_repselec->setMinimumSize(QSize(100, 0));
-        spinBox_repselec->setMaximumSize(QSize(100, 16777215));
+        spinBox_repselec->setMinimumSize(QSize(60, 0));
+        spinBox_repselec->setMaximumSize(QSize(60, 16777215));
         spinBox_repselec->setMinimum(1);
         spinBox_repselec->setMaximum(1000);
         spinBox_repselec->setValue(1);
 
         horizontalLayout_5->addWidget(spinBox_repselec);
 
-        horizontalSpacer_10 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        horizontalSpacer_10 = new QSpacerItem(20, 1, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         horizontalLayout_5->addItem(horizontalSpacer_10);
 
 
-        gridLayout_3->addLayout(horizontalLayout_5, 0, 2, 1, 1);
+        gridLayout_3->addLayout(horizontalLayout_5, 0, 6, 1, 1);
+
+        horizontalLayout_4 = new QHBoxLayout();
+        horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
+        checkBox_SelecManual = new QCheckBox(SelectFiles);
+        checkBox_SelecManual->setObjectName(QStringLiteral("checkBox_SelecManual"));
+        checkBox_SelecManual->setMinimumSize(QSize(150, 0));
+        checkBox_SelecManual->setMaximumSize(QSize(150, 16777215));
+        checkBox_SelecManual->setChecked(true);
+
+        horizontalLayout_4->addWidget(checkBox_SelecManual);
+
+        horizontalSpacer_13 = new QSpacerItem(20, 1, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_4->addItem(horizontalSpacer_13);
+
+
+        gridLayout_3->addLayout(horizontalLayout_4, 0, 0, 1, 1);
 
         horizontalLayout_8 = new QHBoxLayout();
         horizontalLayout_8->setObjectName(QStringLiteral("horizontalLayout_8"));
         checkBox_RandomSort = new QCheckBox(SelectFiles);
         checkBox_RandomSort->setObjectName(QStringLiteral("checkBox_RandomSort"));
-        checkBox_RandomSort->setMinimumSize(QSize(100, 0));
-        checkBox_RandomSort->setMaximumSize(QSize(100, 16777215));
+        checkBox_RandomSort->setMinimumSize(QSize(150, 0));
+        checkBox_RandomSort->setMaximumSize(QSize(150, 16777215));
 
         horizontalLayout_8->addWidget(checkBox_RandomSort);
 
-        horizontalSpacer_11 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        horizontalSpacer_11 = new QSpacerItem(20, 1, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         horizontalLayout_8->addItem(horizontalSpacer_11);
 
 
-        gridLayout_3->addLayout(horizontalLayout_8, 0, 1, 1, 1);
+        gridLayout_3->addLayout(horizontalLayout_8, 0, 5, 1, 1);
 
 
         verticalLayout_fileconf->addLayout(gridLayout_3);
@@ -517,6 +537,7 @@ public:
         radiobutton_selectData->setText(QApplication::translate("selectAnalizeData", "Select Calibration and Validation Data:", Q_NULLPTR));
         checkBox_stepsSelec->setText(QApplication::translate("selectAnalizeData", "Sort in Steps:", Q_NULLPTR));
         label_repselec->setText(QApplication::translate("selectAnalizeData", "Select Repetition:", Q_NULLPTR));
+        checkBox_SelecManual->setText(QApplication::translate("selectAnalizeData", "Manual", Q_NULLPTR));
         checkBox_RandomSort->setText(QApplication::translate("selectAnalizeData", "Sort Randomly", Q_NULLPTR));
         label->setText(QApplication::translate("selectAnalizeData", "Calibration Data:", Q_NULLPTR));
         label_2->setText(QApplication::translate("selectAnalizeData", "Validation Data:", Q_NULLPTR));

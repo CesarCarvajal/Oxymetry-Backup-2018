@@ -189,7 +189,7 @@ void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFil
             }
 
             /* If there are repetitions then change the name */
-            if(rep > 1){
+            if(repetition > 1){
                 /* Complete the file name */
                 line = line.append(QString::number(IntegrationTime) + "ms_" + QString::number(Frequency) + "Hz_" + QString::number(j+1) + "_R" + QString::number(rep));
             }else{
