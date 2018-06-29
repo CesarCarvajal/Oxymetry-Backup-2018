@@ -2109,6 +2109,9 @@
              <height>30</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>Analize Data</string>
+           </property>
            <property name="text">
             <string>Analize Data</string>
            </property>

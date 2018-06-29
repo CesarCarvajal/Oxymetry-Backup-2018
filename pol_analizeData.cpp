@@ -30,6 +30,7 @@
 #include <QFile>
 #include <QMessageBox>
 #include <QCollator>
+#include <QMenu>
 
 /* Internal includes */
 #include "application.h"
@@ -65,13 +66,16 @@ selectAnalizeData::selectAnalizeData(QWidget *parent) :
     connect(ui->spinBox_repselec, SIGNAL(valueChanged(int)), this, SLOT(updateSelectionList()));
     connect(ui->spinBox_calSet, SIGNAL(valueChanged(int)), this, SLOT(setDataSets()));
     connect(ui->spinBox_ValSet, SIGNAL(valueChanged(int)), this, SLOT(setDataSets()));
+    connect(ui->spinBox_stepsSelec, SIGNAL(valueChanged(int)), this, SLOT(selectFileSteps()));
 
     /* Connect signals */
     connect(ui->radiobutton_selectData, SIGNAL(clicked()), signalMapperC, SLOT(map()));
     connect(ui->radiobutton_selectSet, SIGNAL(clicked()), signalMapperC, SLOT(map()));
-    connect(ui->listWidget_Calibration, SIGNAL(itemSelectionChanged()), signalMapperC, SLOT(map()));
-    connect(ui->listWidget_Validation, SIGNAL(itemSelectionChanged()), signalMapperC, SLOT(map()));
+    connect(ui->listWidget_Calibration, SIGNAL(itemClicked(QListWidgetItem*)), signalMapperC, SLOT(map()));
+    connect(ui->listWidget_Calibration, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
+    connect(ui->listWidget_Validation, SIGNAL(itemClicked(QListWidgetItem*)), signalMapperC, SLOT(map()));
     connect(ui->label_restart, SIGNAL(clicked()), signalMapperC, SLOT(map()));
+    connect(ui->label_switch, SIGNAL(clicked()), signalMapperC, SLOT(map()));
     connect(ui->checkBox_RandomSort, SIGNAL(clicked()), signalMapperC, SLOT(map()));
     connect(ui->checkBox_stepsSelec, SIGNAL(clicked()), signalMapperC, SLOT(map()));
     connect(ui->checkBox_SelecManual, SIGNAL(clicked()), signalMapperC, SLOT(map()));
@@ -81,6 +85,7 @@ selectAnalizeData::selectAnalizeData(QWidget *parent) :
     signalMapperC->setMapping(ui->listWidget_Calibration, ui->listWidget_Calibration);
     signalMapperC->setMapping(ui->listWidget_Validation, ui->listWidget_Validation);
     signalMapperC->setMapping(ui->label_restart, ui->label_restart);
+    signalMapperC->setMapping(ui->label_switch, ui->label_switch);
     signalMapperC->setMapping(ui->checkBox_RandomSort, ui->checkBox_RandomSort);
     signalMapperC->setMapping(ui->checkBox_stepsSelec, ui->checkBox_stepsSelec);
     signalMapperC->setMapping(ui->checkBox_SelecManual, ui->checkBox_SelecManual);
@@ -93,6 +98,7 @@ selectAnalizeData::selectAnalizeData(QWidget *parent) :
 
     /* Set restart label color */
     ui->label_restart->setStyleSheet("QLabel { color: blue; }");
+    ui->label_switch->setStyleSheet("QLabel { color: blue; }");
 
     /* Set repetitions in 0 */
     repetitions = 0;
@@ -112,8 +118,47 @@ selectAnalizeData::selectAnalizeData(QWidget *parent) :
     ui->checkBox_stepsSelec->hide();
     ui->spinBox_stepsSelec->hide();
     ui->checkBox_SelecManual->hide();
+
 }
 
+/**
+ * @brief Organize files in steps
+ */
+void selectAnalizeData::selectFileSteps(void){
+
+    /*Set all as calibration */
+    FFTFilesCalibration.append(FFTFilesValidation);
+    FFTFilesValidation.clear();
+
+    /* Sort file names */
+    FFTFilesCalibration = sortFiles(FFTFilesCalibration);
+
+    /* Create temporal lists */
+    QStringList FFTFilesCalibration_Temp, FFTFilesValidation_Temp;
+
+    /* For each position, randomly shuffle the vector and get the first position */
+    for(int i = 0; i < FFTFilesCalibration.size(); i++){
+
+        /* select the right positions */
+        if(i % ui->spinBox_stepsSelec->value() == 0){
+
+            /* Get the validation values */
+            FFTFilesValidation_Temp.append(FFTFilesCalibration.at(i));
+        }else{
+
+            /* Get the calibration values */
+            FFTFilesCalibration_Temp.append(FFTFilesCalibration.at(i));
+        }
+    }
+
+    /* Save the shuffle values */
+    FFTFilesValidation.append(FFTFilesValidation_Temp);
+    FFTFilesCalibration.clear();
+    FFTFilesCalibration.append(FFTFilesCalibration_Temp);
+
+    /* Clean Lists */
+    cleanList();
+}
 
 /**
  * @brief Update selection list of files according to the selected repetition if there are some
@@ -225,6 +270,9 @@ void selectAnalizeData::selectPath(void)
         ui->spinBox_stepsSelec->show();
         ui->checkBox_SelecManual->show();
 
+        /* Set the maximum value to organize the values */
+        ui->spinBox_stepsSelec->setMaximum(FFTFilesCalibration.size());
+
         /* If the selection of data is enabled */
         if(ui->radiobutton_selectSet->isChecked()){
 
@@ -269,11 +317,6 @@ void selectAnalizeData::handleClickEvent(QWidget *widget)
     /* Enable the type of data selection */
     ui->SelectFiles->setEnabled(ui->radiobutton_selectData->isChecked());
     ui->SelectSet->setEnabled(ui->radiobutton_selectSet->isChecked());
-
-    /* Show Ui Items */
-    ui->checkBox_RandomSort->setEnabled(ui->radiobutton_selectData->isChecked());
-    ui->checkBox_stepsSelec->setEnabled(ui->radiobutton_selectData->isChecked());
-    ui->spinBox_stepsSelec->setEnabled(ui->radiobutton_selectData->isChecked());
 
     /* Check which option is active */
     if(radioBox == ui->radiobutton_selectData){
@@ -326,7 +369,7 @@ void selectAnalizeData::handleClickEvent(QWidget *widget)
     }
 
     /* Click in the calibration or validation list */
-    if((listItem == ui->listWidget_Calibration || listItem == ui->listWidget_Validation) || label == ui->label_restart){
+    if(listItem == ui->listWidget_Calibration || listItem == ui->listWidget_Validation || label == ui->label_restart || label == ui->label_switch){
 
         /* User clicks one file in the calibration list */
         if(listItem == ui->listWidget_Calibration && ui->checkBox_SelecManual->isChecked()){
@@ -347,12 +390,37 @@ void selectAnalizeData::handleClickEvent(QWidget *widget)
         if(label == ui->label_restart){
 
             /*Set all as calibration */
-            FFTFilesCalibration.append(FFTFilesValidation);
-            FFTFilesValidation.clear();
+            automaticLoading = true;
+
+            /* Load data with the known path */
+            selectPath();
+
+            /* Set falg to false again */
+            automaticLoading = false;
 
             /* Restart the automatic selection options */
             ui->checkBox_RandomSort->setChecked(false);
             ui->checkBox_stepsSelec->setChecked(false);
+        }
+
+        /* Switch files from calibration to validation */
+        if(label == ui->label_switch){
+
+            /* Save vectors temporarly */
+            QStringList FFTFilesCalibration_Temp, FFTFilesValidation_Temp;
+
+            /* Get actual values */
+            FFTFilesCalibration_Temp = FFTFilesValidation;
+            FFTFilesValidation_Temp = FFTFilesCalibration;
+
+            /*Set all as calibration */
+            FFTFilesCalibration.clear();
+            FFTFilesValidation.clear();
+
+            /* Switch vectors */
+            FFTFilesCalibration.append(FFTFilesCalibration_Temp);
+            FFTFilesValidation.append(FFTFilesValidation_Temp);
+
         }
 
         /* Clean Lists */
@@ -397,10 +465,12 @@ void selectAnalizeData::handleClickEvent(QWidget *widget)
     if(checkBox == ui->checkBox_stepsSelec){
 
         /* Disable spin roll */
-        ui->spinBox_stepsSelec->setEnabled(true);
+        ui->spinBox_stepsSelec->setEnabled(ui->checkBox_stepsSelec->isChecked());
         ui->checkBox_RandomSort->setChecked(false);
         ui->checkBox_SelecManual->setChecked(false);
 
+        /* Add files */
+        selectFileSteps();
     }
 
     /* Always choose manual selection if there is no option selected by the user */
@@ -457,13 +527,13 @@ void selectAnalizeData::setDataSets(void)
             FFTFilesCalibration = Dir.entryList(QStringList() << "*R"+QString::number(ui->spinBox_calSet->value())+".FFT",QDir::Files | QDir::NoSymLinks, QDir::Time | QDir::Reversed);
 
             /* Sort file names */
-            sortFiles(FFTFilesCalibration);
+            FFTFilesCalibration = sortFiles(FFTFilesCalibration);
 
             /* Add the FFT files to the list */
             FFTFilesValidation = Dir.entryList(QStringList() << "*R"+QString::number(ui->spinBox_ValSet->value())+".FFT",QDir::Files | QDir::NoSymLinks, QDir::Time | QDir::Reversed);
 
             /* Sort file names */
-            sortFiles(FFTFilesValidation);
+            FFTFilesValidation = sortFiles(FFTFilesValidation);
 
         }else{
 
@@ -471,7 +541,7 @@ void selectAnalizeData::setDataSets(void)
             FFTFilesCalibration = Dir.entryList(QStringList() << "*.FFT",QDir::Files | QDir::NoSymLinks, QDir::Time | QDir::Reversed);
 
             /* Sort file names */
-            sortFiles(FFTFilesCalibration);
+            FFTFilesCalibration = sortFiles(FFTFilesCalibration);
 
             /* Add the FFT files to the list */
             FFTFilesValidation = FFTFilesCalibration;
@@ -542,8 +612,9 @@ void selectAnalizeData::cancel(void)
 void selectAnalizeData::cleanList(void){
 
     /* Disconnect the signal temporarly to refresh the list */
-    disconnect(ui->listWidget_Calibration, SIGNAL(itemSelectionChanged()), signalMapperC, SLOT(map()));
-    disconnect(ui->listWidget_Validation, SIGNAL(itemSelectionChanged()), signalMapperC, SLOT(map()));
+    disconnect(ui->listWidget_Calibration, SIGNAL(itemClicked(QListWidgetItem*)), signalMapperC, SLOT(map()));
+    disconnect(ui->listWidget_Validation, SIGNAL(itemClicked(QListWidgetItem*)), signalMapperC, SLOT(map()));
+    disconnect(ui->listWidget_Calibration, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
 
     /* Clear the list */
     ui->listWidget_Calibration->clear();
@@ -562,11 +633,46 @@ void selectAnalizeData::cleanList(void){
     ui->listWidget_Validation->addItems(FFTFilesValidation);
 
     /* Connecta again the signal */
-    connect(ui->listWidget_Calibration, SIGNAL(itemSelectionChanged()), signalMapperC, SLOT(map()));
-    connect(ui->listWidget_Validation, SIGNAL(itemSelectionChanged()), signalMapperC, SLOT(map()));
+    connect(ui->listWidget_Calibration, SIGNAL(itemClicked(QListWidgetItem*)), signalMapperC, SLOT(map()));
+    connect(ui->listWidget_Validation, SIGNAL(itemClicked(QListWidgetItem*)), signalMapperC, SLOT(map()));
+    connect(ui->listWidget_Calibration, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
 
     /* Enable the button to analyze data */
     ui->pushButton_generate->setEnabled(!FFTFilesCalibration.isEmpty() && !FFTFilesValidation.isEmpty());
+
+}
+
+/**
+ * @brief Remove the item
+ */
+void selectAnalizeData::removeItem(void){
+
+    /* If it has data */
+    if(!FFTFilesCalibration.isEmpty()){
+
+        /* Add to the other list the selected files */
+        FFTFilesCalibration.removeAt(FFTFilesCalibration.indexOf(ui->listWidget_Calibration->selectedItems().at(0)->text()));
+
+        /* Clean Lists */
+        cleanList();
+    }
+
+}
+
+/**
+ * @brief Left Click Menu
+ */
+void selectAnalizeData::showContextMenu(const QPoint &pos)
+{
+    // Handle global position
+    QPoint globalPos = ui->listWidget_Calibration->mapToGlobal(pos);
+
+    // Create menu and insert some actions
+    QMenu LMenu;
+    LMenu.addAction("Remove File",  this, SLOT(removeItem()));
+
+    // Show context menu at handling position
+    LMenu.exec(globalPos);
 
 }
 

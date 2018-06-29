@@ -1359,6 +1359,9 @@ public:
         qwtPlot_Pol_Prediction->setToolTip(QApplication::translate("PanelPolarimeter", "Prediction Plot", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         Tabs_Plots->setTabText(Tabs_Plots->indexOf(MeasResults), QApplication::translate("PanelPolarimeter", "Measurement Results", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        button_AnalizeData->setToolTip(QApplication::translate("PanelPolarimeter", "Analize Data", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         button_AnalizeData->setText(QApplication::translate("PanelPolarimeter", "Analize Data", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         button_LoadData->setToolTip(QApplication::translate("PanelPolarimeter", "Load Data from Files", Q_NULLPTR));

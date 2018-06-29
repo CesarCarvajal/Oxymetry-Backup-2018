@@ -92,6 +92,9 @@ private slots:
     /* Allow the user to load data manually */
     void allowSelectPath(void);
 
+    /* Organize files per steps */
+    void selectFileSteps(void);
+
     /* Update list according to the selected repetition */
     void updateSelectionList(void);
 
@@ -103,6 +106,12 @@ private slots:
 
     /* Set data sets for calibration and validation */
     void setDataSets(void);
+
+    /* Remove item from calibration */
+    void removeItem(void);
+
+    /* left click menu */
+    void showContextMenu(const QPoint &pos);
 
 public slots:
 

@@ -38,8 +38,10 @@ public:
     QGridLayout *gridLayout;
     QVBoxLayout *verticalLayout;
     QLabel *label_18;
-    QFrame *line_2;
     QSpacerItem *verticalSpacer_3;
+    QFrame *line;
+    QLabel *label_5;
+    QFrame *line_2;
     QHBoxLayout *horizontalLayout_2;
     QSpacerItem *horizontalSpacer;
     QRadioButton *radiobutton_selectData;
@@ -71,6 +73,8 @@ public:
     QSpacerItem *verticalSpacer_2;
     QListWidget *listWidget_Validation;
     QSpacerItem *horizontalSpacer_4;
+    QHBoxLayout *horizontalLayout_11;
+    ClickableLabel *label_switch;
     ClickableLabel *label_restart;
     QHBoxLayout *horizontalLayout_3;
     QSpacerItem *horizontalSpacer_3;
@@ -87,11 +91,15 @@ public:
     QSpinBox *spinBox_calSet;
     QSpacerItem *horizontalSpacer_7;
     QSpacerItem *horizontalSpacer_5;
-    QFrame *line;
-    QSpacerItem *verticalSpacer_5;
     QHBoxLayout *horizontalLayout;
     QLabel *label_currentPath;
     QLineEdit *lineEdit_currentDataPath;
+    QSpacerItem *verticalSpacer_5;
+    QFrame *line_3;
+    QLabel *label_6;
+    QFrame *line_4;
+    QWidget *PLS;
+    QVBoxLayout *verticalLayout_5;
     QSpacerItem *verticalSpacer_4;
     QHBoxLayout *horizontalLayout_9;
     QPushButton *pushButton_cancel;
@@ -105,7 +113,7 @@ public:
     {
         if (selectAnalizeData->objectName().isEmpty())
             selectAnalizeData->setObjectName(QStringLiteral("selectAnalizeData"));
-        selectAnalizeData->resize(782, 698);
+        selectAnalizeData->resize(782, 757);
         QSizePolicy sizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -129,16 +137,32 @@ public:
 
         verticalLayout->addWidget(label_18);
 
+        verticalSpacer_3 = new QSpacerItem(20, 10, QSizePolicy::Minimum, QSizePolicy::Fixed);
+
+        verticalLayout->addItem(verticalSpacer_3);
+
+        line = new QFrame(selectAnalizeData);
+        line->setObjectName(QStringLiteral("line"));
+        line->setFrameShape(QFrame::HLine);
+        line->setFrameShadow(QFrame::Sunken);
+
+        verticalLayout->addWidget(line);
+
+        label_5 = new QLabel(selectAnalizeData);
+        label_5->setObjectName(QStringLiteral("label_5"));
+        QFont font1;
+        font1.setBold(true);
+        font1.setWeight(75);
+        label_5->setFont(font1);
+
+        verticalLayout->addWidget(label_5);
+
         line_2 = new QFrame(selectAnalizeData);
         line_2->setObjectName(QStringLiteral("line_2"));
         line_2->setFrameShape(QFrame::HLine);
         line_2->setFrameShadow(QFrame::Sunken);
 
         verticalLayout->addWidget(line_2);
-
-        verticalSpacer_3 = new QSpacerItem(20, 10, QSizePolicy::Minimum, QSizePolicy::Fixed);
-
-        verticalLayout->addItem(verticalSpacer_3);
 
         horizontalLayout_2 = new QHBoxLayout();
         horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
@@ -148,9 +172,6 @@ public:
 
         radiobutton_selectData = new QRadioButton(selectAnalizeData);
         radiobutton_selectData->setObjectName(QStringLiteral("radiobutton_selectData"));
-        QFont font1;
-        font1.setBold(true);
-        font1.setWeight(75);
         radiobutton_selectData->setFont(font1);
         radiobutton_selectData->setAutoFillBackground(false);
         radiobutton_selectData->setInputMethodHints(Qt::ImhNone);
@@ -186,7 +207,7 @@ public:
 
         spinBox_stepsSelec = new QSpinBox(SelectFiles);
         spinBox_stepsSelec->setObjectName(QStringLiteral("spinBox_stepsSelec"));
-        spinBox_stepsSelec->setEnabled(true);
+        spinBox_stepsSelec->setEnabled(false);
         spinBox_stepsSelec->setMinimumSize(QSize(60, 0));
         spinBox_stepsSelec->setMaximumSize(QSize(60, 16777215));
         spinBox_stepsSelec->setMinimum(2);
@@ -283,8 +304,9 @@ public:
 
         listWidget_Calibration = new QListWidget(SelectFiles);
         listWidget_Calibration->setObjectName(QStringLiteral("listWidget_Calibration"));
-        listWidget_Calibration->setMinimumSize(QSize(0, 300));
+        listWidget_Calibration->setMinimumSize(QSize(0, 200));
         listWidget_Calibration->viewport()->setProperty("cursor", QVariant(QCursor(Qt::PointingHandCursor)));
+        listWidget_Calibration->setContextMenuPolicy(Qt::CustomContextMenu);
         listWidget_Calibration->setFrameShape(QFrame::StyledPanel);
         listWidget_Calibration->setFrameShadow(QFrame::Sunken);
         listWidget_Calibration->setLineWidth(1);
@@ -293,8 +315,12 @@ public:
         listWidget_Calibration->setEditTriggers(QAbstractItemView::SelectedClicked);
         listWidget_Calibration->setDragEnabled(false);
         listWidget_Calibration->setDefaultDropAction(Qt::MoveAction);
+        listWidget_Calibration->setTextElideMode(Qt::ElideRight);
         listWidget_Calibration->setMovement(QListView::Static);
+        listWidget_Calibration->setResizeMode(QListView::Fixed);
         listWidget_Calibration->setSpacing(2);
+        listWidget_Calibration->setModelColumn(0);
+        listWidget_Calibration->setUniformItemSizes(true);
         listWidget_Calibration->setSelectionRectVisible(true);
 
         verticalLayout_3->addWidget(listWidget_Calibration);
@@ -317,8 +343,18 @@ public:
         listWidget_Validation = new QListWidget(SelectFiles);
         listWidget_Validation->setObjectName(QStringLiteral("listWidget_Validation"));
         listWidget_Validation->setEnabled(true);
-        listWidget_Validation->setMinimumSize(QSize(0, 300));
+        listWidget_Validation->setMinimumSize(QSize(0, 200));
         listWidget_Validation->viewport()->setProperty("cursor", QVariant(QCursor(Qt::PointingHandCursor)));
+        listWidget_Validation->setAutoScrollMargin(25);
+        listWidget_Validation->setEditTriggers(QAbstractItemView::SelectedClicked);
+        listWidget_Validation->setDefaultDropAction(Qt::MoveAction);
+        listWidget_Validation->setFlow(QListView::TopToBottom);
+        listWidget_Validation->setSpacing(2);
+        listWidget_Validation->setGridSize(QSize(0, 20));
+        listWidget_Validation->setViewMode(QListView::ListMode);
+        listWidget_Validation->setModelColumn(0);
+        listWidget_Validation->setUniformItemSizes(true);
+        listWidget_Validation->setSelectionRectVisible(true);
 
         verticalLayout_8->addWidget(listWidget_Validation);
 
@@ -332,15 +368,27 @@ public:
 
         verticalLayout_fileconf->addLayout(gridLayout_2);
 
-        label_restart = new ClickableLabel(SelectFiles);
-        label_restart->setObjectName(QStringLiteral("label_restart"));
+        horizontalLayout_11 = new QHBoxLayout();
+        horizontalLayout_11->setObjectName(QStringLiteral("horizontalLayout_11"));
+        label_switch = new ClickableLabel(SelectFiles);
+        label_switch->setObjectName(QStringLiteral("label_switch"));
         QFont font2;
         font2.setPointSize(7);
+        label_switch->setFont(font2);
+        label_switch->setCursor(QCursor(Qt::PointingHandCursor));
+
+        horizontalLayout_11->addWidget(label_switch);
+
+        label_restart = new ClickableLabel(SelectFiles);
+        label_restart->setObjectName(QStringLiteral("label_restart"));
         label_restart->setFont(font2);
         label_restart->setCursor(QCursor(Qt::PointingHandCursor));
         label_restart->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-        verticalLayout_fileconf->addWidget(label_restart);
+        horizontalLayout_11->addWidget(label_restart);
+
+
+        verticalLayout_fileconf->addLayout(horizontalLayout_11);
 
 
         verticalLayout->addWidget(SelectFiles);
@@ -427,17 +475,6 @@ public:
 
         verticalLayout->addWidget(SelectSet);
 
-        line = new QFrame(selectAnalizeData);
-        line->setObjectName(QStringLiteral("line"));
-        line->setFrameShape(QFrame::HLine);
-        line->setFrameShadow(QFrame::Sunken);
-
-        verticalLayout->addWidget(line);
-
-        verticalSpacer_5 = new QSpacerItem(20, 15, QSizePolicy::Minimum, QSizePolicy::Fixed);
-
-        verticalLayout->addItem(verticalSpacer_5);
-
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
         label_currentPath = new QLabel(selectAnalizeData);
@@ -464,6 +501,38 @@ public:
 
 
         verticalLayout->addLayout(horizontalLayout);
+
+        verticalSpacer_5 = new QSpacerItem(20, 10, QSizePolicy::Minimum, QSizePolicy::Fixed);
+
+        verticalLayout->addItem(verticalSpacer_5);
+
+        line_3 = new QFrame(selectAnalizeData);
+        line_3->setObjectName(QStringLiteral("line_3"));
+        line_3->setFrameShape(QFrame::HLine);
+        line_3->setFrameShadow(QFrame::Sunken);
+
+        verticalLayout->addWidget(line_3);
+
+        label_6 = new QLabel(selectAnalizeData);
+        label_6->setObjectName(QStringLiteral("label_6"));
+        label_6->setFont(font1);
+
+        verticalLayout->addWidget(label_6);
+
+        line_4 = new QFrame(selectAnalizeData);
+        line_4->setObjectName(QStringLiteral("line_4"));
+        line_4->setFrameShape(QFrame::HLine);
+        line_4->setFrameShadow(QFrame::Sunken);
+
+        verticalLayout->addWidget(line_4);
+
+        PLS = new QWidget(selectAnalizeData);
+        PLS->setObjectName(QStringLiteral("PLS"));
+        PLS->setMinimumSize(QSize(0, 100));
+        verticalLayout_5 = new QVBoxLayout(PLS);
+        verticalLayout_5->setObjectName(QStringLiteral("verticalLayout_5"));
+
+        verticalLayout->addWidget(PLS);
 
         verticalSpacer_4 = new QSpacerItem(20, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
@@ -533,7 +602,8 @@ public:
     void retranslateUi(QDialog *selectAnalizeData)
     {
         selectAnalizeData->setWindowTitle(QApplication::translate("selectAnalizeData", "Data Analizer", Q_NULLPTR));
-        label_18->setText(QApplication::translate("selectAnalizeData", "Data Analysis", Q_NULLPTR));
+        label_18->setText(QApplication::translate("selectAnalizeData", "PLS Data Analysis", Q_NULLPTR));
+        label_5->setText(QApplication::translate("selectAnalizeData", "Data Selection", Q_NULLPTR));
         radiobutton_selectData->setText(QApplication::translate("selectAnalizeData", "Select Calibration and Validation Data:", Q_NULLPTR));
         checkBox_stepsSelec->setText(QApplication::translate("selectAnalizeData", "Sort in Steps:", Q_NULLPTR));
         label_repselec->setText(QApplication::translate("selectAnalizeData", "Select Repetition:", Q_NULLPTR));
@@ -541,12 +611,14 @@ public:
         checkBox_RandomSort->setText(QApplication::translate("selectAnalizeData", "Sort Randomly", Q_NULLPTR));
         label->setText(QApplication::translate("selectAnalizeData", "Calibration Data:", Q_NULLPTR));
         label_2->setText(QApplication::translate("selectAnalizeData", "Validation Data:", Q_NULLPTR));
+        label_switch->setText(QApplication::translate("selectAnalizeData", "Switch >>", Q_NULLPTR));
         label_restart->setText(QApplication::translate("selectAnalizeData", "Restart", Q_NULLPTR));
         radiobutton_selectSet->setText(QApplication::translate("selectAnalizeData", "Select a Set of Data or Repetition as Calibration and Validation", Q_NULLPTR));
         label_3->setText(QApplication::translate("selectAnalizeData", "Validation Set:", Q_NULLPTR));
         label_4->setText(QApplication::translate("selectAnalizeData", "Calibration Set:", Q_NULLPTR));
         label_currentPath->setText(QApplication::translate("selectAnalizeData", "Current Data Path:", Q_NULLPTR));
         lineEdit_currentDataPath->setText(QApplication::translate("selectAnalizeData", "Please Select a FFT Data Files Path", Q_NULLPTR));
+        label_6->setText(QApplication::translate("selectAnalizeData", "PLS Settings", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         pushButton_cancel->setToolTip(QApplication::translate("selectAnalizeData", "Cancel Data Analysis", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
