@@ -60,6 +60,7 @@ public:
 
     /* Set axis title */
     void setXAxisTitle(QString title);
+    void setXAxisTopTitle(QString title);
     void setYAxisTitle(QString title);
 
     /* Set caption */
@@ -68,6 +69,7 @@ public:
     /* Set axis limits */
     void setXAxis(double min, double max);
     void setYAxis(double min, double max);
+    void setXAxisTop(double min, double max, double step);
 
     /* Hide/show grid */
     void hideGrid(void);

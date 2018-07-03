@@ -314,12 +314,17 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
 
     /* Average over all Wavelengths plot for Polarimeter */
     ui->qwtPlot_Pol_Average->setXAxisTitle("Time (sec)");
+    ui->qwtPlot_Pol_Average->setXAxisTopTitle("Measurement Number");
     ui->qwtPlot_Pol_Average->setYAxisTitle("Average FFT Intensity (Counts)");
     ui->qwtPlot_Pol_Average->setYAxis(0.0, ceil(2000*1.1));
     minXAverage = 0;
     maxXAverage = PolPlotter->time_plot;
     maxYAverage = 0;
     ui->qwtPlot_Pol_Average->setXAxis(minXAverage, maxXAverage);
+
+    /* Set top axis with Measurement number for averages */
+    ui->qwtPlot_Pol_Average->enableAxis(QwtPlot::xTop);
+    ui->qwtPlot_Pol_Average->setXAxisTop(-0.8 , 20.3, 2);
 
     /* FFT Curve at a certain Wavelength */
     ui->qwtPlot_Pol_FFT->setXAxis(0.0, 21);
@@ -777,6 +782,17 @@ void PanelPolarimeter::adjust_Run_Start(short int typeRun){
         minXAverage = 0;
         maxXAverage = measurementLength + measurementLength*0.1 + ConfigureMeasurement->timePoint[0]/1000;
         ui->qwtPlot_Pol_Average->setXAxis(minXAverage, maxXAverage);
+
+        /* Adjust the approximated measurement number in the x-top axis of the average */
+        if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->NConcentrations > 25){
+
+            /* If there are too many number, then just plot every two */
+            ui->qwtPlot_Pol_Average->setXAxisTop(-0.5, ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->NConcentrations + ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->NConcentrations*0.1, 2);
+        }else{
+
+            /* If less points, then show all the measurement numbers */
+            ui->qwtPlot_Pol_Average->setXAxisTop(-0.5, ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->NConcentrations + ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->NConcentrations*0.1, 1);
+        }
 
         /* Clear all other plots too */
         PolPlotter->clean_AllPlots();
@@ -1543,6 +1559,7 @@ void PanelPolarimeter::clean_All_Pol(void){
     maxYRaw = 0;
     maxYAverage = 0;
     ui->qwtPlot_Pol_Average->setXAxis(minXAverage, maxXAverage);
+    ui->qwtPlot_Pol_Average->setXAxisTop(-0.8 , 20.3, 2);
 
     /* Nothing is running */
     Runner = new Pol_Measurements();
@@ -2578,6 +2595,7 @@ void PanelPolarimeter::plot_Average(void){
             minXAverage = PolPlotter->maxXtime;
             maxXAverage = PolPlotter->maxXtime + measurementLength + measurementLength*0.1 + ConfigureMeasurement->timePoint[0]/1000;
             ui->qwtPlot_Pol_Average->setXAxis(minXAverage, maxXAverage);
+
         }
 
         /* Restart all vector to don't overload them with too many information */

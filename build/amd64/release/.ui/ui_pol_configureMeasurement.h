@@ -710,9 +710,9 @@ public:
         doubleSpinBox_MinImp1->setObjectName(QStringLiteral("doubleSpinBox_MinImp1"));
         doubleSpinBox_MinImp1->setMinimumSize(QSize(80, 0));
         doubleSpinBox_MinImp1->setMaximumSize(QSize(80, 16777215));
-        doubleSpinBox_MinImp1->setDecimals(1);
+        doubleSpinBox_MinImp1->setDecimals(2);
         doubleSpinBox_MinImp1->setMaximum(1e+8);
-        doubleSpinBox_MinImp1->setSingleStep(0.1);
+        doubleSpinBox_MinImp1->setSingleStep(0.01);
 
         horizontalLayout_4->addWidget(doubleSpinBox_MinImp1);
 
@@ -737,7 +737,7 @@ public:
         doubleSpinBox_StockImp1->setObjectName(QStringLiteral("doubleSpinBox_StockImp1"));
         doubleSpinBox_StockImp1->setMinimumSize(QSize(80, 0));
         doubleSpinBox_StockImp1->setMaximumSize(QSize(80, 16777215));
-        doubleSpinBox_StockImp1->setDecimals(1);
+        doubleSpinBox_StockImp1->setDecimals(2);
         doubleSpinBox_StockImp1->setMaximum(1e+6);
         doubleSpinBox_StockImp1->setSingleStep(0.1);
         doubleSpinBox_StockImp1->setValue(4);
@@ -765,9 +765,9 @@ public:
         doubleSpinBox_MaxGluc->setObjectName(QStringLiteral("doubleSpinBox_MaxGluc"));
         doubleSpinBox_MaxGluc->setMinimumSize(QSize(80, 0));
         doubleSpinBox_MaxGluc->setMaximumSize(QSize(80, 16777215));
-        doubleSpinBox_MaxGluc->setDecimals(1);
+        doubleSpinBox_MaxGluc->setDecimals(2);
         doubleSpinBox_MaxGluc->setMaximum(1e+12);
-        doubleSpinBox_MaxGluc->setSingleStep(0.1);
+        doubleSpinBox_MaxGluc->setSingleStep(0.01);
         doubleSpinBox_MaxGluc->setValue(500);
 
         horizontalLayout_17->addWidget(doubleSpinBox_MaxGluc);
@@ -793,7 +793,7 @@ public:
         doubleSpinBox_StockGlucose->setObjectName(QStringLiteral("doubleSpinBox_StockGlucose"));
         doubleSpinBox_StockGlucose->setMinimumSize(QSize(80, 0));
         doubleSpinBox_StockGlucose->setMaximumSize(QSize(80, 16777215));
-        doubleSpinBox_StockGlucose->setDecimals(1);
+        doubleSpinBox_StockGlucose->setDecimals(2);
         doubleSpinBox_StockGlucose->setMaximum(1e+8);
         doubleSpinBox_StockGlucose->setSingleStep(0.1);
         doubleSpinBox_StockGlucose->setValue(1000);
@@ -821,9 +821,9 @@ public:
         doubleSpinBox_MinGluc->setObjectName(QStringLiteral("doubleSpinBox_MinGluc"));
         doubleSpinBox_MinGluc->setMinimumSize(QSize(80, 0));
         doubleSpinBox_MinGluc->setMaximumSize(QSize(80, 16777215));
-        doubleSpinBox_MinGluc->setDecimals(1);
+        doubleSpinBox_MinGluc->setDecimals(2);
         doubleSpinBox_MinGluc->setMaximum(1e+6);
-        doubleSpinBox_MinGluc->setSingleStep(0.1);
+        doubleSpinBox_MinGluc->setSingleStep(0.01);
 
         horizontalLayout_15->addWidget(doubleSpinBox_MinGluc);
 
@@ -848,9 +848,9 @@ public:
         doubleSpinBox_MaxImp1->setObjectName(QStringLiteral("doubleSpinBox_MaxImp1"));
         doubleSpinBox_MaxImp1->setMinimumSize(QSize(80, 0));
         doubleSpinBox_MaxImp1->setMaximumSize(QSize(80, 16777215));
-        doubleSpinBox_MaxImp1->setDecimals(1);
+        doubleSpinBox_MaxImp1->setDecimals(2);
         doubleSpinBox_MaxImp1->setMaximum(1e+6);
-        doubleSpinBox_MaxImp1->setSingleStep(0.1);
+        doubleSpinBox_MaxImp1->setSingleStep(0.01);
         doubleSpinBox_MaxImp1->setValue(2);
 
         horizontalLayout_6->addWidget(doubleSpinBox_MaxImp1);
@@ -876,9 +876,9 @@ public:
         doubleSpinBox_MinImp2->setObjectName(QStringLiteral("doubleSpinBox_MinImp2"));
         doubleSpinBox_MinImp2->setMinimumSize(QSize(80, 0));
         doubleSpinBox_MinImp2->setMaximumSize(QSize(80, 16777215));
-        doubleSpinBox_MinImp2->setDecimals(1);
+        doubleSpinBox_MinImp2->setDecimals(2);
         doubleSpinBox_MinImp2->setMaximum(1e+8);
-        doubleSpinBox_MinImp2->setSingleStep(0.1);
+        doubleSpinBox_MinImp2->setSingleStep(0.01);
 
         horizontalLayout_14->addWidget(doubleSpinBox_MinImp2);
 
@@ -905,9 +905,9 @@ public:
         doubleSpinBox_MaxImp2->setObjectName(QStringLiteral("doubleSpinBox_MaxImp2"));
         doubleSpinBox_MaxImp2->setMinimumSize(QSize(80, 0));
         doubleSpinBox_MaxImp2->setMaximumSize(QSize(80, 16777215));
-        doubleSpinBox_MaxImp2->setDecimals(1);
+        doubleSpinBox_MaxImp2->setDecimals(2);
         doubleSpinBox_MaxImp2->setMaximum(1e+7);
-        doubleSpinBox_MaxImp2->setSingleStep(0.1);
+        doubleSpinBox_MaxImp2->setSingleStep(0.01);
         doubleSpinBox_MaxImp2->setValue(500);
 
         horizontalLayout_16->addWidget(doubleSpinBox_MaxImp2);
@@ -935,7 +935,7 @@ public:
         doubleSpinBox_StockImp2->setObjectName(QStringLiteral("doubleSpinBox_StockImp2"));
         doubleSpinBox_StockImp2->setMinimumSize(QSize(80, 0));
         doubleSpinBox_StockImp2->setMaximumSize(QSize(80, 16777203));
-        doubleSpinBox_StockImp2->setDecimals(1);
+        doubleSpinBox_StockImp2->setDecimals(2);
         doubleSpinBox_StockImp2->setMaximum(1e+8);
         doubleSpinBox_StockImp2->setSingleStep(0.1);
         doubleSpinBox_StockImp2->setValue(1500);

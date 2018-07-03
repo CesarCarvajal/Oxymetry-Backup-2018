@@ -48,6 +48,7 @@ Plot::Plot(QWidget *parent):
 
     /* Assign axis font */
     setAxisFont(xBottom, plotFont);
+    setAxisFont(xTop, plotFont);
     setAxisFont(yLeft, plotFont);
     setAxisFont(yRight, plotFont);
 
@@ -86,6 +87,17 @@ Plot::Plot(QWidget *parent):
 void Plot::setXAxis(double min, double max)
 {
     setAxisScale(xBottom, min, max);
+    zoomer->setZoomBase(true);
+}
+
+/**
+ * @brief Set x-axis top limits
+ * @param[in] min Minimum
+ * @param[in] max Maximum
+ */
+void Plot::setXAxisTop(double min, double max, double step)
+{
+    setAxisScale(xTop, min, max, step);
     zoomer->setZoomBase(true);
 }
 
@@ -150,7 +162,26 @@ void Plot::setXAxisTitle(QString title)
 
     /* Set font and update title */
     bottomTitle.setFont(axisFont);
-    setAxisTitle(xBottom, bottomTitle);
+    setAxisTitle(xBottom, bottomTitle); 
+
+}
+
+/**
+ * @brief Set x-axis top title
+ * @param[in] title Axis title
+ */
+void Plot::setXAxisTopTitle(QString title)
+{
+
+    axisFont.setPointSize(8);
+
+    QwtText bottomTitle = title;
+
+    /* Set font and update title */
+    bottomTitle.setFont(axisFont);
+    setAxisTitle(xTop, bottomTitle);
+
+    axisFont.setPointSize(10);
 }
 
 /**
