@@ -773,25 +773,28 @@ void PanelPolarimeter::adjust_Run_Start(short int typeRun){
         ui->label_remaining->setVisible(true);
 
         /* Calculate the total time length of the measurements */
-        int measurementLength = ConfigureMeasurement->timePoint.at(ConfigureMeasurement->timePoint.length()-1)/1000;
+        int measurementLength = ConfigureMeasurement->totalMtime;
 
         /* Adjust the intervals of averages plot during the measurements, to get 300 points */
-        Runner->measurementPlotTimeInterval = int(ceil((ConfigureMeasurement->timePoint.at(ConfigureMeasurement->timePoint.length()-1)/300000)));
+        Runner->measurementPlotTimeInterval = int(ceil(ConfigureMeasurement->totalMtime/300));
 
         /* Adjust axis for the measurements */
         minXAverage = 0;
-        maxXAverage = measurementLength + measurementLength*0.1 + ConfigureMeasurement->timePoint[0]/1000;
+        maxXAverage = measurementLength + measurementLength*0.1;
         ui->qwtPlot_Pol_Average->setXAxis(minXAverage, maxXAverage);
 
+        /* How many measurement points are there? */
+        double lengthMeasNumber = maxXAverage  / (ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->PumpsCycle/1000);
+
         /* Adjust the approximated measurement number in the x-top axis of the average */
-        if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->NConcentrations > 25){
+        if(lengthMeasNumber > 25){
 
             /* If there are too many number, then just plot every two */
-            ui->qwtPlot_Pol_Average->setXAxisTop(-0.5, ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->NConcentrations + ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->NConcentrations*0.1, 2);
+            ui->qwtPlot_Pol_Average->setXAxisTop(-0.5, lengthMeasNumber-0.5, 2);
         }else{
 
             /* If less points, then show all the measurement numbers */
-            ui->qwtPlot_Pol_Average->setXAxisTop(-0.5, ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->NConcentrations + ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->NConcentrations*0.1, 1);
+            ui->qwtPlot_Pol_Average->setXAxisTop(-0.5, lengthMeasNumber-0.5, 1);
         }
 
         /* Clear all other plots too */
@@ -2583,18 +2586,6 @@ void PanelPolarimeter::plot_Average(void){
             /* Save the actual maximum value of Y plot of averages */
             maxYAverage = ceil((PolPlotter->maxYValue)*1.1);
             ui->qwtPlot_Pol_Average->setYAxis(0.0, maxYAverage);
-
-        }
-
-        /* Change axis according to the running type 1: Measuring */
-        if(Runner->PolMeasuring){
-            /* Calculate the total time length of the measurements */
-            int measurementLength = ConfigureMeasurement->timePoint.at(ConfigureMeasurement->timePoint.length()-1)/1000;
-
-            /* Adjust axis for the measurements */
-            minXAverage = PolPlotter->maxXtime;
-            maxXAverage = PolPlotter->maxXtime + measurementLength + measurementLength*0.1 + ConfigureMeasurement->timePoint[0]/1000;
-            ui->qwtPlot_Pol_Average->setXAxis(minXAverage, maxXAverage);
 
         }
 

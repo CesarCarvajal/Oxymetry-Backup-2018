@@ -64,6 +64,9 @@ public:
     int shortBreak;
     int longBreak;
 
+    /* Cycle Time */
+    double PumpsCycle;
+
     /* Active substances flags */
     bool glucoseActive;
     bool Imp1Active;

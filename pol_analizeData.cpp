@@ -395,6 +395,13 @@ void selectAnalizeData::handleClickEvent(QWidget *widget)
             /* Load data with the known path */
             selectPath();
 
+            /* If there is more than 1 data set */
+            if(repetitions > 1){
+
+                /* Update the selection list */
+                updateSelectionList();
+            }
+
             /* Set falg to false again */
             automaticLoading = false;
 

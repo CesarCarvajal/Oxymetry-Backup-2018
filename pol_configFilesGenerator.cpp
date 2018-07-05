@@ -46,6 +46,7 @@ Pol_configFilesGenerator::Pol_configFilesGenerator()
     shortBreak = 0;
     longBreak = 0;
     repetition = 0;
+    PumpsCycle = 0;
 
     /* Active substances flags */
     glucoseActive = false;
@@ -146,10 +147,10 @@ void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFil
     fprintf(file, "%s", "Time_Interval;File_Name;\n");
 
     /* Cycle of a concentration */
-    double cycleTime = (2 * fillRefill + 4*shortBreak)*(NSteps + (NSteps-1)) +  (2 * fillRefill + 3*shortBreak + longBreak );
+    PumpsCycle = (2 * fillRefill + 4*shortBreak)*(NSteps + (NSteps-1)) +  (2 * fillRefill + 3*shortBreak + longBreak );
 
     /* Time intervals between measurements */
-    double measurementTime = cycleTime - (((longBreak + (2*IntegrationTime*NrSpectra*NrAverages))/3));
+    double measurementTime = PumpsCycle - (((longBreak + (2*IntegrationTime*NrSpectra*NrAverages))/3));
 
     /* Set initial time for repetitions in case they are present */
     int initialTime = 0;
@@ -161,7 +162,7 @@ void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFil
         for(int j = 0 ; j < NConcentrations; j++){
 
             /* Measurement cycle time */
-            int mTime = initialTime + measurementTime + (cycleTime * j);
+            int mTime = initialTime + measurementTime + (PumpsCycle * j);
 
             /* Configuration line */
             QString line = QString::number(mTime) + ";" ;
@@ -205,7 +206,7 @@ void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFil
         }
 
         /* Measurement cycle time */
-        initialTime = initialTime + measurementTime + (cycleTime * NConcentrations-1);
+        initialTime = initialTime + (PumpsCycle * (NConcentrations)) + ((2 * fillRefill + 4*shortBreak)*(NSteps));
 
     }
     /* Close file */
@@ -222,6 +223,11 @@ void Pol_configFilesGenerator::writePumpFile(FILE *pumpFile, QString filetype, Q
 
     /* Repeat the scripts when there are repetitions */
     for(int rep =0; rep < repetition; rep++){
+
+        /* write this second */
+        if(rep > 0){
+            fprintf(pumpFile, "%d\t%d\t%d\n", 1, 0, 0);
+        }
 
         /* Flow Calculation */
         for(int k =0; k < NConcentrations; k++){

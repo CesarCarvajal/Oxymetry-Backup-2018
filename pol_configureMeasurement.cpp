@@ -289,7 +289,7 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
 
         /* Is it checked? */
         externSoftware->ConfigurationFileGenerator->normalizedCounts = ui->checkBox_NormalizeCountsConfig->isChecked();
-}
+    }
 
     /* Update all parameters */
     updateConfigurationValues();
@@ -449,8 +449,12 @@ void configurePolMeasure::loadConfiguration(void)
         }
     }
 
-    /* Save the total time */
-    totalMtime = (timePoint.at(timePoint.length()-1) + timePoint.at(0))/1000;
+    /* How long last a measurement? */
+    double Mduration = (externSoftware->ConfigurationFileGenerator->NrSpectra * externSoftware->ConfigurationFileGenerator->IntegrationTime
+            * externSoftware->ConfigurationFileGenerator->NrAverages);
+
+     /* Save the total time */
+    totalMtime = ((timePoint.at(timePoint.length()-1))/1000) + externSoftware->ConfigurationFileGenerator->PumpsCycle/1000 + Mduration/1000;
 
     /* Copy path into line edit */
     ui->lineEdit_path->setText(pathDataMeasurements.absoluteFilePath());
@@ -517,9 +521,16 @@ void configurePolMeasure::getConfigurationFromFile(QString data)
         externSoftware->ConfigurationFileGenerator->NumberOfSubstances = externSoftware->ConfigurationFileGenerator->glucoseActive +
                 externSoftware->ConfigurationFileGenerator->Imp1Active + externSoftware->ConfigurationFileGenerator->Imp2Active;
 
-        externSoftware->GlucoseConcentration.resize(externSoftware->ConfigurationFileGenerator->NConcentrations);
-        externSoftware->Impurity1Concentration.resize(externSoftware->ConfigurationFileGenerator->NConcentrations);
-        externSoftware->Impurity2Concentration.resize(externSoftware->ConfigurationFileGenerator->NConcentrations);
+        externSoftware->GlucoseConcentration.resize(externSoftware->ConfigurationFileGenerator->NConcentrations * externSoftware->ConfigurationFileGenerator->repetition);
+        externSoftware->Impurity1Concentration.resize(externSoftware->ConfigurationFileGenerator->NConcentrations* externSoftware->ConfigurationFileGenerator->repetition);
+        externSoftware->Impurity2Concentration.resize(externSoftware->ConfigurationFileGenerator->NConcentrations* externSoftware->ConfigurationFileGenerator->repetition);
+
+        /* How long is a cycle? */
+        externSoftware->ConfigurationFileGenerator->PumpsCycle = (2 * externSoftware->ConfigurationFileGenerator->fillRefill +
+                                                                  4*externSoftware->ConfigurationFileGenerator->shortBreak)*(
+                    externSoftware->ConfigurationFileGenerator->NSteps + (externSoftware->ConfigurationFileGenerator->NSteps-1)) +
+                (2 * externSoftware->ConfigurationFileGenerator->fillRefill + 3*externSoftware->ConfigurationFileGenerator->shortBreak
+                 + externSoftware->ConfigurationFileGenerator->longBreak);
 
     }
 }
