@@ -61,6 +61,9 @@ public:
     /* Wavelengh range */
     double minWavelength, maxWavelength;
 
+    /* Interval mode user time for the measurements */
+    double UserTimeInterval;
+
 private:
 
     /* Run an external process for pump software */

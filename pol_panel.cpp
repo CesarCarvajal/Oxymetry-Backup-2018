@@ -690,7 +690,7 @@ void PanelPolarimeter::adjust_Run_End(){
     stop_Run_Polarimetry();
 
     /* If the measurement stopped by itself */
-    if(!Runner->Stopped){
+    if(!Runner->Stopped && !ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->intervalMode){
 
         /* Allow the automatic loading of files to the analize data window after the measurement */
         Runner->automaticData = true;
@@ -783,18 +783,36 @@ void PanelPolarimeter::adjust_Run_Start(short int typeRun){
         maxXAverage = measurementLength + measurementLength*0.1;
         ui->qwtPlot_Pol_Average->setXAxis(minXAverage, maxXAverage);
 
-        /* How many measurement points are there? */
-        double lengthMeasNumber = maxXAverage  / (ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->PumpsCycle/1000);
+        /* Adjust the measurement number plot in the averages */
+        double lengthMeasNumber = 0;
 
-        /* Adjust the approximated measurement number in the x-top axis of the average */
-        if(lengthMeasNumber > 25){
+        /*  Is this special mode active? */
+        if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->intervalMode){
 
-            /* If there are too many number, then just plot every two */
-            ui->qwtPlot_Pol_Average->setXAxisTop(-0.5, lengthMeasNumber-0.5, 2);
+            /* How many points this case? */
+            lengthMeasNumber = maxXAverage / (ConfigureMeasurement->externSoftware->UserTimeInterval/1000);
+
         }else{
 
-            /* If less points, then show all the measurement numbers */
+            /* How many measurement points are there? */
+            lengthMeasNumber = maxXAverage  / (ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->PumpsCycle/1000);
+        }
+
+        /* Adjust the approximated measurement number in the x-top axis of the average */
+        if(lengthMeasNumber < 25){
+
+            /* If there are too many number, then just plot every two */
             ui->qwtPlot_Pol_Average->setXAxisTop(-0.5, lengthMeasNumber-0.5, 1);
+
+        }else if(lengthMeasNumber > 500){
+
+            /* If less points, then show all the measurement numbers */
+            ui->qwtPlot_Pol_Average->setXAxisTop(-0.5, lengthMeasNumber-0.5, int(ceil(lengthMeasNumber/10)));
+
+        }else{
+
+            /* If there are too many number, then just plot every two */
+            ui->qwtPlot_Pol_Average->setXAxisTop(-0.5, lengthMeasNumber-0.5, int(ceil(lengthMeasNumber/30)));
         }
 
         /* Clear all other plots too */

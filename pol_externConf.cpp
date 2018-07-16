@@ -205,34 +205,65 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
     }
 
     /* Flow Calculation */
-    for(int i =0; i < ConfigurationFileGenerator->NConcentrations; i++){
+    if(ConfigurationFileGenerator->intervalMode){
 
-        /* Get the flows for each substance */
-        GlucoseFlow.replace(i,GlucoseConcentration.at(i)*((ConfigurationFileGenerator->absoluteFlow)/(stockSolutions.at(0))));
-        Impurity1Flow.replace(i,Impurity1Concentration.at(i)*((ConfigurationFileGenerator->absoluteFlow)/(stockSolutions.at(1))));
-        Impurity2Flow.replace(i,Impurity2Concentration.at(i)*((ConfigurationFileGenerator->absoluteFlow)/(stockSolutions.at(2))));
+            /* Get the flows for each substance */
+            GlucoseFlow.replace(0,maxConcentrations.at(0)*((ConfigurationFileGenerator->absoluteFlow)/(stockSolutions.at(0))));
+            Impurity1Flow.replace(0,maxConcentrations.at(1)*((ConfigurationFileGenerator->absoluteFlow)/(stockSolutions.at(1))));
+            Impurity2Flow.replace(0,maxConcentrations.at(2)*((ConfigurationFileGenerator->absoluteFlow)/(stockSolutions.at(2))));
 
-        /* Which substances are active? Calculate the right flow to substract from water */
-        double Flow = 0;
+            /* Which substances are active? Calculate the right flow to substract from water */
+            double Flow = 0;
 
-        /* If glucose is active consider its flow */
-        if(ConfigurationFileGenerator->glucoseActive){
-            Flow = Flow + GlucoseFlow.at(i);
+            /* If glucose is active consider its flow */
+            if(ConfigurationFileGenerator->glucoseActive){
+                Flow = Flow + GlucoseFlow.at(0);
+            }
+
+            /* If Impurity 1 is active consider its flow */
+            if(ConfigurationFileGenerator->Imp1Active){
+                Flow = Flow + Impurity1Flow.at(0);
+            }
+
+            /* If Impurity 2 is active consider its flow */
+            if(ConfigurationFileGenerator->Imp2Active){
+                Flow = Flow + Impurity2Flow.at(0);
+            }
+
+            /* Water Flow */
+            WaterFlow.replace(0,ConfigurationFileGenerator->absoluteFlow - Flow);
+
+    }else{
+
+        for(int i =0; i < ConfigurationFileGenerator->NConcentrations; i++){
+
+            /* Get the flows for each substance */
+            GlucoseFlow.replace(i,GlucoseConcentration.at(i)*((ConfigurationFileGenerator->absoluteFlow)/(stockSolutions.at(0))));
+            Impurity1Flow.replace(i,Impurity1Concentration.at(i)*((ConfigurationFileGenerator->absoluteFlow)/(stockSolutions.at(1))));
+            Impurity2Flow.replace(i,Impurity2Concentration.at(i)*((ConfigurationFileGenerator->absoluteFlow)/(stockSolutions.at(2))));
+
+            /* Which substances are active? Calculate the right flow to substract from water */
+            double Flow = 0;
+
+            /* If glucose is active consider its flow */
+            if(ConfigurationFileGenerator->glucoseActive){
+                Flow = Flow + GlucoseFlow.at(i);
+            }
+
+            /* If Impurity 1 is active consider its flow */
+            if(ConfigurationFileGenerator->Imp1Active){
+                Flow = Flow + Impurity1Flow.at(i);
+            }
+
+            /* If Impurity 2 is active consider its flow */
+            if(ConfigurationFileGenerator->Imp2Active){
+                Flow = Flow + Impurity2Flow.at(i);
+            }
+
+            /* Water Flow */
+            WaterFlow.replace(i,ConfigurationFileGenerator->absoluteFlow - Flow);
+
         }
-
-        /* If Impurity 1 is active consider its flow */
-        if(ConfigurationFileGenerator->Imp1Active){
-            Flow = Flow + Impurity1Flow.at(i);
-        }
-
-        /* If Impurity 2 is active consider its flow */
-        if(ConfigurationFileGenerator->Imp2Active){
-            Flow = Flow + Impurity2Flow.at(i);
-        }
-
-        /* Water Flow */
-        WaterFlow.replace(i,ConfigurationFileGenerator->absoluteFlow - Flow);
-
     }
 
     /* Write all scripts */
@@ -246,7 +277,8 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
 void Pol_ExternConf::writeScripts(void){
 
     /* Create the Spectrometer Script */
-    ConfigurationFileGenerator->GenerateSpectrometerConfiguration(pathForScripts, GlucoseConcentration, Impurity1Concentration, Impurity2Concentration, stockSolutions, minWavelength, maxWavelength);
+    ConfigurationFileGenerator->GenerateSpectrometerConfiguration(pathForScripts, GlucoseConcentration, Impurity1Concentration, Impurity2Concentration, stockSolutions, minWavelength, maxWavelength,     /* Interval mode user time for the measurements */
+                                                                  UserTimeInterval);
 
     /* Remove the existing pump files */
     removeExistingFiles();
@@ -338,14 +370,14 @@ QStringList Pol_ExternConf::TimeConverter(double mTime){
 
     }
     /* minutes */
-    else if(mTime > 60 && mTime < 3600){
+    else if(mTime >= 60 && mTime < 3600){
 
         mTime = mTime/60;
         unit = "min";
         precision = 2;
 
         /* Hours */
-    }else if(mTime > 3600 && mTime < 86400){
+    }else if(mTime >= 3600 && mTime < 86400){
 
         mTime = mTime/3600;
         unit = "hours";

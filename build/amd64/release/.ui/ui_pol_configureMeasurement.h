@@ -201,22 +201,28 @@ public:
     QLabel *label_4;
     QHBoxLayout *horizontalLayout_41;
     QSpacerItem *horizontalSpacer_23;
-    QHBoxLayout *horizontalLayout_44;
-    QLabel *label_BtimeInt;
-    QLineEdit *lineEdit_BtimeInterval;
-    QLabel *label_BtimeInt2;
-    QHBoxLayout *horizontalLayout_45;
+    QSpacerItem *verticalSpacer_3;
+    QGridLayout *gridLayout_9;
+    QHBoxLayout *horizontalLayout_56;
+    QCheckBox *checkBox_IntervalMode;
+    QHBoxLayout *horizontalLayout_55;
+    QLabel *label_intervalMode;
+    QHBoxLayout *horizontalLayout_57;
     QLabel *label_timebetweenM;
-    QLineEdit *lineEdit_timebetweenM;
+    QDoubleSpinBox *doubleSpinBox_timebetweenM;
     QLabel *label2_timebetweenM;
-    QHBoxLayout *horizontalLayout_42;
-    QSpacerItem *horizontalSpacer_3;
     QSpacerItem *verticalSpacer_2;
+    QVBoxLayout *verticalLayout_7;
     QHBoxLayout *timeLayout;
     QLabel *label_timeLabel;
     QLineEdit *timeEdit_timeLabel;
     QLabel *label_endTime;
     QLineEdit *lineEdit_EndTime;
+    QHBoxLayout *horizontalLayout_44;
+    QLabel *label_BtimeInt;
+    QDoubleSpinBox *doubleSpinBox_totalTime;
+    QLabel *label_BtimeInt2;
+    QSpacerItem *horizontalSpacer_7;
     QSpacerItem *verticalSpacer;
     QFrame *line_5;
     QHBoxLayout *horizontalLayout_29;
@@ -225,9 +231,15 @@ public:
     QSpacerItem *horizontalSpacer_16;
     QVBoxLayout *verticalLayout_6;
     QLabel *label_17;
-    QHBoxLayout *horizontalLayout_3;
+    QGridLayout *gridLayout_10;
+    QHBoxLayout *horizontalLayout_45;
     QLabel *label_BFileNamePrev;
     QLineEdit *lineEdit_BFileNamePrev;
+    QHBoxLayout *horizontalLayout_49;
+    QLabel *label_MSpace;
+    QDoubleSpinBox *doubleSpinBox_MSpace;
+    QLabel *label_MSpace2;
+    QHBoxLayout *horizontalLayout_3;
     QHBoxLayout *horizontalLayout_2;
     QLabel *label_filename;
     QLineEdit *lineEdit_path;
@@ -245,7 +257,7 @@ public:
     {
         if (configurePolMeasure->objectName().isEmpty())
             configurePolMeasure->setObjectName(QStringLiteral("configurePolMeasure"));
-        configurePolMeasure->resize(842, 790);
+        configurePolMeasure->resize(826, 853);
         QSizePolicy sizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -1357,11 +1369,8 @@ public:
         checkBox = new QCheckBox(ConfigurationLayout);
         checkBox->setObjectName(QStringLiteral("checkBox"));
         checkBox->setEnabled(false);
-        QSizePolicy sizePolicy6(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        sizePolicy6.setHorizontalStretch(0);
-        sizePolicy6.setVerticalStretch(0);
-        sizePolicy6.setHeightForWidth(checkBox->sizePolicy().hasHeightForWidth());
-        checkBox->setSizePolicy(sizePolicy6);
+        sizePolicy4.setHeightForWidth(checkBox->sizePolicy().hasHeightForWidth());
+        checkBox->setSizePolicy(sizePolicy4);
         checkBox->setMinimumSize(QSize(80, 0));
         checkBox->setMaximumSize(QSize(80, 16777215));
 
@@ -1491,109 +1500,97 @@ public:
 
         gridLayout_5->addLayout(horizontalLayout_41, 2, 3, 1, 1);
 
-        horizontalLayout_44 = new QHBoxLayout();
-        horizontalLayout_44->setObjectName(QStringLiteral("horizontalLayout_44"));
-        label_BtimeInt = new QLabel(ConfigurationLayout);
-        label_BtimeInt->setObjectName(QStringLiteral("label_BtimeInt"));
-        label_BtimeInt->setMinimumSize(QSize(100, 0));
-        label_BtimeInt->setMaximumSize(QSize(16777215, 16777215));
-        QPalette palette9;
-        palette9.setBrush(QPalette::Active, QPalette::WindowText, brush);
-        palette9.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
-        palette9.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        label_BtimeInt->setPalette(palette9);
 
-        horizontalLayout_44->addWidget(label_BtimeInt);
+        verticalLayout_5->addLayout(gridLayout_5);
 
-        lineEdit_BtimeInterval = new QLineEdit(ConfigurationLayout);
-        lineEdit_BtimeInterval->setObjectName(QStringLiteral("lineEdit_BtimeInterval"));
-        lineEdit_BtimeInterval->setEnabled(true);
-        lineEdit_BtimeInterval->setMinimumSize(QSize(80, 0));
-        lineEdit_BtimeInterval->setMaximumSize(QSize(80, 16777215));
-        QPalette palette10;
-        palette10.setBrush(QPalette::Active, QPalette::Text, brush2);
-        palette10.setBrush(QPalette::Inactive, QPalette::Text, brush2);
-        palette10.setBrush(QPalette::Disabled, QPalette::Text, brush1);
-        lineEdit_BtimeInterval->setPalette(palette10);
-        lineEdit_BtimeInterval->setFrame(false);
-        lineEdit_BtimeInterval->setReadOnly(true);
+        verticalSpacer_3 = new QSpacerItem(5, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-        horizontalLayout_44->addWidget(lineEdit_BtimeInterval);
+        verticalLayout_5->addItem(verticalSpacer_3);
 
-        label_BtimeInt2 = new QLabel(ConfigurationLayout);
-        label_BtimeInt2->setObjectName(QStringLiteral("label_BtimeInt2"));
-        label_BtimeInt2->setMinimumSize(QSize(30, 0));
-        QPalette palette11;
-        palette11.setBrush(QPalette::Active, QPalette::WindowText, brush);
-        palette11.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
-        palette11.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        label_BtimeInt2->setPalette(palette11);
+        gridLayout_9 = new QGridLayout();
+        gridLayout_9->setObjectName(QStringLiteral("gridLayout_9"));
+        horizontalLayout_56 = new QHBoxLayout();
+        horizontalLayout_56->setObjectName(QStringLiteral("horizontalLayout_56"));
+        checkBox_IntervalMode = new QCheckBox(ConfigurationLayout);
+        checkBox_IntervalMode->setObjectName(QStringLiteral("checkBox_IntervalMode"));
+        sizePolicy2.setHeightForWidth(checkBox_IntervalMode->sizePolicy().hasHeightForWidth());
+        checkBox_IntervalMode->setSizePolicy(sizePolicy2);
+        checkBox_IntervalMode->setMinimumSize(QSize(220, 0));
 
-        horizontalLayout_44->addWidget(label_BtimeInt2);
+        horizontalLayout_56->addWidget(checkBox_IntervalMode);
 
 
-        gridLayout_5->addLayout(horizontalLayout_44, 3, 0, 1, 1);
+        gridLayout_9->addLayout(horizontalLayout_56, 0, 1, 1, 1);
 
-        horizontalLayout_45 = new QHBoxLayout();
-        horizontalLayout_45->setObjectName(QStringLiteral("horizontalLayout_45"));
+        horizontalLayout_55 = new QHBoxLayout();
+        horizontalLayout_55->setObjectName(QStringLiteral("horizontalLayout_55"));
+        label_intervalMode = new QLabel(ConfigurationLayout);
+        label_intervalMode->setObjectName(QStringLiteral("label_intervalMode"));
+
+        horizontalLayout_55->addWidget(label_intervalMode);
+
+
+        gridLayout_9->addLayout(horizontalLayout_55, 0, 3, 1, 1);
+
+        horizontalLayout_57 = new QHBoxLayout();
+        horizontalLayout_57->setObjectName(QStringLiteral("horizontalLayout_57"));
         label_timebetweenM = new QLabel(ConfigurationLayout);
         label_timebetweenM->setObjectName(QStringLiteral("label_timebetweenM"));
         label_timebetweenM->setMinimumSize(QSize(100, 0));
         label_timebetweenM->setMaximumSize(QSize(16777215, 16777215));
-        QPalette palette12;
-        palette12.setBrush(QPalette::Active, QPalette::WindowText, brush);
-        palette12.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
-        palette12.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        label_timebetweenM->setPalette(palette12);
+        QPalette palette9;
+        palette9.setBrush(QPalette::Active, QPalette::WindowText, brush);
+        palette9.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
+        palette9.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        label_timebetweenM->setPalette(palette9);
 
-        horizontalLayout_45->addWidget(label_timebetweenM);
+        horizontalLayout_57->addWidget(label_timebetweenM);
 
-        lineEdit_timebetweenM = new QLineEdit(ConfigurationLayout);
-        lineEdit_timebetweenM->setObjectName(QStringLiteral("lineEdit_timebetweenM"));
-        lineEdit_timebetweenM->setEnabled(true);
-        lineEdit_timebetweenM->setMinimumSize(QSize(80, 0));
-        lineEdit_timebetweenM->setMaximumSize(QSize(80, 16777215));
-        QPalette palette13;
-        palette13.setBrush(QPalette::Active, QPalette::Text, brush2);
-        palette13.setBrush(QPalette::Inactive, QPalette::Text, brush2);
-        palette13.setBrush(QPalette::Disabled, QPalette::Text, brush1);
-        lineEdit_timebetweenM->setPalette(palette13);
-        lineEdit_timebetweenM->setFrame(false);
-        lineEdit_timebetweenM->setReadOnly(true);
-        lineEdit_timebetweenM->setClearButtonEnabled(false);
+        doubleSpinBox_timebetweenM = new QDoubleSpinBox(ConfigurationLayout);
+        doubleSpinBox_timebetweenM->setObjectName(QStringLiteral("doubleSpinBox_timebetweenM"));
+        sizePolicy4.setHeightForWidth(doubleSpinBox_timebetweenM->sizePolicy().hasHeightForWidth());
+        doubleSpinBox_timebetweenM->setSizePolicy(sizePolicy4);
+        doubleSpinBox_timebetweenM->setMinimumSize(QSize(80, 0));
+        doubleSpinBox_timebetweenM->setMaximumSize(QSize(80, 16777215));
+        QPalette palette10;
+        palette10.setBrush(QPalette::Active, QPalette::Text, brush2);
+        palette10.setBrush(QPalette::Inactive, QPalette::Text, brush2);
+        palette10.setBrush(QPalette::Disabled, QPalette::Text, brush1);
+        doubleSpinBox_timebetweenM->setPalette(palette10);
+        doubleSpinBox_timebetweenM->setFrame(false);
+        doubleSpinBox_timebetweenM->setReadOnly(true);
+        doubleSpinBox_timebetweenM->setButtonSymbols(QAbstractSpinBox::NoButtons);
+        doubleSpinBox_timebetweenM->setDecimals(2);
+        doubleSpinBox_timebetweenM->setMinimum(0.01);
+        doubleSpinBox_timebetweenM->setMaximum(1e+8);
+        doubleSpinBox_timebetweenM->setSingleStep(0.01);
+        doubleSpinBox_timebetweenM->setValue(6.32);
 
-        horizontalLayout_45->addWidget(lineEdit_timebetweenM);
+        horizontalLayout_57->addWidget(doubleSpinBox_timebetweenM);
 
         label2_timebetweenM = new QLabel(ConfigurationLayout);
         label2_timebetweenM->setObjectName(QStringLiteral("label2_timebetweenM"));
         label2_timebetweenM->setMinimumSize(QSize(30, 0));
-        QPalette palette14;
-        palette14.setBrush(QPalette::Active, QPalette::WindowText, brush);
-        palette14.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
-        palette14.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        label2_timebetweenM->setPalette(palette14);
+        QPalette palette11;
+        palette11.setBrush(QPalette::Active, QPalette::WindowText, brush);
+        palette11.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
+        palette11.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        label2_timebetweenM->setPalette(palette11);
 
-        horizontalLayout_45->addWidget(label2_timebetweenM);
-
-
-        gridLayout_5->addLayout(horizontalLayout_45, 3, 1, 1, 1);
-
-        horizontalLayout_42 = new QHBoxLayout();
-        horizontalLayout_42->setObjectName(QStringLiteral("horizontalLayout_42"));
-        horizontalSpacer_3 = new QSpacerItem(215, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
-
-        horizontalLayout_42->addItem(horizontalSpacer_3);
+        horizontalLayout_57->addWidget(label2_timebetweenM);
 
 
-        gridLayout_5->addLayout(horizontalLayout_42, 3, 3, 1, 1);
+        gridLayout_9->addLayout(horizontalLayout_57, 0, 2, 1, 1);
 
 
-        verticalLayout_5->addLayout(gridLayout_5);
+        verticalLayout_5->addLayout(gridLayout_9);
 
-        verticalSpacer_2 = new QSpacerItem(5, 5, QSizePolicy::Minimum, QSizePolicy::Fixed);
+        verticalSpacer_2 = new QSpacerItem(5, 10, QSizePolicy::Minimum, QSizePolicy::Fixed);
 
         verticalLayout_5->addItem(verticalSpacer_2);
 
+        verticalLayout_7 = new QVBoxLayout();
+        verticalLayout_7->setObjectName(QStringLiteral("verticalLayout_7"));
         timeLayout = new QHBoxLayout();
         timeLayout->setObjectName(QStringLiteral("timeLayout"));
         label_timeLabel = new QLabel(ConfigurationLayout);
@@ -1601,29 +1598,32 @@ public:
         sizePolicy5.setHeightForWidth(label_timeLabel->sizePolicy().hasHeightForWidth());
         label_timeLabel->setSizePolicy(sizePolicy5);
         label_timeLabel->setMinimumSize(QSize(100, 0));
-        QPalette palette15;
+        QPalette palette12;
         QBrush brush3(QColor(170, 0, 0, 255));
         brush3.setStyle(Qt::SolidPattern);
-        palette15.setBrush(QPalette::Active, QPalette::WindowText, brush3);
-        palette15.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
-        palette15.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        label_timeLabel->setPalette(palette15);
+        palette12.setBrush(QPalette::Active, QPalette::WindowText, brush3);
+        palette12.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
+        palette12.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        label_timeLabel->setPalette(palette12);
 
         timeLayout->addWidget(label_timeLabel);
 
         timeEdit_timeLabel = new QLineEdit(ConfigurationLayout);
         timeEdit_timeLabel->setObjectName(QStringLiteral("timeEdit_timeLabel"));
+        QSizePolicy sizePolicy6(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        sizePolicy6.setHorizontalStretch(0);
+        sizePolicy6.setVerticalStretch(0);
         sizePolicy6.setHeightForWidth(timeEdit_timeLabel->sizePolicy().hasHeightForWidth());
         timeEdit_timeLabel->setSizePolicy(sizePolicy6);
         timeEdit_timeLabel->setMinimumSize(QSize(0, 0));
         timeEdit_timeLabel->setMaximumSize(QSize(16777215, 16777215));
-        QPalette palette16;
+        QPalette palette13;
         QBrush brush4(QColor(255, 0, 0, 255));
         brush4.setStyle(Qt::SolidPattern);
-        palette16.setBrush(QPalette::Active, QPalette::Text, brush4);
-        palette16.setBrush(QPalette::Inactive, QPalette::Text, brush4);
-        palette16.setBrush(QPalette::Disabled, QPalette::Text, brush1);
-        timeEdit_timeLabel->setPalette(palette16);
+        palette13.setBrush(QPalette::Active, QPalette::Text, brush4);
+        palette13.setBrush(QPalette::Inactive, QPalette::Text, brush4);
+        palette13.setBrush(QPalette::Disabled, QPalette::Text, brush1);
+        timeEdit_timeLabel->setPalette(palette13);
         timeEdit_timeLabel->setFrame(true);
         timeEdit_timeLabel->setReadOnly(true);
 
@@ -1634,26 +1634,80 @@ public:
         sizePolicy5.setHeightForWidth(label_endTime->sizePolicy().hasHeightForWidth());
         label_endTime->setSizePolicy(sizePolicy5);
         label_endTime->setMinimumSize(QSize(100, 0));
-        QPalette palette17;
-        palette17.setBrush(QPalette::Active, QPalette::WindowText, brush);
-        palette17.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
-        palette17.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        label_endTime->setPalette(palette17);
+        QPalette palette14;
+        palette14.setBrush(QPalette::Active, QPalette::WindowText, brush);
+        palette14.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
+        palette14.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        label_endTime->setPalette(palette14);
 
         timeLayout->addWidget(label_endTime);
 
         lineEdit_EndTime = new QLineEdit(ConfigurationLayout);
         lineEdit_EndTime->setObjectName(QStringLiteral("lineEdit_EndTime"));
-        QPalette palette18;
-        palette18.setBrush(QPalette::Active, QPalette::Text, brush2);
-        palette18.setBrush(QPalette::Inactive, QPalette::Text, brush2);
-        palette18.setBrush(QPalette::Disabled, QPalette::Text, brush1);
-        lineEdit_EndTime->setPalette(palette18);
+        QPalette palette15;
+        palette15.setBrush(QPalette::Active, QPalette::Text, brush2);
+        palette15.setBrush(QPalette::Inactive, QPalette::Text, brush2);
+        palette15.setBrush(QPalette::Disabled, QPalette::Text, brush1);
+        lineEdit_EndTime->setPalette(palette15);
 
         timeLayout->addWidget(lineEdit_EndTime);
 
 
-        verticalLayout_5->addLayout(timeLayout);
+        verticalLayout_7->addLayout(timeLayout);
+
+        horizontalLayout_44 = new QHBoxLayout();
+        horizontalLayout_44->setObjectName(QStringLiteral("horizontalLayout_44"));
+        label_BtimeInt = new QLabel(ConfigurationLayout);
+        label_BtimeInt->setObjectName(QStringLiteral("label_BtimeInt"));
+        label_BtimeInt->setMinimumSize(QSize(100, 0));
+        label_BtimeInt->setMaximumSize(QSize(16777215, 16777215));
+        QPalette palette16;
+        palette16.setBrush(QPalette::Active, QPalette::WindowText, brush);
+        palette16.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
+        palette16.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        label_BtimeInt->setPalette(palette16);
+
+        horizontalLayout_44->addWidget(label_BtimeInt);
+
+        doubleSpinBox_totalTime = new QDoubleSpinBox(ConfigurationLayout);
+        doubleSpinBox_totalTime->setObjectName(QStringLiteral("doubleSpinBox_totalTime"));
+        sizePolicy6.setHeightForWidth(doubleSpinBox_totalTime->sizePolicy().hasHeightForWidth());
+        doubleSpinBox_totalTime->setSizePolicy(sizePolicy6);
+        doubleSpinBox_totalTime->setMinimumSize(QSize(80, 0));
+        doubleSpinBox_totalTime->setMaximumSize(QSize(80, 16777215));
+        QPalette palette17;
+        palette17.setBrush(QPalette::Active, QPalette::Text, brush2);
+        palette17.setBrush(QPalette::Inactive, QPalette::Text, brush2);
+        palette17.setBrush(QPalette::Disabled, QPalette::Text, brush1);
+        doubleSpinBox_totalTime->setPalette(palette17);
+        doubleSpinBox_totalTime->setFrame(false);
+        doubleSpinBox_totalTime->setButtonSymbols(QAbstractSpinBox::NoButtons);
+        doubleSpinBox_totalTime->setDecimals(4);
+        doubleSpinBox_totalTime->setMaximum(1e+12);
+        doubleSpinBox_totalTime->setSingleStep(0.0001);
+
+        horizontalLayout_44->addWidget(doubleSpinBox_totalTime);
+
+        label_BtimeInt2 = new QLabel(ConfigurationLayout);
+        label_BtimeInt2->setObjectName(QStringLiteral("label_BtimeInt2"));
+        label_BtimeInt2->setMinimumSize(QSize(30, 0));
+        QPalette palette18;
+        palette18.setBrush(QPalette::Active, QPalette::WindowText, brush);
+        palette18.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
+        palette18.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        label_BtimeInt2->setPalette(palette18);
+
+        horizontalLayout_44->addWidget(label_BtimeInt2);
+
+        horizontalSpacer_7 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_44->addItem(horizontalSpacer_7);
+
+
+        verticalLayout_7->addLayout(horizontalLayout_44);
+
+
+        verticalLayout_5->addLayout(verticalLayout_7);
 
 
         horizontalLayout_22->addLayout(verticalLayout_5);
@@ -1707,20 +1761,22 @@ public:
 
         verticalLayout_6->addWidget(label_17);
 
-        horizontalLayout_3 = new QHBoxLayout();
-        horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
+        gridLayout_10 = new QGridLayout();
+        gridLayout_10->setObjectName(QStringLiteral("gridLayout_10"));
+        horizontalLayout_45 = new QHBoxLayout();
+        horizontalLayout_45->setObjectName(QStringLiteral("horizontalLayout_45"));
         label_BFileNamePrev = new QLabel(ConfigurationLayout);
         label_BFileNamePrev->setObjectName(QStringLiteral("label_BFileNamePrev"));
         sizePolicy1.setHeightForWidth(label_BFileNamePrev->sizePolicy().hasHeightForWidth());
         label_BFileNamePrev->setSizePolicy(sizePolicy1);
-        label_BFileNamePrev->setMinimumSize(QSize(150, 0));
+        label_BFileNamePrev->setMinimumSize(QSize(120, 0));
         QPalette palette19;
         palette19.setBrush(QPalette::Active, QPalette::WindowText, brush);
         palette19.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
         palette19.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
         label_BFileNamePrev->setPalette(palette19);
 
-        horizontalLayout_3->addWidget(label_BFileNamePrev);
+        horizontalLayout_45->addWidget(label_BFileNamePrev);
 
         lineEdit_BFileNamePrev = new QLineEdit(ConfigurationLayout);
         lineEdit_BFileNamePrev->setObjectName(QStringLiteral("lineEdit_BFileNamePrev"));
@@ -1733,8 +1789,71 @@ public:
         lineEdit_BFileNamePrev->setFrame(true);
         lineEdit_BFileNamePrev->setReadOnly(true);
 
-        horizontalLayout_3->addWidget(lineEdit_BFileNamePrev);
+        horizontalLayout_45->addWidget(lineEdit_BFileNamePrev);
 
+
+        gridLayout_10->addLayout(horizontalLayout_45, 0, 0, 1, 1);
+
+        horizontalLayout_49 = new QHBoxLayout();
+        horizontalLayout_49->setObjectName(QStringLiteral("horizontalLayout_49"));
+        label_MSpace = new QLabel(ConfigurationLayout);
+        label_MSpace->setObjectName(QStringLiteral("label_MSpace"));
+        sizePolicy1.setHeightForWidth(label_MSpace->sizePolicy().hasHeightForWidth());
+        label_MSpace->setSizePolicy(sizePolicy1);
+        label_MSpace->setMinimumSize(QSize(120, 0));
+        QPalette palette21;
+        palette21.setBrush(QPalette::Active, QPalette::WindowText, brush);
+        QBrush brush5(QColor(0, 0, 0, 255));
+        brush5.setStyle(Qt::SolidPattern);
+        palette21.setBrush(QPalette::Active, QPalette::Text, brush5);
+        palette21.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
+        palette21.setBrush(QPalette::Inactive, QPalette::Text, brush5);
+        palette21.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        palette21.setBrush(QPalette::Disabled, QPalette::Text, brush1);
+        label_MSpace->setPalette(palette21);
+
+        horizontalLayout_49->addWidget(label_MSpace);
+
+        doubleSpinBox_MSpace = new QDoubleSpinBox(ConfigurationLayout);
+        doubleSpinBox_MSpace->setObjectName(QStringLiteral("doubleSpinBox_MSpace"));
+        doubleSpinBox_MSpace->setMinimumSize(QSize(80, 0));
+        doubleSpinBox_MSpace->setMaximumSize(QSize(80, 16777215));
+        QPalette palette22;
+        palette22.setBrush(QPalette::Active, QPalette::WindowText, brush5);
+        palette22.setBrush(QPalette::Active, QPalette::Text, brush2);
+        palette22.setBrush(QPalette::Inactive, QPalette::WindowText, brush5);
+        palette22.setBrush(QPalette::Inactive, QPalette::Text, brush2);
+        palette22.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        palette22.setBrush(QPalette::Disabled, QPalette::Text, brush1);
+        doubleSpinBox_MSpace->setPalette(palette22);
+        doubleSpinBox_MSpace->setFrame(false);
+        doubleSpinBox_MSpace->setReadOnly(true);
+        doubleSpinBox_MSpace->setButtonSymbols(QAbstractSpinBox::NoButtons);
+        doubleSpinBox_MSpace->setDecimals(3);
+        doubleSpinBox_MSpace->setMaximum(1e+10);
+
+        horizontalLayout_49->addWidget(doubleSpinBox_MSpace);
+
+        label_MSpace2 = new QLabel(ConfigurationLayout);
+        label_MSpace2->setObjectName(QStringLiteral("label_MSpace2"));
+        label_MSpace2->setMinimumSize(QSize(30, 0));
+        label_MSpace2->setMaximumSize(QSize(30, 16777215));
+        QPalette palette23;
+        palette23.setBrush(QPalette::Active, QPalette::WindowText, brush);
+        palette23.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
+        palette23.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        label_MSpace2->setPalette(palette23);
+
+        horizontalLayout_49->addWidget(label_MSpace2);
+
+
+        gridLayout_10->addLayout(horizontalLayout_49, 0, 1, 1, 1);
+
+
+        verticalLayout_6->addLayout(gridLayout_10);
+
+        horizontalLayout_3 = new QHBoxLayout();
+        horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
 
         verticalLayout_6->addLayout(horizontalLayout_3);
 
@@ -1744,13 +1863,13 @@ public:
         label_filename->setObjectName(QStringLiteral("label_filename"));
         sizePolicy1.setHeightForWidth(label_filename->sizePolicy().hasHeightForWidth());
         label_filename->setSizePolicy(sizePolicy1);
-        label_filename->setMinimumSize(QSize(150, 0));
+        label_filename->setMinimumSize(QSize(120, 0));
         label_filename->setMaximumSize(QSize(16777215, 16777215));
-        QPalette palette21;
-        palette21.setBrush(QPalette::Active, QPalette::WindowText, brush);
-        palette21.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
-        palette21.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        label_filename->setPalette(palette21);
+        QPalette palette24;
+        palette24.setBrush(QPalette::Active, QPalette::WindowText, brush);
+        palette24.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
+        palette24.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        label_filename->setPalette(palette24);
         label_filename->setFont(font2);
 
         horizontalLayout_2->addWidget(label_filename);
@@ -2048,26 +2167,20 @@ public:
         label_longBreak2->setText(QApplication::translate("configurePolMeasure", "sec", Q_NULLPTR));
         label_NRepet->setText(QApplication::translate("configurePolMeasure", "Nr. of Repetitions", Q_NULLPTR));
         label_4->setText(QString());
-#ifndef QT_NO_TOOLTIP
-        label_BtimeInt->setToolTip(QApplication::translate("configurePolMeasure", "Time Interval between measurements", Q_NULLPTR));
-#endif // QT_NO_TOOLTIP
-        label_BtimeInt->setText(QApplication::translate("configurePolMeasure", "Total Time:", Q_NULLPTR));
-#ifndef QT_NO_TOOLTIP
-        lineEdit_BtimeInterval->setToolTip(QApplication::translate("configurePolMeasure", "Total measurement time", Q_NULLPTR));
-#endif // QT_NO_TOOLTIP
-        lineEdit_BtimeInterval->setText(QApplication::translate("configurePolMeasure", "5.703", Q_NULLPTR));
-        label_BtimeInt2->setText(QApplication::translate("configurePolMeasure", "hours", Q_NULLPTR));
+        checkBox_IntervalMode->setText(QApplication::translate("configurePolMeasure", "Activate User Interval Mode", Q_NULLPTR));
+        label_intervalMode->setText(QString());
         label_timebetweenM->setText(QApplication::translate("configurePolMeasure", "Intervals:", Q_NULLPTR));
-#ifndef QT_NO_TOOLTIP
-        lineEdit_timebetweenM->setToolTip(QApplication::translate("configurePolMeasure", "Time between measurements", Q_NULLPTR));
-#endif // QT_NO_TOOLTIP
-        lineEdit_timebetweenM->setText(QApplication::translate("configurePolMeasure", "6.32", Q_NULLPTR));
         label2_timebetweenM->setText(QApplication::translate("configurePolMeasure", "min", Q_NULLPTR));
         label_timeLabel->setText(QApplication::translate("configurePolMeasure", "Starting at:  ", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         timeEdit_timeLabel->setToolTip(QApplication::translate("configurePolMeasure", "Time starting the measurement...", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_endTime->setText(QApplication::translate("configurePolMeasure", "Finishing at:", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        label_BtimeInt->setToolTip(QApplication::translate("configurePolMeasure", "Time Interval between measurements", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        label_BtimeInt->setText(QApplication::translate("configurePolMeasure", "Total Time:", Q_NULLPTR));
+        label_BtimeInt2->setText(QApplication::translate("configurePolMeasure", "hours", Q_NULLPTR));
         label_16->setText(QString());
         label_17->setText(QApplication::translate("configurePolMeasure", "Saving Information:", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
@@ -2078,6 +2191,8 @@ public:
         lineEdit_BFileNamePrev->setToolTip(QApplication::translate("configurePolMeasure", "File Name Preview", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         lineEdit_BFileNamePrev->setText(QApplication::translate("configurePolMeasure", "500C1_0C2_6ms_7Hz_1", Q_NULLPTR));
+        label_MSpace->setText(QApplication::translate("configurePolMeasure", "Memory Space:", Q_NULLPTR));
+        label_MSpace2->setText(QApplication::translate("configurePolMeasure", "MB", Q_NULLPTR));
         label_filename->setText(QApplication::translate("configurePolMeasure", "File Path:", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         lineEdit_path->setToolTip(QApplication::translate("configurePolMeasure", "Configuration File URL", Q_NULLPTR));

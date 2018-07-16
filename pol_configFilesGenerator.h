@@ -75,6 +75,9 @@ public:
     /* Normalized counts? */
     bool normalizedCounts;
 
+    /* Manually introduced intervals time? */
+    bool intervalMode;
+
     /* Start delay */
     double startDelay;
 
@@ -87,7 +90,7 @@ public:
     void GeneratePumpScripts(QString pathFile, QString filetype, QVector<double> FlowVector);
 
     /* Generate Spectrometer configuration */
-    void GenerateSpectrometerConfiguration(QString pathFile, QVector<double> GlucoseConcentration, QVector<double> Impurity1Concentration, QVector<double> Impurity2Concentration, QVector<double> StockSolutions, double minW, double maxW);
+    void GenerateSpectrometerConfiguration(QString pathFile, QVector<double> GlucoseConcentration, QVector<double> Impurity1Concentration, QVector<double> Impurity2Concentration, QVector<double> StockSolutions, double minW, double maxW, double UserTimeInterval);
 
     /* Calculate the correlation factors */
     float correlationCoefficient(QVector <double> X, QVector <double> Y, int N);

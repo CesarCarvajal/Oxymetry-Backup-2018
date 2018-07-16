@@ -83,6 +83,7 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     connect(ui->doubleSpinBox_startDelay, SIGNAL(valueChanged(double)), this, SLOT(updateConfigurationValues()));
     connect(ui->doubleSpinBox_minW, SIGNAL(valueChanged(double)), this, SLOT(updateConfigurationValues()));
     connect(ui->doubleSpinBox_maxW, SIGNAL(valueChanged(double)), this, SLOT(updateConfigurationValues()));
+    connect(ui->doubleSpinBox_timebetweenM, SIGNAL(valueChanged(double)), this, SLOT(updateConfigurationValues()));
 
     /* Solutions Concentrations */
     connect(ui->doubleSpinBox_MinGluc, SIGNAL(valueChanged(double)), this, SLOT(updateConfigurationValues()));
@@ -106,6 +107,9 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     /* Normalize the counts? */
     connect(ui->checkBox_NormalizeCountsConfig, SIGNAL(clicked()), signalMapperC, SLOT(map()));
 
+    /* Set manually mesurement intervals */
+    connect(ui->checkBox_IntervalMode, SIGNAL(clicked()), signalMapperC, SLOT(map()));
+
     /* Pump Flow */
     connect(ui->spinBox_ShortBreak, SIGNAL(valueChanged(int)), this, SLOT(updateConfigurationValues()));
     connect(ui->spinBox_LongBreak, SIGNAL(valueChanged(int)), this, SLOT(updateConfigurationValues()));
@@ -118,6 +122,7 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     signalMapperC->setMapping(ui->checkBox_Imp1, ui->checkBox_Imp1);
     signalMapperC->setMapping(ui->checkBox_Glucose, ui->checkBox_Glucose);
     signalMapperC->setMapping(ui->checkBox_NormalizeCountsConfig, ui->checkBox_NormalizeCountsConfig);
+    signalMapperC->setMapping(ui->checkBox_IntervalMode, ui->checkBox_IntervalMode);
 
     /* Connect Button of configuration */
     connect(ui->pushButton_generate, SIGNAL(clicked()), this, SLOT(configurePolarimeter()));
@@ -291,6 +296,66 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
         externSoftware->ConfigurationFileGenerator->normalizedCounts = ui->checkBox_NormalizeCountsConfig->isChecked();
     }
 
+    /* Check the normalization of counts */
+    if(checkBox == ui->checkBox_IntervalMode){
+
+        /* Is it checked? */
+        if(ui->checkBox_IntervalMode->isChecked()){
+
+            /* Do you want to set this mode? */
+            if (QMessageBox::Yes == QMessageBox::question(this, "Interval Mode", "Are you sure that you want to set the measurement time manually? \n \n "
+                                                          "This mode might not be syncrhonized with the Syringe Pumps. Also the generation of Pump Files"
+                                                          " will be enabled just for one concentration",
+                                                          QMessageBox::Yes | QMessageBox::No))
+            {
+                /* Show that this mode is active */
+                ui->label_intervalMode->setText("Interval Mode is Active");
+                ui->label_intervalMode->setStyleSheet("QLabel { color: red; }");
+
+                /* Change labels colors? */
+                ui->label_timebetweenM->setStyleSheet("QLabel { color: black; }");
+                ui->label2_timebetweenM->setStyleSheet("QLabel { color: black; }");
+                ui->doubleSpinBox_timebetweenM->setStyleSheet("QDoubleSpinBox { color: black; }");
+                ui->doubleSpinBox_timebetweenM->setReadOnly(false);
+                ui->doubleSpinBox_timebetweenM->setButtonSymbols(QDoubleSpinBox::UpDownArrows);
+                ui->doubleSpinBox_timebetweenM->setFrame(true);
+
+            }else{
+
+                /* Deselect the option */
+                ui->checkBox_IntervalMode->setChecked(false);
+
+            }
+
+        }else{
+
+            /* restart alert of interval mode active */
+            ui->label_intervalMode->setText("");
+            ui->label_timebetweenM->setStyleSheet("QLabel { color: rgb(0, 85, 0); }");
+            ui->label2_timebetweenM->setStyleSheet("QLabel { color: rgb(0, 85, 0); }");
+            ui->doubleSpinBox_timebetweenM->setStyleSheet("QDoubleSpinBox { color: rgb(0, 170, 0); }");
+            ui->doubleSpinBox_timebetweenM->setReadOnly(true);
+            ui->doubleSpinBox_timebetweenM->setButtonSymbols(QDoubleSpinBox::NoButtons);
+            ui->doubleSpinBox_timebetweenM->setFrame(false);
+
+        }
+
+        /* Is it checked? */
+        externSoftware->ConfigurationFileGenerator->intervalMode = ui->checkBox_IntervalMode->isChecked();
+
+        /* Disable changes on pumps scripts */
+        ui->doubleSpinBox_MinGluc->setEnabled(!ui->checkBox_IntervalMode->isChecked());
+        ui->doubleSpinBox_MinImp1->setEnabled(!ui->checkBox_IntervalMode->isChecked());
+        ui->doubleSpinBox_MinImp2->setEnabled(!ui->checkBox_IntervalMode->isChecked());
+        ui->lineEdit_VolG->setEnabled(!ui->checkBox_IntervalMode->isChecked());
+        ui->lineEdit_VolI1->setEnabled(!ui->checkBox_IntervalMode->isChecked());
+        ui->lineEdit_VolI2->setEnabled(!ui->checkBox_IntervalMode->isChecked());
+
+        /* Disable breaks */
+        ui->spinBox_ShortBreak->setEnabled(!ui->checkBox_IntervalMode->isChecked());
+        ui->spinBox_LongBreak->setEnabled(!ui->checkBox_IntervalMode->isChecked());
+    }
+
     /* Update all parameters */
     updateConfigurationValues();
 
@@ -371,11 +436,11 @@ void configurePolMeasure::loadConfiguration(void)
     /* Clear lists */
     cleanAll();
 
-    /* Check format of configuration file; we need at least 26 semicolons per line */
-    if (wordList[0].count(QLatin1Char(';')) != 26)
+    /* Check format of configuration file; we need at least 28 semicolons per line */
+    if (wordList[0].count(QLatin1Char(';')) != 28)
     {
         /* Show message */
-        showWarning("Malformed configuration file. Please check the file version. It should contain 26 configuration values or 25 semicolons", "");
+        showWarning("Malformed configuration file. Please check the file version. It should contain 28 configuration values or 27 semicolons", "");
         configured = false;
         return;
     }
@@ -449,13 +514,20 @@ void configurePolMeasure::loadConfiguration(void)
         }
     }
 
-    /* How long last a measurement? */
-    double Mduration = (externSoftware->ConfigurationFileGenerator->NrSpectra * externSoftware->ConfigurationFileGenerator->IntegrationTime
-            * externSoftware->ConfigurationFileGenerator->NrAverages);
+    /* If the interval mode is active, then recalculate the total time */
+    if(externSoftware->ConfigurationFileGenerator->intervalMode){
 
-     /* Save the total time */
-    totalMtime = ((timePoint.at(timePoint.length()-1))/1000) + externSoftware->ConfigurationFileGenerator->PumpsCycle/1000 + Mduration/1000;
+        /* Total time for the interval mode */
+        totalMtime = (externSoftware->ConfigurationFileGenerator->NConcentrations+1) * (externSoftware->UserTimeInterval/1000);
 
+    }else{
+        /* How long last a measurement? */
+        double Mduration = (externSoftware->ConfigurationFileGenerator->NrSpectra * externSoftware->ConfigurationFileGenerator->IntegrationTime
+                            * externSoftware->ConfigurationFileGenerator->NrAverages);
+
+        /* Save the total time */
+        totalMtime = ((timePoint.at(timePoint.length()-1))/1000) + externSoftware->ConfigurationFileGenerator->PumpsCycle/1000 + Mduration/1000;
+    }
     /* Copy path into line edit */
     ui->lineEdit_path->setText(pathDataMeasurements.absoluteFilePath());
 
@@ -513,6 +585,8 @@ void configurePolMeasure::getConfigurationFromFile(QString data)
         externSoftware->stockSolutions.replace(2, dataList.at(24).toDouble());
         externSoftware->ConfigurationFileGenerator->repetition = dataList.at(25).toInt();
         externSoftware->ConfigurationFileGenerator->normalizedCounts = dataList.at(26).toInt();
+        externSoftware->ConfigurationFileGenerator->intervalMode = dataList.at(27).toInt();
+        externSoftware->UserTimeInterval = dataList.at(28).toDouble();
 
         /* Calculate some parameters according to the loaded information */
         externSoftware->ConfigurationFileGenerator->fillRefill = (((externSoftware->ConfigurationFileGenerator->absVol/externSoftware->ConfigurationFileGenerator->absoluteFlow)
@@ -552,6 +626,12 @@ void configurePolMeasure::cancel(void)
  */
 void configurePolMeasure::GetConfigurationData(void)
 {
+
+    /* Get the interval mode */
+    externSoftware->ConfigurationFileGenerator->intervalMode = ui->checkBox_IntervalMode->isChecked();
+
+    /* Get the interval mode time from the user */
+    externSoftware->UserTimeInterval = ui->doubleSpinBox_timebetweenM->value()*60*1000;
 
     /* Get the start delay in seconds */
     externSoftware->ConfigurationFileGenerator->startDelay = ui->doubleSpinBox_startDelay->value()*3600;
@@ -719,9 +799,19 @@ void configurePolMeasure::updateConfigurationValues(void)
         C.append(QString::number(ui->doubleSpinBox_MaxImp2->value()) + "C3");
     }
 
-    /* Complete the file name preview */
-    ui->lineEdit_BFileNamePrev->setText(C + "_" + QString::number(ui->doubleSpinBox_intTime->value()) + "ms_"
-                                        + QString::number(ui->spinBox_BFreq->value()) + "Hz_1");
+    /* Are there repetitions? */
+    if(ui->spinBox_Nrepet->value() > 0){
+
+        /* Complete the file name preview */
+        ui->lineEdit_BFileNamePrev->setText(C + "_" + QString::number(ui->doubleSpinBox_intTime->value()) + "ms_"
+                                            + QString::number(ui->spinBox_BFreq->value()) + "Hz_1_R1");
+    }
+    else{
+
+        /* Complete the file name preview */
+        ui->lineEdit_BFileNamePrev->setText(C + "_" + QString::number(ui->doubleSpinBox_intTime->value()) + "ms_"
+                                            + QString::number(ui->spinBox_BFreq->value()) + "Hz_1");
+    }
 
     /* Estimate the cycle time */
     double cycleTime = (2 * fillRefill + 4*ShortBreak)
@@ -731,21 +821,38 @@ void configurePolMeasure::updateConfigurationValues(void)
     /* Estimate the measurement time */
     double measurementTime = cycleTime - (((LongBreak + (2*ui->doubleSpinBox_intTime->value()*ui->spinBox_BNSpec->value()*ui->spinBox_BNAve->value()))/3));
 
-    /* Convert the time to minutes, hours or days */
-    QStringList ConvertedTime = externSoftware->TimeConverter(measurementTime/1000);
+    /* What's the total time? */
+    double totalMtimer = 0;
 
-    /* Display the Measurement Time preview */
-    ui->lineEdit_timebetweenM->setText(ConvertedTime.at(0));
-    ui->label2_timebetweenM->setText(ConvertedTime.at(1));
+    /* Show the time */
+    QStringList ConvertedTime;
 
-    /* Estimate the total measurement time */
-    double totalMtimer = ((measurementTime + (cycleTime * ui->spinBox_BNMeas->value()))/1000)*(ui->spinBox_Nrepet->value() + 1);
+    /* Was the time manually introduced? */
+    if(!ui->checkBox_IntervalMode->isChecked()){
+        /* Convert the time to minutes, hours or days */
+        ConvertedTime = externSoftware->TimeConverter(measurementTime/1000);
 
-    /* Convert the time to minutes, hours or days */
-    ConvertedTime = externSoftware->TimeConverter(totalMtimer);
+        /* Display the Measurement Time preview */
+        ui->doubleSpinBox_timebetweenM->setValue(ConvertedTime.at(0).toDouble());
+        ui->label2_timebetweenM->setText(ConvertedTime.at(1));
+
+        /* Estimate the total measurement time */
+        totalMtimer = ((measurementTime + (cycleTime * ui->spinBox_BNMeas->value()))/1000)*(ui->spinBox_Nrepet->value() + 1);
+
+        /* Convert the time to minutes, hours or days */
+        ConvertedTime = externSoftware->TimeConverter(totalMtimer);
+
+    }else{
+
+        /* Estimate the total measurement time */
+        totalMtimer = ui->doubleSpinBox_timebetweenM->value()*ui->spinBox_BNMeas->value()*60*(ui->spinBox_Nrepet->value() + 1);
+
+        /* Convert the time to minutes, hours or days */
+        ConvertedTime = externSoftware->TimeConverter(totalMtimer);
+    }
 
     /* Display the Total Measurement Time */
-    ui->lineEdit_BtimeInterval->setText(ConvertedTime.at(0));
+    ui->doubleSpinBox_totalTime->setValue(ConvertedTime.at(0).toDouble());
     ui->label_BtimeInt2->setText(ConvertedTime.at(1));
 
     /* Minimum volume per stock solution */
@@ -759,9 +866,9 @@ void configurePolMeasure::updateConfigurationValues(void)
     volumeI2 = (volumeI2/ ui->doubleSpinBox_StockImp2->value())*double(ui->spinBox_BNMeas->value())*double(ui->spinBox_AbsVol->value());
 
     /* Show the user how much is needed minimum */
-    ui->lineEdit_VolG->setText(QString::number(volumeG));
-    ui->lineEdit_VolI1->setText(QString::number(volumeI1));
-    ui->lineEdit_VolI2->setText(QString::number(volumeI2));
+    ui->lineEdit_VolG->setText(QString::number(volumeG*(ui->spinBox_Nrepet->value()+1)));
+    ui->lineEdit_VolI1->setText(QString::number(volumeI1*(ui->spinBox_Nrepet->value()+1)));
+    ui->lineEdit_VolI2->setText(QString::number(volumeI2*(ui->spinBox_Nrepet->value()+1)));
 
     /* If there is a delay in the start, show when it's going to start then */
     if(ui->doubleSpinBox_startDelay->value() != 0){
@@ -843,6 +950,27 @@ void configurePolMeasure::updateConfigurationValues(void)
         ui->doubleSpinBox_StockImp2->setValue(ui->doubleSpinBox_MaxImp2->value()*(NumberOfSubstances));
     }
 
+    /* Update approximate memory space */
+    double space = ui->spinBox_BNMeas->value()*75*(ui->spinBox_Nrepet->value() + 1);
+
+    /* Calculate the space */
+    if(space < 1000){
+
+        ui->doubleSpinBox_MSpace->setValue(space);
+        ui->label_MSpace2->setText("KB");
+
+    }else if(space >= 1000 && space < 1000000){
+
+        ui->doubleSpinBox_MSpace->setValue(space/1000);
+        ui->label_MSpace2->setText("MB");
+
+    }else{
+
+        ui->doubleSpinBox_MSpace->setValue(space/1000000);
+        ui->label_MSpace2->setText("GB");
+
+    }
+
 }
 
 /**
@@ -898,6 +1026,40 @@ void configurePolMeasure::updateForm(void)
 
     /* Update normalized counts */
     ui->checkBox_NormalizeCountsConfig->setChecked(externSoftware->ConfigurationFileGenerator->normalizedCounts);
+
+    /* Update the interval mode */
+    ui->checkBox_IntervalMode->setChecked(externSoftware->ConfigurationFileGenerator->intervalMode);
+
+    /* Update user time interval */
+    ui->doubleSpinBox_timebetweenM->setValue(externSoftware->UserTimeInterval/(60*1000));
+
+    /* Is it checked? */
+    if(ui->checkBox_IntervalMode->isChecked()){
+
+        /* Show that this mode is active */
+        ui->label_intervalMode->setText("Interval Mode is Active");
+        ui->label_intervalMode->setStyleSheet("QLabel { color: red; }");
+
+        /* Change labels colors? */
+        ui->label_timebetweenM->setStyleSheet("QLabel { color: black; }");
+        ui->label2_timebetweenM->setStyleSheet("QLabel { color: black; }");
+        ui->doubleSpinBox_timebetweenM->setStyleSheet("QDoubleSpinBox { color: black; }");
+        ui->doubleSpinBox_timebetweenM->setReadOnly(false);
+        ui->doubleSpinBox_timebetweenM->setButtonSymbols(QDoubleSpinBox::UpDownArrows);
+        ui->doubleSpinBox_timebetweenM->setFrame(true);
+
+        /* Disable changes on pumps scripts */
+        ui->doubleSpinBox_MinGluc->setEnabled(!ui->checkBox_IntervalMode->isChecked());
+        ui->doubleSpinBox_MinImp1->setEnabled(!ui->checkBox_IntervalMode->isChecked());
+        ui->doubleSpinBox_MinImp2->setEnabled(!ui->checkBox_IntervalMode->isChecked());
+        ui->lineEdit_VolG->setEnabled(!ui->checkBox_IntervalMode->isChecked());
+        ui->lineEdit_VolI1->setEnabled(!ui->checkBox_IntervalMode->isChecked());
+        ui->lineEdit_VolI2->setEnabled(!ui->checkBox_IntervalMode->isChecked());
+
+        /* Disable breaks */
+        ui->spinBox_ShortBreak->setEnabled(!ui->checkBox_IntervalMode->isChecked());
+        ui->spinBox_LongBreak->setEnabled(!ui->checkBox_IntervalMode->isChecked());
+    }
 
     /* Update calculable parameters */
     updateConfigurationValues();

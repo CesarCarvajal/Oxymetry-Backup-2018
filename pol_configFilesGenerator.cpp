@@ -56,6 +56,9 @@ Pol_configFilesGenerator::Pol_configFilesGenerator()
     /* Normalizd counts? */
     normalizedCounts = false;
 
+    /* No interval mode active */
+    intervalMode = false;
+
     /* Delay on starting the measurements */
     startDelay = 0;
 
@@ -101,13 +104,14 @@ void Pol_configFilesGenerator::GeneratePumpScripts(QString pathFile, QString fil
  * @brief Generate Spectrometer configuration
  * @param[in] Vectors with Glucose and Impurities concentrations
  */
-void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFile, QVector <double> GlucoseConcentration, QVector <double> Impurity1Concentration, QVector <double> Impurity2Concentration, QVector <double> StockSolutions, double minW, double maxW){
+void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFile, QVector <double> GlucoseConcentration, QVector <double> Impurity1Concentration, QVector <double> Impurity2Concentration, QVector <double> StockSolutions, double minW, double maxW, double     /* Interval mode user time for the measurements */
+                                                                 UserTimeInterval){
 
     /* Open the file */
     FILE *file = fopen(pathFile.toLatin1().data(), "wt");
 
     /* Write in file */
-    fprintf(file, "%s", "1Nr_M;2Nr_Sp;3Int_T;4Nr_Av;5Freq;6MinW;7MaxW;8Ab_F;9Ab_V;10N_Ste;11S_Break;12L_Break;13St_Del;14C1?;15C2?;16C3?;17mC1;18MC1;19StC1;20mC2;21MC2;22StC2;23mC3;MC3;24StC3;25Rep;26NormC\n");
+    fprintf(file, "%s", "1Nr_M;2Nr_Sp;3Int_T;4Nr_Av;5Freq;6MinW;7MaxW;8Ab_F;9Ab_V;10N_Ste;11S_Break;12L_Break;13St_Del;14C1?;15C2?;16C3?;17mC1;18MC1;19StC1;20mC2;21MC2;22StC2;23mC3;MC3;24StC3;25Rep;26NormC;27IntMode;28IntModeTime\n");
 
     /* Write all the configuration data */
     QString configurationData = "";
@@ -138,7 +142,9 @@ void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFil
     configurationData.append(QString::number(*std::max_element(Impurity2Concentration.begin(), Impurity2Concentration.end()))+ ";");
     configurationData.append(QString::number(StockSolutions.at(2)) + ";");
     configurationData.append(QString::number(repetition) + ";");
-    configurationData.append(QString::number(normalizedCounts) + "\n");
+    configurationData.append(QString::number(normalizedCounts) + ";");
+    configurationData.append(QString::number(intervalMode) + ";");
+    configurationData.append(QString::number(UserTimeInterval) + "\n");
 
     /* Write in file */
     fprintf(file, "%s", configurationData.toLatin1().data());
@@ -161,38 +167,77 @@ void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFil
         /* Write measurement configuration for each concentration */
         for(int j = 0 ; j < NConcentrations; j++){
 
-            /* Measurement cycle time */
-            int mTime = initialTime + measurementTime + (PumpsCycle * j);
+            /* Line for the file names */
+            QString line  = "";
 
-            /* Configuration line */
-            QString line = QString::number(mTime) + ";" ;
+            /* Is the interval mode active? */
+            if(intervalMode){
 
-            /* If glucose is active call it Concentration 1 or C1 */
-            if(glucoseActive){
+                /* Measurement cycle time */
+                int mTime = UserTimeInterval * (j+1);
 
-                /* Add C1 to the file name */
-                line.append(QString::number(GlucoseConcentration.at(j)) + "C1_");
+                /* Configuration line */
+                line = QString::number(mTime) + ";" ;
+
+                /* If glucose is active call it Concentration 1 or C1 */
+                if(glucoseActive){
+
+                    /* Add C1 to the file name */
+                    line.append(QString::number(*std::max_element(GlucoseConcentration.begin(), GlucoseConcentration.end())) + "C1_");
+
+                }
+
+                /* If Impurity 1 is active call it Concentration 2 or C2 */
+                if(Imp1Active){
+
+                    /* Add C2 to the file name */
+                    line.append(QString::number(*std::max_element(Impurity1Concentration.begin(), Impurity1Concentration.end())) + "C2_");
+                }
+
+                /* If Impurity 2 is active call it Concentration 3 or C3 */
+                if(Imp2Active){
+
+                    /* Add C3 to the file name */
+                    line.append(QString::number(*std::max_element(Impurity2Concentration.begin(), Impurity2Concentration.end())) + "C3_");
+                }
 
             }
+            /* If the interval mode is not active, then continue normally */
+            else{
 
-            /* If Impurity 1 is active call it Concentration 2 or C2 */
-            if(Imp1Active){
+                /* Measurement cycle time */
+                int mTime = initialTime + measurementTime + (PumpsCycle * j);
 
-                /* Add C2 to the file name */
-                line.append(QString::number(Impurity1Concentration.at(j)) + "C2_");
-            }
+                /* Configuration line */
+                line = QString::number(mTime) + ";" ;
 
-            /* If Impurity 2 is active call it Concentration 3 or C3 */
-            if(Imp2Active){
+                /* If glucose is active call it Concentration 1 or C1 */
+                if(glucoseActive){
 
-                /* Add C3 to the file name */
-                line.append(QString::number(Impurity2Concentration.at(j)) + "C3_");
+                    /* Add C1 to the file name */
+                    line.append(QString::number(GlucoseConcentration.at(j)) + "C1_");
+
+                }
+
+                /* If Impurity 1 is active call it Concentration 2 or C2 */
+                if(Imp1Active){
+
+                    /* Add C2 to the file name */
+                    line.append(QString::number(Impurity1Concentration.at(j)) + "C2_");
+                }
+
+                /* If Impurity 2 is active call it Concentration 3 or C3 */
+                if(Imp2Active){
+
+                    /* Add C3 to the file name */
+                    line.append(QString::number(Impurity2Concentration.at(j)) + "C3_");
+                }
             }
 
             /* If there are repetitions then change the name */
             if(repetition > 1){
                 /* Complete the file name */
-                line = line.append(QString::number(IntegrationTime) + "ms_" + QString::number(Frequency) + "Hz_" + QString::number(j+1) + "_R" + QString::number(rep));
+                line = line.append(QString::number(IntegrationTime) + "ms_" + QString::number(Frequency) + "Hz_" + QString::number(j+1+((rep-1)*NConcentrations)) + "_R" + QString::number(rep));
             }else{
                 /* Complete the file name */
                 line = line.append(QString::number(IntegrationTime) + "ms_" + QString::number(Frequency) + "Hz_" + QString::number(j+1));
@@ -205,9 +250,16 @@ void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFil
             fprintf(file, "%s", line.toLatin1().data());
         }
 
-        /* Measurement cycle time */
-        initialTime = initialTime + (PumpsCycle * (NConcentrations)) + ((2 * fillRefill + 4*shortBreak)*(NSteps));
+        /* Is the interval mode active? */
+        if(intervalMode){
 
+            /* If there are repetitions, then check the right time */
+            initialTime = initialTime + NConcentrations*UserTimeInterval;
+        }
+        else{
+            /* Measurement cycle time */
+            initialTime = initialTime + (PumpsCycle * (NConcentrations)) + ((2 * fillRefill + 4*shortBreak)*(NSteps));
+        }
     }
     /* Close file */
     fclose(file);
@@ -229,8 +281,22 @@ void Pol_configFilesGenerator::writePumpFile(FILE *pumpFile, QString filetype, Q
             fprintf(pumpFile, "%d\t%d\t%d\n", 1, 0, 0);
         }
 
+        /* Get how many concentrations are really needed */
+        int countfor = 0;
+
+        /* If the interval mode is active just one is build */
+        if(intervalMode){
+
+            /* Just build the script for one concentration */
+            countfor = 1;
+        }else{
+
+            /* If not, then get all of them */
+            countfor = NConcentrations;
+        }
+
         /* Flow Calculation */
-        for(int k =0; k < NConcentrations; k++){
+        for(int k =0; k < countfor; k++){
 
             /* Write flushing pattern */
             writeFlushing(pumpFile, filetype);
