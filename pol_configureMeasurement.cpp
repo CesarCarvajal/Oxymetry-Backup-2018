@@ -72,7 +72,8 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     /* Connect buttons to signal mapper */
     connect(ui->pushButton_select, SIGNAL(clicked()), this, SLOT(selectPath()));
 
-    /* Connect configuration edition */
+    /* Connect button to add impurities */
+    connect(ui->pushButton_addImpurity, SIGNAL(clicked()), this, SLOT(addImpurities()));
 
     /* Spectrometer Settings */
     connect(ui->spinBox_BFreq, SIGNAL(valueChanged(int)), this, SLOT(updateConfigurationValues()));
@@ -100,6 +101,9 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     connect(ui->spinBox_Nrepet, SIGNAL(valueChanged(int)), this, SLOT(updateConfigurationValues()));
 
     /* Select the components */
+    connect(ui->checkBox_Imp5, SIGNAL(clicked()), signalMapperC, SLOT(map()));
+    connect(ui->checkBox_Imp4, SIGNAL(clicked()), signalMapperC, SLOT(map()));
+    connect(ui->checkBox_Imp3, SIGNAL(clicked()), signalMapperC, SLOT(map()));
     connect(ui->checkBox_Imp2, SIGNAL(clicked()), signalMapperC, SLOT(map()));
     connect(ui->checkBox_Imp1, SIGNAL(clicked()), signalMapperC, SLOT(map()));
     connect(ui->checkBox_Glucose, SIGNAL(clicked()), signalMapperC, SLOT(map()));
@@ -118,6 +122,9 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     connect(ui->spinBox_NSteps, SIGNAL(valueChanged(int)), this, SLOT(updateConfigurationValues()));
 
     /* Solutions Concentrations */
+    signalMapperC->setMapping(ui->checkBox_Imp5, ui->checkBox_Imp5);
+    signalMapperC->setMapping(ui->checkBox_Imp4, ui->checkBox_Imp4);
+    signalMapperC->setMapping(ui->checkBox_Imp3, ui->checkBox_Imp3);
     signalMapperC->setMapping(ui->checkBox_Imp2, ui->checkBox_Imp2);
     signalMapperC->setMapping(ui->checkBox_Imp1, ui->checkBox_Imp1);
     signalMapperC->setMapping(ui->checkBox_Glucose, ui->checkBox_Glucose);
@@ -140,18 +147,7 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     totalMtime = 0;
 
     /* Hide Solution 2 at the beginning */
-    ui->doubleSpinBox_StockImp2->setVisible(false);
-    ui->label_StockImp2->setVisible(false);
-    ui->label_StockImp2_2->setVisible(false);
-    ui->doubleSpinBox_MaxImp2->setVisible(false);
-    ui->label_MaxImp2->setVisible(false);
-    ui->label_MaxImp2_2->setVisible(false);
-    ui->doubleSpinBox_MinImp2->setVisible(false);
-    ui->label_MinImp2->setVisible(false);
-    ui->label_MinImp2_2->setVisible(false);
-    ui->label_VolI2->setVisible(false);
-    ui->label_VolI22->setVisible(false);
-    ui->lineEdit_VolI2->setVisible(false);
+    hideAdditionalSubstances(true, false, false, false, false);
 
     /* Hide the time label, show it only when there is a delay */
     ui->label_timeLabel->hide();
@@ -232,61 +228,46 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
 {
     QCheckBox *checkBox = qobject_cast<QCheckBox *>(widget);
 
-    /* Number of substances */
-    int NumberOfSubstances = ui->checkBox_Glucose->isChecked() + ui->checkBox_Imp1->isChecked() + ui->checkBox_Imp2->isChecked();
+    /* Check box of impurities */
+    if(checkBox == ui->checkBox_Imp1 || checkBox == ui->checkBox_Imp2 || checkBox == ui->checkBox_Imp3 || checkBox == ui->checkBox_Imp4 || checkBox == ui->checkBox_Imp5){
+
+        /* Show/Hide Impurities values */
+        hideAdditionalSubstances((ui->checkBox_Imp1->isChecked() && ui->checkBox_Imp1->isVisible()), (ui->checkBox_Imp2->isChecked() && ui->checkBox_Imp2->isVisible()),
+                                 (ui->checkBox_Imp3->isChecked() && ui->checkBox_Imp3->isVisible()),
+                                 (ui->checkBox_Imp4->isChecked() && ui->checkBox_Imp4->isVisible()), (ui->checkBox_Imp5->isChecked() && ui->checkBox_Imp5->isVisible()));
+
+        /* Set them to checked again */
+        ui->checkBox_Imp1->setChecked(true);
+        ui->checkBox_Imp2->setChecked(true);
+        ui->checkBox_Imp3->setChecked(true);
+        ui->checkBox_Imp4->setChecked(true);
+        ui->checkBox_Imp5->setChecked(true);
+
+        /* Enable button because one was removed */
+        ui->pushButton_addImpurity->setEnabled(true);
+    }
 
     /* Check the substances */
-    if(checkBox == ui->checkBox_Imp2 || checkBox == ui->checkBox_Imp1 || checkBox == ui->checkBox_Glucose){
-
-        /* Show/Hide Impurity 2 values */
-        ui->doubleSpinBox_StockImp2->setVisible(ui->checkBox_Imp2->isChecked());
-        ui->label_StockImp2->setVisible(ui->checkBox_Imp2->isChecked());
-        ui->label_StockImp2_2->setVisible(ui->checkBox_Imp2->isChecked());
-        ui->doubleSpinBox_MaxImp2->setVisible(ui->checkBox_Imp2->isChecked());
-        ui->label_MaxImp2->setVisible(ui->checkBox_Imp2->isChecked());
-        ui->label_MaxImp2_2->setVisible(ui->checkBox_Imp2->isChecked());
-        ui->doubleSpinBox_MinImp2->setVisible(ui->checkBox_Imp2->isChecked());
-        ui->label_MinImp2->setVisible(ui->checkBox_Imp2->isChecked());
-        ui->label_MinImp2_2->setVisible(ui->checkBox_Imp2->isChecked());
-        ui->label_VolI2->setVisible(ui->checkBox_Imp2->isChecked());
-        ui->label_VolI22->setVisible(ui->checkBox_Imp2->isChecked());
-        ui->lineEdit_VolI2->setVisible(ui->checkBox_Imp2->isChecked());
-
-        /* Show/Hide Impurity 1 values */
-        ui->doubleSpinBox_StockImp1->setVisible(ui->checkBox_Imp1->isChecked());
-        ui->label_StockImp1->setVisible(ui->checkBox_Imp1->isChecked());
-        ui->label_StockImp1_2->setVisible(ui->checkBox_Imp1->isChecked());
-        ui->doubleSpinBox_MaxImp1->setVisible(ui->checkBox_Imp1->isChecked());
-        ui->label_MaxImp1->setVisible(ui->checkBox_Imp1->isChecked());
-        ui->label_MaxImp1_2->setVisible(ui->checkBox_Imp1->isChecked());
-        ui->doubleSpinBox_MinImp1->setVisible(ui->checkBox_Imp1->isChecked());
-        ui->label_MinImp1->setVisible(ui->checkBox_Imp1->isChecked());
-        ui->label_MinImp1_2->setVisible(ui->checkBox_Imp1->isChecked());
-        ui->label_VolI1->setVisible(ui->checkBox_Imp1->isChecked());
-        ui->label_VolI12->setVisible(ui->checkBox_Imp1->isChecked());
-        ui->lineEdit_VolI1->setVisible(ui->checkBox_Imp1->isChecked());
+    if(checkBox == ui->checkBox_Glucose){
 
         /* Show/Hide Glucose values */
         ui->doubleSpinBox_StockGlucose->setVisible(ui->checkBox_Glucose->isChecked());
-        ui->label_StockGluc->setVisible(ui->checkBox_Glucose->isChecked());
-        ui->label_StockGluc2->setVisible(ui->checkBox_Glucose->isChecked());
         ui->doubleSpinBox_MaxGluc->setVisible(ui->checkBox_Glucose->isChecked());
-        ui->label_MaxGluc->setVisible(ui->checkBox_Glucose->isChecked());
-        ui->label_MaxGluc2->setVisible(ui->checkBox_Glucose->isChecked());
         ui->doubleSpinBox_MinGluc->setVisible(ui->checkBox_Glucose->isChecked());
-        ui->label_MinGluc->setVisible(ui->checkBox_Glucose->isChecked());
-        ui->label_MinGluc2->setVisible(ui->checkBox_Glucose->isChecked());
-        ui->label_VolGl1->setVisible(ui->checkBox_Glucose->isChecked());
-        ui->label_VolG2->setVisible(ui->checkBox_Glucose->isChecked());
-        ui->lineEdit_VolG->setVisible(ui->checkBox_Glucose->isChecked());
+        ui->doubleSpinBox_VolG->setVisible(ui->checkBox_Glucose->isChecked());
 
-        if(NumberOfSubstances!=0){
+    }
 
-            /* Adjust the Stock solutions or maximum concentration accordingly */
-            ui->doubleSpinBox_StockGlucose->setValue(ui->doubleSpinBox_MaxGluc->value()*(NumberOfSubstances));
-            ui->doubleSpinBox_StockImp1->setValue(ui->doubleSpinBox_MaxImp1->value()*(NumberOfSubstances));
-            ui->doubleSpinBox_StockImp2->setValue(ui->doubleSpinBox_MaxImp2->value()*(NumberOfSubstances));
-        }
+    /* Number of substances */
+    int NumberOfSubstances = ui->checkBox_Glucose->isChecked() + ui->checkBox_Imp1->isVisible() + ui->checkBox_Imp2->isVisible();
+
+    /* Adjust stock */
+    if(NumberOfSubstances!=0){
+
+        /* Adjust the Stock solutions or maximum concentration accordingly */
+        ui->doubleSpinBox_StockGlucose->setValue(ui->doubleSpinBox_MaxGluc->value()*(NumberOfSubstances));
+        ui->doubleSpinBox_StockImp1->setValue(ui->doubleSpinBox_MaxImp1->value()*(NumberOfSubstances));
+        ui->doubleSpinBox_StockImp2->setValue(ui->doubleSpinBox_MaxImp2->value()*(NumberOfSubstances));
     }
 
     /* Check the normalization of counts */
@@ -305,7 +286,7 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
             /* Do you want to set this mode? */
             if (QMessageBox::Yes == QMessageBox::question(this, "Interval Mode", "Are you sure that you want to set the measurement time manually? \n \n "
                                                           "This mode might not be syncrhonized with the Syringe Pumps. Also the generation of Pump Files"
-                                                          " will be enabled just for one concentration",
+                                                          " will be enabled for just the maximum concentrations.",
                                                           QMessageBox::Yes | QMessageBox::No))
             {
                 /* Show that this mode is active */
@@ -347,9 +328,9 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
         ui->doubleSpinBox_MinGluc->setEnabled(!ui->checkBox_IntervalMode->isChecked());
         ui->doubleSpinBox_MinImp1->setEnabled(!ui->checkBox_IntervalMode->isChecked());
         ui->doubleSpinBox_MinImp2->setEnabled(!ui->checkBox_IntervalMode->isChecked());
-        ui->lineEdit_VolG->setEnabled(!ui->checkBox_IntervalMode->isChecked());
-        ui->lineEdit_VolI1->setEnabled(!ui->checkBox_IntervalMode->isChecked());
-        ui->lineEdit_VolI2->setEnabled(!ui->checkBox_IntervalMode->isChecked());
+        ui->doubleSpinBox_VolG->setEnabled(!ui->checkBox_IntervalMode->isChecked());
+        ui->doubleSpinBox_VolI1->setEnabled(!ui->checkBox_IntervalMode->isChecked());
+        ui->doubleSpinBox_VolI2->setEnabled(!ui->checkBox_IntervalMode->isChecked());
 
         /* Disable breaks */
         ui->spinBox_ShortBreak->setEnabled(!ui->checkBox_IntervalMode->isChecked());
@@ -650,8 +631,9 @@ void configurePolMeasure::GetConfigurationData(void)
 
     /* Save the actual selected substances */
     externSoftware->ConfigurationFileGenerator->glucoseActive = ui->checkBox_Glucose->isChecked();
-    externSoftware->ConfigurationFileGenerator->Imp1Active = ui->checkBox_Imp1->isChecked();
-    externSoftware->ConfigurationFileGenerator->Imp2Active = ui->checkBox_Imp2->isChecked();
+
+    externSoftware->ConfigurationFileGenerator->Imp1Active = ui->checkBox_Imp1->isVisible();
+    externSoftware->ConfigurationFileGenerator->Imp2Active = ui->checkBox_Imp2->isVisible();
 
     /* Required for the Pump Scripts */
 
@@ -729,7 +711,7 @@ void configurePolMeasure::updateConfigurationValues(void)
 {
 
     /* Number of substances */
-    int NumberOfSubstances = ui->checkBox_Glucose->isChecked() + ui->checkBox_Imp1->isChecked() + ui->checkBox_Imp2->isChecked();
+    int NumberOfSubstances = ui->checkBox_Glucose->isChecked() + ui->checkBox_Imp1->isVisible() + ui->checkBox_Imp2->isVisible();
 
     /* Get Refilling Times in ms */
     int fillRefill = (((ui->spinBox_AbsVol->value()/ui->doubleSpinBox_AbsFlow->value())*60) / ui->spinBox_NSteps->value())*1000;
@@ -739,7 +721,7 @@ void configurePolMeasure::updateConfigurationValues(void)
     int LongBreak = (ui->spinBox_LongBreak->value())*1000 + (ui->doubleSpinBox_intTime->value()*ui->spinBox_BNSpec->value()*ui->spinBox_BNAve->value());
 
     /* Are there substances left? */
-    if(!ui->checkBox_Glucose->isChecked() && !ui->checkBox_Imp1->isChecked() && !ui->checkBox_Imp2->isChecked()){
+    if(!ui->checkBox_Glucose->isChecked() && !ui->checkBox_Imp1->isVisible() && !ui->checkBox_Imp2->isVisible()){
 
         /* Show critical */
         showCritical("At least one kind of substance has to be selected!", "");
@@ -749,17 +731,9 @@ void configurePolMeasure::updateConfigurationValues(void)
 
         /* Enable glucose by default */
         ui->doubleSpinBox_StockGlucose->setVisible(true);
-        ui->label_StockGluc->setVisible(true);
-        ui->label_StockGluc2->setVisible(true);
         ui->doubleSpinBox_MaxGluc->setVisible(true);
-        ui->label_MaxGluc->setVisible(true);
-        ui->label_MaxGluc2->setVisible(true);
         ui->doubleSpinBox_MinGluc->setVisible(true);
-        ui->label_MinGluc->setVisible(true);
-        ui->label_MinGluc2->setVisible(true);
-        ui->label_VolGl1->setVisible(true);
-        ui->label_VolG2->setVisible(true);
-        ui->lineEdit_VolG->setVisible(true);
+        ui->doubleSpinBox_VolG->setVisible(true);
 
     }
 
@@ -774,26 +748,26 @@ void configurePolMeasure::updateConfigurationValues(void)
     }
 
     /* Is glucose and one of the other two substacnes active? */
-    if(ui->checkBox_Glucose->isChecked() && (ui->checkBox_Imp1->isChecked() || ui->checkBox_Imp2->isChecked())){
+    if(ui->checkBox_Glucose->isChecked() && (ui->checkBox_Imp1->isVisible() || ui->checkBox_Imp2->isVisible())){
 
         /* Add the separator to the file name */
         C.append("_");
     }
 
     /* Is impurity 1 active? */
-    if(ui->checkBox_Imp1->isChecked()){
+    if(ui->checkBox_Imp1->isVisible()){
 
         /* If Impurity 1 is active, add to the name C2 */
         C.append(QString::number(ui->doubleSpinBox_MaxImp1->value()) + "C2");
     }
 
     /* If there is also a third substance, add the separator */
-    if(ui->checkBox_Imp1->isChecked() && ui->checkBox_Imp2->isChecked()){
+    if(ui->checkBox_Imp1->isVisible() && ui->checkBox_Imp2->isVisible()){
         C.append("_");
     }
 
     /* Is impurity 2 active? */
-    if(ui->checkBox_Imp2->isChecked()){
+    if(ui->checkBox_Imp2->isVisible()){
 
         /* If Impurity 2 is active, add to the name C3 */
         C.append(QString::number(ui->doubleSpinBox_MaxImp2->value()) + "C3");
@@ -812,6 +786,16 @@ void configurePolMeasure::updateConfigurationValues(void)
         ui->lineEdit_BFileNamePrev->setText(C + "_" + QString::number(ui->doubleSpinBox_intTime->value()) + "ms_"
                                             + QString::number(ui->spinBox_BFreq->value()) + "Hz_1");
     }
+
+    /* Minimum volume per stock solution */
+    double volumeG = (ui->doubleSpinBox_MinGluc->value() + ui->doubleSpinBox_MaxGluc->value())/(2);
+    volumeG = (volumeG/ ui->doubleSpinBox_StockGlucose->value())* double(ui->spinBox_BNMeas->value())* double(ui->spinBox_AbsVol->value());
+
+    double volumeI1 = (ui->doubleSpinBox_MinImp1->value() + ui->doubleSpinBox_MaxImp1->value())/(2);
+    volumeI1 = (volumeI1/ ui->doubleSpinBox_StockImp1->value())*double(ui->spinBox_BNMeas->value())*double(ui->spinBox_AbsVol->value());
+
+    double volumeI2 = (ui->doubleSpinBox_MinImp2->value() + ui->doubleSpinBox_MaxImp2->value())/(2);
+    volumeI2 = (volumeI2/ ui->doubleSpinBox_StockImp2->value())*double(ui->spinBox_BNMeas->value())*double(ui->spinBox_AbsVol->value());
 
     /* Estimate the cycle time */
     double cycleTime = (2 * fillRefill + 4*ShortBreak)
@@ -842,6 +826,11 @@ void configurePolMeasure::updateConfigurationValues(void)
         /* Convert the time to minutes, hours or days */
         ConvertedTime = externSoftware->TimeConverter(totalMtimer);
 
+        /* Show the user how much is needed minimum */
+        ui->doubleSpinBox_VolG->setValue(volumeG*(ui->spinBox_Nrepet->value()+1));
+        ui->doubleSpinBox_VolI1->setValue(volumeI1*(ui->spinBox_Nrepet->value()+1));
+        ui->doubleSpinBox_VolI2->setValue(volumeI2*(ui->spinBox_Nrepet->value()+1));
+
     }else{
 
         /* Estimate the total measurement time */
@@ -849,26 +838,16 @@ void configurePolMeasure::updateConfigurationValues(void)
 
         /* Convert the time to minutes, hours or days */
         ConvertedTime = externSoftware->TimeConverter(totalMtimer);
+
+        /* Show the user how much is needed minimum when there is just one concentration in the interval mode */
+        ui->doubleSpinBox_VolG->setValue((volumeG/ui->spinBox_BNMeas->value())*(ui->spinBox_Nrepet->value()+1));
+        ui->doubleSpinBox_VolI1->setValue((volumeI1/ui->spinBox_BNMeas->value())*(ui->spinBox_Nrepet->value()+1));
+        ui->doubleSpinBox_VolI2->setValue((volumeI2/ui->spinBox_BNMeas->value())*(ui->spinBox_Nrepet->value()+1));
     }
 
     /* Display the Total Measurement Time */
     ui->doubleSpinBox_totalTime->setValue(ConvertedTime.at(0).toDouble());
     ui->label_BtimeInt2->setText(ConvertedTime.at(1));
-
-    /* Minimum volume per stock solution */
-    double volumeG = (ui->doubleSpinBox_MinGluc->value() + ui->doubleSpinBox_MaxGluc->value())/(2);
-    volumeG = (volumeG/ ui->doubleSpinBox_StockGlucose->value())* double(ui->spinBox_BNMeas->value())* double(ui->spinBox_AbsVol->value());
-
-    double volumeI1 = (ui->doubleSpinBox_MinImp1->value() + ui->doubleSpinBox_MaxImp1->value())/(2);
-    volumeI1 = (volumeI1/ ui->doubleSpinBox_StockImp1->value())*double(ui->spinBox_BNMeas->value())*double(ui->spinBox_AbsVol->value());
-
-    double volumeI2 = (ui->doubleSpinBox_MinImp2->value() + ui->doubleSpinBox_MaxImp2->value())/(2);
-    volumeI2 = (volumeI2/ ui->doubleSpinBox_StockImp2->value())*double(ui->spinBox_BNMeas->value())*double(ui->spinBox_AbsVol->value());
-
-    /* Show the user how much is needed minimum */
-    ui->lineEdit_VolG->setText(QString::number(volumeG*(ui->spinBox_Nrepet->value()+1)));
-    ui->lineEdit_VolI1->setText(QString::number(volumeI1*(ui->spinBox_Nrepet->value()+1)));
-    ui->lineEdit_VolI2->setText(QString::number(volumeI2*(ui->spinBox_Nrepet->value()+1)));
 
     /* If there is a delay in the start, show when it's going to start then */
     if(ui->doubleSpinBox_startDelay->value() != 0){
@@ -931,7 +910,7 @@ void configurePolMeasure::updateConfigurationValues(void)
     }
 
     /* Show critical message if the concentration of the stock is inappropriate */
-    if(ui->doubleSpinBox_StockImp1->value() < ui->doubleSpinBox_MaxImp1->value()*(NumberOfSubstances) && ui->checkBox_Imp1->isChecked()){
+    if(ui->doubleSpinBox_StockImp1->value() < ui->doubleSpinBox_MaxImp1->value()*(NumberOfSubstances) && ui->checkBox_Imp1->isVisible()){
 
         QString message = "The stock of Impurity 1 should have a minimum concentration of " + QString::number(ui->doubleSpinBox_MaxImp1->value()*(NumberOfSubstances)) + " mg/dl";
         showCritical(message, "");
@@ -941,7 +920,7 @@ void configurePolMeasure::updateConfigurationValues(void)
     }
 
     /* Show critical message if the concentration of the stock is inappropriate */
-    if(ui->doubleSpinBox_StockImp2->value() < ui->doubleSpinBox_MaxImp2->value()*(NumberOfSubstances) && ui->checkBox_Imp2->isChecked() ){
+    if(ui->doubleSpinBox_StockImp2->value() < ui->doubleSpinBox_MaxImp2->value()*(NumberOfSubstances) && ui->checkBox_Imp2->isVisible()){
 
         QString message = "The stock of Impurity 2 should have a minimum concentration of " + QString::number(ui->doubleSpinBox_MaxImp2->value()*(NumberOfSubstances)) + " mg/dl";
         showCritical(message, "");
@@ -979,7 +958,7 @@ void configurePolMeasure::updateConfigurationValues(void)
 void configurePolMeasure::updateStockValues(void)
 {
     /* Number of substances */
-    int NumberOfSubstances = ui->checkBox_Glucose->isChecked() + ui->checkBox_Imp1->isChecked() + ui->checkBox_Imp2->isChecked();
+    int NumberOfSubstances = ui->checkBox_Glucose->isChecked() + ui->checkBox_Imp1->isVisible() + ui->checkBox_Imp2->isVisible();
 
     /* Adjust stock solutions concentration accordingly */
     ui->doubleSpinBox_StockGlucose->setValue(ui->doubleSpinBox_MaxGluc->value()*(NumberOfSubstances));
@@ -990,6 +969,7 @@ void configurePolMeasure::updateStockValues(void)
     /* Adjust stock solutions concentration accordingly */
     ui->doubleSpinBox_StockImp2->setValue(ui->doubleSpinBox_MaxImp2->value()*(NumberOfSubstances));
 
+    /* Update all values */
     updateConfigurationValues();
 }
 
@@ -1006,8 +986,8 @@ void configurePolMeasure::updateForm(void)
     ui->doubleSpinBox_AbsFlow->setValue(externSoftware->ConfigurationFileGenerator->absoluteFlow);
     ui->doubleSpinBox_startDelay->setValue(externSoftware->ConfigurationFileGenerator->startDelay/3600);
     ui->checkBox_Glucose->setChecked(externSoftware->ConfigurationFileGenerator->glucoseActive);
-    ui->checkBox_Imp1->setChecked(externSoftware->ConfigurationFileGenerator->Imp1Active);
-    ui->checkBox_Imp2->setChecked(externSoftware->ConfigurationFileGenerator->Imp2Active);
+    ui->checkBox_Imp1->setVisible(externSoftware->ConfigurationFileGenerator->Imp1Active);
+    ui->checkBox_Imp2->setVisible(externSoftware->ConfigurationFileGenerator->Imp2Active);
     ui->doubleSpinBox_MinGluc->setValue(externSoftware->minConcentrations.at(0));
     ui->doubleSpinBox_MinImp1->setValue(externSoftware->minConcentrations.at(1));
     ui->doubleSpinBox_MinImp2->setValue(externSoftware->minConcentrations.at(2));
@@ -1052,59 +1032,37 @@ void configurePolMeasure::updateForm(void)
         ui->doubleSpinBox_MinGluc->setEnabled(!ui->checkBox_IntervalMode->isChecked());
         ui->doubleSpinBox_MinImp1->setEnabled(!ui->checkBox_IntervalMode->isChecked());
         ui->doubleSpinBox_MinImp2->setEnabled(!ui->checkBox_IntervalMode->isChecked());
-        ui->lineEdit_VolG->setEnabled(!ui->checkBox_IntervalMode->isChecked());
-        ui->lineEdit_VolI1->setEnabled(!ui->checkBox_IntervalMode->isChecked());
-        ui->lineEdit_VolI2->setEnabled(!ui->checkBox_IntervalMode->isChecked());
+        ui->doubleSpinBox_VolG->setEnabled(!ui->checkBox_IntervalMode->isChecked());
+        ui->doubleSpinBox_VolI1->setEnabled(!ui->checkBox_IntervalMode->isChecked());
+        ui->doubleSpinBox_VolI2->setEnabled(!ui->checkBox_IntervalMode->isChecked());
 
         /* Disable breaks */
         ui->spinBox_ShortBreak->setEnabled(!ui->checkBox_IntervalMode->isChecked());
         ui->spinBox_LongBreak->setEnabled(!ui->checkBox_IntervalMode->isChecked());
     }
 
-    /* Update calculable parameters */
-    updateConfigurationValues();
-
     /* Show/Hide Impurity 2 values */
-    ui->doubleSpinBox_StockImp2->setVisible(ui->checkBox_Imp2->isChecked());
-    ui->label_StockImp2->setVisible(ui->checkBox_Imp2->isChecked());
-    ui->label_StockImp2_2->setVisible(ui->checkBox_Imp2->isChecked());
-    ui->doubleSpinBox_MaxImp2->setVisible(ui->checkBox_Imp2->isChecked());
-    ui->label_MaxImp2->setVisible(ui->checkBox_Imp2->isChecked());
-    ui->label_MaxImp2_2->setVisible(ui->checkBox_Imp2->isChecked());
-    ui->doubleSpinBox_MinImp2->setVisible(ui->checkBox_Imp2->isChecked());
-    ui->label_MinImp2->setVisible(ui->checkBox_Imp2->isChecked());
-    ui->label_MinImp2_2->setVisible(ui->checkBox_Imp2->isChecked());
-    ui->label_VolI2->setVisible(ui->checkBox_Imp2->isChecked());
-    ui->label_VolI22->setVisible(ui->checkBox_Imp2->isChecked());
-    ui->lineEdit_VolI2->setVisible(ui->checkBox_Imp2->isChecked());
+    ui->doubleSpinBox_StockImp2->setVisible(externSoftware->ConfigurationFileGenerator->Imp2Active);
+    ui->doubleSpinBox_MaxImp2->setVisible(externSoftware->ConfigurationFileGenerator->Imp2Active);
+    ui->doubleSpinBox_MinImp2->setVisible(externSoftware->ConfigurationFileGenerator->Imp2Active);
+    ui->doubleSpinBox_VolI2->setVisible(externSoftware->ConfigurationFileGenerator->Imp2Active);
+    ui->lineEdit_Imp2->setVisible(externSoftware->ConfigurationFileGenerator->Imp2Active);
 
     /* Show/Hide Impurity 1 values */
-    ui->doubleSpinBox_StockImp1->setVisible(ui->checkBox_Imp1->isChecked());
-    ui->label_StockImp1->setVisible(ui->checkBox_Imp1->isChecked());
-    ui->label_StockImp1_2->setVisible(ui->checkBox_Imp1->isChecked());
-    ui->doubleSpinBox_MaxImp1->setVisible(ui->checkBox_Imp1->isChecked());
-    ui->label_MaxImp1->setVisible(ui->checkBox_Imp1->isChecked());
-    ui->label_MaxImp1_2->setVisible(ui->checkBox_Imp1->isChecked());
-    ui->doubleSpinBox_MinImp1->setVisible(ui->checkBox_Imp1->isChecked());
-    ui->label_MinImp1->setVisible(ui->checkBox_Imp1->isChecked());
-    ui->label_MinImp1_2->setVisible(ui->checkBox_Imp1->isChecked());
-    ui->label_VolI1->setVisible(ui->checkBox_Imp1->isChecked());
-    ui->label_VolI12->setVisible(ui->checkBox_Imp1->isChecked());
-    ui->lineEdit_VolI1->setVisible(ui->checkBox_Imp1->isChecked());
+    ui->doubleSpinBox_StockImp1->setVisible(externSoftware->ConfigurationFileGenerator->Imp1Active);
+    ui->doubleSpinBox_MaxImp1->setVisible(externSoftware->ConfigurationFileGenerator->Imp1Active);
+    ui->doubleSpinBox_MinImp1->setVisible(externSoftware->ConfigurationFileGenerator->Imp1Active);
+    ui->doubleSpinBox_VolI1->setVisible(externSoftware->ConfigurationFileGenerator->Imp1Active);
+    ui->lineEdit_Imp1->setVisible(externSoftware->ConfigurationFileGenerator->Imp1Active);
 
     /* Show/Hide Glucose values */
     ui->doubleSpinBox_StockGlucose->setVisible(ui->checkBox_Glucose->isChecked());
-    ui->label_StockGluc->setVisible(ui->checkBox_Glucose->isChecked());
-    ui->label_StockGluc2->setVisible(ui->checkBox_Glucose->isChecked());
     ui->doubleSpinBox_MaxGluc->setVisible(ui->checkBox_Glucose->isChecked());
-    ui->label_MaxGluc->setVisible(ui->checkBox_Glucose->isChecked());
-    ui->label_MaxGluc2->setVisible(ui->checkBox_Glucose->isChecked());
     ui->doubleSpinBox_MinGluc->setVisible(ui->checkBox_Glucose->isChecked());
-    ui->label_MinGluc->setVisible(ui->checkBox_Glucose->isChecked());
-    ui->label_MinGluc2->setVisible(ui->checkBox_Glucose->isChecked());
-    ui->label_VolGl1->setVisible(ui->checkBox_Glucose->isChecked());
-    ui->label_VolG2->setVisible(ui->checkBox_Glucose->isChecked());
-    ui->lineEdit_VolG->setVisible(ui->checkBox_Glucose->isChecked());
+    ui->doubleSpinBox_VolG->setVisible(ui->checkBox_Glucose->isChecked());
+
+    /* Update calculable parameters */
+    updateConfigurationValues();
 
 }
 
@@ -1167,6 +1125,123 @@ void configurePolMeasure::InitializeForm(PanelItem_Pol* PolarimetrySpectrometer)
 
     /* Did the user cancel the loading of a configuration? */
     Conf_canceled = false;
+}
+
+/**
+ * @brief Add more impurities
+ */
+void configurePolMeasure::addImpurities(void){
+
+    /* Flag */
+    bool flag = false;
+
+    /* Is the impurity 2 added? */
+    if(!ui->checkBox_Imp1->isVisible()){
+
+        /* Show the substance */
+        hideAdditionalSubstances(!ui->checkBox_Imp1->isVisible(), ui->checkBox_Imp2->isVisible(), ui->checkBox_Imp3->isVisible(), ui->checkBox_Imp4->isVisible(), ui->checkBox_Imp5->isVisible());
+        flag = true;
+    }
+
+    /* Is the impurity 2 added? */
+    if(ui->checkBox_Imp1->isVisible() && !ui->checkBox_Imp2->isVisible() && !flag){
+
+        /* Show the substance */
+        hideAdditionalSubstances(ui->checkBox_Imp1->isVisible(),!ui->checkBox_Imp2->isVisible(), ui->checkBox_Imp3->isVisible(), ui->checkBox_Imp4->isVisible(), ui->checkBox_Imp5->isVisible());
+        flag = true;
+    }
+
+    /* Is the impurity 3 added? */
+    if(ui->checkBox_Imp2->isVisible() && !ui->checkBox_Imp3->isVisible() && !flag){
+
+        /* Show the substance */
+        hideAdditionalSubstances(ui->checkBox_Imp1->isVisible(),ui->checkBox_Imp2->isVisible(), !ui->checkBox_Imp3->isVisible(), ui->checkBox_Imp4->isVisible(), ui->checkBox_Imp5->isVisible());
+        flag = true;
+    }
+
+    /* Is the impurity 4 added? */
+    if(ui->checkBox_Imp2->isVisible() && ui->checkBox_Imp3->isVisible() && !ui->checkBox_Imp4->isVisible() && !flag){
+
+        /* Show the substance */
+        hideAdditionalSubstances(ui->checkBox_Imp1->isVisible(),ui->checkBox_Imp2->isVisible(), ui->checkBox_Imp3->isVisible(), !ui->checkBox_Imp4->isVisible(), ui->checkBox_Imp5->isVisible());
+        flag = true;
+    }
+
+    /* Is the impurity 5 added? */
+    if(ui->checkBox_Imp2->isVisible() && ui->checkBox_Imp3->isVisible() && ui->checkBox_Imp4->isVisible() && !ui->checkBox_Imp5->isVisible() && !flag){
+
+        /* Show the substance */
+        hideAdditionalSubstances(ui->checkBox_Imp1->isVisible(),ui->checkBox_Imp2->isVisible(), ui->checkBox_Imp3->isVisible(), ui->checkBox_Imp4->isVisible(), !ui->checkBox_Imp5->isVisible());
+        flag = true;
+    }
+
+    /* All impurities are shown */
+    if(ui->checkBox_Imp1->isVisible() && ui->checkBox_Imp2->isVisible() && ui->checkBox_Imp3->isVisible() && ui->checkBox_Imp4->isVisible() && ui->checkBox_Imp5->isVisible()){
+
+        /* user can't add more impurities */
+        ui->pushButton_addImpurity->setEnabled(false);
+    }
+
+    /* Number of substances */
+    int NumberOfSubstances = ui->checkBox_Glucose->isChecked() + ui->checkBox_Imp1->isVisible() + ui->checkBox_Imp2->isVisible();
+
+    /* Adjust stock */
+    if(NumberOfSubstances!=0){
+
+        /* Adjust the Stock solutions or maximum concentration accordingly */
+        ui->doubleSpinBox_StockGlucose->setValue(ui->doubleSpinBox_MaxGluc->value()*(NumberOfSubstances));
+        ui->doubleSpinBox_StockImp1->setValue(ui->doubleSpinBox_MaxImp1->value()*(NumberOfSubstances));
+        ui->doubleSpinBox_StockImp2->setValue(ui->doubleSpinBox_MaxImp2->value()*(NumberOfSubstances));
+    }
+
+    /* Update all parameters */
+    updateConfigurationValues();
+}
+
+/**
+ * @brief Hide/Show impurities
+ */
+void configurePolMeasure::hideAdditionalSubstances(bool status1, bool status2, bool status3, bool status4, bool status5){
+
+    /* Hide 1 */
+    ui->checkBox_Imp1->setVisible(status1);
+    ui->doubleSpinBox_StockImp1->setVisible(status1);
+    ui->doubleSpinBox_MaxImp1->setVisible(status1);
+    ui->doubleSpinBox_MinImp1->setVisible(status1);
+    ui->doubleSpinBox_VolI1->setVisible(status1);
+    ui->lineEdit_Imp1->setVisible(status1);
+
+    /* Hide 2 */
+    ui->checkBox_Imp2->setVisible(status2);
+    ui->doubleSpinBox_StockImp2->setVisible(status2);
+    ui->doubleSpinBox_MaxImp2->setVisible(status2);
+    ui->doubleSpinBox_MinImp2->setVisible(status2);
+    ui->doubleSpinBox_VolI2->setVisible(status2);
+    ui->lineEdit_Imp2->setVisible(status2);
+
+    /* Hide 3 */
+    ui->doubleSpinBox_StockImp3->setVisible(status3);
+    ui->doubleSpinBox_MaxImp3->setVisible(status3);
+    ui->doubleSpinBox_MinImp3->setVisible(status3);
+    ui->doubleSpinBox_VolI3->setVisible(status3);
+    ui->checkBox_Imp3->setVisible(status3);
+    ui->lineEdit_Imp3->setVisible(status3);
+
+    /* Hide 4 */
+    ui->checkBox_Imp4->setVisible(status4);
+    ui->doubleSpinBox_StockImp4->setVisible(status4);
+    ui->doubleSpinBox_MaxImp4->setVisible(status4);
+    ui->doubleSpinBox_MinImp4->setVisible(status4);
+    ui->doubleSpinBox_VolI4->setVisible(status4);
+    ui->lineEdit_Imp4->setVisible(status4);
+
+    /* Hide 5 */
+    ui->checkBox_Imp5->setVisible(status5);
+    ui->doubleSpinBox_StockImp5->setVisible(status5);
+    ui->doubleSpinBox_MaxImp5->setVisible(status5);
+    ui->doubleSpinBox_MinImp5->setVisible(status5);
+    ui->doubleSpinBox_VolI5->setVisible(status5);
+    ui->lineEdit_Imp5->setVisible(status5);
 }
 
 /**

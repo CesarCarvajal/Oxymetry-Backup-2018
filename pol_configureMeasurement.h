@@ -108,6 +108,9 @@ public:
     /* Initialize the form according to the actual spectrometer settings */
     void InitializeForm(PanelItem_Pol *PolarimetrySpectrometer);
 
+    /* Hide impurities */
+    void hideAdditionalSubstances(bool status1, bool status2, bool status3, bool status4, bool status5);
+
     /* Destructor */
     ~configurePolMeasure(void);
 
@@ -115,6 +118,9 @@ private slots:
 
     /* Select path */
     void selectPath(void);
+
+    /* Add more impurities */
+    void addImpurities(void);
 
     /* Configure polarimeter */
     void configurePolarimeter(void);

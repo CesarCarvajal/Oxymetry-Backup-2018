@@ -87,68 +87,83 @@ public:
     QLabel *label_14;
     QSpacerItem *horizontalSpacer_12;
     QVBoxLayout *verticalLayout_4;
+    QHBoxLayout *horizontalLayout_42;
     QLabel *label_SolConc;
+    QPushButton *pushButton_addImpurity;
+    QHBoxLayout *horizontalLayout_70;
+    QGridLayout *gridLayout_6;
+    QLabel *label_StockGluc;
+    QLabel *label_MinGluc;
+    QLabel *label_MaxGluc;
+    QLabel *label;
+    QLabel *label_VolGl1;
     QGridLayout *gridLayout_3;
     QHBoxLayout *horizontalLayout_32;
-    QLabel *label_VolGl1;
-    QLineEdit *lineEdit_VolG;
-    QLabel *label_VolG2;
+    QDoubleSpinBox *doubleSpinBox_VolG;
     QHBoxLayout *horizontalLayout_4;
-    QLabel *label_MinImp1;
     QDoubleSpinBox *doubleSpinBox_MinImp1;
-    QLabel *label_MinImp1_2;
     QHBoxLayout *horizontalLayout_12;
-    QLabel *label_StockImp1;
     QDoubleSpinBox *doubleSpinBox_StockImp1;
-    QLabel *label_StockImp1_2;
     QHBoxLayout *horizontalLayout_17;
-    QLabel *label_MaxGluc;
     QDoubleSpinBox *doubleSpinBox_MaxGluc;
-    QLabel *label_MaxGluc2;
     QHBoxLayout *horizontalLayout_18;
-    QLabel *label_StockGluc;
     QDoubleSpinBox *doubleSpinBox_StockGlucose;
-    QLabel *label_StockGluc2;
-    QHBoxLayout *horizontalLayout_15;
-    QLabel *label_MinGluc;
-    QDoubleSpinBox *doubleSpinBox_MinGluc;
-    QLabel *label_MinGluc2;
     QHBoxLayout *horizontalLayout_6;
-    QLabel *label_MaxImp1;
     QDoubleSpinBox *doubleSpinBox_MaxImp1;
-    QLabel *label_MaxImp1_2;
     QHBoxLayout *horizontalLayout_14;
-    QLabel *label_MinImp2;
     QDoubleSpinBox *doubleSpinBox_MinImp2;
-    QLabel *label_MinImp2_2;
     QHBoxLayout *horizontalLayout_16;
-    QLabel *label_MaxImp2;
     QDoubleSpinBox *doubleSpinBox_MaxImp2;
-    QLabel *label_MaxImp2_2;
-    QHBoxLayout *horizontalLayout_19;
-    QLabel *label_StockImp2;
-    QDoubleSpinBox *doubleSpinBox_StockImp2;
-    QLabel *label_StockImp2_2;
     QHBoxLayout *horizontalLayout_33;
-    QLabel *label_VolI2;
-    QLineEdit *lineEdit_VolI2;
-    QLabel *label_VolI22;
+    QDoubleSpinBox *doubleSpinBox_VolI2;
     QHBoxLayout *horizontalLayout_30;
-    QLabel *label_VolI1;
-    QLineEdit *lineEdit_VolI1;
-    QLabel *label_VolI12;
+    QDoubleSpinBox *doubleSpinBox_VolI1;
     QHBoxLayout *horizontalLayout_5;
     QCheckBox *checkBox_Glucose;
-    QLabel *label;
     QLabel *label_5;
+    QHBoxLayout *horizontalLayout_69;
+    QDoubleSpinBox *doubleSpinBox_VolI5;
     QHBoxLayout *horizontalLayout_10;
     QCheckBox *checkBox_Imp1;
-    QLabel *label_6;
-    QLabel *label_7;
+    QLineEdit *lineEdit_Imp1;
     QHBoxLayout *horizontalLayout_20;
     QCheckBox *checkBox_Imp2;
-    QLabel *label_8;
-    QLabel *label_12;
+    QLineEdit *lineEdit_Imp2;
+    QHBoxLayout *horizontalLayout_64;
+    QDoubleSpinBox *doubleSpinBox_VolI4;
+    QHBoxLayout *horizontalLayout_58;
+    QDoubleSpinBox *doubleSpinBox_VolI3;
+    QHBoxLayout *horizontalLayout_62;
+    QDoubleSpinBox *doubleSpinBox_MaxImp4;
+    QHBoxLayout *horizontalLayout_67;
+    QDoubleSpinBox *doubleSpinBox_MaxImp5;
+    QHBoxLayout *horizontalLayout_52;
+    QCheckBox *checkBox_Imp3;
+    QLineEdit *lineEdit_Imp3;
+    QHBoxLayout *horizontalLayout_54;
+    QDoubleSpinBox *doubleSpinBox_StockImp3;
+    QHBoxLayout *horizontalLayout_53;
+    QDoubleSpinBox *doubleSpinBox_MaxImp3;
+    QHBoxLayout *horizontalLayout_61;
+    QCheckBox *checkBox_Imp4;
+    QLineEdit *lineEdit_Imp4;
+    QHBoxLayout *horizontalLayout_63;
+    QDoubleSpinBox *doubleSpinBox_StockImp4;
+    QHBoxLayout *horizontalLayout_15;
+    QDoubleSpinBox *doubleSpinBox_MinGluc;
+    QHBoxLayout *horizontalLayout_60;
+    QDoubleSpinBox *doubleSpinBox_MinImp4;
+    QHBoxLayout *horizontalLayout_68;
+    QDoubleSpinBox *doubleSpinBox_StockImp5;
+    QHBoxLayout *horizontalLayout_51;
+    QDoubleSpinBox *doubleSpinBox_MinImp3;
+    QHBoxLayout *horizontalLayout_66;
+    QCheckBox *checkBox_Imp5;
+    QLineEdit *lineEdit_Imp5;
+    QHBoxLayout *horizontalLayout_65;
+    QDoubleSpinBox *doubleSpinBox_MinImp5;
+    QHBoxLayout *horizontalLayout_19;
+    QDoubleSpinBox *doubleSpinBox_StockImp2;
     QSpacerItem *verticalSpacer_6;
     QFrame *line_3;
     QHBoxLayout *horizontalLayout_28;
@@ -257,7 +272,7 @@ public:
     {
         if (configurePolMeasure->objectName().isEmpty())
             configurePolMeasure->setObjectName(QStringLiteral("configurePolMeasure"));
-        configurePolMeasure->resize(826, 853);
+        configurePolMeasure->resize(1379, 853);
         QSizePolicy sizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -639,23 +654,80 @@ public:
 
         verticalLayout_4 = new QVBoxLayout();
         verticalLayout_4->setObjectName(QStringLiteral("verticalLayout_4"));
+        horizontalLayout_42 = new QHBoxLayout();
+        horizontalLayout_42->setObjectName(QStringLiteral("horizontalLayout_42"));
         label_SolConc = new QLabel(ConfigurationLayout);
         label_SolConc->setObjectName(QStringLiteral("label_SolConc"));
-        sizePolicy2.setHeightForWidth(label_SolConc->sizePolicy().hasHeightForWidth());
-        label_SolConc->setSizePolicy(sizePolicy2);
+        QSizePolicy sizePolicy5(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        sizePolicy5.setHorizontalStretch(0);
+        sizePolicy5.setVerticalStretch(0);
+        sizePolicy5.setHeightForWidth(label_SolConc->sizePolicy().hasHeightForWidth());
+        label_SolConc->setSizePolicy(sizePolicy5);
         label_SolConc->setMinimumSize(QSize(0, 15));
         label_SolConc->setMaximumSize(QSize(16777215, 15));
         label_SolConc->setFont(font1);
 
-        verticalLayout_4->addWidget(label_SolConc);
+        horizontalLayout_42->addWidget(label_SolConc);
 
-        gridLayout_3 = new QGridLayout();
-        gridLayout_3->setObjectName(QStringLiteral("gridLayout_3"));
-        horizontalLayout_32 = new QHBoxLayout();
-        horizontalLayout_32->setObjectName(QStringLiteral("horizontalLayout_32"));
+        pushButton_addImpurity = new QPushButton(ConfigurationLayout);
+        pushButton_addImpurity->setObjectName(QStringLiteral("pushButton_addImpurity"));
+        pushButton_addImpurity->setEnabled(true);
+        pushButton_addImpurity->setMinimumSize(QSize(50, 20));
+        pushButton_addImpurity->setMaximumSize(QSize(50, 20));
+        pushButton_addImpurity->setFocusPolicy(Qt::NoFocus);
+
+        horizontalLayout_42->addWidget(pushButton_addImpurity);
+
+
+        verticalLayout_4->addLayout(horizontalLayout_42);
+
+        horizontalLayout_70 = new QHBoxLayout();
+        horizontalLayout_70->setObjectName(QStringLiteral("horizontalLayout_70"));
+        gridLayout_6 = new QGridLayout();
+        gridLayout_6->setObjectName(QStringLiteral("gridLayout_6"));
+        label_StockGluc = new QLabel(ConfigurationLayout);
+        label_StockGluc->setObjectName(QStringLiteral("label_StockGluc"));
+        QSizePolicy sizePolicy6(QSizePolicy::Fixed, QSizePolicy::Preferred);
+        sizePolicy6.setHorizontalStretch(0);
+        sizePolicy6.setVerticalStretch(0);
+        sizePolicy6.setHeightForWidth(label_StockGluc->sizePolicy().hasHeightForWidth());
+        label_StockGluc->setSizePolicy(sizePolicy6);
+        label_StockGluc->setMinimumSize(QSize(150, 0));
+        label_StockGluc->setMaximumSize(QSize(150, 16777215));
+
+        gridLayout_6->addWidget(label_StockGluc, 3, 0, 1, 1);
+
+        label_MinGluc = new QLabel(ConfigurationLayout);
+        label_MinGluc->setObjectName(QStringLiteral("label_MinGluc"));
+        sizePolicy6.setHeightForWidth(label_MinGluc->sizePolicy().hasHeightForWidth());
+        label_MinGluc->setSizePolicy(sizePolicy6);
+        label_MinGluc->setMinimumSize(QSize(150, 0));
+        label_MinGluc->setMaximumSize(QSize(150, 16777215));
+
+        gridLayout_6->addWidget(label_MinGluc, 1, 0, 1, 1);
+
+        label_MaxGluc = new QLabel(ConfigurationLayout);
+        label_MaxGluc->setObjectName(QStringLiteral("label_MaxGluc"));
+        sizePolicy6.setHeightForWidth(label_MaxGluc->sizePolicy().hasHeightForWidth());
+        label_MaxGluc->setSizePolicy(sizePolicy6);
+        label_MaxGluc->setMinimumSize(QSize(150, 0));
+        label_MaxGluc->setMaximumSize(QSize(150, 16777215));
+
+        gridLayout_6->addWidget(label_MaxGluc, 2, 0, 1, 1);
+
+        label = new QLabel(ConfigurationLayout);
+        label->setObjectName(QStringLiteral("label"));
+        label->setMinimumSize(QSize(150, 0));
+        label->setMaximumSize(QSize(150, 16777215));
+
+        gridLayout_6->addWidget(label, 0, 0, 1, 1);
+
         label_VolGl1 = new QLabel(ConfigurationLayout);
         label_VolGl1->setObjectName(QStringLiteral("label_VolGl1"));
-        label_VolGl1->setMinimumSize(QSize(100, 0));
+        sizePolicy6.setHeightForWidth(label_VolGl1->sizePolicy().hasHeightForWidth());
+        label_VolGl1->setSizePolicy(sizePolicy6);
+        label_VolGl1->setMinimumSize(QSize(150, 0));
+        label_VolGl1->setMaximumSize(QSize(150, 16777215));
         QPalette palette;
         QBrush brush(QColor(0, 85, 0, 255));
         brush.setStyle(Qt::SolidPattern);
@@ -666,117 +738,83 @@ public:
         palette.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
         label_VolGl1->setPalette(palette);
 
-        horizontalLayout_32->addWidget(label_VolGl1);
+        gridLayout_6->addWidget(label_VolGl1, 4, 0, 1, 1);
 
-        lineEdit_VolG = new QLineEdit(ConfigurationLayout);
-        lineEdit_VolG->setObjectName(QStringLiteral("lineEdit_VolG"));
-        lineEdit_VolG->setEnabled(true);
-        sizePolicy4.setHeightForWidth(lineEdit_VolG->sizePolicy().hasHeightForWidth());
-        lineEdit_VolG->setSizePolicy(sizePolicy4);
-        lineEdit_VolG->setMinimumSize(QSize(80, 0));
-        lineEdit_VolG->setMaximumSize(QSize(80, 16777215));
+
+        horizontalLayout_70->addLayout(gridLayout_6);
+
+        gridLayout_3 = new QGridLayout();
+        gridLayout_3->setObjectName(QStringLiteral("gridLayout_3"));
+        horizontalLayout_32 = new QHBoxLayout();
+        horizontalLayout_32->setObjectName(QStringLiteral("horizontalLayout_32"));
+        doubleSpinBox_VolG = new QDoubleSpinBox(ConfigurationLayout);
+        doubleSpinBox_VolG->setObjectName(QStringLiteral("doubleSpinBox_VolG"));
+        sizePolicy5.setHeightForWidth(doubleSpinBox_VolG->sizePolicy().hasHeightForWidth());
+        doubleSpinBox_VolG->setSizePolicy(sizePolicy5);
+        doubleSpinBox_VolG->setMinimumSize(QSize(80, 0));
+        doubleSpinBox_VolG->setMaximumSize(QSize(16777215, 16777215));
         QPalette palette1;
         QBrush brush2(QColor(0, 170, 0, 255));
         brush2.setStyle(Qt::SolidPattern);
-        palette1.setBrush(QPalette::Active, QPalette::WindowText, brush2);
         palette1.setBrush(QPalette::Active, QPalette::Text, brush2);
-        palette1.setBrush(QPalette::Active, QPalette::ButtonText, brush2);
-        palette1.setBrush(QPalette::Active, QPalette::ToolTipText, brush2);
-        palette1.setBrush(QPalette::Inactive, QPalette::WindowText, brush2);
         palette1.setBrush(QPalette::Inactive, QPalette::Text, brush2);
-        palette1.setBrush(QPalette::Inactive, QPalette::ButtonText, brush2);
-        palette1.setBrush(QPalette::Inactive, QPalette::ToolTipText, brush2);
-        palette1.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
         palette1.setBrush(QPalette::Disabled, QPalette::Text, brush1);
-        palette1.setBrush(QPalette::Disabled, QPalette::ButtonText, brush1);
-        palette1.setBrush(QPalette::Disabled, QPalette::ToolTipText, brush2);
-        lineEdit_VolG->setPalette(palette1);
-        lineEdit_VolG->setFrame(false);
-        lineEdit_VolG->setReadOnly(true);
+        doubleSpinBox_VolG->setPalette(palette1);
+        doubleSpinBox_VolG->setFrame(false);
+        doubleSpinBox_VolG->setReadOnly(true);
+        doubleSpinBox_VolG->setButtonSymbols(QAbstractSpinBox::NoButtons);
+        doubleSpinBox_VolG->setDecimals(3);
+        doubleSpinBox_VolG->setMaximum(1e+12);
+        doubleSpinBox_VolG->setValue(318.75);
 
-        horizontalLayout_32->addWidget(lineEdit_VolG);
-
-        label_VolG2 = new QLabel(ConfigurationLayout);
-        label_VolG2->setObjectName(QStringLiteral("label_VolG2"));
-        label_VolG2->setMinimumSize(QSize(30, 0));
-        QPalette palette2;
-        palette2.setBrush(QPalette::Active, QPalette::WindowText, brush);
-        palette2.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
-        palette2.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        label_VolG2->setPalette(palette2);
-
-        horizontalLayout_32->addWidget(label_VolG2);
+        horizontalLayout_32->addWidget(doubleSpinBox_VolG);
 
 
         gridLayout_3->addLayout(horizontalLayout_32, 4, 0, 1, 1);
 
         horizontalLayout_4 = new QHBoxLayout();
         horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
-        label_MinImp1 = new QLabel(ConfigurationLayout);
-        label_MinImp1->setObjectName(QStringLiteral("label_MinImp1"));
-        label_MinImp1->setMinimumSize(QSize(100, 0));
-
-        horizontalLayout_4->addWidget(label_MinImp1);
-
         doubleSpinBox_MinImp1 = new QDoubleSpinBox(ConfigurationLayout);
         doubleSpinBox_MinImp1->setObjectName(QStringLiteral("doubleSpinBox_MinImp1"));
+        sizePolicy5.setHeightForWidth(doubleSpinBox_MinImp1->sizePolicy().hasHeightForWidth());
+        doubleSpinBox_MinImp1->setSizePolicy(sizePolicy5);
         doubleSpinBox_MinImp1->setMinimumSize(QSize(80, 0));
-        doubleSpinBox_MinImp1->setMaximumSize(QSize(80, 16777215));
+        doubleSpinBox_MinImp1->setMaximumSize(QSize(16777215, 16777215));
         doubleSpinBox_MinImp1->setDecimals(2);
         doubleSpinBox_MinImp1->setMaximum(1e+8);
         doubleSpinBox_MinImp1->setSingleStep(0.01);
 
         horizontalLayout_4->addWidget(doubleSpinBox_MinImp1);
 
-        label_MinImp1_2 = new QLabel(ConfigurationLayout);
-        label_MinImp1_2->setObjectName(QStringLiteral("label_MinImp1_2"));
-        label_MinImp1_2->setMinimumSize(QSize(30, 0));
-
-        horizontalLayout_4->addWidget(label_MinImp1_2);
-
 
         gridLayout_3->addLayout(horizontalLayout_4, 1, 2, 1, 1);
 
         horizontalLayout_12 = new QHBoxLayout();
         horizontalLayout_12->setObjectName(QStringLiteral("horizontalLayout_12"));
-        label_StockImp1 = new QLabel(ConfigurationLayout);
-        label_StockImp1->setObjectName(QStringLiteral("label_StockImp1"));
-        label_StockImp1->setMinimumSize(QSize(100, 0));
-
-        horizontalLayout_12->addWidget(label_StockImp1);
-
         doubleSpinBox_StockImp1 = new QDoubleSpinBox(ConfigurationLayout);
         doubleSpinBox_StockImp1->setObjectName(QStringLiteral("doubleSpinBox_StockImp1"));
+        sizePolicy5.setHeightForWidth(doubleSpinBox_StockImp1->sizePolicy().hasHeightForWidth());
+        doubleSpinBox_StockImp1->setSizePolicy(sizePolicy5);
         doubleSpinBox_StockImp1->setMinimumSize(QSize(80, 0));
-        doubleSpinBox_StockImp1->setMaximumSize(QSize(80, 16777215));
+        doubleSpinBox_StockImp1->setMaximumSize(QSize(16777215, 16777215));
         doubleSpinBox_StockImp1->setDecimals(2);
         doubleSpinBox_StockImp1->setMaximum(1e+6);
         doubleSpinBox_StockImp1->setSingleStep(0.1);
-        doubleSpinBox_StockImp1->setValue(4);
+        doubleSpinBox_StockImp1->setValue(400);
 
         horizontalLayout_12->addWidget(doubleSpinBox_StockImp1);
-
-        label_StockImp1_2 = new QLabel(ConfigurationLayout);
-        label_StockImp1_2->setObjectName(QStringLiteral("label_StockImp1_2"));
-        label_StockImp1_2->setMinimumSize(QSize(30, 0));
-
-        horizontalLayout_12->addWidget(label_StockImp1_2);
 
 
         gridLayout_3->addLayout(horizontalLayout_12, 3, 2, 1, 1);
 
         horizontalLayout_17 = new QHBoxLayout();
         horizontalLayout_17->setObjectName(QStringLiteral("horizontalLayout_17"));
-        label_MaxGluc = new QLabel(ConfigurationLayout);
-        label_MaxGluc->setObjectName(QStringLiteral("label_MaxGluc"));
-        label_MaxGluc->setMinimumSize(QSize(100, 0));
-
-        horizontalLayout_17->addWidget(label_MaxGluc);
-
         doubleSpinBox_MaxGluc = new QDoubleSpinBox(ConfigurationLayout);
         doubleSpinBox_MaxGluc->setObjectName(QStringLiteral("doubleSpinBox_MaxGluc"));
+        sizePolicy5.setHeightForWidth(doubleSpinBox_MaxGluc->sizePolicy().hasHeightForWidth());
+        doubleSpinBox_MaxGluc->setSizePolicy(sizePolicy5);
         doubleSpinBox_MaxGluc->setMinimumSize(QSize(80, 0));
-        doubleSpinBox_MaxGluc->setMaximumSize(QSize(80, 16777215));
+        doubleSpinBox_MaxGluc->setMaximumSize(QSize(16777215, 16777215));
         doubleSpinBox_MaxGluc->setDecimals(2);
         doubleSpinBox_MaxGluc->setMaximum(1e+12);
         doubleSpinBox_MaxGluc->setSingleStep(0.01);
@@ -784,27 +822,17 @@ public:
 
         horizontalLayout_17->addWidget(doubleSpinBox_MaxGluc);
 
-        label_MaxGluc2 = new QLabel(ConfigurationLayout);
-        label_MaxGluc2->setObjectName(QStringLiteral("label_MaxGluc2"));
-        label_MaxGluc2->setMinimumSize(QSize(30, 0));
-
-        horizontalLayout_17->addWidget(label_MaxGluc2);
-
 
         gridLayout_3->addLayout(horizontalLayout_17, 2, 0, 1, 1);
 
         horizontalLayout_18 = new QHBoxLayout();
         horizontalLayout_18->setObjectName(QStringLiteral("horizontalLayout_18"));
-        label_StockGluc = new QLabel(ConfigurationLayout);
-        label_StockGluc->setObjectName(QStringLiteral("label_StockGluc"));
-        label_StockGluc->setMinimumSize(QSize(100, 0));
-
-        horizontalLayout_18->addWidget(label_StockGluc);
-
         doubleSpinBox_StockGlucose = new QDoubleSpinBox(ConfigurationLayout);
         doubleSpinBox_StockGlucose->setObjectName(QStringLiteral("doubleSpinBox_StockGlucose"));
+        sizePolicy5.setHeightForWidth(doubleSpinBox_StockGlucose->sizePolicy().hasHeightForWidth());
+        doubleSpinBox_StockGlucose->setSizePolicy(sizePolicy5);
         doubleSpinBox_StockGlucose->setMinimumSize(QSize(80, 0));
-        doubleSpinBox_StockGlucose->setMaximumSize(QSize(80, 16777215));
+        doubleSpinBox_StockGlucose->setMaximumSize(QSize(16777215, 16777215));
         doubleSpinBox_StockGlucose->setDecimals(2);
         doubleSpinBox_StockGlucose->setMaximum(1e+8);
         doubleSpinBox_StockGlucose->setSingleStep(0.1);
@@ -812,111 +840,52 @@ public:
 
         horizontalLayout_18->addWidget(doubleSpinBox_StockGlucose);
 
-        label_StockGluc2 = new QLabel(ConfigurationLayout);
-        label_StockGluc2->setObjectName(QStringLiteral("label_StockGluc2"));
-        label_StockGluc2->setMinimumSize(QSize(30, 0));
-
-        horizontalLayout_18->addWidget(label_StockGluc2);
-
 
         gridLayout_3->addLayout(horizontalLayout_18, 3, 0, 1, 1);
 
-        horizontalLayout_15 = new QHBoxLayout();
-        horizontalLayout_15->setObjectName(QStringLiteral("horizontalLayout_15"));
-        label_MinGluc = new QLabel(ConfigurationLayout);
-        label_MinGluc->setObjectName(QStringLiteral("label_MinGluc"));
-        label_MinGluc->setMinimumSize(QSize(100, 0));
-
-        horizontalLayout_15->addWidget(label_MinGluc);
-
-        doubleSpinBox_MinGluc = new QDoubleSpinBox(ConfigurationLayout);
-        doubleSpinBox_MinGluc->setObjectName(QStringLiteral("doubleSpinBox_MinGluc"));
-        doubleSpinBox_MinGluc->setMinimumSize(QSize(80, 0));
-        doubleSpinBox_MinGluc->setMaximumSize(QSize(80, 16777215));
-        doubleSpinBox_MinGluc->setDecimals(2);
-        doubleSpinBox_MinGluc->setMaximum(1e+6);
-        doubleSpinBox_MinGluc->setSingleStep(0.01);
-
-        horizontalLayout_15->addWidget(doubleSpinBox_MinGluc);
-
-        label_MinGluc2 = new QLabel(ConfigurationLayout);
-        label_MinGluc2->setObjectName(QStringLiteral("label_MinGluc2"));
-        label_MinGluc2->setMinimumSize(QSize(30, 0));
-
-        horizontalLayout_15->addWidget(label_MinGluc2);
-
-
-        gridLayout_3->addLayout(horizontalLayout_15, 1, 0, 1, 1);
-
         horizontalLayout_6 = new QHBoxLayout();
         horizontalLayout_6->setObjectName(QStringLiteral("horizontalLayout_6"));
-        label_MaxImp1 = new QLabel(ConfigurationLayout);
-        label_MaxImp1->setObjectName(QStringLiteral("label_MaxImp1"));
-        label_MaxImp1->setMinimumSize(QSize(100, 0));
-
-        horizontalLayout_6->addWidget(label_MaxImp1);
-
         doubleSpinBox_MaxImp1 = new QDoubleSpinBox(ConfigurationLayout);
         doubleSpinBox_MaxImp1->setObjectName(QStringLiteral("doubleSpinBox_MaxImp1"));
+        sizePolicy5.setHeightForWidth(doubleSpinBox_MaxImp1->sizePolicy().hasHeightForWidth());
+        doubleSpinBox_MaxImp1->setSizePolicy(sizePolicy5);
         doubleSpinBox_MaxImp1->setMinimumSize(QSize(80, 0));
-        doubleSpinBox_MaxImp1->setMaximumSize(QSize(80, 16777215));
+        doubleSpinBox_MaxImp1->setMaximumSize(QSize(16777215, 16777215));
         doubleSpinBox_MaxImp1->setDecimals(2);
         doubleSpinBox_MaxImp1->setMaximum(1e+6);
         doubleSpinBox_MaxImp1->setSingleStep(0.01);
-        doubleSpinBox_MaxImp1->setValue(2);
+        doubleSpinBox_MaxImp1->setValue(200);
 
         horizontalLayout_6->addWidget(doubleSpinBox_MaxImp1);
-
-        label_MaxImp1_2 = new QLabel(ConfigurationLayout);
-        label_MaxImp1_2->setObjectName(QStringLiteral("label_MaxImp1_2"));
-        label_MaxImp1_2->setMinimumSize(QSize(30, 0));
-
-        horizontalLayout_6->addWidget(label_MaxImp1_2);
 
 
         gridLayout_3->addLayout(horizontalLayout_6, 2, 2, 1, 1);
 
         horizontalLayout_14 = new QHBoxLayout();
         horizontalLayout_14->setObjectName(QStringLiteral("horizontalLayout_14"));
-        label_MinImp2 = new QLabel(ConfigurationLayout);
-        label_MinImp2->setObjectName(QStringLiteral("label_MinImp2"));
-        label_MinImp2->setMinimumSize(QSize(100, 0));
-
-        horizontalLayout_14->addWidget(label_MinImp2);
-
         doubleSpinBox_MinImp2 = new QDoubleSpinBox(ConfigurationLayout);
         doubleSpinBox_MinImp2->setObjectName(QStringLiteral("doubleSpinBox_MinImp2"));
+        sizePolicy5.setHeightForWidth(doubleSpinBox_MinImp2->sizePolicy().hasHeightForWidth());
+        doubleSpinBox_MinImp2->setSizePolicy(sizePolicy5);
         doubleSpinBox_MinImp2->setMinimumSize(QSize(80, 0));
-        doubleSpinBox_MinImp2->setMaximumSize(QSize(80, 16777215));
+        doubleSpinBox_MinImp2->setMaximumSize(QSize(16777215, 16777215));
         doubleSpinBox_MinImp2->setDecimals(2);
         doubleSpinBox_MinImp2->setMaximum(1e+8);
         doubleSpinBox_MinImp2->setSingleStep(0.01);
 
         horizontalLayout_14->addWidget(doubleSpinBox_MinImp2);
 
-        label_MinImp2_2 = new QLabel(ConfigurationLayout);
-        label_MinImp2_2->setObjectName(QStringLiteral("label_MinImp2_2"));
-        label_MinImp2_2->setEnabled(true);
-        label_MinImp2_2->setMinimumSize(QSize(30, 0));
-
-        horizontalLayout_14->addWidget(label_MinImp2_2);
-
 
         gridLayout_3->addLayout(horizontalLayout_14, 1, 3, 1, 1);
 
         horizontalLayout_16 = new QHBoxLayout();
         horizontalLayout_16->setObjectName(QStringLiteral("horizontalLayout_16"));
-        label_MaxImp2 = new QLabel(ConfigurationLayout);
-        label_MaxImp2->setObjectName(QStringLiteral("label_MaxImp2"));
-        label_MaxImp2->setEnabled(true);
-        label_MaxImp2->setMinimumSize(QSize(100, 0));
-
-        horizontalLayout_16->addWidget(label_MaxImp2);
-
         doubleSpinBox_MaxImp2 = new QDoubleSpinBox(ConfigurationLayout);
         doubleSpinBox_MaxImp2->setObjectName(QStringLiteral("doubleSpinBox_MaxImp2"));
+        sizePolicy5.setHeightForWidth(doubleSpinBox_MaxImp2->sizePolicy().hasHeightForWidth());
+        doubleSpinBox_MaxImp2->setSizePolicy(sizePolicy5);
         doubleSpinBox_MaxImp2->setMinimumSize(QSize(80, 0));
-        doubleSpinBox_MaxImp2->setMaximumSize(QSize(80, 16777215));
+        doubleSpinBox_MaxImp2->setMaximumSize(QSize(16777215, 16777215));
         doubleSpinBox_MaxImp2->setDecimals(2);
         doubleSpinBox_MaxImp2->setMaximum(1e+7);
         doubleSpinBox_MaxImp2->setSingleStep(0.01);
@@ -924,136 +893,53 @@ public:
 
         horizontalLayout_16->addWidget(doubleSpinBox_MaxImp2);
 
-        label_MaxImp2_2 = new QLabel(ConfigurationLayout);
-        label_MaxImp2_2->setObjectName(QStringLiteral("label_MaxImp2_2"));
-        label_MaxImp2_2->setEnabled(true);
-        label_MaxImp2_2->setMinimumSize(QSize(30, 0));
-
-        horizontalLayout_16->addWidget(label_MaxImp2_2);
-
 
         gridLayout_3->addLayout(horizontalLayout_16, 2, 3, 1, 1);
 
-        horizontalLayout_19 = new QHBoxLayout();
-        horizontalLayout_19->setObjectName(QStringLiteral("horizontalLayout_19"));
-        label_StockImp2 = new QLabel(ConfigurationLayout);
-        label_StockImp2->setObjectName(QStringLiteral("label_StockImp2"));
-        label_StockImp2->setEnabled(true);
-        label_StockImp2->setMinimumSize(QSize(100, 0));
-
-        horizontalLayout_19->addWidget(label_StockImp2);
-
-        doubleSpinBox_StockImp2 = new QDoubleSpinBox(ConfigurationLayout);
-        doubleSpinBox_StockImp2->setObjectName(QStringLiteral("doubleSpinBox_StockImp2"));
-        doubleSpinBox_StockImp2->setMinimumSize(QSize(80, 0));
-        doubleSpinBox_StockImp2->setMaximumSize(QSize(80, 16777203));
-        doubleSpinBox_StockImp2->setDecimals(2);
-        doubleSpinBox_StockImp2->setMaximum(1e+8);
-        doubleSpinBox_StockImp2->setSingleStep(0.1);
-        doubleSpinBox_StockImp2->setValue(1500);
-
-        horizontalLayout_19->addWidget(doubleSpinBox_StockImp2);
-
-        label_StockImp2_2 = new QLabel(ConfigurationLayout);
-        label_StockImp2_2->setObjectName(QStringLiteral("label_StockImp2_2"));
-        label_StockImp2_2->setEnabled(true);
-        label_StockImp2_2->setMinimumSize(QSize(30, 0));
-
-        horizontalLayout_19->addWidget(label_StockImp2_2);
-
-
-        gridLayout_3->addLayout(horizontalLayout_19, 3, 3, 1, 1);
-
         horizontalLayout_33 = new QHBoxLayout();
         horizontalLayout_33->setObjectName(QStringLiteral("horizontalLayout_33"));
-        label_VolI2 = new QLabel(ConfigurationLayout);
-        label_VolI2->setObjectName(QStringLiteral("label_VolI2"));
-        label_VolI2->setMinimumSize(QSize(100, 0));
-        QPalette palette3;
-        palette3.setBrush(QPalette::Active, QPalette::WindowText, brush);
-        palette3.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
-        palette3.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        label_VolI2->setPalette(palette3);
+        doubleSpinBox_VolI2 = new QDoubleSpinBox(ConfigurationLayout);
+        doubleSpinBox_VolI2->setObjectName(QStringLiteral("doubleSpinBox_VolI2"));
+        sizePolicy5.setHeightForWidth(doubleSpinBox_VolI2->sizePolicy().hasHeightForWidth());
+        doubleSpinBox_VolI2->setSizePolicy(sizePolicy5);
+        doubleSpinBox_VolI2->setMinimumSize(QSize(80, 0));
+        QPalette palette2;
+        palette2.setBrush(QPalette::Active, QPalette::Text, brush2);
+        palette2.setBrush(QPalette::Inactive, QPalette::Text, brush2);
+        palette2.setBrush(QPalette::Disabled, QPalette::Text, brush1);
+        doubleSpinBox_VolI2->setPalette(palette2);
+        doubleSpinBox_VolI2->setFrame(false);
+        doubleSpinBox_VolI2->setReadOnly(true);
+        doubleSpinBox_VolI2->setButtonSymbols(QAbstractSpinBox::NoButtons);
+        doubleSpinBox_VolI2->setDecimals(3);
+        doubleSpinBox_VolI2->setMaximum(1e+18);
+        doubleSpinBox_VolI2->setValue(318.75);
 
-        horizontalLayout_33->addWidget(label_VolI2);
-
-        lineEdit_VolI2 = new QLineEdit(ConfigurationLayout);
-        lineEdit_VolI2->setObjectName(QStringLiteral("lineEdit_VolI2"));
-        lineEdit_VolI2->setEnabled(true);
-        sizePolicy4.setHeightForWidth(lineEdit_VolI2->sizePolicy().hasHeightForWidth());
-        lineEdit_VolI2->setSizePolicy(sizePolicy4);
-        lineEdit_VolI2->setMinimumSize(QSize(80, 0));
-        lineEdit_VolI2->setMaximumSize(QSize(80, 16777215));
-        QPalette palette4;
-        palette4.setBrush(QPalette::Active, QPalette::WindowText, brush2);
-        palette4.setBrush(QPalette::Active, QPalette::Text, brush2);
-        palette4.setBrush(QPalette::Inactive, QPalette::WindowText, brush2);
-        palette4.setBrush(QPalette::Inactive, QPalette::Text, brush2);
-        palette4.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        palette4.setBrush(QPalette::Disabled, QPalette::Text, brush1);
-        lineEdit_VolI2->setPalette(palette4);
-        lineEdit_VolI2->setFrame(false);
-        lineEdit_VolI2->setReadOnly(true);
-
-        horizontalLayout_33->addWidget(lineEdit_VolI2);
-
-        label_VolI22 = new QLabel(ConfigurationLayout);
-        label_VolI22->setObjectName(QStringLiteral("label_VolI22"));
-        label_VolI22->setMinimumSize(QSize(30, 0));
-        QPalette palette5;
-        palette5.setBrush(QPalette::Active, QPalette::WindowText, brush);
-        palette5.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
-        palette5.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        label_VolI22->setPalette(palette5);
-
-        horizontalLayout_33->addWidget(label_VolI22);
+        horizontalLayout_33->addWidget(doubleSpinBox_VolI2);
 
 
         gridLayout_3->addLayout(horizontalLayout_33, 4, 3, 1, 1);
 
         horizontalLayout_30 = new QHBoxLayout();
         horizontalLayout_30->setObjectName(QStringLiteral("horizontalLayout_30"));
-        label_VolI1 = new QLabel(ConfigurationLayout);
-        label_VolI1->setObjectName(QStringLiteral("label_VolI1"));
-        label_VolI1->setMinimumSize(QSize(100, 0));
-        QPalette palette6;
-        palette6.setBrush(QPalette::Active, QPalette::WindowText, brush);
-        palette6.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
-        palette6.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        label_VolI1->setPalette(palette6);
+        doubleSpinBox_VolI1 = new QDoubleSpinBox(ConfigurationLayout);
+        doubleSpinBox_VolI1->setObjectName(QStringLiteral("doubleSpinBox_VolI1"));
+        sizePolicy5.setHeightForWidth(doubleSpinBox_VolI1->sizePolicy().hasHeightForWidth());
+        doubleSpinBox_VolI1->setSizePolicy(sizePolicy5);
+        doubleSpinBox_VolI1->setMinimumSize(QSize(80, 0));
+        QPalette palette3;
+        palette3.setBrush(QPalette::Active, QPalette::Text, brush2);
+        palette3.setBrush(QPalette::Inactive, QPalette::Text, brush2);
+        palette3.setBrush(QPalette::Disabled, QPalette::Text, brush1);
+        doubleSpinBox_VolI1->setPalette(palette3);
+        doubleSpinBox_VolI1->setFrame(false);
+        doubleSpinBox_VolI1->setReadOnly(true);
+        doubleSpinBox_VolI1->setButtonSymbols(QAbstractSpinBox::NoButtons);
+        doubleSpinBox_VolI1->setDecimals(3);
+        doubleSpinBox_VolI1->setMaximum(1e+21);
+        doubleSpinBox_VolI1->setValue(318.75);
 
-        horizontalLayout_30->addWidget(label_VolI1);
-
-        lineEdit_VolI1 = new QLineEdit(ConfigurationLayout);
-        lineEdit_VolI1->setObjectName(QStringLiteral("lineEdit_VolI1"));
-        lineEdit_VolI1->setEnabled(true);
-        sizePolicy4.setHeightForWidth(lineEdit_VolI1->sizePolicy().hasHeightForWidth());
-        lineEdit_VolI1->setSizePolicy(sizePolicy4);
-        lineEdit_VolI1->setMinimumSize(QSize(80, 0));
-        lineEdit_VolI1->setMaximumSize(QSize(80, 16777215));
-        QPalette palette7;
-        palette7.setBrush(QPalette::Active, QPalette::WindowText, brush2);
-        palette7.setBrush(QPalette::Active, QPalette::Text, brush2);
-        palette7.setBrush(QPalette::Inactive, QPalette::WindowText, brush2);
-        palette7.setBrush(QPalette::Inactive, QPalette::Text, brush2);
-        palette7.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        palette7.setBrush(QPalette::Disabled, QPalette::Text, brush1);
-        lineEdit_VolI1->setPalette(palette7);
-        lineEdit_VolI1->setFrame(false);
-        lineEdit_VolI1->setReadOnly(true);
-
-        horizontalLayout_30->addWidget(lineEdit_VolI1);
-
-        label_VolI12 = new QLabel(ConfigurationLayout);
-        label_VolI12->setObjectName(QStringLiteral("label_VolI12"));
-        label_VolI12->setMinimumSize(QSize(30, 0));
-        QPalette palette8;
-        palette8.setBrush(QPalette::Active, QPalette::WindowText, brush);
-        palette8.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
-        palette8.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        label_VolI12->setPalette(palette8);
-
-        horizontalLayout_30->addWidget(label_VolI12);
+        horizontalLayout_30->addWidget(doubleSpinBox_VolI1);
 
 
         gridLayout_3->addLayout(horizontalLayout_30, 4, 2, 1, 1);
@@ -1062,12 +948,9 @@ public:
         horizontalLayout_5->setObjectName(QStringLiteral("horizontalLayout_5"));
         checkBox_Glucose = new QCheckBox(ConfigurationLayout);
         checkBox_Glucose->setObjectName(QStringLiteral("checkBox_Glucose"));
-        QSizePolicy sizePolicy5(QSizePolicy::Preferred, QSizePolicy::Preferred);
-        sizePolicy5.setHorizontalStretch(0);
-        sizePolicy5.setVerticalStretch(0);
-        sizePolicy5.setHeightForWidth(checkBox_Glucose->sizePolicy().hasHeightForWidth());
-        checkBox_Glucose->setSizePolicy(sizePolicy5);
-        checkBox_Glucose->setMinimumSize(QSize(100, 0));
+        sizePolicy6.setHeightForWidth(checkBox_Glucose->sizePolicy().hasHeightForWidth());
+        checkBox_Glucose->setSizePolicy(sizePolicy6);
+        checkBox_Glucose->setMinimumSize(QSize(20, 0));
         checkBox_Glucose->setMaximumSize(QSize(16777215, 16777215));
         checkBox_Glucose->setLayoutDirection(Qt::LeftToRight);
         checkBox_Glucose->setAutoFillBackground(false);
@@ -1076,52 +959,65 @@ public:
 
         horizontalLayout_5->addWidget(checkBox_Glucose);
 
-        label = new QLabel(ConfigurationLayout);
-        label->setObjectName(QStringLiteral("label"));
-        sizePolicy4.setHeightForWidth(label->sizePolicy().hasHeightForWidth());
-        label->setSizePolicy(sizePolicy4);
-        label->setMinimumSize(QSize(80, 0));
-        label->setMaximumSize(QSize(80, 16777215));
-
-        horizontalLayout_5->addWidget(label);
-
         label_5 = new QLabel(ConfigurationLayout);
         label_5->setObjectName(QStringLiteral("label_5"));
-        label_5->setMinimumSize(QSize(30, 0));
-        label_5->setMaximumSize(QSize(30, 16777215));
+        QSizePolicy sizePolicy7(QSizePolicy::Expanding, QSizePolicy::Preferred);
+        sizePolicy7.setHorizontalStretch(0);
+        sizePolicy7.setVerticalStretch(0);
+        sizePolicy7.setHeightForWidth(label_5->sizePolicy().hasHeightForWidth());
+        label_5->setSizePolicy(sizePolicy7);
+        label_5->setMinimumSize(QSize(62, 0));
 
         horizontalLayout_5->addWidget(label_5);
 
 
         gridLayout_3->addLayout(horizontalLayout_5, 0, 0, 1, 1);
 
+        horizontalLayout_69 = new QHBoxLayout();
+        horizontalLayout_69->setObjectName(QStringLiteral("horizontalLayout_69"));
+        doubleSpinBox_VolI5 = new QDoubleSpinBox(ConfigurationLayout);
+        doubleSpinBox_VolI5->setObjectName(QStringLiteral("doubleSpinBox_VolI5"));
+        doubleSpinBox_VolI5->setEnabled(false);
+        sizePolicy5.setHeightForWidth(doubleSpinBox_VolI5->sizePolicy().hasHeightForWidth());
+        doubleSpinBox_VolI5->setSizePolicy(sizePolicy5);
+        doubleSpinBox_VolI5->setMinimumSize(QSize(80, 0));
+        QPalette palette4;
+        palette4.setBrush(QPalette::Active, QPalette::Text, brush2);
+        palette4.setBrush(QPalette::Inactive, QPalette::Text, brush2);
+        palette4.setBrush(QPalette::Disabled, QPalette::Text, brush1);
+        doubleSpinBox_VolI5->setPalette(palette4);
+        doubleSpinBox_VolI5->setFrame(false);
+        doubleSpinBox_VolI5->setReadOnly(true);
+        doubleSpinBox_VolI5->setButtonSymbols(QAbstractSpinBox::NoButtons);
+        doubleSpinBox_VolI5->setDecimals(3);
+        doubleSpinBox_VolI5->setMaximum(1e+14);
+        doubleSpinBox_VolI5->setSingleStep(0.01);
+
+        horizontalLayout_69->addWidget(doubleSpinBox_VolI5);
+
+
+        gridLayout_3->addLayout(horizontalLayout_69, 4, 6, 1, 1);
+
         horizontalLayout_10 = new QHBoxLayout();
         horizontalLayout_10->setObjectName(QStringLiteral("horizontalLayout_10"));
         checkBox_Imp1 = new QCheckBox(ConfigurationLayout);
         checkBox_Imp1->setObjectName(QStringLiteral("checkBox_Imp1"));
-        sizePolicy5.setHeightForWidth(checkBox_Imp1->sizePolicy().hasHeightForWidth());
-        checkBox_Imp1->setSizePolicy(sizePolicy5);
-        checkBox_Imp1->setMinimumSize(QSize(100, 0));
+        sizePolicy6.setHeightForWidth(checkBox_Imp1->sizePolicy().hasHeightForWidth());
+        checkBox_Imp1->setSizePolicy(sizePolicy6);
+        checkBox_Imp1->setMinimumSize(QSize(20, 0));
         checkBox_Imp1->setMaximumSize(QSize(16777215, 16777215));
         checkBox_Imp1->setChecked(true);
 
         horizontalLayout_10->addWidget(checkBox_Imp1);
 
-        label_6 = new QLabel(ConfigurationLayout);
-        label_6->setObjectName(QStringLiteral("label_6"));
-        sizePolicy4.setHeightForWidth(label_6->sizePolicy().hasHeightForWidth());
-        label_6->setSizePolicy(sizePolicy4);
-        label_6->setMinimumSize(QSize(80, 0));
-        label_6->setMaximumSize(QSize(80, 16777215));
+        lineEdit_Imp1 = new QLineEdit(ConfigurationLayout);
+        lineEdit_Imp1->setObjectName(QStringLiteral("lineEdit_Imp1"));
+        sizePolicy7.setHeightForWidth(lineEdit_Imp1->sizePolicy().hasHeightForWidth());
+        lineEdit_Imp1->setSizePolicy(sizePolicy7);
+        lineEdit_Imp1->setMinimumSize(QSize(60, 0));
+        lineEdit_Imp1->setFrame(false);
 
-        horizontalLayout_10->addWidget(label_6);
-
-        label_7 = new QLabel(ConfigurationLayout);
-        label_7->setObjectName(QStringLiteral("label_7"));
-        label_7->setMinimumSize(QSize(30, 0));
-        label_7->setMaximumSize(QSize(30, 16777215));
-
-        horizontalLayout_10->addWidget(label_7);
+        horizontalLayout_10->addWidget(lineEdit_Imp1);
 
 
         gridLayout_3->addLayout(horizontalLayout_10, 0, 2, 1, 1);
@@ -1131,34 +1027,338 @@ public:
         checkBox_Imp2 = new QCheckBox(ConfigurationLayout);
         checkBox_Imp2->setObjectName(QStringLiteral("checkBox_Imp2"));
         checkBox_Imp2->setEnabled(true);
-        sizePolicy5.setHeightForWidth(checkBox_Imp2->sizePolicy().hasHeightForWidth());
-        checkBox_Imp2->setSizePolicy(sizePolicy5);
-        checkBox_Imp2->setMinimumSize(QSize(100, 0));
+        sizePolicy6.setHeightForWidth(checkBox_Imp2->sizePolicy().hasHeightForWidth());
+        checkBox_Imp2->setSizePolicy(sizePolicy6);
+        checkBox_Imp2->setMinimumSize(QSize(20, 0));
         checkBox_Imp2->setMaximumSize(QSize(16777215, 16777215));
+        checkBox_Imp2->setChecked(true);
 
         horizontalLayout_20->addWidget(checkBox_Imp2);
 
-        label_8 = new QLabel(ConfigurationLayout);
-        label_8->setObjectName(QStringLiteral("label_8"));
-        sizePolicy4.setHeightForWidth(label_8->sizePolicy().hasHeightForWidth());
-        label_8->setSizePolicy(sizePolicy4);
-        label_8->setMinimumSize(QSize(80, 0));
-        label_8->setMaximumSize(QSize(80, 16777215));
+        lineEdit_Imp2 = new QLineEdit(ConfigurationLayout);
+        lineEdit_Imp2->setObjectName(QStringLiteral("lineEdit_Imp2"));
+        sizePolicy7.setHeightForWidth(lineEdit_Imp2->sizePolicy().hasHeightForWidth());
+        lineEdit_Imp2->setSizePolicy(sizePolicy7);
+        lineEdit_Imp2->setMinimumSize(QSize(60, 0));
+        lineEdit_Imp2->setFrame(false);
 
-        horizontalLayout_20->addWidget(label_8);
-
-        label_12 = new QLabel(ConfigurationLayout);
-        label_12->setObjectName(QStringLiteral("label_12"));
-        label_12->setMinimumSize(QSize(30, 0));
-        label_12->setMaximumSize(QSize(30, 16777215));
-
-        horizontalLayout_20->addWidget(label_12);
+        horizontalLayout_20->addWidget(lineEdit_Imp2);
 
 
         gridLayout_3->addLayout(horizontalLayout_20, 0, 3, 1, 1);
 
+        horizontalLayout_64 = new QHBoxLayout();
+        horizontalLayout_64->setObjectName(QStringLiteral("horizontalLayout_64"));
+        doubleSpinBox_VolI4 = new QDoubleSpinBox(ConfigurationLayout);
+        doubleSpinBox_VolI4->setObjectName(QStringLiteral("doubleSpinBox_VolI4"));
+        doubleSpinBox_VolI4->setEnabled(false);
+        sizePolicy5.setHeightForWidth(doubleSpinBox_VolI4->sizePolicy().hasHeightForWidth());
+        doubleSpinBox_VolI4->setSizePolicy(sizePolicy5);
+        doubleSpinBox_VolI4->setMinimumSize(QSize(80, 0));
+        QPalette palette5;
+        palette5.setBrush(QPalette::Active, QPalette::Text, brush2);
+        palette5.setBrush(QPalette::Inactive, QPalette::Text, brush2);
+        palette5.setBrush(QPalette::Disabled, QPalette::Text, brush1);
+        doubleSpinBox_VolI4->setPalette(palette5);
+        doubleSpinBox_VolI4->setFrame(false);
+        doubleSpinBox_VolI4->setReadOnly(true);
+        doubleSpinBox_VolI4->setButtonSymbols(QAbstractSpinBox::NoButtons);
+        doubleSpinBox_VolI4->setDecimals(3);
+        doubleSpinBox_VolI4->setMaximum(1e+14);
+        doubleSpinBox_VolI4->setSingleStep(0.01);
 
-        verticalLayout_4->addLayout(gridLayout_3);
+        horizontalLayout_64->addWidget(doubleSpinBox_VolI4);
+
+
+        gridLayout_3->addLayout(horizontalLayout_64, 4, 5, 1, 1);
+
+        horizontalLayout_58 = new QHBoxLayout();
+        horizontalLayout_58->setObjectName(QStringLiteral("horizontalLayout_58"));
+        doubleSpinBox_VolI3 = new QDoubleSpinBox(ConfigurationLayout);
+        doubleSpinBox_VolI3->setObjectName(QStringLiteral("doubleSpinBox_VolI3"));
+        doubleSpinBox_VolI3->setEnabled(false);
+        sizePolicy5.setHeightForWidth(doubleSpinBox_VolI3->sizePolicy().hasHeightForWidth());
+        doubleSpinBox_VolI3->setSizePolicy(sizePolicy5);
+        doubleSpinBox_VolI3->setMinimumSize(QSize(80, 0));
+        QPalette palette6;
+        palette6.setBrush(QPalette::Active, QPalette::Text, brush2);
+        palette6.setBrush(QPalette::Inactive, QPalette::Text, brush2);
+        palette6.setBrush(QPalette::Disabled, QPalette::Text, brush1);
+        doubleSpinBox_VolI3->setPalette(palette6);
+        doubleSpinBox_VolI3->setFrame(false);
+        doubleSpinBox_VolI3->setReadOnly(true);
+        doubleSpinBox_VolI3->setButtonSymbols(QAbstractSpinBox::NoButtons);
+        doubleSpinBox_VolI3->setDecimals(3);
+        doubleSpinBox_VolI3->setMaximum(1e+14);
+        doubleSpinBox_VolI3->setSingleStep(0.01);
+
+        horizontalLayout_58->addWidget(doubleSpinBox_VolI3);
+
+
+        gridLayout_3->addLayout(horizontalLayout_58, 4, 4, 1, 1);
+
+        horizontalLayout_62 = new QHBoxLayout();
+        horizontalLayout_62->setObjectName(QStringLiteral("horizontalLayout_62"));
+        doubleSpinBox_MaxImp4 = new QDoubleSpinBox(ConfigurationLayout);
+        doubleSpinBox_MaxImp4->setObjectName(QStringLiteral("doubleSpinBox_MaxImp4"));
+        doubleSpinBox_MaxImp4->setEnabled(false);
+        sizePolicy5.setHeightForWidth(doubleSpinBox_MaxImp4->sizePolicy().hasHeightForWidth());
+        doubleSpinBox_MaxImp4->setSizePolicy(sizePolicy5);
+        doubleSpinBox_MaxImp4->setMinimumSize(QSize(80, 0));
+        doubleSpinBox_MaxImp4->setMaximum(1e+6);
+        doubleSpinBox_MaxImp4->setSingleStep(0.01);
+        doubleSpinBox_MaxImp4->setValue(500);
+
+        horizontalLayout_62->addWidget(doubleSpinBox_MaxImp4);
+
+
+        gridLayout_3->addLayout(horizontalLayout_62, 2, 5, 1, 1);
+
+        horizontalLayout_67 = new QHBoxLayout();
+        horizontalLayout_67->setObjectName(QStringLiteral("horizontalLayout_67"));
+        doubleSpinBox_MaxImp5 = new QDoubleSpinBox(ConfigurationLayout);
+        doubleSpinBox_MaxImp5->setObjectName(QStringLiteral("doubleSpinBox_MaxImp5"));
+        doubleSpinBox_MaxImp5->setEnabled(false);
+        sizePolicy5.setHeightForWidth(doubleSpinBox_MaxImp5->sizePolicy().hasHeightForWidth());
+        doubleSpinBox_MaxImp5->setSizePolicy(sizePolicy5);
+        doubleSpinBox_MaxImp5->setMinimumSize(QSize(80, 0));
+        doubleSpinBox_MaxImp5->setMaximum(1e+6);
+        doubleSpinBox_MaxImp5->setSingleStep(0.01);
+        doubleSpinBox_MaxImp5->setValue(500);
+
+        horizontalLayout_67->addWidget(doubleSpinBox_MaxImp5);
+
+
+        gridLayout_3->addLayout(horizontalLayout_67, 2, 6, 1, 1);
+
+        horizontalLayout_52 = new QHBoxLayout();
+        horizontalLayout_52->setObjectName(QStringLiteral("horizontalLayout_52"));
+        checkBox_Imp3 = new QCheckBox(ConfigurationLayout);
+        checkBox_Imp3->setObjectName(QStringLiteral("checkBox_Imp3"));
+        checkBox_Imp3->setEnabled(true);
+        sizePolicy6.setHeightForWidth(checkBox_Imp3->sizePolicy().hasHeightForWidth());
+        checkBox_Imp3->setSizePolicy(sizePolicy6);
+        checkBox_Imp3->setMinimumSize(QSize(20, 0));
+        checkBox_Imp3->setMaximumSize(QSize(16777215, 16777215));
+        checkBox_Imp3->setChecked(true);
+
+        horizontalLayout_52->addWidget(checkBox_Imp3);
+
+        lineEdit_Imp3 = new QLineEdit(ConfigurationLayout);
+        lineEdit_Imp3->setObjectName(QStringLiteral("lineEdit_Imp3"));
+        sizePolicy7.setHeightForWidth(lineEdit_Imp3->sizePolicy().hasHeightForWidth());
+        lineEdit_Imp3->setSizePolicy(sizePolicy7);
+        lineEdit_Imp3->setMinimumSize(QSize(60, 0));
+        lineEdit_Imp3->setFrame(false);
+
+        horizontalLayout_52->addWidget(lineEdit_Imp3);
+
+
+        gridLayout_3->addLayout(horizontalLayout_52, 0, 4, 1, 1);
+
+        horizontalLayout_54 = new QHBoxLayout();
+        horizontalLayout_54->setObjectName(QStringLiteral("horizontalLayout_54"));
+        doubleSpinBox_StockImp3 = new QDoubleSpinBox(ConfigurationLayout);
+        doubleSpinBox_StockImp3->setObjectName(QStringLiteral("doubleSpinBox_StockImp3"));
+        doubleSpinBox_StockImp3->setEnabled(false);
+        sizePolicy5.setHeightForWidth(doubleSpinBox_StockImp3->sizePolicy().hasHeightForWidth());
+        doubleSpinBox_StockImp3->setSizePolicy(sizePolicy5);
+        doubleSpinBox_StockImp3->setMinimumSize(QSize(80, 0));
+        doubleSpinBox_StockImp3->setMaximum(1e+6);
+        doubleSpinBox_StockImp3->setSingleStep(0.01);
+
+        horizontalLayout_54->addWidget(doubleSpinBox_StockImp3);
+
+
+        gridLayout_3->addLayout(horizontalLayout_54, 3, 4, 1, 1);
+
+        horizontalLayout_53 = new QHBoxLayout();
+        horizontalLayout_53->setObjectName(QStringLiteral("horizontalLayout_53"));
+        doubleSpinBox_MaxImp3 = new QDoubleSpinBox(ConfigurationLayout);
+        doubleSpinBox_MaxImp3->setObjectName(QStringLiteral("doubleSpinBox_MaxImp3"));
+        doubleSpinBox_MaxImp3->setEnabled(false);
+        sizePolicy5.setHeightForWidth(doubleSpinBox_MaxImp3->sizePolicy().hasHeightForWidth());
+        doubleSpinBox_MaxImp3->setSizePolicy(sizePolicy5);
+        doubleSpinBox_MaxImp3->setMinimumSize(QSize(80, 0));
+        doubleSpinBox_MaxImp3->setMaximum(1e+6);
+        doubleSpinBox_MaxImp3->setSingleStep(0.01);
+        doubleSpinBox_MaxImp3->setValue(500);
+
+        horizontalLayout_53->addWidget(doubleSpinBox_MaxImp3);
+
+
+        gridLayout_3->addLayout(horizontalLayout_53, 2, 4, 1, 1);
+
+        horizontalLayout_61 = new QHBoxLayout();
+        horizontalLayout_61->setObjectName(QStringLiteral("horizontalLayout_61"));
+        checkBox_Imp4 = new QCheckBox(ConfigurationLayout);
+        checkBox_Imp4->setObjectName(QStringLiteral("checkBox_Imp4"));
+        checkBox_Imp4->setEnabled(true);
+        sizePolicy6.setHeightForWidth(checkBox_Imp4->sizePolicy().hasHeightForWidth());
+        checkBox_Imp4->setSizePolicy(sizePolicy6);
+        checkBox_Imp4->setMinimumSize(QSize(20, 0));
+        checkBox_Imp4->setMaximumSize(QSize(16777215, 16777215));
+        checkBox_Imp4->setChecked(true);
+
+        horizontalLayout_61->addWidget(checkBox_Imp4);
+
+        lineEdit_Imp4 = new QLineEdit(ConfigurationLayout);
+        lineEdit_Imp4->setObjectName(QStringLiteral("lineEdit_Imp4"));
+        sizePolicy7.setHeightForWidth(lineEdit_Imp4->sizePolicy().hasHeightForWidth());
+        lineEdit_Imp4->setSizePolicy(sizePolicy7);
+        lineEdit_Imp4->setMinimumSize(QSize(60, 0));
+        lineEdit_Imp4->setFrame(false);
+
+        horizontalLayout_61->addWidget(lineEdit_Imp4);
+
+
+        gridLayout_3->addLayout(horizontalLayout_61, 0, 5, 1, 1);
+
+        horizontalLayout_63 = new QHBoxLayout();
+        horizontalLayout_63->setObjectName(QStringLiteral("horizontalLayout_63"));
+        doubleSpinBox_StockImp4 = new QDoubleSpinBox(ConfigurationLayout);
+        doubleSpinBox_StockImp4->setObjectName(QStringLiteral("doubleSpinBox_StockImp4"));
+        doubleSpinBox_StockImp4->setEnabled(false);
+        sizePolicy5.setHeightForWidth(doubleSpinBox_StockImp4->sizePolicy().hasHeightForWidth());
+        doubleSpinBox_StockImp4->setSizePolicy(sizePolicy5);
+        doubleSpinBox_StockImp4->setMinimumSize(QSize(80, 0));
+        doubleSpinBox_StockImp4->setMaximum(1e+6);
+        doubleSpinBox_StockImp4->setSingleStep(0.01);
+
+        horizontalLayout_63->addWidget(doubleSpinBox_StockImp4);
+
+
+        gridLayout_3->addLayout(horizontalLayout_63, 3, 5, 1, 1);
+
+        horizontalLayout_15 = new QHBoxLayout();
+        horizontalLayout_15->setObjectName(QStringLiteral("horizontalLayout_15"));
+        doubleSpinBox_MinGluc = new QDoubleSpinBox(ConfigurationLayout);
+        doubleSpinBox_MinGluc->setObjectName(QStringLiteral("doubleSpinBox_MinGluc"));
+        sizePolicy5.setHeightForWidth(doubleSpinBox_MinGluc->sizePolicy().hasHeightForWidth());
+        doubleSpinBox_MinGluc->setSizePolicy(sizePolicy5);
+        doubleSpinBox_MinGluc->setMinimumSize(QSize(80, 0));
+        doubleSpinBox_MinGluc->setMaximumSize(QSize(16777215, 16777215));
+        doubleSpinBox_MinGluc->setDecimals(2);
+        doubleSpinBox_MinGluc->setMaximum(1e+6);
+        doubleSpinBox_MinGluc->setSingleStep(0.01);
+
+        horizontalLayout_15->addWidget(doubleSpinBox_MinGluc);
+
+
+        gridLayout_3->addLayout(horizontalLayout_15, 1, 0, 1, 1);
+
+        horizontalLayout_60 = new QHBoxLayout();
+        horizontalLayout_60->setObjectName(QStringLiteral("horizontalLayout_60"));
+        doubleSpinBox_MinImp4 = new QDoubleSpinBox(ConfigurationLayout);
+        doubleSpinBox_MinImp4->setObjectName(QStringLiteral("doubleSpinBox_MinImp4"));
+        doubleSpinBox_MinImp4->setEnabled(false);
+        sizePolicy5.setHeightForWidth(doubleSpinBox_MinImp4->sizePolicy().hasHeightForWidth());
+        doubleSpinBox_MinImp4->setSizePolicy(sizePolicy5);
+        doubleSpinBox_MinImp4->setMinimumSize(QSize(80, 0));
+        doubleSpinBox_MinImp4->setMaximum(1e+6);
+        doubleSpinBox_MinImp4->setSingleStep(0.01);
+
+        horizontalLayout_60->addWidget(doubleSpinBox_MinImp4);
+
+
+        gridLayout_3->addLayout(horizontalLayout_60, 1, 5, 1, 1);
+
+        horizontalLayout_68 = new QHBoxLayout();
+        horizontalLayout_68->setObjectName(QStringLiteral("horizontalLayout_68"));
+        doubleSpinBox_StockImp5 = new QDoubleSpinBox(ConfigurationLayout);
+        doubleSpinBox_StockImp5->setObjectName(QStringLiteral("doubleSpinBox_StockImp5"));
+        doubleSpinBox_StockImp5->setEnabled(false);
+        sizePolicy5.setHeightForWidth(doubleSpinBox_StockImp5->sizePolicy().hasHeightForWidth());
+        doubleSpinBox_StockImp5->setSizePolicy(sizePolicy5);
+        doubleSpinBox_StockImp5->setMinimumSize(QSize(80, 0));
+        doubleSpinBox_StockImp5->setMaximum(1e+6);
+        doubleSpinBox_StockImp5->setSingleStep(0.01);
+
+        horizontalLayout_68->addWidget(doubleSpinBox_StockImp5);
+
+
+        gridLayout_3->addLayout(horizontalLayout_68, 3, 6, 1, 1);
+
+        horizontalLayout_51 = new QHBoxLayout();
+        horizontalLayout_51->setObjectName(QStringLiteral("horizontalLayout_51"));
+        doubleSpinBox_MinImp3 = new QDoubleSpinBox(ConfigurationLayout);
+        doubleSpinBox_MinImp3->setObjectName(QStringLiteral("doubleSpinBox_MinImp3"));
+        doubleSpinBox_MinImp3->setEnabled(false);
+        sizePolicy5.setHeightForWidth(doubleSpinBox_MinImp3->sizePolicy().hasHeightForWidth());
+        doubleSpinBox_MinImp3->setSizePolicy(sizePolicy5);
+        doubleSpinBox_MinImp3->setMinimumSize(QSize(80, 0));
+        doubleSpinBox_MinImp3->setMaximum(1e+6);
+        doubleSpinBox_MinImp3->setSingleStep(0.01);
+
+        horizontalLayout_51->addWidget(doubleSpinBox_MinImp3);
+
+
+        gridLayout_3->addLayout(horizontalLayout_51, 1, 4, 1, 1);
+
+        horizontalLayout_66 = new QHBoxLayout();
+        horizontalLayout_66->setObjectName(QStringLiteral("horizontalLayout_66"));
+        checkBox_Imp5 = new QCheckBox(ConfigurationLayout);
+        checkBox_Imp5->setObjectName(QStringLiteral("checkBox_Imp5"));
+        checkBox_Imp5->setEnabled(true);
+        sizePolicy6.setHeightForWidth(checkBox_Imp5->sizePolicy().hasHeightForWidth());
+        checkBox_Imp5->setSizePolicy(sizePolicy6);
+        checkBox_Imp5->setMinimumSize(QSize(20, 0));
+        checkBox_Imp5->setMaximumSize(QSize(16777215, 16777215));
+        checkBox_Imp5->setChecked(true);
+
+        horizontalLayout_66->addWidget(checkBox_Imp5);
+
+        lineEdit_Imp5 = new QLineEdit(ConfigurationLayout);
+        lineEdit_Imp5->setObjectName(QStringLiteral("lineEdit_Imp5"));
+        sizePolicy7.setHeightForWidth(lineEdit_Imp5->sizePolicy().hasHeightForWidth());
+        lineEdit_Imp5->setSizePolicy(sizePolicy7);
+        lineEdit_Imp5->setMinimumSize(QSize(60, 0));
+        lineEdit_Imp5->setFrame(false);
+
+        horizontalLayout_66->addWidget(lineEdit_Imp5);
+
+
+        gridLayout_3->addLayout(horizontalLayout_66, 0, 6, 1, 1);
+
+        horizontalLayout_65 = new QHBoxLayout();
+        horizontalLayout_65->setObjectName(QStringLiteral("horizontalLayout_65"));
+        doubleSpinBox_MinImp5 = new QDoubleSpinBox(ConfigurationLayout);
+        doubleSpinBox_MinImp5->setObjectName(QStringLiteral("doubleSpinBox_MinImp5"));
+        doubleSpinBox_MinImp5->setEnabled(false);
+        sizePolicy5.setHeightForWidth(doubleSpinBox_MinImp5->sizePolicy().hasHeightForWidth());
+        doubleSpinBox_MinImp5->setSizePolicy(sizePolicy5);
+        doubleSpinBox_MinImp5->setMinimumSize(QSize(80, 0));
+        doubleSpinBox_MinImp5->setMaximum(1e+6);
+        doubleSpinBox_MinImp5->setSingleStep(0.01);
+
+        horizontalLayout_65->addWidget(doubleSpinBox_MinImp5);
+
+
+        gridLayout_3->addLayout(horizontalLayout_65, 1, 6, 1, 1);
+
+        horizontalLayout_19 = new QHBoxLayout();
+        horizontalLayout_19->setObjectName(QStringLiteral("horizontalLayout_19"));
+        doubleSpinBox_StockImp2 = new QDoubleSpinBox(ConfigurationLayout);
+        doubleSpinBox_StockImp2->setObjectName(QStringLiteral("doubleSpinBox_StockImp2"));
+        sizePolicy5.setHeightForWidth(doubleSpinBox_StockImp2->sizePolicy().hasHeightForWidth());
+        doubleSpinBox_StockImp2->setSizePolicy(sizePolicy5);
+        doubleSpinBox_StockImp2->setMinimumSize(QSize(80, 0));
+        doubleSpinBox_StockImp2->setMaximumSize(QSize(16777215, 16777203));
+        doubleSpinBox_StockImp2->setDecimals(2);
+        doubleSpinBox_StockImp2->setMaximum(1e+8);
+        doubleSpinBox_StockImp2->setSingleStep(0.1);
+        doubleSpinBox_StockImp2->setValue(1500);
+
+        horizontalLayout_19->addWidget(doubleSpinBox_StockImp2);
+
+
+        gridLayout_3->addLayout(horizontalLayout_19, 3, 3, 1, 1);
+
+
+        horizontalLayout_70->addLayout(gridLayout_3);
+
+
+        verticalLayout_4->addLayout(horizontalLayout_70);
 
 
         horizontalLayout_21->addLayout(verticalLayout_4);
@@ -1265,8 +1465,11 @@ public:
 
         label_AbsVol_2 = new QLabel(ConfigurationLayout);
         label_AbsVol_2->setObjectName(QStringLiteral("label_AbsVol_2"));
-        sizePolicy5.setHeightForWidth(label_AbsVol_2->sizePolicy().hasHeightForWidth());
-        label_AbsVol_2->setSizePolicy(sizePolicy5);
+        QSizePolicy sizePolicy8(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        sizePolicy8.setHorizontalStretch(0);
+        sizePolicy8.setVerticalStretch(0);
+        sizePolicy8.setHeightForWidth(label_AbsVol_2->sizePolicy().hasHeightForWidth());
+        label_AbsVol_2->setSizePolicy(sizePolicy8);
         label_AbsVol_2->setMinimumSize(QSize(30, 0));
 
         horizontalLayout_35->addWidget(label_AbsVol_2);
@@ -1493,7 +1696,7 @@ public:
 
         horizontalLayout_41 = new QHBoxLayout();
         horizontalLayout_41->setObjectName(QStringLiteral("horizontalLayout_41"));
-        horizontalSpacer_23 = new QSpacerItem(215, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
+        horizontalSpacer_23 = new QSpacerItem(210, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
 
         horizontalLayout_41->addItem(horizontalSpacer_23);
 
@@ -1503,7 +1706,7 @@ public:
 
         verticalLayout_5->addLayout(gridLayout_5);
 
-        verticalSpacer_3 = new QSpacerItem(5, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
+        verticalSpacer_3 = new QSpacerItem(5, 5, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         verticalLayout_5->addItem(verticalSpacer_3);
 
@@ -1538,11 +1741,11 @@ public:
         label_timebetweenM->setObjectName(QStringLiteral("label_timebetweenM"));
         label_timebetweenM->setMinimumSize(QSize(100, 0));
         label_timebetweenM->setMaximumSize(QSize(16777215, 16777215));
-        QPalette palette9;
-        palette9.setBrush(QPalette::Active, QPalette::WindowText, brush);
-        palette9.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
-        palette9.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        label_timebetweenM->setPalette(palette9);
+        QPalette palette7;
+        palette7.setBrush(QPalette::Active, QPalette::WindowText, brush);
+        palette7.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
+        palette7.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        label_timebetweenM->setPalette(palette7);
 
         horizontalLayout_57->addWidget(label_timebetweenM);
 
@@ -1552,11 +1755,11 @@ public:
         doubleSpinBox_timebetweenM->setSizePolicy(sizePolicy4);
         doubleSpinBox_timebetweenM->setMinimumSize(QSize(80, 0));
         doubleSpinBox_timebetweenM->setMaximumSize(QSize(80, 16777215));
-        QPalette palette10;
-        palette10.setBrush(QPalette::Active, QPalette::Text, brush2);
-        palette10.setBrush(QPalette::Inactive, QPalette::Text, brush2);
-        palette10.setBrush(QPalette::Disabled, QPalette::Text, brush1);
-        doubleSpinBox_timebetweenM->setPalette(palette10);
+        QPalette palette8;
+        palette8.setBrush(QPalette::Active, QPalette::Text, brush2);
+        palette8.setBrush(QPalette::Inactive, QPalette::Text, brush2);
+        palette8.setBrush(QPalette::Disabled, QPalette::Text, brush1);
+        doubleSpinBox_timebetweenM->setPalette(palette8);
         doubleSpinBox_timebetweenM->setFrame(false);
         doubleSpinBox_timebetweenM->setReadOnly(true);
         doubleSpinBox_timebetweenM->setButtonSymbols(QAbstractSpinBox::NoButtons);
@@ -1571,11 +1774,11 @@ public:
         label2_timebetweenM = new QLabel(ConfigurationLayout);
         label2_timebetweenM->setObjectName(QStringLiteral("label2_timebetweenM"));
         label2_timebetweenM->setMinimumSize(QSize(30, 0));
-        QPalette palette11;
-        palette11.setBrush(QPalette::Active, QPalette::WindowText, brush);
-        palette11.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
-        palette11.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        label2_timebetweenM->setPalette(palette11);
+        QPalette palette9;
+        palette9.setBrush(QPalette::Active, QPalette::WindowText, brush);
+        palette9.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
+        palette9.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        label2_timebetweenM->setPalette(palette9);
 
         horizontalLayout_57->addWidget(label2_timebetweenM);
 
@@ -1585,7 +1788,7 @@ public:
 
         verticalLayout_5->addLayout(gridLayout_9);
 
-        verticalSpacer_2 = new QSpacerItem(5, 10, QSizePolicy::Minimum, QSizePolicy::Fixed);
+        verticalSpacer_2 = new QSpacerItem(5, 5, QSizePolicy::Minimum, QSizePolicy::Fixed);
 
         verticalLayout_5->addItem(verticalSpacer_2);
 
@@ -1595,35 +1798,32 @@ public:
         timeLayout->setObjectName(QStringLiteral("timeLayout"));
         label_timeLabel = new QLabel(ConfigurationLayout);
         label_timeLabel->setObjectName(QStringLiteral("label_timeLabel"));
-        sizePolicy5.setHeightForWidth(label_timeLabel->sizePolicy().hasHeightForWidth());
-        label_timeLabel->setSizePolicy(sizePolicy5);
+        sizePolicy8.setHeightForWidth(label_timeLabel->sizePolicy().hasHeightForWidth());
+        label_timeLabel->setSizePolicy(sizePolicy8);
         label_timeLabel->setMinimumSize(QSize(100, 0));
-        QPalette palette12;
+        QPalette palette10;
         QBrush brush3(QColor(170, 0, 0, 255));
         brush3.setStyle(Qt::SolidPattern);
-        palette12.setBrush(QPalette::Active, QPalette::WindowText, brush3);
-        palette12.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
-        palette12.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        label_timeLabel->setPalette(palette12);
+        palette10.setBrush(QPalette::Active, QPalette::WindowText, brush3);
+        palette10.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
+        palette10.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        label_timeLabel->setPalette(palette10);
 
         timeLayout->addWidget(label_timeLabel);
 
         timeEdit_timeLabel = new QLineEdit(ConfigurationLayout);
         timeEdit_timeLabel->setObjectName(QStringLiteral("timeEdit_timeLabel"));
-        QSizePolicy sizePolicy6(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        sizePolicy6.setHorizontalStretch(0);
-        sizePolicy6.setVerticalStretch(0);
-        sizePolicy6.setHeightForWidth(timeEdit_timeLabel->sizePolicy().hasHeightForWidth());
-        timeEdit_timeLabel->setSizePolicy(sizePolicy6);
+        sizePolicy5.setHeightForWidth(timeEdit_timeLabel->sizePolicy().hasHeightForWidth());
+        timeEdit_timeLabel->setSizePolicy(sizePolicy5);
         timeEdit_timeLabel->setMinimumSize(QSize(0, 0));
         timeEdit_timeLabel->setMaximumSize(QSize(16777215, 16777215));
-        QPalette palette13;
+        QPalette palette11;
         QBrush brush4(QColor(255, 0, 0, 255));
         brush4.setStyle(Qt::SolidPattern);
-        palette13.setBrush(QPalette::Active, QPalette::Text, brush4);
-        palette13.setBrush(QPalette::Inactive, QPalette::Text, brush4);
-        palette13.setBrush(QPalette::Disabled, QPalette::Text, brush1);
-        timeEdit_timeLabel->setPalette(palette13);
+        palette11.setBrush(QPalette::Active, QPalette::Text, brush4);
+        palette11.setBrush(QPalette::Inactive, QPalette::Text, brush4);
+        palette11.setBrush(QPalette::Disabled, QPalette::Text, brush1);
+        timeEdit_timeLabel->setPalette(palette11);
         timeEdit_timeLabel->setFrame(true);
         timeEdit_timeLabel->setReadOnly(true);
 
@@ -1631,24 +1831,24 @@ public:
 
         label_endTime = new QLabel(ConfigurationLayout);
         label_endTime->setObjectName(QStringLiteral("label_endTime"));
-        sizePolicy5.setHeightForWidth(label_endTime->sizePolicy().hasHeightForWidth());
-        label_endTime->setSizePolicy(sizePolicy5);
+        sizePolicy8.setHeightForWidth(label_endTime->sizePolicy().hasHeightForWidth());
+        label_endTime->setSizePolicy(sizePolicy8);
         label_endTime->setMinimumSize(QSize(100, 0));
-        QPalette palette14;
-        palette14.setBrush(QPalette::Active, QPalette::WindowText, brush);
-        palette14.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
-        palette14.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        label_endTime->setPalette(palette14);
+        QPalette palette12;
+        palette12.setBrush(QPalette::Active, QPalette::WindowText, brush);
+        palette12.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
+        palette12.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        label_endTime->setPalette(palette12);
 
         timeLayout->addWidget(label_endTime);
 
         lineEdit_EndTime = new QLineEdit(ConfigurationLayout);
         lineEdit_EndTime->setObjectName(QStringLiteral("lineEdit_EndTime"));
-        QPalette palette15;
-        palette15.setBrush(QPalette::Active, QPalette::Text, brush2);
-        palette15.setBrush(QPalette::Inactive, QPalette::Text, brush2);
-        palette15.setBrush(QPalette::Disabled, QPalette::Text, brush1);
-        lineEdit_EndTime->setPalette(palette15);
+        QPalette palette13;
+        palette13.setBrush(QPalette::Active, QPalette::Text, brush2);
+        palette13.setBrush(QPalette::Inactive, QPalette::Text, brush2);
+        palette13.setBrush(QPalette::Disabled, QPalette::Text, brush1);
+        lineEdit_EndTime->setPalette(palette13);
 
         timeLayout->addWidget(lineEdit_EndTime);
 
@@ -1661,26 +1861,27 @@ public:
         label_BtimeInt->setObjectName(QStringLiteral("label_BtimeInt"));
         label_BtimeInt->setMinimumSize(QSize(100, 0));
         label_BtimeInt->setMaximumSize(QSize(16777215, 16777215));
-        QPalette palette16;
-        palette16.setBrush(QPalette::Active, QPalette::WindowText, brush);
-        palette16.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
-        palette16.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        label_BtimeInt->setPalette(palette16);
+        QPalette palette14;
+        palette14.setBrush(QPalette::Active, QPalette::WindowText, brush);
+        palette14.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
+        palette14.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        label_BtimeInt->setPalette(palette14);
 
         horizontalLayout_44->addWidget(label_BtimeInt);
 
         doubleSpinBox_totalTime = new QDoubleSpinBox(ConfigurationLayout);
         doubleSpinBox_totalTime->setObjectName(QStringLiteral("doubleSpinBox_totalTime"));
-        sizePolicy6.setHeightForWidth(doubleSpinBox_totalTime->sizePolicy().hasHeightForWidth());
-        doubleSpinBox_totalTime->setSizePolicy(sizePolicy6);
+        sizePolicy5.setHeightForWidth(doubleSpinBox_totalTime->sizePolicy().hasHeightForWidth());
+        doubleSpinBox_totalTime->setSizePolicy(sizePolicy5);
         doubleSpinBox_totalTime->setMinimumSize(QSize(80, 0));
         doubleSpinBox_totalTime->setMaximumSize(QSize(80, 16777215));
-        QPalette palette17;
-        palette17.setBrush(QPalette::Active, QPalette::Text, brush2);
-        palette17.setBrush(QPalette::Inactive, QPalette::Text, brush2);
-        palette17.setBrush(QPalette::Disabled, QPalette::Text, brush1);
-        doubleSpinBox_totalTime->setPalette(palette17);
+        QPalette palette15;
+        palette15.setBrush(QPalette::Active, QPalette::Text, brush2);
+        palette15.setBrush(QPalette::Inactive, QPalette::Text, brush2);
+        palette15.setBrush(QPalette::Disabled, QPalette::Text, brush1);
+        doubleSpinBox_totalTime->setPalette(palette15);
         doubleSpinBox_totalTime->setFrame(false);
+        doubleSpinBox_totalTime->setReadOnly(true);
         doubleSpinBox_totalTime->setButtonSymbols(QAbstractSpinBox::NoButtons);
         doubleSpinBox_totalTime->setDecimals(4);
         doubleSpinBox_totalTime->setMaximum(1e+12);
@@ -1691,11 +1892,11 @@ public:
         label_BtimeInt2 = new QLabel(ConfigurationLayout);
         label_BtimeInt2->setObjectName(QStringLiteral("label_BtimeInt2"));
         label_BtimeInt2->setMinimumSize(QSize(30, 0));
-        QPalette palette18;
-        palette18.setBrush(QPalette::Active, QPalette::WindowText, brush);
-        palette18.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
-        palette18.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        label_BtimeInt2->setPalette(palette18);
+        QPalette palette16;
+        palette16.setBrush(QPalette::Active, QPalette::WindowText, brush);
+        palette16.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
+        palette16.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        label_BtimeInt2->setPalette(palette16);
 
         horizontalLayout_44->addWidget(label_BtimeInt2);
 
@@ -1770,22 +1971,22 @@ public:
         sizePolicy1.setHeightForWidth(label_BFileNamePrev->sizePolicy().hasHeightForWidth());
         label_BFileNamePrev->setSizePolicy(sizePolicy1);
         label_BFileNamePrev->setMinimumSize(QSize(120, 0));
-        QPalette palette19;
-        palette19.setBrush(QPalette::Active, QPalette::WindowText, brush);
-        palette19.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
-        palette19.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        label_BFileNamePrev->setPalette(palette19);
+        QPalette palette17;
+        palette17.setBrush(QPalette::Active, QPalette::WindowText, brush);
+        palette17.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
+        palette17.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        label_BFileNamePrev->setPalette(palette17);
 
         horizontalLayout_45->addWidget(label_BFileNamePrev);
 
         lineEdit_BFileNamePrev = new QLineEdit(ConfigurationLayout);
         lineEdit_BFileNamePrev->setObjectName(QStringLiteral("lineEdit_BFileNamePrev"));
         lineEdit_BFileNamePrev->setEnabled(true);
-        QPalette palette20;
-        palette20.setBrush(QPalette::Active, QPalette::Text, brush2);
-        palette20.setBrush(QPalette::Inactive, QPalette::Text, brush2);
-        palette20.setBrush(QPalette::Disabled, QPalette::Text, brush1);
-        lineEdit_BFileNamePrev->setPalette(palette20);
+        QPalette palette18;
+        palette18.setBrush(QPalette::Active, QPalette::Text, brush2);
+        palette18.setBrush(QPalette::Inactive, QPalette::Text, brush2);
+        palette18.setBrush(QPalette::Disabled, QPalette::Text, brush1);
+        lineEdit_BFileNamePrev->setPalette(palette18);
         lineEdit_BFileNamePrev->setFrame(true);
         lineEdit_BFileNamePrev->setReadOnly(true);
 
@@ -1801,16 +2002,16 @@ public:
         sizePolicy1.setHeightForWidth(label_MSpace->sizePolicy().hasHeightForWidth());
         label_MSpace->setSizePolicy(sizePolicy1);
         label_MSpace->setMinimumSize(QSize(120, 0));
-        QPalette palette21;
-        palette21.setBrush(QPalette::Active, QPalette::WindowText, brush);
+        QPalette palette19;
+        palette19.setBrush(QPalette::Active, QPalette::WindowText, brush);
         QBrush brush5(QColor(0, 0, 0, 255));
         brush5.setStyle(Qt::SolidPattern);
-        palette21.setBrush(QPalette::Active, QPalette::Text, brush5);
-        palette21.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
-        palette21.setBrush(QPalette::Inactive, QPalette::Text, brush5);
-        palette21.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        palette21.setBrush(QPalette::Disabled, QPalette::Text, brush1);
-        label_MSpace->setPalette(palette21);
+        palette19.setBrush(QPalette::Active, QPalette::Text, brush5);
+        palette19.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
+        palette19.setBrush(QPalette::Inactive, QPalette::Text, brush5);
+        palette19.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        palette19.setBrush(QPalette::Disabled, QPalette::Text, brush1);
+        label_MSpace->setPalette(palette19);
 
         horizontalLayout_49->addWidget(label_MSpace);
 
@@ -1818,14 +2019,14 @@ public:
         doubleSpinBox_MSpace->setObjectName(QStringLiteral("doubleSpinBox_MSpace"));
         doubleSpinBox_MSpace->setMinimumSize(QSize(80, 0));
         doubleSpinBox_MSpace->setMaximumSize(QSize(80, 16777215));
-        QPalette palette22;
-        palette22.setBrush(QPalette::Active, QPalette::WindowText, brush5);
-        palette22.setBrush(QPalette::Active, QPalette::Text, brush2);
-        palette22.setBrush(QPalette::Inactive, QPalette::WindowText, brush5);
-        palette22.setBrush(QPalette::Inactive, QPalette::Text, brush2);
-        palette22.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        palette22.setBrush(QPalette::Disabled, QPalette::Text, brush1);
-        doubleSpinBox_MSpace->setPalette(palette22);
+        QPalette palette20;
+        palette20.setBrush(QPalette::Active, QPalette::WindowText, brush5);
+        palette20.setBrush(QPalette::Active, QPalette::Text, brush2);
+        palette20.setBrush(QPalette::Inactive, QPalette::WindowText, brush5);
+        palette20.setBrush(QPalette::Inactive, QPalette::Text, brush2);
+        palette20.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        palette20.setBrush(QPalette::Disabled, QPalette::Text, brush1);
+        doubleSpinBox_MSpace->setPalette(palette20);
         doubleSpinBox_MSpace->setFrame(false);
         doubleSpinBox_MSpace->setReadOnly(true);
         doubleSpinBox_MSpace->setButtonSymbols(QAbstractSpinBox::NoButtons);
@@ -1838,11 +2039,11 @@ public:
         label_MSpace2->setObjectName(QStringLiteral("label_MSpace2"));
         label_MSpace2->setMinimumSize(QSize(30, 0));
         label_MSpace2->setMaximumSize(QSize(30, 16777215));
-        QPalette palette23;
-        palette23.setBrush(QPalette::Active, QPalette::WindowText, brush);
-        palette23.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
-        palette23.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        label_MSpace2->setPalette(palette23);
+        QPalette palette21;
+        palette21.setBrush(QPalette::Active, QPalette::WindowText, brush);
+        palette21.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
+        palette21.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        label_MSpace2->setPalette(palette21);
 
         horizontalLayout_49->addWidget(label_MSpace2);
 
@@ -1865,11 +2066,11 @@ public:
         label_filename->setSizePolicy(sizePolicy1);
         label_filename->setMinimumSize(QSize(120, 0));
         label_filename->setMaximumSize(QSize(16777215, 16777215));
-        QPalette palette24;
-        palette24.setBrush(QPalette::Active, QPalette::WindowText, brush);
-        palette24.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
-        palette24.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        label_filename->setPalette(palette24);
+        QPalette palette22;
+        palette22.setBrush(QPalette::Active, QPalette::WindowText, brush);
+        palette22.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
+        palette22.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        label_filename->setPalette(palette22);
         label_filename->setFont(font2);
 
         horizontalLayout_2->addWidget(label_filename);
@@ -2035,78 +2236,51 @@ public:
         label_minW2->setText(QApplication::translate("configurePolMeasure", "nm", Q_NULLPTR));
         label_14->setText(QString());
         label_SolConc->setText(QApplication::translate("configurePolMeasure", "Solutions Concentration:", Q_NULLPTR));
-        label_VolGl1->setText(QApplication::translate("configurePolMeasure", "Volume Glucose:", Q_NULLPTR));
-        lineEdit_VolG->setText(QApplication::translate("configurePolMeasure", "318.75", Q_NULLPTR));
-        label_VolG2->setText(QApplication::translate("configurePolMeasure", "ml", Q_NULLPTR));
-#ifndef QT_NO_TOOLTIP
-        label_MinImp1->setToolTip(QApplication::translate("configurePolMeasure", "Minimum Impurity 1 Concentration?", Q_NULLPTR));
-#endif // QT_NO_TOOLTIP
-        label_MinImp1->setText(QApplication::translate("configurePolMeasure", "Min. Impurity 1: ", Q_NULLPTR));
-        label_MinImp1_2->setText(QApplication::translate("configurePolMeasure", "g/l", Q_NULLPTR));
-#ifndef QT_NO_TOOLTIP
-        label_StockImp1->setToolTip(QApplication::translate("configurePolMeasure", "Which concentration of impurity 1 is in stock?", Q_NULLPTR));
-#endif // QT_NO_TOOLTIP
-        label_StockImp1->setText(QApplication::translate("configurePolMeasure", "Stock Impurity 1:", Q_NULLPTR));
-        label_StockImp1_2->setText(QApplication::translate("configurePolMeasure", "g/l", Q_NULLPTR));
-#ifndef QT_NO_TOOLTIP
-        label_MaxGluc->setToolTip(QApplication::translate("configurePolMeasure", "Maximum Glucose Concentration?", Q_NULLPTR));
-#endif // QT_NO_TOOLTIP
-        label_MaxGluc->setText(QApplication::translate("configurePolMeasure", "Max. Glucose: ", Q_NULLPTR));
-        label_MaxGluc2->setText(QApplication::translate("configurePolMeasure", "mg/dl", Q_NULLPTR));
+        pushButton_addImpurity->setText(QApplication::translate("configurePolMeasure", "+ Add", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         label_StockGluc->setToolTip(QApplication::translate("configurePolMeasure", "Which concentration of glucose is in stock?", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        label_StockGluc->setText(QApplication::translate("configurePolMeasure", "Stock Glucose:", Q_NULLPTR));
-        label_StockGluc2->setText(QApplication::translate("configurePolMeasure", "mg/dl", Q_NULLPTR));
+        label_StockGluc->setText(QApplication::translate("configurePolMeasure", "Stock Concentration (mg/dl):", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         label_MinGluc->setToolTip(QApplication::translate("configurePolMeasure", "Minimum Glucose Concentration?", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        label_MinGluc->setText(QApplication::translate("configurePolMeasure", "Min. Glucose:", Q_NULLPTR));
-        label_MinGluc2->setText(QApplication::translate("configurePolMeasure", "mg/dl", Q_NULLPTR));
+        label_MinGluc->setText(QApplication::translate("configurePolMeasure", "Min. Concentration (mg/dl):", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        label_MaxImp1->setToolTip(QApplication::translate("configurePolMeasure", "Maximum Impurity 1 Concentration?", Q_NULLPTR));
+        label_MaxGluc->setToolTip(QApplication::translate("configurePolMeasure", "Maximum Glucose Concentration?", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        label_MaxImp1->setText(QApplication::translate("configurePolMeasure", "Max. Impurity 1: ", Q_NULLPTR));
-        label_MaxImp1_2->setText(QApplication::translate("configurePolMeasure", "g/l", Q_NULLPTR));
-#ifndef QT_NO_TOOLTIP
-        label_MinImp2->setToolTip(QApplication::translate("configurePolMeasure", "Minimum Impurity 2 Concentration?", Q_NULLPTR));
-#endif // QT_NO_TOOLTIP
-        label_MinImp2->setText(QApplication::translate("configurePolMeasure", "Min. Impurity 2: ", Q_NULLPTR));
-        label_MinImp2_2->setText(QApplication::translate("configurePolMeasure", "mg/dl", Q_NULLPTR));
-#ifndef QT_NO_TOOLTIP
-        label_MaxImp2->setToolTip(QApplication::translate("configurePolMeasure", "Maximum Impurity 2 Concentration?", Q_NULLPTR));
-#endif // QT_NO_TOOLTIP
-        label_MaxImp2->setText(QApplication::translate("configurePolMeasure", "Max. Impurity 2:", Q_NULLPTR));
-        label_MaxImp2_2->setText(QApplication::translate("configurePolMeasure", "mg/dl", Q_NULLPTR));
-#ifndef QT_NO_TOOLTIP
-        label_StockImp2->setToolTip(QApplication::translate("configurePolMeasure", "Which concentration of impurity 2 is in stock?", Q_NULLPTR));
-#endif // QT_NO_TOOLTIP
-        label_StockImp2->setText(QApplication::translate("configurePolMeasure", "Stock Impurity 2:", Q_NULLPTR));
-        label_StockImp2_2->setText(QApplication::translate("configurePolMeasure", "mg/dl", Q_NULLPTR));
-        label_VolI2->setText(QApplication::translate("configurePolMeasure", "Volume Impurity 2:", Q_NULLPTR));
-        lineEdit_VolI2->setText(QApplication::translate("configurePolMeasure", "0", Q_NULLPTR));
-        label_VolI22->setText(QApplication::translate("configurePolMeasure", "ml", Q_NULLPTR));
-        label_VolI1->setText(QApplication::translate("configurePolMeasure", "Volume Impurity 1:", Q_NULLPTR));
-        lineEdit_VolI1->setText(QApplication::translate("configurePolMeasure", "318.75", Q_NULLPTR));
-        label_VolI12->setText(QApplication::translate("configurePolMeasure", "ml", Q_NULLPTR));
+        label_MaxGluc->setText(QApplication::translate("configurePolMeasure", "Max. Concentration (mg/dl):", Q_NULLPTR));
+        label->setText(QString());
+        label_VolGl1->setText(QApplication::translate("configurePolMeasure", "Volume in Stock (ml):", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         checkBox_Glucose->setToolTip(QApplication::translate("configurePolMeasure", "Include/Remove Glucose", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        checkBox_Glucose->setText(QApplication::translate("configurePolMeasure", "Glucose", Q_NULLPTR));
-        label->setText(QString());
-        label_5->setText(QString());
+        checkBox_Glucose->setText(QApplication::translate("configurePolMeasure", "C1 -", Q_NULLPTR));
+        label_5->setText(QApplication::translate("configurePolMeasure", "Glucose", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        checkBox_Imp1->setToolTip(QApplication::translate("configurePolMeasure", "Include/Remove Impurity 1", Q_NULLPTR));
+        checkBox_Imp1->setToolTip(QApplication::translate("configurePolMeasure", "Remove Impurity 1", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        checkBox_Imp1->setText(QApplication::translate("configurePolMeasure", "Impurity 1", Q_NULLPTR));
-        label_6->setText(QString());
-        label_7->setText(QString());
+        checkBox_Imp1->setText(QApplication::translate("configurePolMeasure", "C2 -", Q_NULLPTR));
+        lineEdit_Imp1->setText(QApplication::translate("configurePolMeasure", "Impurity 1", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        checkBox_Imp2->setToolTip(QApplication::translate("configurePolMeasure", "Include/Remove Impurity 2", Q_NULLPTR));
+        checkBox_Imp2->setToolTip(QApplication::translate("configurePolMeasure", "Remove Impurity 2", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        checkBox_Imp2->setText(QApplication::translate("configurePolMeasure", "Impurity 2", Q_NULLPTR));
-        label_8->setText(QString());
-        label_12->setText(QString());
+        checkBox_Imp2->setText(QApplication::translate("configurePolMeasure", "C3 -", Q_NULLPTR));
+        lineEdit_Imp2->setText(QApplication::translate("configurePolMeasure", "Impurity 2", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        checkBox_Imp3->setToolTip(QApplication::translate("configurePolMeasure", "Remove Impurity 3", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        checkBox_Imp3->setText(QApplication::translate("configurePolMeasure", "C4 -", Q_NULLPTR));
+        lineEdit_Imp3->setText(QApplication::translate("configurePolMeasure", "Impurity 3", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        checkBox_Imp4->setToolTip(QApplication::translate("configurePolMeasure", "Remove Impurity 4", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        checkBox_Imp4->setText(QApplication::translate("configurePolMeasure", "C5 -", Q_NULLPTR));
+        lineEdit_Imp4->setText(QApplication::translate("configurePolMeasure", "Impurity 4", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        checkBox_Imp5->setToolTip(QApplication::translate("configurePolMeasure", "Remove Impurity 5", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        checkBox_Imp5->setText(QApplication::translate("configurePolMeasure", "C6 -", Q_NULLPTR));
+        lineEdit_Imp5->setText(QApplication::translate("configurePolMeasure", "Impurity 5", Q_NULLPTR));
         label_IconPump->setText(QString());
         label_PumpFlow->setText(QApplication::translate("configurePolMeasure", "Pumps Flow:", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
