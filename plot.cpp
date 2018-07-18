@@ -173,15 +173,12 @@ void Plot::setXAxisTitle(QString title)
 void Plot::setXAxisTopTitle(QString title)
 {
 
-    axisFont.setPointSize(8);
-
-    QwtText bottomTitle = title;
+    QwtText topTitle = title;
 
     /* Set font and update title */
-    bottomTitle.setFont(axisFont);
-    setAxisTitle(xTop, bottomTitle);
+    topTitle.setFont(axisFont);
+    setAxisTitle(xTop, topTitle);
 
-    axisFont.setPointSize(10);
 }
 
 /**

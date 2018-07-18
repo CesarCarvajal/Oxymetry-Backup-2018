@@ -43,6 +43,9 @@ public:
     QVector <double> GlucoseConcentration;
     QVector <double> Impurity1Concentration;
     QVector <double> Impurity2Concentration;
+    QVector <double> Impurity3Concentration;
+    QVector <double> Impurity4Concentration;
+    QVector <double> Impurity5Concentration;
 
     /* Stock Solutions */
     QVector<double> stockSolutions;
@@ -57,6 +60,9 @@ public:
     QVector <double> GlucoseFlow;
     QVector <double> Impurity1Flow;
     QVector <double> Impurity2Flow;
+    QVector <double> Impurity3Flow;
+    QVector <double> Impurity4Flow;
+    QVector <double> Impurity5Flow;
 
     /* Wavelengh range */
     double minWavelength, maxWavelength;

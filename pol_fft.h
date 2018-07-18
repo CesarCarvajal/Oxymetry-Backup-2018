@@ -66,6 +66,9 @@ public:
     double ConcentrationC1=-1;
     double ConcentrationC2=-1;
     double ConcentrationC3=-1;
+    double ConcentrationC4=-1;
+    double ConcentrationC5=-1;
+    double ConcentrationC6=-1;
 
     /* Where are we going to extract the components of the FFT */
     int f_w;

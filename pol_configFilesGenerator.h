@@ -68,9 +68,7 @@ public:
     double PumpsCycle;
 
     /* Active substances flags */
-    bool glucoseActive;
-    bool Imp1Active;
-    bool Imp2Active;
+    QVector <bool> activeSubstances;
 
     /* Normalized counts? */
     bool normalizedCounts;
@@ -90,7 +88,9 @@ public:
     void GeneratePumpScripts(QString pathFile, QString filetype, QVector<double> FlowVector);
 
     /* Generate Spectrometer configuration */
-    void GenerateSpectrometerConfiguration(QString pathFile, QVector<double> GlucoseConcentration, QVector<double> Impurity1Concentration, QVector<double> Impurity2Concentration, QVector<double> StockSolutions, double minW, double maxW, double UserTimeInterval);
+    void GenerateSpectrometerConfiguration(QString pathFile, QVector<double> GlucoseConcentration, QVector<double> Impurity1Concentration, QVector<double> Impurity2Concentration,
+                                           QVector<double> Impurity3Concentration, QVector<double> Impurity4Concentration, QVector<double> Impurity5Concentration,
+                                           QVector<double> StockSolutions, double minW, double maxW, double UserTimeInterval);
 
     /* Calculate the correlation factors */
     float correlationCoefficient(QVector <double> X, QVector <double> Y, int N);

@@ -1573,6 +1573,9 @@ void PanelPolarimeter::clean_All_Pol(void){
     FFTL.ConcentrationC1 = FFTL.SelectedWaveL;
     FFTL.ConcentrationC2 = FFTL.SelectedWaveL;
     FFTL.ConcentrationC3 = FFTL.SelectedWaveL;
+    FFTL.ConcentrationC4 = FFTL.SelectedWaveL;
+    FFTL.ConcentrationC5 = FFTL.SelectedWaveL;
+    FFTL.ConcentrationC6 = FFTL.SelectedWaveL;
 
     /* Also restart plotting variables */
     minXAverage = 0;
@@ -2339,6 +2342,9 @@ void PanelPolarimeter::initialize_Default_Calibration(void){
     FFTL.ConcentrationC1 = 0;
     FFTL.ConcentrationC2 = 0;
     FFTL.ConcentrationC3 = 0;
+    FFTL.ConcentrationC4 = 0;
+    FFTL.ConcentrationC5 = 0;
+    FFTL.ConcentrationC6 = 0;
 }
 
 /**
@@ -2533,6 +2539,9 @@ void PanelPolarimeter::pol_Calibrate(void){
             FFTL.ConcentrationC1 = 0;
             FFTL.ConcentrationC2 = 0;
             FFTL.ConcentrationC3 = 0;
+            FFTL.ConcentrationC4 = 0;
+            FFTL.ConcentrationC5 = 0;
+            FFTL.ConcentrationC6 = 0;
 
             /* Configure spectrometer */
             ptrSpectrometers[SpectrometerNumber]->setIntegrationTime(ptrSpectrometers[SpectrometerNumber]->getIntegrationTime());
@@ -3835,7 +3844,7 @@ void PanelPolarimeter::write_To_File(FILE *file, double *a_pSpectrum, int WParam
         QString concentrations, conc = "";
 
         /* Is glucose active? */
-        if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->glucoseActive){
+        if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(0)){
 
             /* Write C1 */
             FFTL.ConcentrationC1 = ConfigureMeasurement->externSoftware->GlucoseConcentration.at(Timeindex-1);
@@ -3844,7 +3853,7 @@ void PanelPolarimeter::write_To_File(FILE *file, double *a_pSpectrum, int WParam
         }
 
         /* Is Impurity 1 active? */
-        if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->Imp1Active){
+        if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(1)){
 
             /* Write C2 */
             FFTL.ConcentrationC2 = ConfigureMeasurement->externSoftware->Impurity1Concentration.at(Timeindex-1);
@@ -3853,12 +3862,39 @@ void PanelPolarimeter::write_To_File(FILE *file, double *a_pSpectrum, int WParam
         }
 
         /* Is Impurity 2 active? */
-        if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->Imp2Active){
+        if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(2)){
 
             /* Write C3 */
             FFTL.ConcentrationC3 = ConfigureMeasurement->externSoftware->Impurity2Concentration.at(Timeindex-1);
             concentrations.append(" , " + QString::number(FFTL.ConcentrationC3));
             conc.append("C3");
+        }
+
+        /* Is Impurity 3 active? */
+        if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(3)){
+
+            /* Write C4 */
+            FFTL.ConcentrationC4 = ConfigureMeasurement->externSoftware->Impurity3Concentration.at(Timeindex-1);
+            concentrations.append(" , " + QString::number(FFTL.ConcentrationC4));
+            conc.append("C4");
+        }
+
+        /* Is Impurity 4 active? */
+        if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(4)){
+
+            /* Write C5 */
+            FFTL.ConcentrationC5 = ConfigureMeasurement->externSoftware->Impurity4Concentration.at(Timeindex-1);
+            concentrations.append(" , " + QString::number(FFTL.ConcentrationC5));
+            conc.append("C5");
+        }
+
+        /* Is Impurity 5 active? */
+        if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(5)){
+
+            /* Write C6 */
+            FFTL.ConcentrationC6 = ConfigureMeasurement->externSoftware->Impurity5Concentration.at(Timeindex-1);
+            concentrations.append(" , " + QString::number(FFTL.ConcentrationC6));
+            conc.append("C6");
         }
 
         fprintf(file, "Concentrations %s: %s\n\n", conc.toLatin1().data() ,concentrations.toLatin1().data());

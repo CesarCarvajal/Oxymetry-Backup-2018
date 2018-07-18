@@ -355,6 +355,7 @@ void fft::ReadFile(QString FilePath)
 {
     /* Data to get from the File Name */
     ConcentrationC1 = IntTime = FrequencyF = ConcentrationC2 = ConcentrationC3 = NrAverages = NrSpectra = -1;
+    ConcentrationC4 = ConcentrationC5 = ConcentrationC6 = -1;
 
     /* There is some information in the file very important to know how many data are we using */
 
@@ -403,7 +404,7 @@ void fft::ReadFile(QString FilePath)
                 FrequencyF = QString(Readed_Row.at(1)).replace(",",".").toDouble();
 
                 /* Concentrations found */
-            }else if(ReadRow.contains("Concentrations") && ConcentrationC1==-1 && ConcentrationC2==-1 && ConcentrationC3==-1){
+            }else if(ReadRow.contains("Concentrations") && ConcentrationC1==-1 && ConcentrationC2==-1 && ConcentrationC3==-1 && ConcentrationC4==-1 && ConcentrationC5==-1 && ConcentrationC6==-1){
 
                 /* Is there glucose? */
                 if(ReadRow.contains("C1")){
@@ -418,6 +419,21 @@ void fft::ReadFile(QString FilePath)
                 /* Is there Impurity 2? */
                 if(ReadRow.contains("C3")){
                     ConcentrationC3 = QString(Readed_Row.at(6)).replace(",",".").toDouble();
+                }
+
+                /* Is there Impurity 3? */
+                if(ReadRow.contains("C4")){
+                    ConcentrationC4 = QString(Readed_Row.at(8)).replace(",",".").toDouble();
+                }
+
+                /* Is there Impurity 4? */
+                if(ReadRow.contains("C5")){
+                    ConcentrationC5 = QString(Readed_Row.at(10)).replace(",",".").toDouble();
+                }
+
+                /* Is there Impurity 5? */
+                if(ReadRow.contains("C6")){
+                    ConcentrationC6 = QString(Readed_Row.at(12)).replace(",",".").toDouble();
                 }
 
                 /* From here ahead just counts and other data */
@@ -563,6 +579,24 @@ void fft::saveFFTtoFile(QFileInfo FileDetails, bool userSaving)
     if(ConcentrationC3 >= 0){
         concentrations.append(" , " + QString::number(ConcentrationC3));
         conc.append("C3");
+    }
+
+    /* Is there Impurity 3? */
+    if(ConcentrationC4 >= 0){
+        concentrations.append(" , " + QString::number(ConcentrationC4));
+        conc.append("C4");
+    }
+
+    /* Is there Impurity 4? */
+    if(ConcentrationC5 >= 0){
+        concentrations.append(" , " + QString::number(ConcentrationC5));
+        conc.append("C5");
+    }
+
+    /* Is there Impurity 2? */
+    if(ConcentrationC6 >= 0){
+        concentrations.append(" , " + QString::number(ConcentrationC6));
+        conc.append("C6");
     }
 
     /* Write the concentrations to the file */
