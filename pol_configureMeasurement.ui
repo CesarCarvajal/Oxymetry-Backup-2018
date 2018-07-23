@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>1413</width>
-    <height>853</height>
+    <height>825</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -1139,7 +1139,10 @@
                      <string>Impurity 3</string>
                     </property>
                     <property name="frame">
-                     <bool>false</bool>
+                     <bool>true</bool>
+                    </property>
+                    <property name="echoMode">
+                     <enum>QLineEdit::Normal</enum>
                     </property>
                    </widget>
                   </item>
@@ -1690,6 +1693,9 @@
                      <string>Impurity 1</string>
                     </property>
                     <property name="frame">
+                     <bool>true</bool>
+                    </property>
+                    <property name="clearButtonEnabled">
                      <bool>false</bool>
                     </property>
                    </widget>
@@ -1915,7 +1921,10 @@
                      <string>Impurity 2</string>
                     </property>
                     <property name="frame">
-                     <bool>false</bool>
+                     <bool>true</bool>
+                    </property>
+                    <property name="echoMode">
+                     <enum>QLineEdit::Normal</enum>
                     </property>
                    </widget>
                   </item>
@@ -2004,7 +2013,10 @@
                      <string>Impurity 4</string>
                     </property>
                     <property name="frame">
-                     <bool>false</bool>
+                     <bool>true</bool>
+                    </property>
+                    <property name="echoMode">
+                     <enum>QLineEdit::Normal</enum>
                     </property>
                    </widget>
                   </item>
@@ -2507,7 +2519,10 @@
                      <string>Impurity 5</string>
                     </property>
                     <property name="frame">
-                     <bool>false</bool>
+                     <bool>true</bool>
+                    </property>
+                    <property name="echoMode">
+                     <enum>QLineEdit::Normal</enum>
                     </property>
                    </widget>
                   </item>
@@ -4204,6 +4219,86 @@
              </widget>
             </item>
             <item>
+             <layout class="QGridLayout" name="gridLayout_7">
+              <item row="0" column="2">
+               <layout class="QHBoxLayout" name="horizontalLayout_43">
+                <item>
+                 <widget class="QCheckBox" name="checkBox_saveRaw">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="text">
+                   <string>Raw Data</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item row="0" column="0">
+               <layout class="QHBoxLayout" name="horizontalLayout_3">
+                <item>
+                 <widget class="QLabel" name="label_saveOptions">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>120</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Saving Options:</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item row="0" column="1">
+               <layout class="QHBoxLayout" name="horizontalLayout_46">
+                <item>
+                 <widget class="QCheckBox" name="checkBox_saveFFT">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="text">
+                   <string>FFT Profiles</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_5">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Fixed</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>5</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
              <layout class="QGridLayout" name="gridLayout_10">
               <item row="0" column="0">
                <layout class="QHBoxLayout" name="horizontalLayout_45">
@@ -4563,9 +4658,6 @@
                </layout>
               </item>
              </layout>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_3"/>
             </item>
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_2">

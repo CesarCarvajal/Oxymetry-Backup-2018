@@ -70,6 +70,9 @@ public:
     /* Active substances flags */
     QVector <bool> activeSubstances;
 
+    /* Save the substances names */
+    QStringList substancesNames;
+
     /* Normalized counts? */
     bool normalizedCounts;
 

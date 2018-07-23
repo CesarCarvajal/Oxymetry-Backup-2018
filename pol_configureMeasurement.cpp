@@ -117,6 +117,8 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     connect(ui->checkBox_Imp2, SIGNAL(clicked()), signalMapperC, SLOT(map()));
     connect(ui->checkBox_Imp1, SIGNAL(clicked()), signalMapperC, SLOT(map()));
     connect(ui->checkBox_Glucose, SIGNAL(clicked()), signalMapperC, SLOT(map()));
+    connect(ui->checkBox_saveFFT, SIGNAL(clicked()), signalMapperC, SLOT(map()));
+    connect(ui->checkBox_saveRaw, SIGNAL(clicked()), signalMapperC, SLOT(map()));
 
     /* Normalize the counts? */
     connect(ui->checkBox_NormalizeCountsConfig, SIGNAL(clicked()), signalMapperC, SLOT(map()));
@@ -140,6 +142,8 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     signalMapperC->setMapping(ui->checkBox_Glucose, ui->checkBox_Glucose);
     signalMapperC->setMapping(ui->checkBox_NormalizeCountsConfig, ui->checkBox_NormalizeCountsConfig);
     signalMapperC->setMapping(ui->checkBox_IntervalMode, ui->checkBox_IntervalMode);
+    signalMapperC->setMapping(ui->checkBox_saveFFT, ui->checkBox_saveFFT);
+    signalMapperC->setMapping(ui->checkBox_saveRaw, ui->checkBox_saveRaw);
 
     /* Connect Button of configuration */
     connect(ui->pushButton_generate, SIGNAL(clicked()), this, SLOT(configurePolarimeter()));
@@ -163,8 +167,8 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     /* Initialize variables */
     ui->lineEdit_path->setText("Select a Path when Loading or Creating a Configuration File");
 
-    /* Hide Solution 2 at the beginning */
-    hideAdditionalSubstances(false, false, false, false, false);
+    /* Hide Solutions C3 to C6 at the beginning */
+    hideAdditionalSubstances(true, false, false, false, false);
 }
 
 /**
@@ -179,7 +183,6 @@ void configurePolMeasure::selectPath(void)
     {
         /* Get path of configuration file */
         pathDataM = QFileDialog::getOpenFileName(this, "Configuration file", QDir::currentPath(), "Text files (*.txt)");
-
     }
     else
     {
@@ -192,7 +195,6 @@ void configurePolMeasure::selectPath(void)
     {
         /* If a new file was loaded, clear all the configuration */
         cleanAll();
-
     }
 
     /* Is there a path? */
@@ -220,15 +222,15 @@ void configurePolMeasure::cleanAll(void)
     /* Clear lists */
     timePoint.clear();
     savingFilesNames.clear();
+
+    /* Restart some values */
     externSoftware->ConfigurationFileGenerator->NrSpectra=1000;
     externSoftware->ConfigurationFileGenerator->IntegrationTime=8;
     externSoftware->ConfigurationFileGenerator->NrAverages=1;
     externSoftware->ConfigurationFileGenerator->Frequency =7;
-    externSoftware->ConfigurationFileGenerator->repetition = 0;
     externSoftware->maxWavelength = 1100.23;
     externSoftware->minWavelength = 277.299;
     ui->lineEdit_path->setEnabled(false);
-
 }
 
 /**
@@ -270,8 +272,8 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
     }
 
     /* Number of substances */
-    int NumberOfSubstances = ui->checkBox_Glucose->isChecked() + ui->checkBox_Imp1->isVisible() + ui->checkBox_Imp2->isVisible() + ui->checkBox_Imp3->isVisible()
-            + ui->checkBox_Imp4->isVisible()+ ui->checkBox_Imp5->isVisible();
+    int NumberOfSubstances = ui->checkBox_Glucose->isChecked() + ui->checkBox_Imp1->isEnabled() + ui->checkBox_Imp2->isEnabled() + ui->checkBox_Imp3->isEnabled()
+            + ui->checkBox_Imp4->isEnabled()+ ui->checkBox_Imp5->isEnabled();
 
     /* Adjust stock */
     if(NumberOfSubstances > 0){
@@ -288,19 +290,19 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
     /* Check the normalization of counts */
     if(checkBox == ui->checkBox_NormalizeCountsConfig){
 
-        /* Is it checked? */
+        /* Is the normalization of counts checked? */
         externSoftware->ConfigurationFileGenerator->normalizedCounts = ui->checkBox_NormalizeCountsConfig->isChecked();
     }
 
-    /* Check the normalization of counts */
+    /* Check if the Interval Mode is activated */
     if(checkBox == ui->checkBox_IntervalMode){
 
-        /* Is it checked? */
+        /* Is the Interval mode checked? */
         if(ui->checkBox_IntervalMode->isChecked()){
 
             /* Do you want to set this mode? */
             if (QMessageBox::Yes == QMessageBox::question(this, "Interval Mode", "Are you sure that you want to set the measurement time manually? \n \n "
-                                                          "This mode might not be syncrhonized with the Syringe Pumps. Also the generation of Pump Files"
+                                                          "This mode might not be synchronized with the Syringe Pumps. Also the generation of Pump Files"
                                                           " will be enabled for just the maximum concentrations.",
                                                           QMessageBox::Yes | QMessageBox::No))
             {
@@ -334,7 +336,7 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
             ui->doubleSpinBox_timebetweenM->setFrame(false);
         }
 
-        /* Is it checked? */
+        /* Save that the Interval Mode is active now */
         externSoftware->ConfigurationFileGenerator->intervalMode = ui->checkBox_IntervalMode->isChecked();
 
         /* Disable changes on pumps scripts, not needed in this mode */
@@ -352,6 +354,16 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
 
     /* Update all parameters */
     updateConfigurationValues();
+
+    /* The user doesn't have any saving option selected for the measurement, are you sure that you don't want to save the data? */
+    if(!ui->checkBox_saveFFT->isChecked() && !ui->checkBox_saveRaw->isChecked()){
+
+        /* Show message for saving options */
+        showWarning("Data might not be saved during the Measurement, FFT Data will be selected by default!", "");
+
+        /* Select FFT data saving for default */
+        ui->checkBox_saveFFT->setChecked(true);
+    }
 
 }
 
@@ -430,11 +442,11 @@ void configurePolMeasure::loadConfiguration(void)
     /* Clear lists */
     cleanAll();
 
-    /* Check format of configuration file; we need at least 41 semicolons per line */
-    if (wordList[0].count(QLatin1Char(';')) != 40)
+    /* Check format of configuration file; we need at least 45 semicolons in this conf line */
+    if (wordList[0].count(QLatin1Char(';')) != 45)
     {
         /* Show message */
-        showWarning("Malformed configuration file. Please check the file version. It should contain 42 configuration values or 41 semicolons", "");
+        showWarning("Malformed configuration file. Please check the file version. It should contain 46 configuration values and 45 semicolons", "");
         configured = false;
         return;
     }
@@ -482,28 +494,24 @@ void configurePolMeasure::loadConfiguration(void)
             if(externSoftware->ConfigurationFileGenerator->activeSubstances.at(2)){
                 externSoftware->Impurity2Concentration.replace(i, name.left(name.indexOf("C3")).toDouble());
                 name.remove(0, name.indexOf("C3")+3);
-
             }
 
             /* Get the impurity 3 concentration */
             if(externSoftware->ConfigurationFileGenerator->activeSubstances.at(3)){
                 externSoftware->Impurity3Concentration.replace(i, name.left(name.indexOf("C4")).toDouble());
                 name.remove(0, name.indexOf("C4")+3);
-
             }
 
             /* Get the impurity 4 concentration */
             if(externSoftware->ConfigurationFileGenerator->activeSubstances.at(4)){
                 externSoftware->Impurity4Concentration.replace(i, name.left(name.indexOf("C5")).toDouble());
                 name.remove(0, name.indexOf("C5")+3);
-
             }
 
             /* Get the impurity 5 concentration */
             if(externSoftware->ConfigurationFileGenerator->activeSubstances.at(5)){
                 externSoftware->Impurity5Concentration.replace(i, name.left(name.indexOf("C6")).toDouble());
                 name.remove(0, name.indexOf("C6")+3);
-
             }
         }
 
@@ -616,38 +624,45 @@ void configurePolMeasure::getConfigurationFromFile(QString data)
         externSoftware->ConfigurationFileGenerator->normalizedCounts = dataList.at(38).toInt();
         externSoftware->ConfigurationFileGenerator->intervalMode = dataList.at(39).toInt();
         externSoftware->UserTimeInterval = dataList.at(40).toDouble();
+        externSoftware->ConfigurationFileGenerator->substancesNames.replace(0, dataList.at(41));
+        externSoftware->ConfigurationFileGenerator->substancesNames.replace(1, dataList.at(42));
+        externSoftware->ConfigurationFileGenerator->substancesNames.replace(2, dataList.at(43));
+        externSoftware->ConfigurationFileGenerator->substancesNames.replace(3, dataList.at(44));
+        externSoftware->ConfigurationFileGenerator->substancesNames.replace(4, dataList.at(45));
 
         /* Calculate some parameters according to the loaded information */
-        externSoftware->ConfigurationFileGenerator->fillRefill = (((externSoftware->ConfigurationFileGenerator->absVol/externSoftware->ConfigurationFileGenerator->absoluteFlow)
+        externSoftware->ConfigurationFileGenerator->fillRefill = (((externSoftware->ConfigurationFileGenerator->absVol
+                                                                    /externSoftware->ConfigurationFileGenerator->absoluteFlow)
                                                                    *60) / externSoftware->ConfigurationFileGenerator->NSteps)*1000;
-
         /* Count active substances */
-        int activeSubs = 0;
+        updateActiveSubstances();
 
-        /* Active substances? */
-        for(int g = 0; g < externSoftware->ConfigurationFileGenerator->activeSubstances.length(); g++){
-
-            /* Sum the active substances */
-            activeSubs = activeSubs + externSoftware->ConfigurationFileGenerator->activeSubstances.at(g);
+        /* Resize vectors if the substances are active */
+        if(externSoftware->ConfigurationFileGenerator->activeSubstances.at(0)){
+            externSoftware->GlucoseConcentration.resize(externSoftware->ConfigurationFileGenerator->NConcentrations * externSoftware->ConfigurationFileGenerator->repetition);
         }
-
-        /* Get the active substances */
-        externSoftware->ConfigurationFileGenerator->NumberOfSubstances = activeSubs;
-
-        /* Resize vectors */
-        externSoftware->GlucoseConcentration.resize(externSoftware->ConfigurationFileGenerator->NConcentrations * externSoftware->ConfigurationFileGenerator->repetition);
-        externSoftware->Impurity1Concentration.resize(externSoftware->ConfigurationFileGenerator->NConcentrations* externSoftware->ConfigurationFileGenerator->repetition);
-        externSoftware->Impurity2Concentration.resize(externSoftware->ConfigurationFileGenerator->NConcentrations* externSoftware->ConfigurationFileGenerator->repetition);
-        externSoftware->Impurity3Concentration.resize(externSoftware->ConfigurationFileGenerator->NConcentrations* externSoftware->ConfigurationFileGenerator->repetition);
-        externSoftware->Impurity4Concentration.resize(externSoftware->ConfigurationFileGenerator->NConcentrations* externSoftware->ConfigurationFileGenerator->repetition);
-        externSoftware->Impurity5Concentration.resize(externSoftware->ConfigurationFileGenerator->NConcentrations* externSoftware->ConfigurationFileGenerator->repetition);
+        if(externSoftware->ConfigurationFileGenerator->activeSubstances.at(1)){
+            externSoftware->Impurity1Concentration.resize(externSoftware->ConfigurationFileGenerator->NConcentrations* externSoftware->ConfigurationFileGenerator->repetition);
+        }
+        if(externSoftware->ConfigurationFileGenerator->activeSubstances.at(2)){
+            externSoftware->Impurity2Concentration.resize(externSoftware->ConfigurationFileGenerator->NConcentrations* externSoftware->ConfigurationFileGenerator->repetition);
+        }
+        if(externSoftware->ConfigurationFileGenerator->activeSubstances.at(3)){
+            externSoftware->Impurity3Concentration.resize(externSoftware->ConfigurationFileGenerator->NConcentrations* externSoftware->ConfigurationFileGenerator->repetition);
+        }
+        if(externSoftware->ConfigurationFileGenerator->activeSubstances.at(4)){
+            externSoftware->Impurity4Concentration.resize(externSoftware->ConfigurationFileGenerator->NConcentrations* externSoftware->ConfigurationFileGenerator->repetition);
+        }
+        if(externSoftware->ConfigurationFileGenerator->activeSubstances.at(5)){
+            externSoftware->Impurity5Concentration.resize(externSoftware->ConfigurationFileGenerator->NConcentrations* externSoftware->ConfigurationFileGenerator->repetition);
+        }
 
         /* How long is a cycle? */
         externSoftware->ConfigurationFileGenerator->PumpsCycle = (2 * externSoftware->ConfigurationFileGenerator->fillRefill +
-                                                                  4*externSoftware->ConfigurationFileGenerator->shortBreak)*(
-                    externSoftware->ConfigurationFileGenerator->NSteps + (externSoftware->ConfigurationFileGenerator->NSteps-1)) +
-                (2 * externSoftware->ConfigurationFileGenerator->fillRefill + 3*externSoftware->ConfigurationFileGenerator->shortBreak
-                 + externSoftware->ConfigurationFileGenerator->longBreak);
+                                                                  4 * externSoftware->ConfigurationFileGenerator->shortBreak) *
+                (externSoftware->ConfigurationFileGenerator->NSteps + (externSoftware->ConfigurationFileGenerator->NSteps-1)) +
+                (2 * externSoftware->ConfigurationFileGenerator->fillRefill + 3 * externSoftware->ConfigurationFileGenerator->shortBreak +
+                 externSoftware->ConfigurationFileGenerator->longBreak);
     }
 }
 
@@ -668,14 +683,13 @@ void configurePolMeasure::cancel(void)
  */
 void configurePolMeasure::GetConfigurationData(void)
 {
-
     /* Get the interval mode */
     externSoftware->ConfigurationFileGenerator->intervalMode = ui->checkBox_IntervalMode->isChecked();
 
-    /* Get the interval mode time from the user */
-    externSoftware->UserTimeInterval = ui->doubleSpinBox_timebetweenM->value()*60*1000;
+    /* Get the interval mode time from the user from minutes to ms */
+    externSoftware->UserTimeInterval = ui->doubleSpinBox_timebetweenM->value()*60000;
 
-    /* Get the start delay in seconds */
+    /* Get the start delay from hours to seconds */
     externSoftware->ConfigurationFileGenerator->startDelay = ui->doubleSpinBox_startDelay->value()*3600;
 
     /* Get Integration Time in ms */
@@ -692,11 +706,11 @@ void configurePolMeasure::GetConfigurationData(void)
 
     /* Save the actual selected substances */
     externSoftware->ConfigurationFileGenerator->activeSubstances.replace(0,ui->checkBox_Glucose->isChecked());
-    externSoftware->ConfigurationFileGenerator->activeSubstances.replace(1,ui->checkBox_Imp1->isVisible());
-    externSoftware->ConfigurationFileGenerator->activeSubstances.replace(2,ui->checkBox_Imp2->isVisible());
-    externSoftware->ConfigurationFileGenerator->activeSubstances.replace(3,ui->checkBox_Imp3->isVisible());
-    externSoftware->ConfigurationFileGenerator->activeSubstances.replace(4,ui->checkBox_Imp4->isVisible());
-    externSoftware->ConfigurationFileGenerator->activeSubstances.replace(5,ui->checkBox_Imp5->isVisible());
+    externSoftware->ConfigurationFileGenerator->activeSubstances.replace(1,ui->checkBox_Imp1->isEnabled());
+    externSoftware->ConfigurationFileGenerator->activeSubstances.replace(2,ui->checkBox_Imp2->isEnabled());
+    externSoftware->ConfigurationFileGenerator->activeSubstances.replace(3,ui->checkBox_Imp3->isEnabled());
+    externSoftware->ConfigurationFileGenerator->activeSubstances.replace(4,ui->checkBox_Imp4->isEnabled());
+    externSoftware->ConfigurationFileGenerator->activeSubstances.replace(5,ui->checkBox_Imp5->isEnabled());
 
     /* Required for the Pump Scripts */
 
@@ -720,14 +734,15 @@ void configurePolMeasure::GetConfigurationData(void)
     /* Get absolute Volume */
     externSoftware->ConfigurationFileGenerator->absVol = ui->spinBox_AbsVol->value();
 
-    /* Get Refilling Times in ms */
+    /* Get Refilling Times from seconds to ms */
     externSoftware->ConfigurationFileGenerator->fillRefill = (((externSoftware->ConfigurationFileGenerator->absVol/externSoftware->ConfigurationFileGenerator->absoluteFlow)*60)
                                                               / externSoftware->ConfigurationFileGenerator->NSteps)*1000;
 
-    /* Get the Breaks in ms */
+    /* Get the Breaks from seconds to ms */
     externSoftware->ConfigurationFileGenerator->shortBreak = (ui->spinBox_ShortBreak->value())*1000;
     externSoftware->ConfigurationFileGenerator->longBreak = (ui->spinBox_LongBreak->value())*1000 +
-            (externSoftware->ConfigurationFileGenerator->IntegrationTime*externSoftware->ConfigurationFileGenerator->NrSpectra*externSoftware->ConfigurationFileGenerator->NrAverages);
+            (externSoftware->ConfigurationFileGenerator->IntegrationTime * externSoftware->ConfigurationFileGenerator->NrSpectra *
+             externSoftware->ConfigurationFileGenerator->NrAverages);
 
     /* Stock Solutions */
     externSoftware->stockSolutions.replace(0,ui->doubleSpinBox_StockGlucose->value());
@@ -753,18 +768,15 @@ void configurePolMeasure::GetConfigurationData(void)
     externSoftware->maxConcentrations.replace(4,ui->doubleSpinBox_MaxImp4->value());
     externSoftware->maxConcentrations.replace(5,ui->doubleSpinBox_MaxImp5->value());
 
-    /* Count active substances */
-    int activeSubs = 0;
+    /* Save substances names */
+    externSoftware->ConfigurationFileGenerator->substancesNames.replace(0, ui->lineEdit_Imp1->text());
+    externSoftware->ConfigurationFileGenerator->substancesNames.replace(1, ui->lineEdit_Imp2->text());
+    externSoftware->ConfigurationFileGenerator->substancesNames.replace(2, ui->lineEdit_Imp3->text());
+    externSoftware->ConfigurationFileGenerator->substancesNames.replace(3, ui->lineEdit_Imp4->text());
+    externSoftware->ConfigurationFileGenerator->substancesNames.replace(4, ui->lineEdit_Imp5->text());
 
-    /* Active substances? */
-    for(int g = 0; g < externSoftware->ConfigurationFileGenerator->activeSubstances.length(); g++){
-
-        /* Sum the active substances */
-        activeSubs = activeSubs + externSoftware->ConfigurationFileGenerator->activeSubstances.at(g);
-    }
-
-    /* Get the active substances */
-    externSoftware->ConfigurationFileGenerator->NumberOfSubstances = activeSubs;
+    /* Update active substances number */
+    updateActiveSubstances();
 
     /* Which Wavelength range will be used? */
     externSoftware->minWavelength = ui->doubleSpinBox_minW->value();
@@ -793,11 +805,6 @@ void configurePolMeasure::GetConfigurationData(void)
  */
 void configurePolMeasure::updateConfigurationValues(void)
 {
-
-    /* Number of substances */
-    int NumberOfSubstances = ui->checkBox_Glucose->isChecked() + ui->checkBox_Imp1->isVisible() + ui->checkBox_Imp2->isVisible() + ui->checkBox_Imp3->isVisible()
-            + ui->checkBox_Imp4->isVisible()+ ui->checkBox_Imp5->isVisible();
-
     /* Get Refilling Times in ms */
     int fillRefill = (((ui->spinBox_AbsVol->value()/ui->doubleSpinBox_AbsFlow->value())*60) / ui->spinBox_NSteps->value())*1000;
 
@@ -806,8 +813,8 @@ void configurePolMeasure::updateConfigurationValues(void)
     int LongBreak = (ui->spinBox_LongBreak->value())*1000 + (ui->doubleSpinBox_intTime->value()*ui->spinBox_BNSpec->value()*ui->spinBox_BNAve->value());
 
     /* Are there substances left? */
-    if(!ui->checkBox_Glucose->isChecked() && !ui->checkBox_Imp1->isVisible() && !ui->checkBox_Imp2->isVisible() && !ui->checkBox_Imp3->isVisible()
-            && !ui->checkBox_Imp4->isVisible() && !ui->checkBox_Imp5->isVisible()){
+    if(!ui->checkBox_Glucose->isChecked() && !ui->checkBox_Imp1->isEnabled() && !ui->checkBox_Imp2->isEnabled() && !ui->checkBox_Imp3->isEnabled()
+            && !ui->checkBox_Imp4->isEnabled() && !ui->checkBox_Imp5->isEnabled()){
 
         /* Show critical */
         showCritical("At least one kind of substance has to be selected!", "");
@@ -820,11 +827,7 @@ void configurePolMeasure::updateConfigurationValues(void)
         ui->doubleSpinBox_MaxGluc->setVisible(true);
         ui->doubleSpinBox_MinGluc->setVisible(true);
         ui->doubleSpinBox_VolG->setVisible(true);
-
     }
-
-    /* Update file name preview */
-    filePreviewName();
 
     /* Total absolute volume */
     double Vol = double(ui->spinBox_BNMeas->value())* double(ui->spinBox_AbsVol->value());
@@ -853,6 +856,7 @@ void configurePolMeasure::updateConfigurationValues(void)
 
     /* Was the time manually introduced? */
     if(!ui->checkBox_IntervalMode->isChecked()){
+
         /* Convert the time to minutes, hours or days */
         ConvertedTime = externSoftware->TimeConverter(measurementTime/1000);
 
@@ -866,7 +870,7 @@ void configurePolMeasure::updateConfigurationValues(void)
         /* Convert the time to minutes, hours or days */
         ConvertedTime = externSoftware->TimeConverter(totalMtimer);
 
-        /* Show the user how much is needed minimum */
+        /* Show the user how much is needed minimum for the substances */
         ui->doubleSpinBox_VolG->setValue(volumeG*(ui->spinBox_Nrepet->value()+1));
         ui->doubleSpinBox_VolI1->setValue(volumeI1*(ui->spinBox_Nrepet->value()+1));
         ui->doubleSpinBox_VolI2->setValue(volumeI2*(ui->spinBox_Nrepet->value()+1));
@@ -889,7 +893,6 @@ void configurePolMeasure::updateConfigurationValues(void)
         ui->doubleSpinBox_VolI3->setValue((volumeI3/ui->spinBox_BNMeas->value())*(ui->spinBox_Nrepet->value()+1));
         ui->doubleSpinBox_VolI4->setValue((volumeI4/ui->spinBox_BNMeas->value())*(ui->spinBox_Nrepet->value()+1));
         ui->doubleSpinBox_VolI5->setValue((volumeI5/ui->spinBox_BNMeas->value())*(ui->spinBox_Nrepet->value()+1));
-
     }
 
     /* Display the Total Measurement Time */
@@ -946,68 +949,28 @@ void configurePolMeasure::updateConfigurationValues(void)
         ui->spinBox_BNSpec->setValue(externSoftware->ConfigurationFileGenerator->NrSpectra);
     }
 
-    /* Show critical message if the concentration of the stock is inappropriate */
-    if(ui->doubleSpinBox_StockGlucose->value() < ui->doubleSpinBox_MaxGluc->value()*(NumberOfSubstances) && ui->checkBox_Glucose->isChecked()){
-
-        /* Set back default value */
-        ui->doubleSpinBox_StockGlucose->setValue(ui->doubleSpinBox_MaxGluc->value()*(NumberOfSubstances));
-
-        QString message = "The stock of Glucose should have a minimum concentration of " + QString::number(ui->doubleSpinBox_MaxGluc->value()*(NumberOfSubstances)) + " mg/dl";
-        showCritical(message, "");
-    }
-
-    /* Show critical message if the concentration of the stock is inappropriate */
-    if(ui->doubleSpinBox_StockImp1->value() <ui->doubleSpinBox_MaxImp1->value()*(NumberOfSubstances) && ui->checkBox_Imp1->isVisible()){
-
-        /* Set back default value */
-        ui->doubleSpinBox_StockImp1->setValue(ui->doubleSpinBox_MaxImp1->value()*(NumberOfSubstances));
-
-        QString message = "The stock of " + ui->lineEdit_Imp1->text() + " should have a minimum concentration of " + QString::number(ui->doubleSpinBox_MaxImp1->value()*(NumberOfSubstances)) + " mg/dl";
-        showCritical(message, "");
-    }
-
-    /* Show critical message if the concentration of the stock is inappropriate */
-    if(ui->doubleSpinBox_StockImp2->value() < ui->doubleSpinBox_MaxImp2->value()*(NumberOfSubstances) && ui->checkBox_Imp2->isVisible()){
-
-        /* Set back default value */
-        ui->doubleSpinBox_StockImp2->setValue(ui->doubleSpinBox_MaxImp2->value()*(NumberOfSubstances));
-
-        QString message = "The stock of " + ui->lineEdit_Imp2->text() + " should have a minimum concentration of " + QString::number(ui->doubleSpinBox_MaxImp2->value()*(NumberOfSubstances)) + " mg/dl";
-        showCritical(message, "");
-    }
-
-    /* Show critical message if the concentration of the stock is inappropriate */
-    if(ui->doubleSpinBox_StockImp3->value() < ui->doubleSpinBox_MaxImp3->value()*(NumberOfSubstances) && ui->checkBox_Imp3->isVisible()){
-
-        /* Set back default value */
-        ui->doubleSpinBox_StockImp3->setValue(ui->doubleSpinBox_MaxImp3->value()*(NumberOfSubstances));
-
-        QString message = "The stock of " + ui->lineEdit_Imp3->text() + " should have a minimum concentration of " + QString::number(ui->doubleSpinBox_MaxImp3->value()*(NumberOfSubstances)) + " mg/dl";
-        showCritical(message, "");
-    }
-
-    /* Show critical message if the concentration of the stock is inappropriate */
-    if(ui->doubleSpinBox_StockImp4->value() < ui->doubleSpinBox_MaxImp4->value()*(NumberOfSubstances) && ui->checkBox_Imp4->isVisible()){
-
-        /* Set back default value */
-        ui->doubleSpinBox_StockImp4->setValue(ui->doubleSpinBox_MaxImp4->value()*(NumberOfSubstances));
-
-        QString message = "The stock of " + ui->lineEdit_Imp4->text() + " should have a minimum concentration of " + QString::number(ui->doubleSpinBox_MaxImp4->value()*(NumberOfSubstances)) + " mg/dl";
-        showCritical(message, "");
-    }
-
-    /* Show critical message if the concentration of the stock is inappropriate */
-    if(ui->doubleSpinBox_StockImp5->value() < ui->doubleSpinBox_MaxImp5->value()*(NumberOfSubstances) && ui->checkBox_Imp5->isVisible()){
-
-        /* Set back default value */
-        ui->doubleSpinBox_StockImp5->setValue(ui->doubleSpinBox_MaxImp5->value()*(NumberOfSubstances));
-
-        QString message = "The stock of " + ui->lineEdit_Imp5->text() + " should have a minimum concentration of " + QString::number(ui->doubleSpinBox_MaxImp5->value()*(NumberOfSubstances)) + " mg/dl";
-        showCritical(message, "");
-    }
+    /* Check intriduced stock solutions amounts */
+    checkStockValues();
 
     /* Update approximate memory space */
-    double space = ui->spinBox_BNMeas->value()*75*(ui->spinBox_Nrepet->value() + 1);
+    double space = 0;
+
+    /* Which saving options is there? */
+    if(ui->checkBox_saveFFT->isChecked() && ui->checkBox_saveRaw->isChecked()){
+
+        /* Both files together can make all this space approximately */
+        space = ui->spinBox_BNMeas->value()*(75 + 15000)*(ui->spinBox_Nrepet->value() + 1);
+
+    }else if(!ui->checkBox_saveFFT->isChecked() && ui->checkBox_saveRaw->isChecked()){
+
+        /* Only Raw data can have all this space approximately */
+        space = ui->spinBox_BNMeas->value()*(15000)*(ui->spinBox_Nrepet->value() + 1);
+
+    }else{
+
+        /* Only FFT data can have all this space approximately */
+        space = ui->spinBox_BNMeas->value()*(75)*(ui->spinBox_Nrepet->value() + 1);
+    }
 
     /* Calculate the memory space */
     if(space < 1000){
@@ -1030,6 +993,8 @@ void configurePolMeasure::updateConfigurationValues(void)
 
     }
 
+    /* Update file name preview */
+    filePreviewName();
 }
 
 /**
@@ -1038,25 +1003,15 @@ void configurePolMeasure::updateConfigurationValues(void)
 void configurePolMeasure::updateStockValues(void)
 {
     /* Number of substances */
-    int NumberOfSubstances = ui->checkBox_Glucose->isChecked() + ui->checkBox_Imp1->isVisible() + ui->checkBox_Imp2->isVisible() + ui->checkBox_Imp3->isVisible()
-            + ui->checkBox_Imp4->isVisible()+ ui->checkBox_Imp5->isVisible();
+    int NumberOfSubstances = ui->checkBox_Glucose->isChecked() + ui->checkBox_Imp1->isEnabled() + ui->checkBox_Imp2->isEnabled() + ui->checkBox_Imp3->isEnabled()
+            + ui->checkBox_Imp4->isEnabled()+ ui->checkBox_Imp5->isEnabled();
 
     /* Adjust stock solutions concentration accordingly */
     ui->doubleSpinBox_StockGlucose->setValue(ui->doubleSpinBox_MaxGluc->value()*(NumberOfSubstances));
-
-    /* Adjust stock solutions concentration accordingly */
     ui->doubleSpinBox_StockImp1->setValue(ui->doubleSpinBox_MaxImp1->value()*(NumberOfSubstances));
-
-    /* Adjust stock solutions concentration accordingly */
     ui->doubleSpinBox_StockImp2->setValue(ui->doubleSpinBox_MaxImp2->value()*(NumberOfSubstances));
-
-    /* Adjust stock solutions concentration accordingly */
     ui->doubleSpinBox_StockImp3->setValue(ui->doubleSpinBox_MaxImp3->value()*(NumberOfSubstances));
-
-    /* Adjust stock solutions concentration accordingly */
     ui->doubleSpinBox_StockImp4->setValue(ui->doubleSpinBox_MaxImp4->value()*(NumberOfSubstances));
-
-    /* Adjust stock solutions concentration accordingly */
     ui->doubleSpinBox_StockImp5->setValue(ui->doubleSpinBox_MaxImp5->value()*(NumberOfSubstances));
 
     /* Update all values */
@@ -1068,28 +1023,42 @@ void configurePolMeasure::updateStockValues(void)
  */
 void configurePolMeasure::updateForm(void)
 {
-    /* Update form */
+    /* Update form values when changes during the calibration */
     ui->spinBox_AbsVol->setValue(externSoftware->ConfigurationFileGenerator->absVol);
     ui->spinBox_BNMeas->setValue(externSoftware->ConfigurationFileGenerator->NConcentrations);
     ui->spinBox_NSteps->setValue(externSoftware->ConfigurationFileGenerator->NSteps);
     ui->spinBox_ShortBreak->setValue(externSoftware->ConfigurationFileGenerator->shortBreak/1000);
     ui->doubleSpinBox_AbsFlow->setValue(externSoftware->ConfigurationFileGenerator->absoluteFlow);
     ui->doubleSpinBox_startDelay->setValue(externSoftware->ConfigurationFileGenerator->startDelay/3600);
-    ui->checkBox_Glucose->setChecked(externSoftware->ConfigurationFileGenerator->activeSubstances.at(0));
-    ui->checkBox_Imp1->setVisible(externSoftware->ConfigurationFileGenerator->activeSubstances.at(1));
-    ui->checkBox_Imp2->setVisible(externSoftware->ConfigurationFileGenerator->activeSubstances.at(2));
-    ui->doubleSpinBox_MinGluc->setValue(externSoftware->minConcentrations.at(0));
-    ui->doubleSpinBox_MinImp1->setValue(externSoftware->minConcentrations.at(1));
-    ui->doubleSpinBox_MinImp2->setValue(externSoftware->minConcentrations.at(2));
     ui->spinBox_LongBreak->setValue((externSoftware->ConfigurationFileGenerator->longBreak -
                                      (externSoftware->ConfigurationFileGenerator->IntegrationTime*externSoftware->ConfigurationFileGenerator->NrSpectra*
                                       externSoftware->ConfigurationFileGenerator->NrAverages))/1000);
+
+    /* Update Substances status, which ones should be shown and what were their values? */
+    ui->checkBox_Glucose->setChecked(externSoftware->ConfigurationFileGenerator->activeSubstances.at(0));
+    ui->doubleSpinBox_MinGluc->setValue(externSoftware->minConcentrations.at(0));
+    ui->doubleSpinBox_MinImp1->setValue(externSoftware->minConcentrations.at(1));
+    ui->doubleSpinBox_MinImp2->setValue(externSoftware->minConcentrations.at(2));
+    ui->doubleSpinBox_MinImp3->setValue(externSoftware->minConcentrations.at(3));
+    ui->doubleSpinBox_MinImp4->setValue(externSoftware->minConcentrations.at(4));
+    ui->doubleSpinBox_MinImp5->setValue(externSoftware->minConcentrations.at(5));
     ui->doubleSpinBox_MaxGluc->setValue(externSoftware->maxConcentrations.at(0));
     ui->doubleSpinBox_MaxImp1->setValue(externSoftware->maxConcentrations.at(1));
     ui->doubleSpinBox_MaxImp2->setValue(externSoftware->maxConcentrations.at(2));
+    ui->doubleSpinBox_MaxImp3->setValue(externSoftware->maxConcentrations.at(3));
+    ui->doubleSpinBox_MaxImp4->setValue(externSoftware->maxConcentrations.at(4));
+    ui->doubleSpinBox_MaxImp5->setValue(externSoftware->maxConcentrations.at(5));
     ui->doubleSpinBox_StockGlucose->setValue(externSoftware->stockSolutions.at(0));
     ui->doubleSpinBox_StockImp1->setValue(externSoftware->stockSolutions.at(1));
     ui->doubleSpinBox_StockImp2->setValue(externSoftware->stockSolutions.at(2));
+    ui->doubleSpinBox_StockImp3->setValue(externSoftware->stockSolutions.at(3));
+    ui->doubleSpinBox_StockImp4->setValue(externSoftware->stockSolutions.at(4));
+    ui->doubleSpinBox_StockImp5->setValue(externSoftware->stockSolutions.at(5));
+    ui->lineEdit_Imp1->setText(externSoftware->ConfigurationFileGenerator->substancesNames.at(0));
+    ui->lineEdit_Imp2->setText(externSoftware->ConfigurationFileGenerator->substancesNames.at(1));
+    ui->lineEdit_Imp3->setText(externSoftware->ConfigurationFileGenerator->substancesNames.at(2));
+    ui->lineEdit_Imp4->setText(externSoftware->ConfigurationFileGenerator->substancesNames.at(3));
+    ui->lineEdit_Imp5->setText(externSoftware->ConfigurationFileGenerator->substancesNames.at(4));
 
     /* Repetition minus 1, because 1 measurement means 0 repetitions */
     ui->spinBox_Nrepet->setValue(externSoftware->ConfigurationFileGenerator->repetition - 1);
@@ -1103,7 +1072,7 @@ void configurePolMeasure::updateForm(void)
     /* Update user time interval */
     ui->doubleSpinBox_timebetweenM->setValue(externSoftware->UserTimeInterval/(60*1000));
 
-    /* Is it checked? */
+    /* Is the Interval Mode checked? Then the available options change */
     if(ui->checkBox_IntervalMode->isChecked()){
 
         /* Show that this mode is active */
@@ -1131,21 +1100,10 @@ void configurePolMeasure::updateForm(void)
         ui->spinBox_LongBreak->setEnabled(!ui->checkBox_IntervalMode->isChecked());
     }
 
-    /* Show/Hide Impurity 2 values */
-    ui->doubleSpinBox_StockImp2->setVisible(externSoftware->ConfigurationFileGenerator->activeSubstances.at(2));
-    ui->doubleSpinBox_MaxImp2->setVisible(externSoftware->ConfigurationFileGenerator->activeSubstances.at(2));
-    ui->doubleSpinBox_MinImp2->setVisible(externSoftware->ConfigurationFileGenerator->activeSubstances.at(2));
-    ui->doubleSpinBox_VolI2->setVisible(externSoftware->ConfigurationFileGenerator->activeSubstances.at(2));
-    ui->lineEdit_Imp2->setVisible(externSoftware->ConfigurationFileGenerator->activeSubstances.at(2));
-    ui->checkBox_Imp2->setVisible(externSoftware->ConfigurationFileGenerator->activeSubstances.at(2));
-
-    /* Show/Hide Impurity 1 values */
-    ui->doubleSpinBox_StockImp1->setVisible(externSoftware->ConfigurationFileGenerator->activeSubstances.at(1));
-    ui->doubleSpinBox_MaxImp1->setVisible(externSoftware->ConfigurationFileGenerator->activeSubstances.at(1));
-    ui->doubleSpinBox_MinImp1->setVisible(externSoftware->ConfigurationFileGenerator->activeSubstances.at(1));
-    ui->doubleSpinBox_VolI1->setVisible(externSoftware->ConfigurationFileGenerator->activeSubstances.at(1));
-    ui->lineEdit_Imp1->setVisible(externSoftware->ConfigurationFileGenerator->activeSubstances.at(1));
-    ui->checkBox_Imp1->setVisible(externSoftware->ConfigurationFileGenerator->activeSubstances.at(1));
+    /* Show/Hide Impurities values if they were shown */
+    hideAdditionalSubstances(externSoftware->ConfigurationFileGenerator->activeSubstances.at(1), externSoftware->ConfigurationFileGenerator->activeSubstances.at(2),
+                             externSoftware->ConfigurationFileGenerator->activeSubstances.at(3), externSoftware->ConfigurationFileGenerator->activeSubstances.at(4),
+                             externSoftware->ConfigurationFileGenerator->activeSubstances.at(5));
 
     /* Show/Hide Glucose values */
     ui->doubleSpinBox_StockGlucose->setVisible(ui->checkBox_Glucose->isChecked());
@@ -1203,6 +1161,7 @@ void configurePolMeasure::InitializeForm(PanelItem_Pol* PolarimetrySpectrometer)
     ui->spinBox_BNAve->setMaximum(floor((1000)/(4*PolarimetrySpectrometer->getIntegrationTime()*PolarimetrySpectrometer->getFrequency())));
     ui->spinBox_BFreq->setValue(PolarimetrySpectrometer->getFrequency());
     ui->spinBox_BNSpec->setValue(PolarimetrySpectrometer->getNumberOfSpectra());
+
     /* Select the correct number of spectra according to the frequency resolution */
     ui->spinBox_BNSpec->setSingleStep(NrSpectraSteps(PolarimetrySpectrometer->getIntegrationTime()*PolarimetrySpectrometer->getFrequency()));
     ui->spinBox_BNSpec->setMinimum(NrSpectraSteps(PolarimetrySpectrometer->getIntegrationTime()*PolarimetrySpectrometer->getFrequency()));
@@ -1289,44 +1248,48 @@ void configurePolMeasure::hideAdditionalSubstances(bool status1, bool status2, b
 
     /* Hide 1 */
     ui->checkBox_Imp1->setVisible(status1);
+    ui->checkBox_Imp1->setEnabled(status1);
+    ui->lineEdit_Imp1->setVisible(status1);
     ui->doubleSpinBox_StockImp1->setVisible(status1);
     ui->doubleSpinBox_MaxImp1->setVisible(status1);
     ui->doubleSpinBox_MinImp1->setVisible(status1);
     ui->doubleSpinBox_VolI1->setVisible(status1);
-    ui->lineEdit_Imp1->setVisible(status1);
 
     /* Hide 2 */
     ui->checkBox_Imp2->setVisible(status2);
+    ui->checkBox_Imp2->setEnabled(status2);
+    ui->lineEdit_Imp2->setVisible(status2);
     ui->doubleSpinBox_StockImp2->setVisible(status2);
     ui->doubleSpinBox_MaxImp2->setVisible(status2);
     ui->doubleSpinBox_MinImp2->setVisible(status2);
     ui->doubleSpinBox_VolI2->setVisible(status2);
-    ui->lineEdit_Imp2->setVisible(status2);
 
     /* Hide 3 */
+    ui->checkBox_Imp3->setVisible(status3);
+    ui->checkBox_Imp3->setEnabled(status3);
+    ui->lineEdit_Imp3->setVisible(status3);
     ui->doubleSpinBox_StockImp3->setVisible(status3);
     ui->doubleSpinBox_MaxImp3->setVisible(status3);
     ui->doubleSpinBox_MinImp3->setVisible(status3);
     ui->doubleSpinBox_VolI3->setVisible(status3);
-    ui->checkBox_Imp3->setVisible(status3);
-    ui->lineEdit_Imp3->setVisible(status3);
 
     /* Hide 4 */
     ui->checkBox_Imp4->setVisible(status4);
+    ui->checkBox_Imp4->setEnabled(status4);
+    ui->lineEdit_Imp4->setVisible(status4);
     ui->doubleSpinBox_StockImp4->setVisible(status4);
     ui->doubleSpinBox_MaxImp4->setVisible(status4);
     ui->doubleSpinBox_MinImp4->setVisible(status4);
     ui->doubleSpinBox_VolI4->setVisible(status4);
-    ui->lineEdit_Imp4->setVisible(status4);
 
     /* Hide 5 */
     ui->checkBox_Imp5->setVisible(status5);
+    ui->checkBox_Imp5->setEnabled(status5);
+    ui->lineEdit_Imp5->setVisible(status5);
     ui->doubleSpinBox_StockImp5->setVisible(status5);
     ui->doubleSpinBox_MaxImp5->setVisible(status5);
     ui->doubleSpinBox_MinImp5->setVisible(status5);
     ui->doubleSpinBox_VolI5->setVisible(status5);
-    ui->lineEdit_Imp5->setVisible(status5);
-
 }
 
 /**
@@ -1345,63 +1308,64 @@ void configurePolMeasure::filePreviewName(void){
     }
 
     /* Is glucose and one of the other two substacnes active? */
-    if(ui->checkBox_Glucose->isChecked() && ((ui->checkBox_Imp1->isVisible()) || ui->checkBox_Imp2->isVisible() || ui->checkBox_Imp3->isVisible() || ui->checkBox_Imp4->isVisible()
-                                             || ui->checkBox_Imp5->isVisible())){
+    if(ui->checkBox_Glucose->isChecked() && ((ui->checkBox_Imp1->isEnabled()) || ui->checkBox_Imp2->isEnabled() || ui->checkBox_Imp3->isEnabled()
+                                             || ui->checkBox_Imp4->isEnabled() || ui->checkBox_Imp5->isEnabled())){
 
         /* Add the separator to the file name */
         C.append("_");
     }
 
     /* Is impurity 1 active? */
-    if(ui->checkBox_Imp1->isVisible()){
+    if(ui->checkBox_Imp1->isEnabled()){
 
         /* If Impurity 1 is active, add to the name C2 */
         C.append(QString::number(ui->doubleSpinBox_MaxImp1->value()) + "C2");
     }
 
     /* If there is also a third substance, add the separator */
-    if(ui->checkBox_Imp1->isVisible() && (ui->checkBox_Imp2->isVisible() || ui->checkBox_Imp3->isVisible() || ui->checkBox_Imp4->isVisible() || ui->checkBox_Imp5->isVisible())){
+    if(ui->checkBox_Imp1->isEnabled() && (ui->checkBox_Imp2->isEnabled() || ui->checkBox_Imp3->isEnabled() || ui->checkBox_Imp4->isEnabled()
+                                          || ui->checkBox_Imp5->isEnabled())){
         C.append("_");
     }
 
     /* Is impurity 2 active? */
-    if(ui->checkBox_Imp2->isVisible()){
+    if(ui->checkBox_Imp2->isEnabled()){
 
         /* If Impurity 2 is active, add to the name C3 */
         C.append(QString::number(ui->doubleSpinBox_MaxImp2->value()) + "C3");
     }
 
     /* If there is also a fourth substance, add the separator */
-    if(ui->checkBox_Imp2->isVisible() && (ui->checkBox_Imp3->isVisible() || ui->checkBox_Imp4->isVisible() || ui->checkBox_Imp5->isVisible())){
+    if(ui->checkBox_Imp2->isEnabled() && (ui->checkBox_Imp3->isEnabled() || ui->checkBox_Imp4->isEnabled() || ui->checkBox_Imp5->isEnabled())){
         C.append("_");
     }
 
     /* Is impurity 3 active? */
-    if(ui->checkBox_Imp3->isVisible()){
+    if(ui->checkBox_Imp3->isEnabled()){
 
         /* If Impurity 3 is active, add to the name C4 */
         C.append(QString::number(ui->doubleSpinBox_MaxImp3->value()) + "C4");
     }
 
     /* If there is also a fifth substance, add the separator */
-    if(ui->checkBox_Imp3->isVisible() && (ui->checkBox_Imp4->isVisible() || ui->checkBox_Imp5->isVisible())){
+    if(ui->checkBox_Imp3->isEnabled() && (ui->checkBox_Imp4->isEnabled() || ui->checkBox_Imp5->isEnabled())){
         C.append("_");
     }
 
     /* Is impurity 4 active? */
-    if(ui->checkBox_Imp4->isVisible()){
+    if(ui->checkBox_Imp4->isEnabled()){
 
         /* If Impurity 4 is active, add to the name C5 */
         C.append(QString::number(ui->doubleSpinBox_MaxImp4->value()) + "C5");
     }
 
     /* If there is also a sixt substance, add the separator */
-    if(ui->checkBox_Imp4->isVisible() && ui->checkBox_Imp5->isVisible()){
+    if(ui->checkBox_Imp4->isEnabled() && ui->checkBox_Imp5->isEnabled()){
         C.append("_");
     }
 
     /* Is impurity 5 active? */
-    if(ui->checkBox_Imp5->isVisible()){
+    if(ui->checkBox_Imp5->isEnabled()){
 
         /* If Impurity 5 is active, add to the name C6 */
         C.append(QString::number(ui->doubleSpinBox_MaxImp5->value()) + "C6");
@@ -1420,6 +1384,100 @@ void configurePolMeasure::filePreviewName(void){
         ui->lineEdit_BFileNamePrev->setText(C + "_" + QString::number(ui->doubleSpinBox_intTime->value()) + "ms_"
                                             + QString::number(ui->spinBox_BFreq->value()) + "Hz_1");
     }
+}
+
+/**
+ * @brief Check if the introduced values of Stock solutions is correct.
+ */
+void configurePolMeasure::checkStockValues(void){
+
+    /* Number of substances */
+    int NumberOfSubstances = ui->checkBox_Glucose->isChecked() + ui->checkBox_Imp1->isEnabled() + ui->checkBox_Imp2->isEnabled() + ui->checkBox_Imp3->isEnabled()
+            + ui->checkBox_Imp4->isEnabled()+ ui->checkBox_Imp5->isEnabled();
+
+    /* Show critical message if the concentration of the stock is inappropriate */
+    if(ui->doubleSpinBox_StockGlucose->value() < ui->doubleSpinBox_MaxGluc->value()*(NumberOfSubstances) && ui->checkBox_Glucose->isChecked()){
+
+        /* Set back default value */
+        ui->doubleSpinBox_StockGlucose->setValue(ui->doubleSpinBox_MaxGluc->value()*(NumberOfSubstances));
+
+        QString message = "The stock of Glucose should have a minimum concentration of "
+                + QString::number(ui->doubleSpinBox_MaxGluc->value()*(NumberOfSubstances)) + " mg/dl";
+        showCritical(message, "");
+    }
+
+    /* Show critical message if the concentration of the stock is inappropriate */
+    if(ui->doubleSpinBox_StockImp1->value() <ui->doubleSpinBox_MaxImp1->value()*(NumberOfSubstances) && ui->checkBox_Imp1->isEnabled()){
+
+        /* Set back default value */
+        ui->doubleSpinBox_StockImp1->setValue(ui->doubleSpinBox_MaxImp1->value()*(NumberOfSubstances));
+
+        QString message = "The stock of " + ui->lineEdit_Imp1->text() + " should have a minimum concentration of "
+                + QString::number(ui->doubleSpinBox_MaxImp1->value()*(NumberOfSubstances)) + " mg/dl";
+        showCritical(message, "");
+    }
+
+    /* Show critical message if the concentration of the stock is inappropriate */
+    if(ui->doubleSpinBox_StockImp2->value() < ui->doubleSpinBox_MaxImp2->value()*(NumberOfSubstances) && ui->checkBox_Imp2->isEnabled()){
+
+        /* Set back default value */
+        ui->doubleSpinBox_StockImp2->setValue(ui->doubleSpinBox_MaxImp2->value()*(NumberOfSubstances));
+
+        QString message = "The stock of " + ui->lineEdit_Imp2->text() + " should have a minimum concentration of "
+                + QString::number(ui->doubleSpinBox_MaxImp2->value()*(NumberOfSubstances)) + " mg/dl";
+        showCritical(message, "");
+    }
+
+    /* Show critical message if the concentration of the stock is inappropriate */
+    if(ui->doubleSpinBox_StockImp3->value() < ui->doubleSpinBox_MaxImp3->value()*(NumberOfSubstances) && ui->checkBox_Imp3->isEnabled()){
+
+        /* Set back default value */
+        ui->doubleSpinBox_StockImp3->setValue(ui->doubleSpinBox_MaxImp3->value()*(NumberOfSubstances));
+
+        QString message = "The stock of " + ui->lineEdit_Imp3->text() + " should have a minimum concentration of "
+                + QString::number(ui->doubleSpinBox_MaxImp3->value()*(NumberOfSubstances)) + " mg/dl";
+        showCritical(message, "");
+    }
+
+    /* Show critical message if the concentration of the stock is inappropriate */
+    if(ui->doubleSpinBox_StockImp4->value() < ui->doubleSpinBox_MaxImp4->value()*(NumberOfSubstances) && ui->checkBox_Imp4->isEnabled()){
+
+        /* Set back default value */
+        ui->doubleSpinBox_StockImp4->setValue(ui->doubleSpinBox_MaxImp4->value()*(NumberOfSubstances));
+
+        QString message = "The stock of " + ui->lineEdit_Imp4->text() + " should have a minimum concentration of "
+                + QString::number(ui->doubleSpinBox_MaxImp4->value()*(NumberOfSubstances)) + " mg/dl";
+        showCritical(message, "");
+    }
+
+    /* Show critical message if the concentration of the stock is inappropriate */
+    if(ui->doubleSpinBox_StockImp5->value() < ui->doubleSpinBox_MaxImp5->value()*(NumberOfSubstances) && ui->checkBox_Imp5->isEnabled()){
+
+        /* Set back default value */
+        ui->doubleSpinBox_StockImp5->setValue(ui->doubleSpinBox_MaxImp5->value()*(NumberOfSubstances));
+
+        QString message = "The stock of " + ui->lineEdit_Imp5->text() + " should have a minimum concentration of "
+                + QString::number(ui->doubleSpinBox_MaxImp5->value()*(NumberOfSubstances)) + " mg/dl";
+        showCritical(message, "");
+    }
+}
+
+/**
+ * @brief Update how many substances are there.
+ */
+void configurePolMeasure::updateActiveSubstances(void){
+    /* Count active substances */
+    int activeSubs = 0;
+
+    /* Active substances? */
+    for(int g = 0; g < externSoftware->ConfigurationFileGenerator->activeSubstances.length(); g++){
+
+        /* Sum the active substances */
+        activeSubs = activeSubs + externSoftware->ConfigurationFileGenerator->activeSubstances.at(g);
+    }
+
+    /* Get the active substances */
+    externSoftware->ConfigurationFileGenerator->NumberOfSubstances = activeSubs;
 }
 
 /**

@@ -51,11 +51,19 @@ Pol_configFilesGenerator::Pol_configFilesGenerator()
     /* Active substances flags */
     activeSubstances.resize(6);
 
+    /* There are 5 impurities names */
+    substancesNames.append(".");
+    substancesNames.append(".");
+    substancesNames.append(".");
+    substancesNames.append(".");
+    substancesNames.append(".");
+
     /* Glucose and Impurity 1 are always at the beggining active */
     activeSubstances.replace(0, true);
+    activeSubstances.replace(1, true);
 
     /* Initialize the vector */
-    for(int g=1; g < activeSubstances.length() ; g++){
+    for(int g=2; g < activeSubstances.length() ; g++){
 
         /* No substances active */
         activeSubstances.replace(g, false);
@@ -115,14 +123,13 @@ void Pol_configFilesGenerator::GeneratePumpScripts(QString pathFile, QString fil
 void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFile, QVector <double> GlucoseConcentration, QVector <double> Impurity1Concentration, QVector <double> Impurity2Concentration,
                                                                  QVector <double> Impurity3Concentration, QVector <double> Impurity4Concentration, QVector <double> Impurity5Concentration,
                                                                  QVector <double> StockSolutions, double minW, double maxW, double UserTimeInterval){
-
     /* Open the file */
     FILE *file = fopen(pathFile.toLatin1().data(), "wt");
 
     /* Write in file */
     fprintf(file, "%s", "1Nr_M;2Nr_Sp;3Int_T;4Nr_Av;5Freq;6MinW;7MaxW;8Ab_F;9Ab_V;10N_Ste;11S_Break;12L_Break;13St_Del;14C1?;15C2?;16C3?;17C4?;18C5?;19C6?;"
                         "20mC1;21MC1;22StC1;23mC2;24MC2;25StC2;26mC3;27MC3;28StC3;29mC4;30MC4;31StC4;32mC5;33MC5;34StC5;35mC6;36MC6;37StC6;"
-                        "38Rep;39NormC;40IntMode;41IntModeTime\n");
+                        "38Rep;39NormC;40IntMode;41IntModeTime;42Imp1Name;43Imp2Name;44Imp3Name;45Imp4Name;46Imp5Name\n");
 
     /* Write all the configuration data */
     QString configurationData = "";
@@ -167,7 +174,12 @@ void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFil
     configurationData.append(QString::number(repetition) + ";");
     configurationData.append(QString::number(normalizedCounts) + ";");
     configurationData.append(QString::number(intervalMode) + ";");
-    configurationData.append(QString::number(UserTimeInterval) + "\n");
+    configurationData.append(QString::number(UserTimeInterval) + ";");
+    configurationData.append(substancesNames.at(0) + ";");
+    configurationData.append(substancesNames.at(1) + ";");
+    configurationData.append(substancesNames.at(2) + ";");
+    configurationData.append(substancesNames.at(3) + ";");
+    configurationData.append(substancesNames.at(4) + ",\n");
 
     /* Write in file */
     fprintf(file, "%s", configurationData.toLatin1().data());

@@ -223,8 +223,6 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
         connect(PolarimetrySpectrometer->ui->label_frequency, SIGNAL(clicked()), signalMapper, SLOT(map()));
         connect(PolarimetrySpectrometer->ui->label_numberOfAverages, SIGNAL(clicked()), signalMapper, SLOT(map()));
         connect(PolarimetrySpectrometer->ui->label_autoAdjust, SIGNAL(clicked()), signalMapper, SLOT(map()));
-        connect(ui->checkBox_AutoSave_Pol_Raw, SIGNAL(clicked()), signalMapper, SLOT(map()));
-        connect(ui->checkBox_AutoSave_Pol, SIGNAL(clicked()), signalMapper, SLOT(map()));
         connect(PolarimetrySpectrometer->ui->checkBox_normalize, SIGNAL(clicked()), signalMapper, SLOT(map()));
         connect(PolarimetrySpectrometer->ui->lineEdit_name, SIGNAL(returnPressed()), signalMapper, SLOT(map()));
 
@@ -236,8 +234,6 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
         signalMapper->setMapping(PolarimetrySpectrometer->ui->label_numberOfAverages, PolarimetrySpectrometer->ui->label_numberOfAverages);
         signalMapper->setMapping(PolarimetrySpectrometer->ui->label_autoAdjust, PolarimetrySpectrometer->ui->label_autoAdjust);
         signalMapper->setMapping(PolarimetrySpectrometer->ui->checkBox_normalize, PolarimetrySpectrometer->ui->checkBox_normalize);
-        signalMapper->setMapping(ui->checkBox_AutoSave_Pol_Raw, ui->checkBox_AutoSave_Pol_Raw);
-        signalMapper->setMapping(ui->checkBox_AutoSave_Pol, ui->checkBox_AutoSave_Pol);
         signalMapper->setMapping(PolarimetrySpectrometer->ui->lineEdit_name, PolarimetrySpectrometer->ui->lineEdit_name);
         signalMapper->setMapping(ui->label_clearAll, ui->label_clearAll);
         signalMapper->setMapping(ui->label_hideLiveRaw, ui->label_hideLiveRaw);
@@ -247,7 +243,6 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
         signalMapper->setMapping(ui->label_prediction, ui->label_prediction);
         signalMapper->setMapping(ui->FFT_label_Pol, ui->FFT_label_Pol);
         signalMapper->setMapping(ui->label_Measurements_Pol, ui->label_Measurements_Pol);
-        signalMapper->setMapping(ui->label_Save_Pol, ui->label_Save_Pol);
         signalMapper->setMapping(ui->label_hideConf, ui->label_hideConf);
 
         /* Connect event handler */
@@ -277,7 +272,6 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     connect(ui->label_prediction, SIGNAL(clicked()), signalMapper, SLOT(map()));
     connect(ui->FFT_label_Pol, SIGNAL(clicked()), signalMapper, SLOT(map()));
     connect(ui->label_Measurements_Pol, SIGNAL(clicked()), signalMapper, SLOT(map()));
-    connect(ui->label_Save_Pol, SIGNAL(clicked()), signalMapper, SLOT(map()));
     connect(ui->label_hideConf, SIGNAL(clicked()), signalMapper, SLOT(map()));
 
     /* Set button styles */
@@ -289,8 +283,6 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     ui->button_Start_Meas_Pol->setStyleSheet((!m_NrDevices) ? grayButton : greenButton);
     ui->button_calibrate->setDisabled((!m_NrDevices) ? true : false);
     ui->button_calibrate->setStyleSheet((!m_NrDevices) ? grayButton : "black");
-    ui->checkBox_AutoSave_Pol->setDisabled((!m_NrDevices) ? true : false);
-    ui->checkBox_AutoSave_Pol_Raw->setDisabled((!m_NrDevices) ? true : false);
     ui->button_Pol_ConfigureMeasurement->setDisabled((!m_NrDevices) ? true : false);
     ui->label_clearAll->setDisabled((!m_NrDevices) ? true : false);
 
@@ -671,11 +663,17 @@ void PanelPolarimeter::adjust_Run_End(){
         if(totalMeasuretime == 0){break;}
     }
 
-    /* Reset selected rows in the Configuration profile table */
+    /* Reset selection */
     ui->Table_Measurements_Pol->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->Table_Measurements_Pol->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->Table_Measurements_Pol->selectRow(0);
     ui->Table_Measurements_Pol->setSelectionMode(QAbstractItemView::NoSelection);
+    for(int i = 0; i < ui->Table_Measurements_Pol->rowCount(); i++){
+        ui->Table_Measurements_Pol->cellWidget(i, 0)->setStyleSheet("qproperty-alignment: AlignCenter;" "background-color: rgb(255, 255, 255)");
+
+        /* Handle events and update UI */
+        Application::processEvents();
+    }
 
     /* Set progress bars to 100 percent */
     ui->currentProgressBar_Pol->setValue(0);
@@ -721,6 +719,12 @@ void PanelPolarimeter::adjust_Run_Start(short int typeRun){
     /* Re-attach the raw signal plot in case it was removed for example when cleaning all */
     curve_Pol->attach(ui->qwtPlot_Pol);
 
+    ui->Table_Measurements_Pol->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->Table_Measurements_Pol->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->Table_Measurements_Pol->selectRow(0);
+    ui->Table_Measurements_Pol->setSelectionMode(QAbstractItemView::NoSelection);
+    ui->Table_Measurements_Pol->cellWidget(0, 0)->setStyleSheet("qproperty-alignment: AlignCenter;" "background-color: rgb(0, 153, 255)");
+
     /* Restart delayed stop flags for Calibration */
     Runner->delayStop = false;
 
@@ -728,8 +732,6 @@ void PanelPolarimeter::adjust_Run_Start(short int typeRun){
     ui->button_LoadData->setEnabled(false);
     ui->button_AnalizeData->setEnabled(false);
     ui->button_Start_Meas_Pol->setEnabled(false);
-    ui->checkBox_AutoSave_Pol->setEnabled(false);
-    ui->checkBox_AutoSave_Pol_Raw->setEnabled(false);
     ui->button_calibrate->setEnabled(false);
     ui->button_Pol_ConfigureMeasurement->setEnabled(false);
     ui->label_clearAll->setEnabled(false);
@@ -1142,17 +1144,6 @@ void PanelPolarimeter::change_File_Name(void){
             /* Change the name by the first part plus the new information */
             ConfigureMeasurement->savingFilesNames.replace(j, NewFileName + "_" + QString::number(PolarimetrySpectrometer->getIntegrationTime()) + "ms_"
                                                            + QString::number(PolarimetrySpectrometer->getFrequency()) + "Hz_" + QString::number(j+1));
-
-            /* Remove the actual data on table */
-            ui->Table_Measurements_Pol->removeCellWidget(j, 2);
-
-            /* Update label for file name */
-            QLabel *newt3 = new QLabel();
-            newt3->setText(ConfigureMeasurement->savingFilesNames.at(j));
-            newt3->setStyleSheet("QLabel { margin-left: 2px; }");
-
-            /* Add new data to the table */
-            ui->Table_Measurements_Pol->setCellWidget(j, 2, newt3);
         }
     }
 }
@@ -2080,26 +2071,6 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
         ui->Table_Measurements_Pol->setVisible(!ui->Table_Measurements_Pol->isVisible());
 
     }
-    /* Show/Hide Check Boxes of Saving Options */
-    else if(label == ui->label_Save_Pol){
-
-        /* Are the Check Boxes of Saving Options visible? */
-        if(ui->checkBox_AutoSave_Pol->isVisible()){
-
-            /* Hide Check Boxes of Saving Options if clicked */
-            ui->label_Save_Pol->setText("> Saving Options");
-            ui->label_Save_Pol->setToolTip("Show Saving Options");
-        }else{
-
-            /* Show Check Boxes of Saving Options again */
-            ui->label_Save_Pol->setText("< Saving Options");
-            ui->label_Save_Pol->setToolTip("Hide Saving Options");
-        }
-
-        /* Hide or Show plots */
-        ui->checkBox_AutoSave_Pol_Raw->setVisible(!ui->checkBox_AutoSave_Pol->isVisible());
-        ui->checkBox_AutoSave_Pol->setVisible(!ui->checkBox_AutoSave_Pol->isVisible());
-    }
     /* Show/Hide the lateral panel */
     else if(label == ui->label_hideConf){
 
@@ -2120,10 +2091,7 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
         /* Hide or Show thus GUI elements if they are already visible */
         if(Runner->PolConfigured){
             ui->Table_Measurements_Pol->setVisible(!ui->list_devices_Pol->isVisible());
-            ui->checkBox_AutoSave_Pol->setVisible(!ui->list_devices_Pol->isVisible());
-            ui->checkBox_AutoSave_Pol_Raw->setVisible(!ui->list_devices_Pol->isVisible());
             ui->label_Measurements_Pol->setVisible(!ui->list_devices_Pol->isVisible());
-            ui->label_Save_Pol->setVisible(!ui->list_devices_Pol->isVisible());
         }
 
         /* Is the lateral panel visible? */
@@ -2173,36 +2141,15 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
         }
     }
 
-    /* The user doesn't have any saving option selected for the measurement, are you sure that you don't want to save the data? */
-    if(!ui->checkBox_AutoSave_Pol->isChecked() && !ui->checkBox_AutoSave_Pol_Raw->isChecked()){
-
-        /* Update information bar */
-        ui->info->setText("Select one type...");
-
-        /* Show message for saving options */
-        showWarning("Data might not be saved during the Measurement, FFT Data will be selected by default!", "");
-
-        /* Select FFT data saving for default */
-        ui->checkBox_AutoSave_Pol->setChecked(true);
-
-        /* Update information bar */
-        ui->info->setText("");
-        return;
+    /* This is another condition to change the spacing so it looks nice */
+    if(((ui->Table_Measurements_Pol->isVisible() && ui->qwtPlot_Pol_FFT->isVisible())
+        || (ui->Table_Measurements_Pol->isVisible() && !ui->qwtPlot_Pol_FFT->isVisible())) && Runner->PolConfigured){
+        ui->verticalSpacerX->changeSize(20,13,QSizePolicy::Fixed,QSizePolicy::Fixed);
     }
 
     /* In case some elements from the lateral panel are hidden or shown again, change the spacing so they look good */
-    if((!ui->qwtPlot_Pol_FFT->isVisible() || (!ui->Table_Measurements_Pol->isVisible() || !ui->checkBox_AutoSave_Pol->isVisible())) && Runner->PolConfigured){
+    if(Runner->PolConfigured){
         ui->verticalSpacerX->changeSize(20,13,QSizePolicy::Fixed,QSizePolicy::Expanding);
-    }else{
-        /* If there is a configuration loaded means that there are other elements in the lateral panel too */
-        if(Runner->PolConfigured){
-            ui->verticalSpacerX->changeSize(20,13,QSizePolicy::Fixed,QSizePolicy::Fixed);
-        }
-    }
-
-    /* This is another condition to change the spacing so it looks nice */
-    if(ui->Table_Measurements_Pol->isVisible() && Runner->PolConfigured){
-        ui->verticalSpacerX->changeSize(20,13,QSizePolicy::Fixed,QSizePolicy::Fixed);
     }
 
     /* Catch check box event */
@@ -2712,6 +2659,7 @@ void PanelPolarimeter::pol_Measure(void){
             ui->Table_Measurements_Pol->setSelectionMode(QAbstractItemView::SingleSelection);
             ui->Table_Measurements_Pol->selectRow(Timeindex);
             ui->Table_Measurements_Pol->setSelectionMode(QAbstractItemView::NoSelection);
+            ui->Table_Measurements_Pol->cellWidget(Timeindex, 0)->setStyleSheet("qproperty-alignment: AlignCenter;" "background-color: rgb(0, 153, 255)");
 
             /* Go to next entry */
             Timeindex++;
@@ -2884,13 +2832,13 @@ void PanelPolarimeter::process_Received_Data_Pol(QString Path)
     Runner->delayStop = false;
 
     /* Is there an automatic saving of FFT Data selected by the user? */
-    if(ui->checkBox_AutoSave_Pol->isChecked() && Runner->PolMeasuring && !Runner->PolCalibrating){
+    if(ConfigureMeasurement->ui->checkBox_saveFFT->isChecked() && Runner->PolMeasuring && !Runner->PolCalibrating){
         /* Save FFT value to file */
         FFTL.saveFFTtoFile(fileInfoSaving, false);
     }
 
     /* Is there an automatic saving of Raw Data?, if not just remove the file with the Raw Data */
-    if(!ui->checkBox_AutoSave_Pol_Raw->isChecked()&& !Runner->PolCalibrating){
+    if(!ConfigureMeasurement->ui->checkBox_saveRaw->isChecked()&& !Runner->PolCalibrating){
         /* Remove temporal file */
         remove(Path.toLatin1().data());
     }
@@ -3262,6 +3210,45 @@ void PanelPolarimeter::setConfiguration(void){
     /* Zero row count of measurement list */
     ui->Table_Measurements_Pol->setRowCount(0);
 
+    /* Show or hide the columns of the substances */
+    if(!ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(0)){
+        ui->Table_Measurements_Pol->hideColumn(2);
+    }else{
+        ui->Table_Measurements_Pol->showColumn(2);
+    }
+    if(!ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(1)){
+        ui->Table_Measurements_Pol->hideColumn(3);
+    }else{
+        ui->Table_Measurements_Pol->showColumn(3);
+    }
+    if(!ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(2)){
+        ui->Table_Measurements_Pol->hideColumn(4);
+    }else{
+        ui->Table_Measurements_Pol->showColumn(4);
+    }
+    if(!ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(3)){
+        ui->Table_Measurements_Pol->hideColumn(5);
+    }else{
+        ui->Table_Measurements_Pol->showColumn(5);
+    }
+    if(!ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(4)){
+        ui->Table_Measurements_Pol->hideColumn(6);
+    }else{
+        ui->Table_Measurements_Pol->showColumn(6);
+    }
+    if(!ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(5)){
+        ui->Table_Measurements_Pol->hideColumn(7);
+    }else{
+        ui->Table_Measurements_Pol->showColumn(7);
+    }
+
+    ui->Table_Measurements_Pol->setColumnWidth(2, 70);
+    ui->Table_Measurements_Pol->setColumnWidth(3, 70);
+    ui->Table_Measurements_Pol->setColumnWidth(4, 70);
+    ui->Table_Measurements_Pol->setColumnWidth(5, 70);
+    ui->Table_Measurements_Pol->setColumnWidth(6, 70);
+    ui->Table_Measurements_Pol->setColumnWidth(7, 70);
+
     /*  Count rows */
     int rowcounter = 0;
     int repetitions = 1;
@@ -3275,7 +3262,9 @@ void PanelPolarimeter::setConfiguration(void){
         if (i > 0)
         {
             /* Calculate duration of entry before current entry */
-            double duration =  ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->NrSpectra *  ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->IntegrationTime *  ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->NrAverages;
+            double duration =  ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->NrSpectra
+                    *  ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->IntegrationTime
+                    *  ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->NrAverages;
 
             /* Check if there's a time overlap between last and current entry */
             if (( ConfigureMeasurement->timePoint[i - 1] + duration) >  ConfigureMeasurement->timePoint[i])
@@ -3296,22 +3285,23 @@ void PanelPolarimeter::setConfiguration(void){
         QLabel *ntn = new QLabel();
         /* Are there repetitions? */
         if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->repetition > 1){
-            ntn->setText("R" + QString::number(repetitions) + " - " + QString::number(rowcounter));
+            ntn->setText("R" + QString::number(repetitions) + " - " + QString::number(ui->Table_Measurements_Pol->rowCount()));
 
             /* Adjust table widget */
-            ui->Table_Measurements_Pol->setColumnWidth(0, 45);
+            ui->Table_Measurements_Pol->setColumnWidth(0, 55);
             ui->Table_Measurements_Pol->setColumnWidth(1, 80);
-            ui->Table_Measurements_Pol->setColumnWidth(2, 100);
+
         }else{
-            ntn->setText(QString::number(rowcounter));
+            ntn->setText(QString::number(ui->Table_Measurements_Pol->rowCount()));
 
             /* Adjust table widget */
             ui->Table_Measurements_Pol->setColumnWidth(0, 25);
             ui->Table_Measurements_Pol->setColumnWidth(1, 90);
-            ui->Table_Measurements_Pol->setColumnWidth(2, 110);
         }
+
         ntn->setStyleSheet("QLabel { margin-left: 2px; }");
         ui->Table_Measurements_Pol->setCellWidget(i, 0, ntn);
+        ui->Table_Measurements_Pol->cellWidget(i, 0)->setStyleSheet("qproperty-alignment: AlignCenter;" "background-color: rgb(255, 255, 255)");
 
         /* Create label for time point */
         QLabel *nt2 = new QLabel();
@@ -3327,13 +3317,11 @@ void PanelPolarimeter::setConfiguration(void){
         else if (ConvertedTime.at(1)=="min"){
             nt2->setText(QDateTime::fromTime_t(ConfigureMeasurement->timePoint.at(i)/1000).toUTC().toString("mm:ss"));
             ui->Table_Measurements_Pol->horizontalHeaderItem(1)->setText("Time (m:s)");
-
         }else if (ConvertedTime.at(1)=="sec"){
             nt2->setText(QDateTime::fromTime_t(ConfigureMeasurement->timePoint.at(i)/1000).toUTC().toString("ss"));
             ui->Table_Measurements_Pol->horizontalHeaderItem(1)->setText("Time (s)");
 
         }else{
-
             ui->Table_Measurements_Pol->horizontalHeaderItem(1)->setText("Time (d:h:m:s)");
             int nDays = ConvertedTime.at(0).toDouble();
             nt2->setText(QString::number(nDays) + ":" +QDateTime::fromTime_t((ConfigureMeasurement->timePoint.at(i)/1000)-86400*nDays).toUTC().toString("hh:mm:ss"));
@@ -3342,11 +3330,59 @@ void PanelPolarimeter::setConfiguration(void){
         nt2->setStyleSheet("QLabel { margin-left: 2px; }");
         ui->Table_Measurements_Pol->setCellWidget(i, 1, nt2);
 
-        /* Create label for file name */
-        QLabel *nt3 = new QLabel();
-        nt3->setText(ConfigureMeasurement->savingFilesNames.at(i));
-        nt3->setStyleSheet("QLabel { margin-left: 2px; }");
-        ui->Table_Measurements_Pol->setCellWidget(i, 2, nt3);
+        /* Create label for C1 */
+        if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(0)){
+
+            QLabel *nt3 = new QLabel();
+            nt3->setText(QString::number(ConfigureMeasurement->externSoftware->GlucoseConcentration.at(rowcounter-1)));
+            nt3->setStyleSheet("QLabel { margin-left: 2px; }");
+            ui->Table_Measurements_Pol->setCellWidget(i, 2, nt3);
+        }
+
+        /* Create label for C2 */
+        if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(1)){
+
+            QLabel *ntC2 = new QLabel();
+            ntC2->setText(QString::number(ConfigureMeasurement->externSoftware->Impurity1Concentration.at(rowcounter-1)));
+            ntC2->setStyleSheet("QLabel { margin-left: 2px; }");
+            ui->Table_Measurements_Pol->setCellWidget(i, 3, ntC2);
+        }
+
+        /* Create label for C3 */
+        if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(2)){
+
+            QLabel *ntC3 = new QLabel();
+            ntC3->setText(QString::number(ConfigureMeasurement->externSoftware->Impurity2Concentration.at(rowcounter-1)));
+            ntC3->setStyleSheet("QLabel { margin-left: 2px; }");
+            ui->Table_Measurements_Pol->setCellWidget(i, 4, ntC3);
+        }
+
+        /* Create label for C4 */
+        if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(3)){
+
+            QLabel *ntC4 = new QLabel();
+            ntC4->setText(QString::number(ConfigureMeasurement->externSoftware->Impurity3Concentration.at(rowcounter-1)));
+            ntC4->setStyleSheet("QLabel { margin-left: 2px; }");
+            ui->Table_Measurements_Pol->setCellWidget(i, 5, ntC4);
+        }
+
+        /* Create label for C5 */
+        if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(4)){
+
+            QLabel *ntC5 = new QLabel();
+            ntC5->setText(QString::number(ConfigureMeasurement->externSoftware->Impurity4Concentration.at(rowcounter-1)));
+            ntC5->setStyleSheet("QLabel { margin-left: 2px; }");
+            ui->Table_Measurements_Pol->setCellWidget(i, 6, ntC5);
+        }
+
+        /* Create label for C6 */
+        if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(3)){
+
+            QLabel *ntC6 = new QLabel();
+            ntC6->setText(QString::number(ConfigureMeasurement->externSoftware->Impurity5Concentration.at(rowcounter-1)));
+            ntC6->setStyleSheet("QLabel { margin-left: 2px; }");
+            ui->Table_Measurements_Pol->setCellWidget(i, 7, ntC6);
+        }
 
         /* Are there repetitions? */
         if((i+1) % (unsigned int) ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->NConcentrations == 0){
@@ -3371,7 +3407,6 @@ void PanelPolarimeter::setConfiguration(void){
     /* Change the Wavelength range according to the loaded configuration */
     PolarimetrySpectrometer->setWavelengthRange(ConfigureMeasurement->externSoftware->minWavelength,
                                                 ConfigureMeasurement->externSoftware->maxWavelength);
-
     /* Update Wavelengths Range */
     update_Wavelength_Range();
 
@@ -3404,9 +3439,6 @@ void PanelPolarimeter::showUI_Item(bool UIstatus)
     /* Update items on UI */
     ui->label_Measurements_Pol->setVisible(UIstatus);
     ui->Table_Measurements_Pol->setVisible(UIstatus);
-    ui->label_Save_Pol->setVisible(UIstatus);
-    ui->checkBox_AutoSave_Pol->setVisible(UIstatus);
-    ui->checkBox_AutoSave_Pol_Raw->setVisible(UIstatus);
 
     /* Make the items to look nicer */
     if(UIstatus){
@@ -3514,8 +3546,6 @@ void PanelPolarimeter::stop_Run_Polarimetry(void) {
     }
 
     /* Enable buttons again */
-    ui->checkBox_AutoSave_Pol->setEnabled(true);
-    ui->checkBox_AutoSave_Pol_Raw->setEnabled(true);
     ui->button_Pol_ConfigureMeasurement->setEnabled(true);
     ui->button_LoadData->setEnabled(true);
     ui->button_AnalizeData->setEnabled(true);

@@ -426,22 +426,6 @@
         </widget>
        </item>
        <item>
-        <spacer name="verticalSpacerX">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Expanding</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>10</width>
-           <height>100</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
         <widget class="ClickableLabel" name="label_Measurements_Pol">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -498,7 +482,7 @@
        <item>
         <widget class="QTableWidget" name="Table_Measurements_Pol">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -512,7 +496,7 @@
          <property name="maximumSize">
           <size>
            <width>300</width>
-           <height>400</height>
+           <height>450</height>
           </size>
          </property>
          <property name="toolTip">
@@ -558,7 +542,7 @@
           <number>0</number>
          </property>
          <property name="columnCount">
-          <number>3</number>
+          <number>8</number>
          </property>
          <attribute name="horizontalHeaderCascadingSectionResizes">
           <bool>false</bool>
@@ -598,7 +582,7 @@
          </attribute>
          <column>
           <property name="text">
-           <string>#</string>
+           <string>Nr.</string>
           </property>
          </column>
          <column>
@@ -611,160 +595,54 @@
          </column>
          <column>
           <property name="text">
-           <string>File Name</string>
+           <string>C1 (mg/dl)</string>
           </property>
           <property name="toolTip">
            <string>File Name</string>
           </property>
          </column>
+         <column>
+          <property name="text">
+           <string>C2 (mg/dl)</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>C3 (mg/dl)</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>C4 (mg/dl)</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>C5 (mg/dl)</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>C6 (mg/dl)</string>
+          </property>
+         </column>
         </widget>
        </item>
        <item>
-        <spacer name="verticalSpacer_16">
+        <spacer name="verticalSpacerX">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
+          <enum>QSizePolicy::Expanding</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>20</width>
-           <height>5</height>
+           <width>10</width>
+           <height>100</height>
           </size>
          </property>
         </spacer>
-       </item>
-       <item>
-        <widget class="ClickableLabel" name="label_Save_Pol">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>15</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-           <underline>true</underline>
-           <kerning>false</kerning>
-          </font>
-         </property>
-         <property name="cursor">
-          <cursorShape>PointingHandCursor</cursorShape>
-         </property>
-         <property name="toolTip">
-          <string>Hide Saving Options</string>
-         </property>
-         <property name="text">
-          <string>&lt; Saving Options:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_5">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>5</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <property name="sizeConstraint">
-          <enum>QLayout::SetMinimumSize</enum>
-         </property>
-         <item>
-          <spacer name="horizontalSpacer_17">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Fixed</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>10</width>
-             <height>15</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="checkBox_AutoSave_Pol_Raw">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>110</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>110</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="toolTip">
-            <string>Save Raw Data</string>
-           </property>
-           <property name="text">
-            <string>Raw Data</string>
-           </property>
-           <property name="checked">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="checkBox_AutoSave_Pol">
-           <property name="minimumSize">
-            <size>
-             <width>110</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>110</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="toolTip">
-            <string>Save FFT Profile</string>
-           </property>
-           <property name="text">
-            <string>FFT Profiles</string>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>16</width>
-             <height>16</height>
-            </size>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
        </item>
        <item>
         <widget class="Line" name="line_m">

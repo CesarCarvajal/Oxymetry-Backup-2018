@@ -114,6 +114,12 @@ public:
     /* Hide impurities */
     void hideAdditionalSubstances(bool status1, bool status2, bool status3, bool status4, bool status5);
 
+    /* Check if the introduced stock solutions values are correct */
+    void checkStockValues(void);
+
+    /* Update the actual active substances number */
+    void updateActiveSubstances(void);
+
     /* Destructor */
     ~configurePolMeasure(void);
 

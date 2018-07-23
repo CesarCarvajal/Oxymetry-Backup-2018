@@ -65,6 +65,9 @@ Pol_ExternConf::Pol_ExternConf()
     /* Restart limits */
     minWavelength = 200;
     maxWavelength = 1200;
+
+    /* User time interval */
+    UserTimeInterval = 0;
 }
 
 /**

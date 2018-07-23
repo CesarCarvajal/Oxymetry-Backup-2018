@@ -250,6 +250,14 @@ public:
     QSpacerItem *horizontalSpacer_16;
     QVBoxLayout *verticalLayout_6;
     QLabel *label_17;
+    QGridLayout *gridLayout_7;
+    QHBoxLayout *horizontalLayout_43;
+    QCheckBox *checkBox_saveRaw;
+    QHBoxLayout *horizontalLayout_3;
+    QLabel *label_saveOptions;
+    QHBoxLayout *horizontalLayout_46;
+    QCheckBox *checkBox_saveFFT;
+    QSpacerItem *verticalSpacer_5;
     QGridLayout *gridLayout_10;
     QHBoxLayout *horizontalLayout_45;
     QLabel *label_BFileNamePrev;
@@ -258,7 +266,6 @@ public:
     QLabel *label_MSpace;
     QDoubleSpinBox *doubleSpinBox_MSpace;
     QLabel *label_MSpace2;
-    QHBoxLayout *horizontalLayout_3;
     QHBoxLayout *horizontalLayout_2;
     QLabel *label_filename;
     QLineEdit *lineEdit_path;
@@ -276,8 +283,8 @@ public:
     {
         if (configurePolMeasure->objectName().isEmpty())
             configurePolMeasure->setObjectName(QStringLiteral("configurePolMeasure"));
-        configurePolMeasure->resize(1413, 853);
-        QSizePolicy sizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+        configurePolMeasure->resize(1413, 825);
+        QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(configurePolMeasure->sizePolicy().hasHeightForWidth());
@@ -770,7 +777,8 @@ public:
         sizePolicy7.setHeightForWidth(lineEdit_Imp3->sizePolicy().hasHeightForWidth());
         lineEdit_Imp3->setSizePolicy(sizePolicy7);
         lineEdit_Imp3->setMinimumSize(QSize(60, 0));
-        lineEdit_Imp3->setFrame(false);
+        lineEdit_Imp3->setFrame(true);
+        lineEdit_Imp3->setEchoMode(QLineEdit::Normal);
 
         horizontalLayout_52->addWidget(lineEdit_Imp3);
 
@@ -1017,7 +1025,8 @@ public:
         sizePolicy7.setHeightForWidth(lineEdit_Imp1->sizePolicy().hasHeightForWidth());
         lineEdit_Imp1->setSizePolicy(sizePolicy7);
         lineEdit_Imp1->setMinimumSize(QSize(60, 0));
-        lineEdit_Imp1->setFrame(false);
+        lineEdit_Imp1->setFrame(true);
+        lineEdit_Imp1->setClearButtonEnabled(false);
 
         horizontalLayout_10->addWidget(lineEdit_Imp1);
 
@@ -1119,7 +1128,8 @@ public:
         sizePolicy7.setHeightForWidth(lineEdit_Imp2->sizePolicy().hasHeightForWidth());
         lineEdit_Imp2->setSizePolicy(sizePolicy7);
         lineEdit_Imp2->setMinimumSize(QSize(60, 0));
-        lineEdit_Imp2->setFrame(false);
+        lineEdit_Imp2->setFrame(true);
+        lineEdit_Imp2->setEchoMode(QLineEdit::Normal);
 
         horizontalLayout_20->addWidget(lineEdit_Imp2);
 
@@ -1160,7 +1170,8 @@ public:
         sizePolicy7.setHeightForWidth(lineEdit_Imp4->sizePolicy().hasHeightForWidth());
         lineEdit_Imp4->setSizePolicy(sizePolicy7);
         lineEdit_Imp4->setMinimumSize(QSize(60, 0));
-        lineEdit_Imp4->setFrame(false);
+        lineEdit_Imp4->setFrame(true);
+        lineEdit_Imp4->setEchoMode(QLineEdit::Normal);
 
         horizontalLayout_61->addWidget(lineEdit_Imp4);
 
@@ -1351,7 +1362,8 @@ public:
         sizePolicy7.setHeightForWidth(lineEdit_Imp5->sizePolicy().hasHeightForWidth());
         lineEdit_Imp5->setSizePolicy(sizePolicy7);
         lineEdit_Imp5->setMinimumSize(QSize(60, 0));
-        lineEdit_Imp5->setFrame(false);
+        lineEdit_Imp5->setFrame(true);
+        lineEdit_Imp5->setEchoMode(QLineEdit::Normal);
 
         horizontalLayout_66->addWidget(lineEdit_Imp5);
 
@@ -1501,11 +1513,8 @@ public:
 
         label_AbsVol_2 = new QLabel(ConfigurationLayout);
         label_AbsVol_2->setObjectName(QStringLiteral("label_AbsVol_2"));
-        QSizePolicy sizePolicy8(QSizePolicy::Preferred, QSizePolicy::Preferred);
-        sizePolicy8.setHorizontalStretch(0);
-        sizePolicy8.setVerticalStretch(0);
-        sizePolicy8.setHeightForWidth(label_AbsVol_2->sizePolicy().hasHeightForWidth());
-        label_AbsVol_2->setSizePolicy(sizePolicy8);
+        sizePolicy.setHeightForWidth(label_AbsVol_2->sizePolicy().hasHeightForWidth());
+        label_AbsVol_2->setSizePolicy(sizePolicy);
         label_AbsVol_2->setMinimumSize(QSize(30, 0));
 
         horizontalLayout_35->addWidget(label_AbsVol_2);
@@ -1834,8 +1843,8 @@ public:
         timeLayout->setObjectName(QStringLiteral("timeLayout"));
         label_timeLabel = new QLabel(ConfigurationLayout);
         label_timeLabel->setObjectName(QStringLiteral("label_timeLabel"));
-        sizePolicy8.setHeightForWidth(label_timeLabel->sizePolicy().hasHeightForWidth());
-        label_timeLabel->setSizePolicy(sizePolicy8);
+        sizePolicy.setHeightForWidth(label_timeLabel->sizePolicy().hasHeightForWidth());
+        label_timeLabel->setSizePolicy(sizePolicy);
         label_timeLabel->setMinimumSize(QSize(100, 0));
         QPalette palette10;
         QBrush brush3(QColor(170, 0, 0, 255));
@@ -1867,8 +1876,8 @@ public:
 
         label_endTime = new QLabel(ConfigurationLayout);
         label_endTime->setObjectName(QStringLiteral("label_endTime"));
-        sizePolicy8.setHeightForWidth(label_endTime->sizePolicy().hasHeightForWidth());
-        label_endTime->setSizePolicy(sizePolicy8);
+        sizePolicy.setHeightForWidth(label_endTime->sizePolicy().hasHeightForWidth());
+        label_endTime->setSizePolicy(sizePolicy);
         label_endTime->setMinimumSize(QSize(100, 0));
         QPalette palette12;
         palette12.setBrush(QPalette::Active, QPalette::WindowText, brush);
@@ -1998,6 +2007,53 @@ public:
 
         verticalLayout_6->addWidget(label_17);
 
+        gridLayout_7 = new QGridLayout();
+        gridLayout_7->setObjectName(QStringLiteral("gridLayout_7"));
+        horizontalLayout_43 = new QHBoxLayout();
+        horizontalLayout_43->setObjectName(QStringLiteral("horizontalLayout_43"));
+        checkBox_saveRaw = new QCheckBox(ConfigurationLayout);
+        checkBox_saveRaw->setObjectName(QStringLiteral("checkBox_saveRaw"));
+        sizePolicy5.setHeightForWidth(checkBox_saveRaw->sizePolicy().hasHeightForWidth());
+        checkBox_saveRaw->setSizePolicy(sizePolicy5);
+
+        horizontalLayout_43->addWidget(checkBox_saveRaw);
+
+
+        gridLayout_7->addLayout(horizontalLayout_43, 0, 2, 1, 1);
+
+        horizontalLayout_3 = new QHBoxLayout();
+        horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
+        label_saveOptions = new QLabel(ConfigurationLayout);
+        label_saveOptions->setObjectName(QStringLiteral("label_saveOptions"));
+        sizePolicy1.setHeightForWidth(label_saveOptions->sizePolicy().hasHeightForWidth());
+        label_saveOptions->setSizePolicy(sizePolicy1);
+        label_saveOptions->setMinimumSize(QSize(120, 0));
+
+        horizontalLayout_3->addWidget(label_saveOptions);
+
+
+        gridLayout_7->addLayout(horizontalLayout_3, 0, 0, 1, 1);
+
+        horizontalLayout_46 = new QHBoxLayout();
+        horizontalLayout_46->setObjectName(QStringLiteral("horizontalLayout_46"));
+        checkBox_saveFFT = new QCheckBox(ConfigurationLayout);
+        checkBox_saveFFT->setObjectName(QStringLiteral("checkBox_saveFFT"));
+        sizePolicy5.setHeightForWidth(checkBox_saveFFT->sizePolicy().hasHeightForWidth());
+        checkBox_saveFFT->setSizePolicy(sizePolicy5);
+        checkBox_saveFFT->setChecked(true);
+
+        horizontalLayout_46->addWidget(checkBox_saveFFT);
+
+
+        gridLayout_7->addLayout(horizontalLayout_46, 0, 1, 1, 1);
+
+
+        verticalLayout_6->addLayout(gridLayout_7);
+
+        verticalSpacer_5 = new QSpacerItem(20, 5, QSizePolicy::Minimum, QSizePolicy::Fixed);
+
+        verticalLayout_6->addItem(verticalSpacer_5);
+
         gridLayout_10 = new QGridLayout();
         gridLayout_10->setObjectName(QStringLiteral("gridLayout_10"));
         horizontalLayout_45 = new QHBoxLayout();
@@ -2088,11 +2144,6 @@ public:
 
 
         verticalLayout_6->addLayout(gridLayout_10);
-
-        horizontalLayout_3 = new QHBoxLayout();
-        horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
-
-        verticalLayout_6->addLayout(horizontalLayout_3);
 
         horizontalLayout_2 = new QHBoxLayout();
         horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
@@ -2397,6 +2448,9 @@ public:
         label_BtimeInt2->setText(QApplication::translate("configurePolMeasure", "hours", Q_NULLPTR));
         label_16->setText(QString());
         label_17->setText(QApplication::translate("configurePolMeasure", "Saving Information:", Q_NULLPTR));
+        checkBox_saveRaw->setText(QApplication::translate("configurePolMeasure", "Raw Data", Q_NULLPTR));
+        label_saveOptions->setText(QApplication::translate("configurePolMeasure", "Saving Options:", Q_NULLPTR));
+        checkBox_saveFFT->setText(QApplication::translate("configurePolMeasure", "FFT Profiles", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         label_BFileNamePrev->setToolTip(QApplication::translate("configurePolMeasure", "File Name Preview", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
