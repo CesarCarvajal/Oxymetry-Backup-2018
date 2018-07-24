@@ -125,7 +125,7 @@ The user interface will provide some GUI elements when they are required accordi
 
 2.1 -&gt; How to load a configuration profile?
 
-Please go to the button &quot;Configure&quot; and click on the button &quot;Load Configuration&quot;. Then select the appropriate configuration file with extension &quot;.txt&quot;.
+Please go to the button &quot;Configure&quot; and click on the button &quot;Load Configuration&quot;. Then select the appropriate configuration file with extension &quot;.csar&quot;.
 
 
 2.2 -&gt; How to create a configuration file?

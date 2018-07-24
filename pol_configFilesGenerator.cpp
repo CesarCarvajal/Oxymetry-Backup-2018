@@ -32,7 +32,6 @@
  */
 Pol_configFilesGenerator::Pol_configFilesGenerator()
 {
-
     /* Initialize variables */
     NConcentrations = 0;
     NrSpectra = 1000;

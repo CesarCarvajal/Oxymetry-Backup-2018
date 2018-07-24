@@ -663,11 +663,17 @@ void PanelPolarimeter::adjust_Run_End(){
         if(totalMeasuretime == 0){break;}
     }
 
+    if(!Runner->Stopped && !abort_everything){
+        /* Save the summary */
+        write_Summary();
+    }
+
     /* Reset selection */
     ui->Table_Measurements_Pol->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->Table_Measurements_Pol->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->Table_Measurements_Pol->selectRow(0);
     ui->Table_Measurements_Pol->setSelectionMode(QAbstractItemView::NoSelection);
+
     for(int i = 0; i < ui->Table_Measurements_Pol->rowCount(); i++){
         ui->Table_Measurements_Pol->cellWidget(i, 0)->setStyleSheet("qproperty-alignment: AlignCenter;" "background-color: rgb(255, 255, 255)");
 
@@ -719,11 +725,13 @@ void PanelPolarimeter::adjust_Run_Start(short int typeRun){
     /* Re-attach the raw signal plot in case it was removed for example when cleaning all */
     curve_Pol->attach(ui->qwtPlot_Pol);
 
-    ui->Table_Measurements_Pol->setSelectionBehavior(QAbstractItemView::SelectRows);
-    ui->Table_Measurements_Pol->setSelectionMode(QAbstractItemView::SingleSelection);
-    ui->Table_Measurements_Pol->selectRow(0);
-    ui->Table_Measurements_Pol->setSelectionMode(QAbstractItemView::NoSelection);
-    ui->Table_Measurements_Pol->cellWidget(0, 0)->setStyleSheet("qproperty-alignment: AlignCenter;" "background-color: rgb(0, 153, 255)");
+    if(ConfigureMeasurement->configured){
+        ui->Table_Measurements_Pol->setSelectionBehavior(QAbstractItemView::SelectRows);
+        ui->Table_Measurements_Pol->setSelectionMode(QAbstractItemView::SingleSelection);
+        ui->Table_Measurements_Pol->selectRow(0);
+        ui->Table_Measurements_Pol->setSelectionMode(QAbstractItemView::NoSelection);
+        ui->Table_Measurements_Pol->cellWidget(0, 0)->setStyleSheet("qproperty-alignment: AlignCenter;" "background-color: rgb(0, 153, 255)");
+    }
 
     /* Restart delayed stop flags for Calibration */
     Runner->delayStop = false;
@@ -2231,6 +2239,9 @@ void PanelPolarimeter::initialize_Calibration(void){
     ui->button_calibrate->setEnabled(true);
     ui->button_Start_Meas_Pol->setStyleSheet(grayButton);
 
+    /* Adjust top axis of averages */
+    ui->qwtPlot_Pol_Average->setXAxisTop(-0.8 , 20.3, 2);
+
     /* Ajust X axis of time plotting */
     adjust_Average_Plot_Time();
 }
@@ -2292,6 +2303,153 @@ void PanelPolarimeter::initialize_Default_Calibration(void){
     FFTL.ConcentrationC4 = 0;
     FFTL.ConcentrationC5 = 0;
     FFTL.ConcentrationC6 = 0;
+}
+
+/**
+ * @brief Load Summary of the measurement, Polarimeter Setup
+ */
+void PanelPolarimeter::Load_Summary(void) {
+
+    /* Update information bar */
+    ui->info->setText("Loading Measurement Summary...");
+
+    /* Load Data Path */
+    QString DataPath = QFileDialog::getOpenFileName(this, QString("Open Measurement Summary"), ".", QString("*.sum"));
+
+    /* File selected by user? */
+    if (NULL == DataPath)
+    {
+        /* No file selected. Dialog aborted. */
+        ui->info->setText("");
+        return;
+    }
+
+    /* Restart vectors */
+    PolPlotter->averaged_Signal_time.resize(0);
+    PolPlotter->AverageDC.resize(0);
+    PolPlotter->AverageW.resize(0);
+    PolPlotter->Average2W.resize(0);
+
+    /* Enroute File */
+    QFile file(DataPath);
+
+    /* Does the File exists? */
+    if(!file.exists()){
+        /* If not, tell the user that it coulnd't be found */
+        showWarning("File not Found!", "");
+        return;
+    }
+
+    /* Create the readed row */
+    QString Row;
+
+    /* Number of rows */
+    int NrMeas = -1;
+    double value = -1;
+
+    /* Open the file */
+    if(file.open(QIODevice::ReadOnly)) {
+
+        /* Get lines from file */
+        QTextStream stream(&file);
+
+        /* Read row by row */
+        while(!stream.atEnd()){
+
+            /* When should it start reading the FFT data? */
+            bool read = false;
+
+            /* Read the current line in file */
+            Row = stream.readLine();
+
+            /* Indicates where to start reading the numerical information from file */
+            QString in = Row.at(0);
+
+            /* If a number was found at the first position, then start reading */
+            in.toInt(&read);
+
+            /* Have already skipped the first lines and there is information to get? */
+            if (read){
+
+                /* Get the values from the line separated by 2 tabulars and replace (,) by (.) to read numbers */
+                QStringList Readed_Row = Row.split("\t\t");
+                Readed_Row.replaceInStrings(",",".");
+
+                /* Get actual readed value */
+                if(value != Readed_Row.at(1).toDouble()){
+                    /* Count measurement numbers */
+                    NrMeas = NrMeas + 1;
+                }
+
+                /* Save the time */
+                PolPlotter->averaged_Signal_time.append(Readed_Row.at(0).toDouble());
+
+                /* Save the DC - Position 1 */
+                PolPlotter->AverageDC.append(Readed_Row.at(1).toDouble());
+
+                /* Save W - Position 2 */
+                PolPlotter->AverageW.append(Readed_Row.at(2).toDouble());
+
+                /* Save 2W - Position 3 */
+                PolPlotter->Average2W.append(Readed_Row.at(3).toDouble());
+
+                /* Get the actual value */
+                value = Readed_Row.at(1).toDouble();
+            }
+        }
+    }
+
+    /* Close file */
+    file.close();
+
+    /* Add signals to the plots */
+    PolPlotter->Average_DC_Signal->setSamples(PolPlotter->averaged_Signal_time, PolPlotter->AverageDC);
+    PolPlotter->Average_DC_Signal->setTitle(" Ī(DC)");
+    PolPlotter->Average_W_Signal->setSamples(PolPlotter->averaged_Signal_time, PolPlotter->AverageW);
+    PolPlotter->Average_W_Signal->setTitle(" Ī(ω)");
+    PolPlotter->Average_2W_Signal->setSamples(PolPlotter->averaged_Signal_time, PolPlotter->Average2W);
+    PolPlotter->Average_2W_Signal->setTitle(" Ī(2ω)");
+
+    /* Attach graphs */
+    PolPlotter->Average_DC_Signal->attach(ui->qwtPlot_Pol_Average);
+    PolPlotter->Average_W_Signal->attach(ui->qwtPlot_Pol_Average);
+    PolPlotter->Average_2W_Signal->attach(ui->qwtPlot_Pol_Average);
+
+    /* Just add a certain time to the plot */
+    int maximal = *std::max_element(PolPlotter->averaged_Signal_time.begin(), PolPlotter->averaged_Signal_time.end());
+    ui->qwtPlot_Pol_Average->setXAxis(0.0, maximal + maximal*0.1);
+
+    /* Adjust the measurement number plot in the averages */
+    double lengthMeasNumber = NrMeas + NrMeas*0.1;
+
+    /* Adjust the approximated measurement number in the x-top axis of the average */
+    if(lengthMeasNumber < 25){
+
+        /* If there are too many number, then just plot every two */
+        ui->qwtPlot_Pol_Average->setXAxisTop(-0.5, lengthMeasNumber+0.5, 1);
+
+    }else if(lengthMeasNumber > 500){
+
+        /* If less points, then show all the measurement numbers */
+        ui->qwtPlot_Pol_Average->setXAxisTop(-0.5, lengthMeasNumber+0.5, int(ceil(lengthMeasNumber/10)));
+
+    }else{
+
+        /* If there are too many number, then just plot every two */
+        ui->qwtPlot_Pol_Average->setXAxisTop(-0.5, lengthMeasNumber+0.5, int(ceil(lengthMeasNumber/30)));
+    }
+
+    /* Update plots */
+    ui->qwtPlot_Pol_Average->update();
+
+    /* Resize vectors */
+    PolPlotter->averaged_Signal_time.resize(0);
+    PolPlotter->AverageDC.resize(0);
+    PolPlotter->AverageW.resize(0);
+    PolPlotter->Average2W.resize(0);
+
+    /* Update information bar */
+    ui->info->setText("");
 }
 
 /**
@@ -2560,7 +2718,6 @@ void PanelPolarimeter::plot_Average(void){
             /* Save the actual maximum value of Y plot of averages */
             maxYAverage = ceil((PolPlotter->maxYValue)*1.1);
             ui->qwtPlot_Pol_Average->setYAxis(0.0, maxYAverage);
-
         }
 
         /* Restart all vector to don't overload them with too many information */
@@ -2569,7 +2726,6 @@ void PanelPolarimeter::plot_Average(void){
         PolPlotter->AverageW.resize(0);
         PolPlotter->Average2W.resize(0);
     }
-
 }
 
 /**
@@ -2690,7 +2846,6 @@ void PanelPolarimeter::pol_Measure(void){
 
     /* Show the progress of the Measurements */
     pol_Measurement_Progress(Timeindex);
-
 }
 
 /**
@@ -2726,7 +2881,6 @@ void PanelPolarimeter::pol_Measurement_Progress(unsigned int i){
     /* Update progress bars */
     ui->currentProgressBar_Pol->setValue(progress);
     ui->TotalProgressBar_Pol->setValue((i) * 100 / ConfigureMeasurement->timePoint.count());
-
 }
 
 /**
@@ -2853,7 +3007,6 @@ void PanelPolarimeter::process_Received_Data_Pol(QString Path)
         Runner->Calibration_Progress = 0;
         ui->currentProgressBar_Pol->setValue(0);
     }
-
 }
 
 /**
@@ -2897,7 +3050,6 @@ void PanelPolarimeter::receive_Data_Pol(int WParam, int LParam)
 
                 /* Graph needs update */
                 needUpdate = true;
-
             }
             /* Start Store to RAM measurement */
             else
@@ -2960,10 +3112,7 @@ void PanelPolarimeter::receive_Data_Pol(int WParam, int LParam)
                 /* Graph needs update */
                 needUpdate = true;
 
-                /*
-             * Got all StoreToRAM data, save it to disk now!
-             */
-
+                /* Got all StoreToRAM data, save it to disk now */
                 FILE *file = fopen(path.toLatin1().data(), "wt");
 
                 /* Check file handle */
@@ -2991,7 +3140,6 @@ void PanelPolarimeter::receive_Data_Pol(int WParam, int LParam)
 
                 /* Process the received data */
                 process_Received_Data_Pol(path);
-
             }
 
             /* Update curve of raw data */
@@ -3099,6 +3247,7 @@ void PanelPolarimeter::run_Polarimetry(short int runType) {
  */
 void PanelPolarimeter::save_Graph_Pol(void) {
 
+    /* Save the old status of the information bar */
     QString oldstatus = ui->info->text();
 
     /* Update information bar */
@@ -3126,7 +3275,7 @@ void PanelPolarimeter::save_Graph_Pol(void) {
         }
     }
 
-    /* Update information bar */
+    /* Update information bar to the previous information */
     ui->info->setText(oldstatus);
 }
 
@@ -3242,6 +3391,7 @@ void PanelPolarimeter::setConfiguration(void){
         ui->Table_Measurements_Pol->showColumn(7);
     }
 
+    /* Set columns size */
     ui->Table_Measurements_Pol->setColumnWidth(2, 70);
     ui->Table_Measurements_Pol->setColumnWidth(3, 70);
     ui->Table_Measurements_Pol->setColumnWidth(4, 70);
@@ -3283,6 +3433,7 @@ void PanelPolarimeter::setConfiguration(void){
 
         /* Create label for measurement number */
         QLabel *ntn = new QLabel();
+
         /* Are there repetitions? */
         if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->repetition > 1){
             ntn->setText("R" + QString::number(repetitions) + " - " + QString::number(ui->Table_Measurements_Pol->rowCount()));
@@ -3298,7 +3449,6 @@ void PanelPolarimeter::setConfiguration(void){
             ui->Table_Measurements_Pol->setColumnWidth(0, 25);
             ui->Table_Measurements_Pol->setColumnWidth(1, 90);
         }
-
         ntn->setStyleSheet("QLabel { margin-left: 2px; }");
         ui->Table_Measurements_Pol->setCellWidget(i, 0, ntn);
         ui->Table_Measurements_Pol->cellWidget(i, 0)->setStyleSheet("qproperty-alignment: AlignCenter;" "background-color: rgb(255, 255, 255)");
@@ -3330,54 +3480,60 @@ void PanelPolarimeter::setConfiguration(void){
         nt2->setStyleSheet("QLabel { margin-left: 2px; }");
         ui->Table_Measurements_Pol->setCellWidget(i, 1, nt2);
 
-        /* Create label for C1 */
+        /* Is C1 active? */
         if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(0)){
 
-            QLabel *nt3 = new QLabel();
-            nt3->setText(QString::number(ConfigureMeasurement->externSoftware->GlucoseConcentration.at(rowcounter-1)));
-            nt3->setStyleSheet("QLabel { margin-left: 2px; }");
-            ui->Table_Measurements_Pol->setCellWidget(i, 2, nt3);
+            /* Create label for C1 */
+            QLabel *ntC1 = new QLabel();
+            ntC1->setText(QString::number(ConfigureMeasurement->externSoftware->GlucoseConcentration.at(rowcounter-1)));
+            ntC1->setStyleSheet("QLabel { margin-left: 2px; }");
+            ui->Table_Measurements_Pol->setCellWidget(i, 2, ntC1);
         }
 
-        /* Create label for C2 */
+        /* Is C2 active? */
         if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(1)){
 
+            /* Create label for C2 */
             QLabel *ntC2 = new QLabel();
             ntC2->setText(QString::number(ConfigureMeasurement->externSoftware->Impurity1Concentration.at(rowcounter-1)));
             ntC2->setStyleSheet("QLabel { margin-left: 2px; }");
             ui->Table_Measurements_Pol->setCellWidget(i, 3, ntC2);
         }
 
-        /* Create label for C3 */
+        /* Is C3 active? */
         if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(2)){
 
+            /* Create label for C3 */
             QLabel *ntC3 = new QLabel();
             ntC3->setText(QString::number(ConfigureMeasurement->externSoftware->Impurity2Concentration.at(rowcounter-1)));
             ntC3->setStyleSheet("QLabel { margin-left: 2px; }");
             ui->Table_Measurements_Pol->setCellWidget(i, 4, ntC3);
         }
 
-        /* Create label for C4 */
+        /* Is C4 active? */
         if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(3)){
 
+            /* Create label for C4 */
             QLabel *ntC4 = new QLabel();
             ntC4->setText(QString::number(ConfigureMeasurement->externSoftware->Impurity3Concentration.at(rowcounter-1)));
             ntC4->setStyleSheet("QLabel { margin-left: 2px; }");
             ui->Table_Measurements_Pol->setCellWidget(i, 5, ntC4);
         }
 
-        /* Create label for C5 */
+        /* Is C5 active? */
         if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(4)){
 
+            /* Create label for C5 */
             QLabel *ntC5 = new QLabel();
             ntC5->setText(QString::number(ConfigureMeasurement->externSoftware->Impurity4Concentration.at(rowcounter-1)));
             ntC5->setStyleSheet("QLabel { margin-left: 2px; }");
             ui->Table_Measurements_Pol->setCellWidget(i, 6, ntC5);
         }
 
-        /* Create label for C6 */
+        /* Is C6 active? */
         if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(3)){
 
+            /* Create label for C6 */
             QLabel *ntC6 = new QLabel();
             ntC6->setText(QString::number(ConfigureMeasurement->externSoftware->Impurity5Concentration.at(rowcounter-1)));
             ntC6->setStyleSheet("QLabel { margin-left: 2px; }");
@@ -3427,7 +3583,6 @@ void PanelPolarimeter::setConfiguration(void){
 
     /* Update information bar */
     ui->info->setText("Configured... Please Load Files to the Pumps Software");
-
 }
 
 /**
@@ -3581,14 +3736,18 @@ void PanelPolarimeter::toggle_Load_Data(void)
 
     /* Use a dialog to select the kind of data to be loaded */
     QMessageBox msgBox;
-    QPushButton *Raw = msgBox.addButton(tr("Raw Data"),QMessageBox::ActionRole);
-    QPushButton *FFT = msgBox.addButton(tr("FFT Data"), QMessageBox::ActionRole);
+    QSpacerItem* horizontalSpacer = new QSpacerItem(500, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    QPushButton *Summary = msgBox.addButton(tr("Measurement Summary"), QMessageBox::ActionRole);
+    QPushButton *Raw = msgBox.addButton(tr("Raw Data File"),QMessageBox::ActionRole);
+    QPushButton *FFT = msgBox.addButton(tr("FFT Data File"), QMessageBox::ActionRole);
 
     /* Set tool tips */
     Raw->setToolTip("Load Raw Data");
     Raw->setToolTipDuration(-1);
     FFT->setToolTip("Load FFT Data");
     FFT->setToolTipDuration(-1);
+    Summary->setToolTip("Load Measurement Summary");
+    Summary->setToolTipDuration(-1);
 
     /* Adjust the dialog window */
     msgBox.addButton(QMessageBox::Cancel);
@@ -3596,6 +3755,9 @@ void PanelPolarimeter::toggle_Load_Data(void)
     msgBox.setText("Loading Data File ...                                                                             ");
     msgBox.setInformativeText("Please select the type of data that you would like to load?");
     msgBox.setWindowTitle("Load Data");
+
+    QGridLayout* layout = (QGridLayout*)msgBox.layout();
+    layout->addItem(horizontalSpacer, layout->rowCount(), 0, 1, layout->columnCount());
 
     /* Run the dialog */
     msgBox.exec();
@@ -3612,9 +3774,10 @@ void PanelPolarimeter::toggle_Load_Data(void)
 
         /* Load FFT */
         Load_From_FFT();
+    }
 
-        /* If user select raw data, then load it */
-    } else if (msgBox.clickedButton() == Raw) {
+    /* If user select raw data, then load it */
+    else if (msgBox.clickedButton() == Raw) {
 
         /* If loaded clean all */
         if(m_NrDevices > 0){
@@ -3626,6 +3789,21 @@ void PanelPolarimeter::toggle_Load_Data(void)
         /* Load and analyze raw data */
         Load_From_Raw_Data();
     }
+
+    /* If user select the measurement summary, then load it */
+    else if (msgBox.clickedButton() == Summary) {
+
+        /* If loaded clean all */
+        if(m_NrDevices > 0){
+
+            /* Restart all to load the data */
+            clean_All_Pol();
+        }
+
+        /* Load and analyze raw data */
+        Load_Summary();
+    }
+
 
     /* Which button was pressed? */
     if ((msgBox.clickedButton() == Raw || msgBox.clickedButton() == FFT) && dataloaded) {
@@ -3681,6 +3859,8 @@ void PanelPolarimeter::toggle_Load_Data(void)
     Raw = nullptr;
     delete FFT;
     FFT = nullptr;
+    delete Summary;
+    Summary = nullptr;
 }
 
 /**
@@ -3691,13 +3871,11 @@ void PanelPolarimeter::toggle_Pol_Calibration(void)
     /* Polarimeter Calibration running or not? */
     if(!Runner->PolCalibrating)
     {
-
         /* Is there any configuration to calibrate? */
         if(!Runner->PolConfigured){
 
             /* Initialize a defalut calibration */
             initialize_Default_Calibration();
-
         }
 
         /* Clear all plots */
@@ -3731,7 +3909,6 @@ void PanelPolarimeter::toggle_Pol_Calibration(void)
 
         /* Run type calibration with 0: Calibrating */
         run_Polarimetry(0);
-
     }
     else
     {
@@ -3766,8 +3943,8 @@ void PanelPolarimeter::toggle_Pol_Calibration(void)
 void PanelPolarimeter::toggle_Pol_Measurement(void)
 {
     /* Polarimeter Measurement running or not? */
-    if(!Runner->PolMeasuring)
-    {
+    if(!Runner->PolMeasuring){
+
         /* Is there a loaded configuration profile? */
         if(Runner->PolConfigured){
 
@@ -3795,13 +3972,13 @@ void PanelPolarimeter::toggle_Pol_Measurement(void)
             run_Polarimetry(1);
 
         }else{
+
             /* Show message if no configuration has been loaded */
             showCritical("Please load a Configuration Profile to Start the Measurement", "");
             return;
         }
-    }
-    else
-    {
+
+    }else{
         /* Polarimeter Measurement running at the moment. Stop it. */
         stop_Run_Polarimetry();
 
@@ -3839,7 +4016,6 @@ void PanelPolarimeter::update_Wavelength_Range(void){
     ui->qwtPlot_Pol->setXAxis(PolarimetrySpectrometer->getMinimumWavelength(), PolarimetrySpectrometer->getMaximumWavelength());
     ui->qwtPlot_Pol_Compensation->setXAxis(PolarimetrySpectrometer->getMinimumWavelength(), PolarimetrySpectrometer->getMaximumWavelength());
     ui->qwtPlot_Pol_w_2w->setXAxis(PolarimetrySpectrometer->getMinimumWavelength(), PolarimetrySpectrometer->getMaximumWavelength());
-
 }
 
 /**
@@ -3855,12 +4031,9 @@ void PanelPolarimeter::write_To_File(FILE *file, double *a_pSpectrum, int WParam
 
         /* Write the Header with name/serial number */
         if (ptrSpectrometers[SpectrometerNumber]->hasReadableName()){
-
             fprintf(file, "Serial Number: %s \n", ptrSpectrometers[SpectrometerNumber]->getSerialNumber().toLatin1().data());
             fprintf(file, "Spectrometer Name: %s \n", ptrSpectrometers[SpectrometerNumber]->getReadableName().toLatin1().data());
-
         }else{
-
             fprintf(file, "Serial Number: %s\n", ptrSpectrometers[SpectrometerNumber]->getSerialNumber().toLatin1().data());
         }
 
@@ -3928,7 +4101,6 @@ void PanelPolarimeter::write_To_File(FILE *file, double *a_pSpectrum, int WParam
         }
 
         fprintf(file, "Concentrations %s: %s\n\n", conc.toLatin1().data() ,concentrations.toLatin1().data());
-
     }
 
     /* Save wavelengths */
@@ -3967,6 +4139,73 @@ void PanelPolarimeter::write_To_File(FILE *file, double *a_pSpectrum, int WParam
 }
 
 /**
+ * @brief Write the Measurement Summary to a file
+ */
+void PanelPolarimeter::write_Summary() {
+
+    /* Re asign the folder path to save the measurement files */
+    QString path2(ConfigureMeasurement->pathDataMeasurements.absoluteDir().path() + "/" + folderForData + "/");
+    fileInfoSaving = QFileInfo(path2);
+
+    /* Create the path for StoreToRam */
+    QString path(fileInfoSaving.absoluteDir().path() + "/Measurement_Summary.sum");
+
+    /* Got all StoreToRAM data, save it to disk now */
+    FILE *file = fopen(path.toLatin1().data(), "wt");
+
+    /* Check file handle */
+    if (nullptr == file){
+        return;
+    }
+
+    /* Write the Header with name/serial number */
+    if (ptrSpectrometers[SpectrometerNumber]->hasReadableName()){
+        fprintf(file, "Serial Number: %s \n", ptrSpectrometers[SpectrometerNumber]->getSerialNumber().toLatin1().data());
+        fprintf(file, "Spectrometer Name: %s \n", ptrSpectrometers[SpectrometerNumber]->getReadableName().toLatin1().data());
+    }else{
+        fprintf(file, "Serial Number: %s\n", ptrSpectrometers[SpectrometerNumber]->getSerialNumber().toLatin1().data());
+    }
+
+    /* Write some useful data on file */
+    fprintf(file, "Integration Time: %.2f ms\n", ptrSpectrometers[SpectrometerNumber]->getIntegrationTime());
+    fprintf(file, "Nr. of Spectra: %i\n", ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->NrSpectra);
+    fprintf(file, "Nr. of Averages: %i\n", ptrSpectrometers[SpectrometerNumber]->getNumberOfAverages());
+    fprintf(file, "Frequency: %.2f\n\n", FFTL.FrequencyF);
+
+    /* Loop through the time */
+    for (int z = 0; z < PolPlotter->averaged_Signal_time.length(); z++){
+
+        /* Write FFT data headers */
+        if (z == 0){
+            fprintf(file, "Time \t \t");
+            fprintf(file, "Average DC Amplitude \t \t");
+            fprintf(file, "Average W Amplitude \t");
+            fprintf(file, "Average 2W Amplitude \n");
+        }
+
+        /* Write wavelengths and amplitudes */
+        fprintf(file, "%.1f\t\t", PolPlotter->averaged_Signal_time.at(z));
+        fprintf(file, "%.4f\t\t", PolPlotter->AverageDC.at(z));
+        fprintf(file, "%.4f\t\t", PolPlotter->AverageW.at(z));
+        fprintf(file, "%.4f\t\t", PolPlotter->Average2W.at(z));
+
+        fprintf(file, "\n");
+    }
+
+    /* Close the file */
+    fclose(file);
+
+    /* Free pointer */
+    file = nullptr;
+
+    /* Restart vectors */
+    PolPlotter->averaged_Signal_time.resize(0);
+    PolPlotter->AverageDC.resize(0);
+    PolPlotter->AverageW.resize(0);
+    PolPlotter->Average2W.resize(0);
+}
+
+/**
  * @brief Show All the initial UI of plots
  */
 void PanelPolarimeter::showAllPlots() {
@@ -4000,7 +4239,6 @@ void PanelPolarimeter::showAllPlots() {
     ui->label_HideRatio->setText(">> Hide Ratio I(ω)/I(2ω)");
     ui->label_HideRatio->setStyleSheet("QLabel { color: blue; }");
     ui->label_HideRatio->setFrameShape(QFrame::NoFrame);
-
 }
 
 /**
@@ -4026,7 +4264,6 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
 
     /* Show the window */
     DataSelector->exec();
-
 }
 
 /**
@@ -4034,7 +4271,6 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
  */
 PanelPolarimeter::~PanelPolarimeter(void)
 {
-
     /* Check handle */
     if (nullptr != curve_Pol)
     {

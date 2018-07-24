@@ -117,6 +117,9 @@
               <height>50</height>
              </size>
             </property>
+            <property name="toolTip">
+             <string>Spectrometer Settings</string>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -233,6 +236,9 @@
                     <width>80</width>
                     <height>16777215</height>
                    </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Normalize Counts in Counts per Second</string>
                   </property>
                   <property name="text">
                    <string/>
@@ -823,6 +829,9 @@
               <height>50</height>
              </size>
             </property>
+            <property name="toolTip">
+             <string>Solutions Settings</string>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -905,6 +914,9 @@
                 <property name="focusPolicy">
                  <enum>Qt::NoFocus</enum>
                 </property>
+                <property name="toolTip">
+                 <string>add Impurity</string>
+                </property>
                 <property name="text">
                  <string>+ Add</string>
                 </property>
@@ -937,7 +949,7 @@
                    </size>
                   </property>
                   <property name="toolTip">
-                   <string>Which concentration of glucose is in stock?</string>
+                   <string>Which concentration is in stock?</string>
                   </property>
                   <property name="text">
                    <string>Stock Solution Concentration:</string>
@@ -965,7 +977,7 @@
                    </size>
                   </property>
                   <property name="toolTip">
-                   <string>Minimum Glucose Concentration?</string>
+                   <string>Minimum Concentration?</string>
                   </property>
                   <property name="text">
                    <string>Minimum Concentration:</string>
@@ -993,7 +1005,7 @@
                    </size>
                   </property>
                   <property name="toolTip">
-                   <string>Maximum Glucose Concentration?</string>
+                   <string>Maximum Concentration?</string>
                   </property>
                   <property name="text">
                    <string>Maximum Concentration:</string>
@@ -1076,6 +1088,9 @@
                     </disabled>
                    </palette>
                   </property>
+                  <property name="toolTip">
+                   <string>Volume in Stock?</string>
+                  </property>
                   <property name="text">
                    <string>Volume in Stock:</string>
                   </property>
@@ -1135,6 +1150,9 @@
                       <height>0</height>
                      </size>
                     </property>
+                    <property name="toolTip">
+                     <string>Change Name of Impurity 3</string>
+                    </property>
                     <property name="text">
                      <string>Impurity 3</string>
                     </property>
@@ -1169,6 +1187,9 @@
                       <width>16777215</width>
                       <height>16777215</height>
                      </size>
+                    </property>
+                    <property name="toolTip">
+                     <string>Maximum Concentration of Impurity 2</string>
                     </property>
                     <property name="decimals">
                      <number>2</number>
@@ -1205,6 +1226,9 @@
                       <height>0</height>
                      </size>
                     </property>
+                    <property name="toolTip">
+                     <string>Maximum Concentration of Impurity 4</string>
+                    </property>
                     <property name="maximum">
                      <double>1000000.000000000000000</double>
                     </property>
@@ -1236,6 +1260,9 @@
                       <width>80</width>
                       <height>0</height>
                      </size>
+                    </property>
+                    <property name="toolTip">
+                     <string>Minimum Concentration of Impurity 5</string>
                     </property>
                     <property name="maximum">
                      <double>1000000.000000000000000</double>
@@ -1303,6 +1330,9 @@
                       </disabled>
                      </palette>
                     </property>
+                    <property name="toolTip">
+                     <string>Required Volume of Impurity 4</string>
+                    </property>
                     <property name="frame">
                      <bool>false</bool>
                     </property>
@@ -1344,6 +1374,9 @@
                       <height>0</height>
                      </size>
                     </property>
+                    <property name="toolTip">
+                     <string>Minimum Concentration of Impurity 3</string>
+                    </property>
                     <property name="maximum">
                      <double>1000000.000000000000000</double>
                     </property>
@@ -1375,6 +1408,9 @@
                       <width>16777215</width>
                       <height>16777215</height>
                      </size>
+                    </property>
+                    <property name="toolTip">
+                     <string>Maximum Concentration of Impurity 1</string>
                     </property>
                     <property name="decimals">
                      <number>2</number>
@@ -1414,6 +1450,9 @@
                       <height>16777215</height>
                      </size>
                     </property>
+                    <property name="toolTip">
+                     <string>Maximum Concentration of Glucose</string>
+                    </property>
                     <property name="decimals">
                      <number>2</number>
                     </property>
@@ -1451,6 +1490,9 @@
                       <width>16777215</width>
                       <height>16777203</height>
                      </size>
+                    </property>
+                    <property name="toolTip">
+                     <string>Stock Concentration of Impurity 2</string>
                     </property>
                     <property name="decimals">
                      <number>2</number>
@@ -1524,6 +1566,9 @@
                       </disabled>
                      </palette>
                     </property>
+                    <property name="toolTip">
+                     <string>Required Volume of Impurity 3</string>
+                    </property>
                     <property name="frame">
                      <bool>false</bool>
                     </property>
@@ -1565,6 +1610,9 @@
                       <height>0</height>
                      </size>
                     </property>
+                    <property name="toolTip">
+                     <string>Minimum Concentration of Impurity 4</string>
+                    </property>
                     <property name="maximum">
                      <double>1000000.000000000000000</double>
                     </property>
@@ -1597,6 +1645,9 @@
                       <height>16777215</height>
                      </size>
                     </property>
+                    <property name="toolTip">
+                     <string>Minimum Concentration of Impurity 1</string>
+                    </property>
                     <property name="decimals">
                      <number>2</number>
                     </property>
@@ -1628,6 +1679,9 @@
                       <width>80</width>
                       <height>0</height>
                      </size>
+                    </property>
+                    <property name="toolTip">
+                     <string>Maximum Concentration of Impurity 5</string>
                     </property>
                     <property name="maximum">
                      <double>1000000.000000000000000</double>
@@ -1689,6 +1743,9 @@
                       <height>0</height>
                      </size>
                     </property>
+                    <property name="toolTip">
+                     <string>Change Name of Impurity 1</string>
+                    </property>
                     <property name="text">
                      <string>Impurity 1</string>
                     </property>
@@ -1723,6 +1780,9 @@
                       <width>16777215</width>
                       <height>16777215</height>
                      </size>
+                    </property>
+                    <property name="toolTip">
+                     <string>Minimum Concentration of Impurity 2</string>
                     </property>
                     <property name="decimals">
                      <number>2</number>
@@ -1759,6 +1819,9 @@
                       <height>16777215</height>
                      </size>
                     </property>
+                    <property name="toolTip">
+                     <string>Minimum Concentration of Glucose</string>
+                    </property>
                     <property name="decimals">
                      <number>2</number>
                     </property>
@@ -1790,6 +1853,9 @@
                       <width>80</width>
                       <height>0</height>
                      </size>
+                    </property>
+                    <property name="toolTip">
+                     <string>Maximum Concentration of Impurity 3</string>
                     </property>
                     <property name="maximum">
                      <double>1000000.000000000000000</double>
@@ -1917,6 +1983,9 @@
                       <height>0</height>
                      </size>
                     </property>
+                    <property name="toolTip">
+                     <string>Change Name of Impurity 2</string>
+                    </property>
                     <property name="text">
                      <string>Impurity 2</string>
                     </property>
@@ -1948,6 +2017,9 @@
                       <width>80</width>
                       <height>0</height>
                      </size>
+                    </property>
+                    <property name="toolTip">
+                     <string>Stock Concentration of Impurity 5</string>
                     </property>
                     <property name="maximum">
                      <double>1000000.000000000000000</double>
@@ -2009,6 +2081,9 @@
                       <height>0</height>
                      </size>
                     </property>
+                    <property name="toolTip">
+                     <string>Change Name of Impurity 4</string>
+                    </property>
                     <property name="text">
                      <string>Impurity 4</string>
                     </property>
@@ -2043,6 +2118,9 @@
                       <width>16777215</width>
                       <height>16777215</height>
                      </size>
+                    </property>
+                    <property name="toolTip">
+                     <string>Stock Concentration of Impurity 1</string>
                     </property>
                     <property name="decimals">
                      <number>2</number>
@@ -2112,6 +2190,9 @@
                        </colorrole>
                       </disabled>
                      </palette>
+                    </property>
+                    <property name="toolTip">
+                     <string>Required Volume of Impurity 2</string>
                     </property>
                     <property name="frame">
                      <bool>false</bool>
@@ -2194,6 +2275,9 @@
                       </disabled>
                      </palette>
                     </property>
+                    <property name="toolTip">
+                     <string>Required Volume of Glucose</string>
+                    </property>
                     <property name="frame">
                      <bool>false</bool>
                     </property>
@@ -2234,6 +2318,9 @@
                       <width>80</width>
                       <height>0</height>
                      </size>
+                    </property>
+                    <property name="toolTip">
+                     <string>Stock Concentration of Impurity 3</string>
                     </property>
                     <property name="maximum">
                      <double>1000000.000000000000000</double>
@@ -2301,6 +2388,9 @@
                       </disabled>
                      </palette>
                     </property>
+                    <property name="toolTip">
+                     <string>Required Volume of Impurity 5</string>
+                    </property>
                     <property name="frame">
                      <bool>false</bool>
                     </property>
@@ -2341,6 +2431,9 @@
                       <width>80</width>
                       <height>0</height>
                      </size>
+                    </property>
+                    <property name="toolTip">
+                     <string>Stock Concentration of Impurity 4</string>
                     </property>
                     <property name="maximum">
                      <double>1000000.000000000000000</double>
@@ -2405,6 +2498,9 @@
                       </disabled>
                      </palette>
                     </property>
+                    <property name="toolTip">
+                     <string>Required Volume of Impurity 1</string>
+                    </property>
                     <property name="frame">
                      <bool>false</bool>
                     </property>
@@ -2448,6 +2544,9 @@
                       <width>16777215</width>
                       <height>16777215</height>
                      </size>
+                    </property>
+                    <property name="toolTip">
+                     <string>Stock Concentration of Glucose</string>
                     </property>
                     <property name="decimals">
                      <number>2</number>
@@ -2514,6 +2613,9 @@
                       <width>60</width>
                       <height>0</height>
                      </size>
+                    </property>
+                    <property name="toolTip">
+                     <string>Change Name of Impurity 5</string>
                     </property>
                     <property name="text">
                      <string>Impurity 5</string>
@@ -2678,6 +2780,9 @@
               <width>50</width>
               <height>50</height>
              </size>
+            </property>
+            <property name="toolTip">
+             <string>Pumps Settings</string>
             </property>
             <property name="text">
              <string/>
@@ -3018,6 +3123,9 @@
               <height>50</height>
              </size>
             </property>
+            <property name="toolTip">
+             <string>Time Settings</string>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -3356,6 +3464,9 @@
                     <height>16777215</height>
                    </size>
                   </property>
+                  <property name="toolTip">
+                   <string>Set number of repetitions</string>
+                  </property>
                   <property name="maximum">
                    <number>1000</number>
                   </property>
@@ -3429,8 +3540,11 @@
                     <height>0</height>
                    </size>
                   </property>
+                  <property name="toolTip">
+                   <string>Activate Interval Mode</string>
+                  </property>
                   <property name="text">
-                   <string>Activate User Interval Mode</string>
+                   <string>User Interval Mode</string>
                   </property>
                  </widget>
                 </item>
@@ -3561,6 +3675,9 @@
                      </colorrole>
                     </disabled>
                    </palette>
+                  </property>
+                  <property name="toolTip">
+                   <string>Time Intervals for the Measurements</string>
                   </property>
                   <property name="frame">
                    <bool>false</bool>
@@ -3881,6 +3998,9 @@
                     </disabled>
                    </palette>
                   </property>
+                  <property name="toolTip">
+                   <string>Time finishing the measurements</string>
+                  </property>
                  </widget>
                 </item>
                </layout>
@@ -4002,6 +4122,9 @@
                      </colorrole>
                     </disabled>
                    </palette>
+                  </property>
+                  <property name="toolTip">
+                   <string>Total estimated time for the measurements</string>
                   </property>
                   <property name="frame">
                    <bool>false</bool>
@@ -4158,6 +4281,9 @@
               <height>50</height>
              </size>
             </property>
+            <property name="toolTip">
+             <string>Save Settings</string>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -4230,6 +4356,9 @@
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
+                  <property name="toolTip">
+                   <string>Save Raw Data</string>
+                  </property>
                   <property name="text">
                    <string>Raw Data</string>
                   </property>
@@ -4269,6 +4398,9 @@
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
+                  </property>
+                  <property name="toolTip">
+                   <string>Save FFT profiles</string>
                   </property>
                   <property name="text">
                    <string>FFT Profiles</string>
@@ -4581,6 +4713,9 @@
                      </colorrole>
                     </disabled>
                    </palette>
+                  </property>
+                  <property name="toolTip">
+                   <string>Space in memory required</string>
                   </property>
                   <property name="frame">
                    <bool>false</bool>

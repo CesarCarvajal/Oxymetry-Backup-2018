@@ -27,7 +27,6 @@
  */
 Pol_Plot::Pol_Plot()
 {
-
     /* Plot Average, range of time plotting */
     time_plot=400;
 
@@ -71,7 +70,6 @@ Pol_Plot::Pol_Plot()
     predictionSignal = new QwtPlotCurve("");
     predictionSignal->setPen(QPen("black"));
     predictionSignal->setItemAttribute(QwtPlotItem::Legend, false);
-
 }
 
 /**
@@ -118,16 +116,18 @@ void Pol_Plot::plotFFTatSelectedWave(QVector<double> FFTLfft_data, QVector<doubl
  * @brief Plot W, DC and 2W averaged
  * @param[in] Vectors with the DC, W, 2W and ratio W/2W components, also the wavelengths. The parameter dataloaded prevents mixing of data.
  */
-void Pol_Plot::plotAverages(bool dataloaded, QVector<double> FFTLfft_DC, QVector<double> FFTLfft_W, QVector<double> FFTLfft_2W, QVector<double> FFTLwavelengths, bool measuring, int time){
+void Pol_Plot::plotAverages(bool dataloaded, QVector<double> FFTLfft_DC, QVector<double> FFTLfft_W, QVector<double> FFTLfft_2W, QVector<double> FFTLwavelengths,
+                            bool measuring, int time){
 
     /* Initialize the average variables */
     double average_DC=0, average_W=0, average_2W = 0;
 
     /* Was there previously data loaded that may affect the new plotting? */
     if(!dataloaded){
+
         /* Sum all the FFT signal amplitudes */
-        for ( int  i = 0; i < FFTLwavelengths.length(); i++ )
-        {
+        for ( int  i = 0; i < FFTLwavelengths.length(); i++ ){
+
             average_DC = average_DC + FFTLfft_DC.at(i);
             average_W = average_W + FFTLfft_W.at(i);
             average_2W = average_2W + FFTLfft_2W.at(i);
@@ -169,7 +169,6 @@ void Pol_Plot::plotAverages(bool dataloaded, QVector<double> FFTLfft_DC, QVector
 
     /* Whats the maximum time reached on the vector until now? */
     maxXtime = *std::max_element(averaged_Signal_time.begin(), averaged_Signal_time.end());
-
 }
 
 /**

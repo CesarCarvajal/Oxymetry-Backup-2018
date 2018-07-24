@@ -548,8 +548,8 @@ void fft::saveFFTtoFile(QFileInfo FileDetails, bool userSaving)
     fprintf(fileFFT, "Serial Number: %s\n", ptrSpectrometers[0]->getSerialNumber().toLatin1().data());
 
     /* Check for readable name */
-    if (ptrSpectrometers[0]->hasReadableName())
-    {
+    if (ptrSpectrometers[0]->hasReadableName()){
+
         /* Write readable name */
         fprintf(fileFFT, "Readable Name: %s\n", ptrSpectrometers[0]->getReadableName().toLatin1().data());
     }
@@ -603,11 +603,10 @@ void fft::saveFFTtoFile(QFileInfo FileDetails, bool userSaving)
     fprintf(fileFFT, "Concentrations %s: %s\n\n", conc.toLatin1().data() , concentrations.toLatin1().data());
 
     /* Loop through the wavelengths */
-    for (int z = 0; z < wavelengths.length(); z++)
-    {
+    for (int z = 0; z < wavelengths.length(); z++){
+
         /* Write FFT data headers */
-        if (z == 0)
-        {
+        if (z == 0){
             fprintf(fileFFT, "Wavelength \t \t");
             fprintf(fileFFT, "DC Amplitude \t \t");
             fprintf(fileFFT, "W Amplitude \t");
@@ -623,7 +622,6 @@ void fft::saveFFTtoFile(QFileInfo FileDetails, bool userSaving)
         fprintf(fileFFT, "%.5f\t\t", fft_Compensation_Signal.at(z));
 
         fprintf(fileFFT, "\n");
-
     }
 
     fprintf(fileFFT, "\n");

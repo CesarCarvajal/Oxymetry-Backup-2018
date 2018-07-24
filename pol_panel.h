@@ -185,6 +185,12 @@ private slots:
     /* Change the Integration time from the auto adjusted during calibration */
     void change_Auto_Integration_Time_Pol(void);
 
+    /* Load measurement summary */
+    void Load_Summary(void);
+
+    /* Write measurement summary */
+    void write_Summary();
+
     /* Change the Integration time manually during calibration */
     void change_Integration_Time_Pol(void);
 

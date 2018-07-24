@@ -2259,9 +2259,15 @@ public:
     {
         configurePolMeasure->setWindowTitle(QApplication::translate("configurePolMeasure", "Polarimeter Measurement Configuration", Q_NULLPTR));
         label_18->setText(QApplication::translate("configurePolMeasure", "Measurement Configuration", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        label_13->setToolTip(QApplication::translate("configurePolMeasure", "Spectrometer Settings", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         label_13->setText(QString());
         label_Spectrometer->setText(QApplication::translate("configurePolMeasure", "Spectrometer:", Q_NULLPTR));
         label_19->setText(QApplication::translate("configurePolMeasure", "Normalize Counts:", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        checkBox_NormalizeCountsConfig->setToolTip(QApplication::translate("configurePolMeasure", "Normalize Counts in Counts per Second", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         checkBox_NormalizeCountsConfig->setText(QString());
         label_20->setText(QString());
 #ifndef QT_NO_TOOLTIP
@@ -2321,33 +2327,93 @@ public:
         doubleSpinBox_minW->setToolTip(QApplication::translate("configurePolMeasure", "Insert minimum wavelength", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_minW2->setText(QApplication::translate("configurePolMeasure", "nm", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        label_14->setToolTip(QApplication::translate("configurePolMeasure", "Solutions Settings", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         label_14->setText(QString());
         label_SolConc->setText(QApplication::translate("configurePolMeasure", "Solutions Concentration:", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        pushButton_addImpurity->setToolTip(QApplication::translate("configurePolMeasure", "add Impurity", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         pushButton_addImpurity->setText(QApplication::translate("configurePolMeasure", "+ Add", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        label_StockGluc->setToolTip(QApplication::translate("configurePolMeasure", "Which concentration of glucose is in stock?", Q_NULLPTR));
+        label_StockGluc->setToolTip(QApplication::translate("configurePolMeasure", "Which concentration is in stock?", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_StockGluc->setText(QApplication::translate("configurePolMeasure", "Stock Solution Concentration:", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        label_MinGluc->setToolTip(QApplication::translate("configurePolMeasure", "Minimum Glucose Concentration?", Q_NULLPTR));
+        label_MinGluc->setToolTip(QApplication::translate("configurePolMeasure", "Minimum Concentration?", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_MinGluc->setText(QApplication::translate("configurePolMeasure", "Minimum Concentration:", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        label_MaxGluc->setToolTip(QApplication::translate("configurePolMeasure", "Maximum Glucose Concentration?", Q_NULLPTR));
+        label_MaxGluc->setToolTip(QApplication::translate("configurePolMeasure", "Maximum Concentration?", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_MaxGluc->setText(QApplication::translate("configurePolMeasure", "Maximum Concentration:", Q_NULLPTR));
         label->setText(QString());
+#ifndef QT_NO_TOOLTIP
+        label_VolGl1->setToolTip(QApplication::translate("configurePolMeasure", "Volume in Stock?", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         label_VolGl1->setText(QApplication::translate("configurePolMeasure", "Volume in Stock:", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         checkBox_Imp3->setToolTip(QApplication::translate("configurePolMeasure", "Remove Impurity 3", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         checkBox_Imp3->setText(QApplication::translate("configurePolMeasure", "C4 -", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        lineEdit_Imp3->setToolTip(QApplication::translate("configurePolMeasure", "Change Name of Impurity 3", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         lineEdit_Imp3->setText(QApplication::translate("configurePolMeasure", "Impurity 3", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        doubleSpinBox_MaxImp2->setToolTip(QApplication::translate("configurePolMeasure", "Maximum Concentration of Impurity 2", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_TOOLTIP
+        doubleSpinBox_MaxImp4->setToolTip(QApplication::translate("configurePolMeasure", "Maximum Concentration of Impurity 4", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_TOOLTIP
+        doubleSpinBox_MinImp5->setToolTip(QApplication::translate("configurePolMeasure", "Minimum Concentration of Impurity 5", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_TOOLTIP
+        doubleSpinBox_VolI4->setToolTip(QApplication::translate("configurePolMeasure", "Required Volume of Impurity 4", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_TOOLTIP
+        doubleSpinBox_MinImp3->setToolTip(QApplication::translate("configurePolMeasure", "Minimum Concentration of Impurity 3", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_TOOLTIP
+        doubleSpinBox_MaxImp1->setToolTip(QApplication::translate("configurePolMeasure", "Maximum Concentration of Impurity 1", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_TOOLTIP
+        doubleSpinBox_MaxGluc->setToolTip(QApplication::translate("configurePolMeasure", "Maximum Concentration of Glucose", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_TOOLTIP
+        doubleSpinBox_StockImp2->setToolTip(QApplication::translate("configurePolMeasure", "Stock Concentration of Impurity 2", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_TOOLTIP
+        doubleSpinBox_VolI3->setToolTip(QApplication::translate("configurePolMeasure", "Required Volume of Impurity 3", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_TOOLTIP
+        doubleSpinBox_MinImp4->setToolTip(QApplication::translate("configurePolMeasure", "Minimum Concentration of Impurity 4", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_TOOLTIP
+        doubleSpinBox_MinImp1->setToolTip(QApplication::translate("configurePolMeasure", "Minimum Concentration of Impurity 1", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_TOOLTIP
+        doubleSpinBox_MaxImp5->setToolTip(QApplication::translate("configurePolMeasure", "Maximum Concentration of Impurity 5", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
 #ifndef QT_NO_TOOLTIP
         checkBox_Imp1->setToolTip(QApplication::translate("configurePolMeasure", "Remove Impurity 1", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         checkBox_Imp1->setText(QApplication::translate("configurePolMeasure", "C2 -", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        lineEdit_Imp1->setToolTip(QApplication::translate("configurePolMeasure", "Change Name of Impurity 1", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         lineEdit_Imp1->setText(QApplication::translate("configurePolMeasure", "Impurity 1", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        doubleSpinBox_MinImp2->setToolTip(QApplication::translate("configurePolMeasure", "Minimum Concentration of Impurity 2", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_TOOLTIP
+        doubleSpinBox_MinGluc->setToolTip(QApplication::translate("configurePolMeasure", "Minimum Concentration of Glucose", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_TOOLTIP
+        doubleSpinBox_MaxImp3->setToolTip(QApplication::translate("configurePolMeasure", "Maximum Concentration of Impurity 3", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
 #ifndef QT_NO_TOOLTIP
         checkBox_Glucose->setToolTip(QApplication::translate("configurePolMeasure", "Include/Remove Glucose", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
@@ -2357,21 +2423,60 @@ public:
         checkBox_Imp2->setToolTip(QApplication::translate("configurePolMeasure", "Remove Impurity 2", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         checkBox_Imp2->setText(QApplication::translate("configurePolMeasure", "C3 -", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        lineEdit_Imp2->setToolTip(QApplication::translate("configurePolMeasure", "Change Name of Impurity 2", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         lineEdit_Imp2->setText(QApplication::translate("configurePolMeasure", "Impurity 2", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        doubleSpinBox_StockImp5->setToolTip(QApplication::translate("configurePolMeasure", "Stock Concentration of Impurity 5", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
 #ifndef QT_NO_TOOLTIP
         checkBox_Imp4->setToolTip(QApplication::translate("configurePolMeasure", "Remove Impurity 4", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         checkBox_Imp4->setText(QApplication::translate("configurePolMeasure", "C5 -", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        lineEdit_Imp4->setToolTip(QApplication::translate("configurePolMeasure", "Change Name of Impurity 4", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         lineEdit_Imp4->setText(QApplication::translate("configurePolMeasure", "Impurity 4", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        doubleSpinBox_StockImp1->setToolTip(QApplication::translate("configurePolMeasure", "Stock Concentration of Impurity 1", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_TOOLTIP
+        doubleSpinBox_VolI2->setToolTip(QApplication::translate("configurePolMeasure", "Required Volume of Impurity 2", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_TOOLTIP
+        doubleSpinBox_VolG->setToolTip(QApplication::translate("configurePolMeasure", "Required Volume of Glucose", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_TOOLTIP
+        doubleSpinBox_StockImp3->setToolTip(QApplication::translate("configurePolMeasure", "Stock Concentration of Impurity 3", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_TOOLTIP
+        doubleSpinBox_VolI5->setToolTip(QApplication::translate("configurePolMeasure", "Required Volume of Impurity 5", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_TOOLTIP
+        doubleSpinBox_StockImp4->setToolTip(QApplication::translate("configurePolMeasure", "Stock Concentration of Impurity 4", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_TOOLTIP
+        doubleSpinBox_VolI1->setToolTip(QApplication::translate("configurePolMeasure", "Required Volume of Impurity 1", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_TOOLTIP
+        doubleSpinBox_StockGlucose->setToolTip(QApplication::translate("configurePolMeasure", "Stock Concentration of Glucose", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
 #ifndef QT_NO_TOOLTIP
         checkBox_Imp5->setToolTip(QApplication::translate("configurePolMeasure", "Remove Impurity 5", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         checkBox_Imp5->setText(QApplication::translate("configurePolMeasure", "C6 -", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        lineEdit_Imp5->setToolTip(QApplication::translate("configurePolMeasure", "Change Name of Impurity 5", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         lineEdit_Imp5->setText(QApplication::translate("configurePolMeasure", "Impurity 5", Q_NULLPTR));
         label_6->setText(QApplication::translate("configurePolMeasure", "mg/dl", Q_NULLPTR));
         label_7->setText(QApplication::translate("configurePolMeasure", "mg/dl", Q_NULLPTR));
         label_8->setText(QApplication::translate("configurePolMeasure", "mg/dl", Q_NULLPTR));
         label_12->setText(QApplication::translate("configurePolMeasure", "ml", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        label_IconPump->setToolTip(QApplication::translate("configurePolMeasure", "Pumps Settings", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         label_IconPump->setText(QString());
         label_PumpFlow->setText(QApplication::translate("configurePolMeasure", "Pumps Flow:", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
@@ -2398,6 +2503,9 @@ public:
         spinBox_NSteps->setToolTip(QApplication::translate("configurePolMeasure", "Set number of steps", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_2->setText(QString());
+#ifndef QT_NO_TOOLTIP
+        label_15->setToolTip(QApplication::translate("configurePolMeasure", "Time Settings", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         label_15->setText(QString());
         label_MeasurementTime->setText(QApplication::translate("configurePolMeasure", "Measurement Time:", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
@@ -2431,10 +2539,19 @@ public:
 #endif // QT_NO_TOOLTIP
         label_longBreak2->setText(QApplication::translate("configurePolMeasure", "sec", Q_NULLPTR));
         label_NRepet->setText(QApplication::translate("configurePolMeasure", "Nr. of Repetitions", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        spinBox_Nrepet->setToolTip(QApplication::translate("configurePolMeasure", "Set number of repetitions", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         label_4->setText(QString());
-        checkBox_IntervalMode->setText(QApplication::translate("configurePolMeasure", "Activate User Interval Mode", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        checkBox_IntervalMode->setToolTip(QApplication::translate("configurePolMeasure", "Activate Interval Mode", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        checkBox_IntervalMode->setText(QApplication::translate("configurePolMeasure", "User Interval Mode", Q_NULLPTR));
         label_intervalMode->setText(QString());
         label_timebetweenM->setText(QApplication::translate("configurePolMeasure", "Intervals:", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        doubleSpinBox_timebetweenM->setToolTip(QApplication::translate("configurePolMeasure", "Time Intervals for the Measurements", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         label2_timebetweenM->setText(QApplication::translate("configurePolMeasure", "min", Q_NULLPTR));
         label_timeLabel->setText(QApplication::translate("configurePolMeasure", "Starting at:  ", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
@@ -2442,14 +2559,29 @@ public:
 #endif // QT_NO_TOOLTIP
         label_endTime->setText(QApplication::translate("configurePolMeasure", "Finishing at:", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
+        lineEdit_EndTime->setToolTip(QApplication::translate("configurePolMeasure", "Time finishing the measurements", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_TOOLTIP
         label_BtimeInt->setToolTip(QApplication::translate("configurePolMeasure", "Time Interval between measurements", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_BtimeInt->setText(QApplication::translate("configurePolMeasure", "Total Time:", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        doubleSpinBox_totalTime->setToolTip(QApplication::translate("configurePolMeasure", "Total estimated time for the measurements", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         label_BtimeInt2->setText(QApplication::translate("configurePolMeasure", "hours", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        label_16->setToolTip(QApplication::translate("configurePolMeasure", "Save Settings", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         label_16->setText(QString());
         label_17->setText(QApplication::translate("configurePolMeasure", "Saving Information:", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        checkBox_saveRaw->setToolTip(QApplication::translate("configurePolMeasure", "Save Raw Data", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         checkBox_saveRaw->setText(QApplication::translate("configurePolMeasure", "Raw Data", Q_NULLPTR));
         label_saveOptions->setText(QApplication::translate("configurePolMeasure", "Saving Options:", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        checkBox_saveFFT->setToolTip(QApplication::translate("configurePolMeasure", "Save FFT profiles", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         checkBox_saveFFT->setText(QApplication::translate("configurePolMeasure", "FFT Profiles", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         label_BFileNamePrev->setToolTip(QApplication::translate("configurePolMeasure", "File Name Preview", Q_NULLPTR));
@@ -2460,6 +2592,9 @@ public:
 #endif // QT_NO_TOOLTIP
         lineEdit_BFileNamePrev->setText(QApplication::translate("configurePolMeasure", "500C1_0C2_6ms_7Hz_1", Q_NULLPTR));
         label_MSpace->setText(QApplication::translate("configurePolMeasure", "Memory Space:", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        doubleSpinBox_MSpace->setToolTip(QApplication::translate("configurePolMeasure", "Space in memory required", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
         label_MSpace2->setText(QApplication::translate("configurePolMeasure", "MB", Q_NULLPTR));
         label_filename->setText(QApplication::translate("configurePolMeasure", "File Path:", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP

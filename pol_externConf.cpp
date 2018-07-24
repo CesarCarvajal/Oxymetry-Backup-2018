@@ -106,7 +106,6 @@ void Pol_ExternConf::openPumpSoftware(void){
             /* Show critical error if the shortcut doesn't exist or the software isn't installed */
             showCritical(QString("Nemesys Pump Software shortcut in desktop named 'NEMESYS' is missing!, Please check if the software is installed, and create a desktop shortcut for it!"), QString(""));
             return;
-
         }
     }
 }
@@ -117,7 +116,7 @@ void Pol_ExternConf::openPumpSoftware(void){
 void Pol_ExternConf::pumpsPatternCalculator(void){
 
     /* Gaps between concentrations */
-    double gapGlucose, gapImpurity1, gapImpurity2, gapImpurity3, gapImpurity4, gapImpurity5 ;
+    double gapGlucose = 0, gapImpurity1 = 0, gapImpurity2 = 0, gapImpurity3 = 0, gapImpurity4 = 0, gapImpurity5 = 0 ;
 
     /* Set size of the concentrations vectors */
     GlucoseConcentration.resize(ConfigurationFileGenerator->NConcentrations);
@@ -127,7 +126,6 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
         Impurity1Concentration.resize(ConfigurationFileGenerator->NConcentrations);
         Impurity1Flow.resize(ConfigurationFileGenerator->NConcentrations);
         gapImpurity1 = (maxConcentrations.at(1) - minConcentrations.at(1))/(ConfigurationFileGenerator->NConcentrations-1);
-
     }
 
     /* Is Impurity 2 active? */
@@ -135,7 +133,6 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
         Impurity2Concentration.resize(ConfigurationFileGenerator->NConcentrations);
         Impurity2Flow.resize(ConfigurationFileGenerator->NConcentrations);
         gapImpurity2 = (maxConcentrations.at(2) - minConcentrations.at(2))/(ConfigurationFileGenerator->NConcentrations-1);
-
     }
 
     /* Is Impurity 3 active? */
@@ -143,7 +140,6 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
         Impurity3Concentration.resize(ConfigurationFileGenerator->NConcentrations);
         Impurity3Flow.resize(ConfigurationFileGenerator->NConcentrations);
         gapImpurity3 = (maxConcentrations.at(3) - minConcentrations.at(3))/(ConfigurationFileGenerator->NConcentrations-1);
-
     }
 
     /* Is Impurity 4 active? */
@@ -151,7 +147,6 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
         Impurity4Concentration.resize(ConfigurationFileGenerator->NConcentrations);
         Impurity4Flow.resize(ConfigurationFileGenerator->NConcentrations);
         gapImpurity4 = (maxConcentrations.at(4) - minConcentrations.at(4))/(ConfigurationFileGenerator->NConcentrations-1);
-
     }
 
     /* Is Impurity 5 active? */
@@ -159,7 +154,6 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
         Impurity5Concentration.resize(ConfigurationFileGenerator->NConcentrations);
         Impurity5Flow.resize(ConfigurationFileGenerator->NConcentrations);
         gapImpurity5 = (maxConcentrations.at(5) - minConcentrations.at(5))/(ConfigurationFileGenerator->NConcentrations-1);
-
     }
 
     /* Create vectors of Flows */
@@ -180,7 +174,6 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
         gapImpurity3 = 0;
         gapImpurity4 = 0;
         gapImpurity5 = 0;
-
     }
 
     /* Create vectors with indexes and solution concentrations */
@@ -215,7 +208,6 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
         }
 
         Nmeasurements.replace(k, k);
-
     }
 
     /* Count active substances */
@@ -358,7 +350,6 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
 
             /* If no correlation or just a few elements, then stop doing random order */
             break;
-
         }
     }else{
 
@@ -369,8 +360,6 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
         std::random_shuffle(Impurity3Concentration.begin(), Impurity3Concentration.end());
         std::random_shuffle(Impurity4Concentration.begin(), Impurity4Concentration.end());
         std::random_shuffle(Impurity5Concentration.begin(), Impurity5Concentration.end());
-
-
     }
 
     /* Flow Calculation */
@@ -501,13 +490,11 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
 
             /* Water Flow */
             WaterFlow.replace(i,ConfigurationFileGenerator->absoluteFlow - Flow);
-
         }
     }
 
     /* Write all scripts */
     writeScripts();
-
 }
 
 /**
@@ -517,8 +504,8 @@ void Pol_ExternConf::writeScripts(void){
 
     /* Create the Spectrometer Script */
     ConfigurationFileGenerator->GenerateSpectrometerConfiguration(pathForScripts, GlucoseConcentration, Impurity1Concentration, Impurity2Concentration,  Impurity3Concentration,
-                                                                   Impurity4Concentration,  Impurity5Concentration, stockSolutions, minWavelength, maxWavelength, UserTimeInterval);
-
+                                                                   Impurity4Concentration,  Impurity5Concentration, stockSolutions, minWavelength,
+                                                                  maxWavelength, UserTimeInterval);
     /* Remove the existing pump files */
     removeExistingFiles();
 
@@ -566,7 +553,6 @@ void Pol_ExternConf::writeScripts(void){
 
     /* Create the Water pump script */
     ConfigurationFileGenerator->GeneratePumpScripts(pathForScripts, "/WaterPumpScript.nfp", WaterFlow);
-
 }
 
 /**
@@ -694,7 +680,6 @@ QStringList Pol_ExternConf::TimeConverter(double mTime){
  */
 Pol_ExternConf::~Pol_ExternConf(void)
 {
-
     delete process1;
     process1 = nullptr;
 

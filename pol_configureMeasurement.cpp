@@ -182,12 +182,12 @@ void configurePolMeasure::selectPath(void)
     if (!ui->lineEdit_path->isEnabled())
     {
         /* Get path of configuration file */
-        pathDataM = QFileDialog::getOpenFileName(this, "Configuration file", QDir::currentPath(), "Text files (*.txt)");
+        pathDataM = QFileDialog::getOpenFileName(this, "Configuration file", QDir::currentPath(), "Text files (*.csar)");
     }
     else
     {
         /* Get path of configuration file */
-        pathDataM = QFileDialog::getOpenFileName(this, "Configuration file", pathDataM, "Text files (*.txt)");
+        pathDataM = QFileDialog::getOpenFileName(this, "Configuration file", pathDataM, "Text files (*.csar)");
     }
 
     /* Did the user select a new path? */
@@ -376,7 +376,7 @@ void configurePolMeasure::configurePolarimeter(void)
     GetConfigurationData();
 
     /* Get path to save configuration file */
-    QString pathDataM = QFileDialog::getSaveFileName(this, tr("Save Configuration File"), "spectrometer_skript", "Text files (*.txt)");
+    QString pathDataM = QFileDialog::getSaveFileName(this, tr("Save Configuration File"), "spectrometer_skript", "Text files (*.csar)");
 
     /* Is there a path? */
     if(!pathDataM.isEmpty()){
@@ -405,7 +405,7 @@ void configurePolMeasure::configurePolarimeter(void)
 }
 
 /**
- * @brief Load configuration from file .txt
+ * @brief Load configuration from file .csar
  */
 void configurePolMeasure::loadConfiguration(void)
 {
