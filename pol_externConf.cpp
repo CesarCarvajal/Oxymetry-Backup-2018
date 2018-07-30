@@ -513,42 +513,42 @@ void Pol_ExternConf::writeScripts(void){
     if(ConfigurationFileGenerator->activeSubstances.at(0)){
 
         /* Create the Glucose pump script */
-        ConfigurationFileGenerator->GeneratePumpScripts(pathForScripts, "/GlucosePumpScript.nfp", GlucoseFlow);
+        ConfigurationFileGenerator->GeneratePumpScripts(pathForScripts, "/C1GlucosePumpScript.nfp", GlucoseFlow);
     }
 
     /* If Impurity 1 is active, then generate its pump script */
     if(ConfigurationFileGenerator->activeSubstances.at(1)){
 
         /* Create the Impurity 1 pump script */
-        ConfigurationFileGenerator->GeneratePumpScripts(pathForScripts, "/Impurity1PumpScript.nfp", Impurity1Flow);
+        ConfigurationFileGenerator->GeneratePumpScripts(pathForScripts, "/C2PumpScript.nfp", Impurity1Flow);
     }
 
     /* If impurity 2 is active, then generate its pump script */
     if(ConfigurationFileGenerator->activeSubstances.at(2)){
 
         /* Create the Impurity 2 pump script */
-        ConfigurationFileGenerator->GeneratePumpScripts(pathForScripts, "/Impurity2PumpScript.nfp", Impurity2Flow);
+        ConfigurationFileGenerator->GeneratePumpScripts(pathForScripts, "/C3PumpScript.nfp", Impurity2Flow);
     }
 
     /* If impurity 3 is active, then generate its pump script */
     if(ConfigurationFileGenerator->activeSubstances.at(3)){
 
         /* Create the Impurity 3 pump script */
-        ConfigurationFileGenerator->GeneratePumpScripts(pathForScripts, "/Impurity3PumpScript.nfp", Impurity3Flow);
+        ConfigurationFileGenerator->GeneratePumpScripts(pathForScripts, "/C4PumpScript.nfp", Impurity3Flow);
     }
 
     /* If impurity 4 is active, then generate its pump script */
     if(ConfigurationFileGenerator->activeSubstances.at(4)){
 
         /* Create the Impurity 4 pump script */
-        ConfigurationFileGenerator->GeneratePumpScripts(pathForScripts, "/Impurity4PumpScript.nfp", Impurity4Flow);
+        ConfigurationFileGenerator->GeneratePumpScripts(pathForScripts, "/C5PumpScript.nfp", Impurity4Flow);
     }
 
     /* If impurity 5 is active, then generate its pump script */
     if(ConfigurationFileGenerator->activeSubstances.at(5)){
 
         /* Create the Impurity 5 pump script */
-        ConfigurationFileGenerator->GeneratePumpScripts(pathForScripts, "/Impurity5PumpScript.nfp", Impurity5Flow);
+        ConfigurationFileGenerator->GeneratePumpScripts(pathForScripts, "/C6PumpScript.nfp", Impurity5Flow);
     }
 
     /* Create the Water pump script */
@@ -564,7 +564,7 @@ void Pol_ExternConf::removeExistingFiles(void){
     QFileInfo folder(pathForScripts);
 
     /* If there are some pump scripts already, remove them */
-    QFile file(folder.absolutePath() + "/GlucosePumpScript.nfp");
+    QFile file(folder.absolutePath() + "/C1GlucosePumpScript.nfp");
 
     /* Does the pump file for glucose exist? */
     if(file.exists()){
@@ -574,7 +574,7 @@ void Pol_ExternConf::removeExistingFiles(void){
     }
 
     /* If there are some pump scripts already, remove them */
-    QFile file2(folder.absolutePath() + "/Impurity1PumpScript.nfp");
+    QFile file2(folder.absolutePath() + "/C2PumpScript.nfp");
 
     /* Does the pump file for Impurity 1 exist? */
     if(file2.exists()){
@@ -584,7 +584,7 @@ void Pol_ExternConf::removeExistingFiles(void){
     }
 
     /* If there are some pump scripts already, remove them */
-    QFile file3(folder.absolutePath() + "/Impurity2PumpScript.nfp");
+    QFile file3(folder.absolutePath() + "/C3PumpScript.nfp");
 
     /* Does the pump file for Impurity 2 exists? */
     if(file3.exists()){
@@ -594,7 +594,7 @@ void Pol_ExternConf::removeExistingFiles(void){
     }
 
     /* If there are some pump scripts already, remove them */
-    QFile file4(folder.absolutePath() + "/Impurity3PumpScript.nfp");
+    QFile file4(folder.absolutePath() + "/C4PumpScript.nfp");
 
     /* Does the pump file for Impurity 3 exists? */
     if(file4.exists()){
@@ -604,7 +604,7 @@ void Pol_ExternConf::removeExistingFiles(void){
     }
 
     /* If there are some pump scripts already, remove them */
-    QFile file5(folder.absolutePath() + "/Impurity4PumpScript.nfp");
+    QFile file5(folder.absolutePath() + "/C5PumpScript.nfp");
 
     /* Does the pump file for Impurity 4 exists? */
     if(file5.exists()){
@@ -614,7 +614,7 @@ void Pol_ExternConf::removeExistingFiles(void){
     }
 
     /* If there are some pump scripts already, remove them */
-    QFile file6(folder.absolutePath() + "/Impurity5PumpScript.nfp");
+    QFile file6(folder.absolutePath() + "/C6PumpScript.nfp");
 
     /* Does the pump file for Impurity 5 exists? */
     if(file6.exists()){

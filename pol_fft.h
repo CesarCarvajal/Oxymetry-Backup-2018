@@ -103,7 +103,7 @@ public:
     void InitializeFFTArrays();
 
     /* Save FFT to a file */
-    void saveFFTtoFile(QFileInfo FileDetails, bool userSaving);
+    void saveFFTtoFile(QFileInfo FileDetails, bool userSaving, QStringList substancesNames);
 
     /* Destructor */
     ~fft(void);

@@ -517,7 +517,7 @@ void fft::CalculateFFT(int N, QVector<double> Data)
 * @brief Save the FFT Data to a File
 * @param[in] Details of the file where the FFT will be saved. Also if the user is saving or the system is saving automatically.
 */
-void fft::saveFFTtoFile(QFileInfo FileDetails, bool userSaving)
+void fft::saveFFTtoFile(QFileInfo FileDetails, bool userSaving, QStringList substancesNames)
 {
     /* Create the path and file name for the FFT file */
     QString path;
@@ -566,37 +566,37 @@ void fft::saveFFTtoFile(QFileInfo FileDetails, bool userSaving)
     /* Is there glucose? */
     if(ConcentrationC1 >= 0){
         concentrations.append(QString::number(ConcentrationC1));
-        conc.append("C1");
+        conc.append("C1-Glucose/");
     }
 
     /* Is there Impurity 1? */
     if(ConcentrationC2 >= 0){
         concentrations.append(" , " + QString::number(ConcentrationC2));
-        conc.append("C2");
+        conc.append("C2-" + substancesNames.at(0) + "/");
     }
 
     /* Is there Impurity 2? */
     if(ConcentrationC3 >= 0){
         concentrations.append(" , " + QString::number(ConcentrationC3));
-        conc.append("C3");
+        conc.append("C3-" + substancesNames.at(1) + "/");
     }
 
     /* Is there Impurity 3? */
     if(ConcentrationC4 >= 0){
         concentrations.append(" , " + QString::number(ConcentrationC4));
-        conc.append("C4");
+        conc.append("C4-" + substancesNames.at(2) + "/");
     }
 
     /* Is there Impurity 4? */
     if(ConcentrationC5 >= 0){
         concentrations.append(" , " + QString::number(ConcentrationC5));
-        conc.append("C5");
+        conc.append("C5-" + substancesNames.at(3) + "/");
     }
 
     /* Is there Impurity 2? */
     if(ConcentrationC6 >= 0){
         concentrations.append(" , " + QString::number(ConcentrationC6));
-        conc.append("C6");
+        conc.append("C6-" + substancesNames.at(4) + "/");
     }
 
     /* Write the concentrations to the file */

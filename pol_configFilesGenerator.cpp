@@ -98,7 +98,30 @@ void Pol_configFilesGenerator::GeneratePumpScripts(QString pathFile, QString fil
     FILE *Sfile = fopen(ScriptPath.toLatin1().data(), "wt");
 
     /* Write in file */
-    fprintf(Sfile, "%s", "ml/min \n");
+    fprintf(Sfile, "%s", "ml/min ");
+    /* Write which substance belong to which concentration Cx */
+    if(filetype.contains("C2")){
+        fprintf(Sfile, "%s", substancesNames.at(0).toLatin1().data());
+    }
+    if(filetype.contains("C3")){
+        fprintf(Sfile, "%s", substancesNames.at(1).toLatin1().data());
+    }
+    if(filetype.contains("C4")){
+        fprintf(Sfile, "%s", substancesNames.at(2).toLatin1().data());
+    }
+    if(filetype.contains("C5")){
+        fprintf(Sfile, "%s", substancesNames.at(3).toLatin1().data());
+    }
+    if(filetype.contains("C6")){
+        fprintf(Sfile, "%s", substancesNames.at(4).toLatin1().data());
+    }
+    if(filetype.contains("C1")){
+        fprintf(Sfile, "%s", "Glucose");
+    }
+    if(filetype.contains("Water")){
+        fprintf(Sfile, "%s", "Water");
+    }
+    fprintf(Sfile, "%s", "\n");
     fprintf(Sfile, "%s", "1 \n");
 
     /* Print start delay if needed */

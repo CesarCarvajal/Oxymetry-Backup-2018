@@ -2988,7 +2988,7 @@ void PanelPolarimeter::process_Received_Data_Pol(QString Path)
     /* Is there an automatic saving of FFT Data selected by the user? */
     if(ConfigureMeasurement->ui->checkBox_saveFFT->isChecked() && Runner->PolMeasuring && !Runner->PolCalibrating){
         /* Save FFT value to file */
-        FFTL.saveFFTtoFile(fileInfoSaving, false);
+        FFTL.saveFFTtoFile(fileInfoSaving, false, ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->substancesNames);
     }
 
     /* Is there an automatic saving of Raw Data?, if not just remove the file with the Raw Data */
@@ -3485,7 +3485,12 @@ void PanelPolarimeter::setConfiguration(void){
 
             /* Create label for C1 */
             QLabel *ntC1 = new QLabel();
-            ntC1->setText(QString::number(ConfigureMeasurement->externSoftware->GlucoseConcentration.at(rowcounter-1)));
+            if(!ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->intervalMode){
+                ntC1->setText(QString::number(ConfigureMeasurement->externSoftware->GlucoseConcentration.at(rowcounter-1)));
+            }else{
+                ntC1->setText(QString::number(*std::max_element(ConfigureMeasurement->externSoftware->GlucoseConcentration.begin(),
+                                                                ConfigureMeasurement->externSoftware->GlucoseConcentration.end())));
+            }
             ntC1->setStyleSheet("QLabel { margin-left: 2px; }");
             ui->Table_Measurements_Pol->setCellWidget(i, 2, ntC1);
         }
@@ -3495,7 +3500,12 @@ void PanelPolarimeter::setConfiguration(void){
 
             /* Create label for C2 */
             QLabel *ntC2 = new QLabel();
-            ntC2->setText(QString::number(ConfigureMeasurement->externSoftware->Impurity1Concentration.at(rowcounter-1)));
+            if(!ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->intervalMode){
+                ntC2->setText(QString::number(ConfigureMeasurement->externSoftware->Impurity1Concentration.at(rowcounter-1)));
+            }else{
+                ntC2->setText(QString::number(*std::max_element(ConfigureMeasurement->externSoftware->Impurity1Concentration.begin(),
+                                                                ConfigureMeasurement->externSoftware->Impurity1Concentration.end())));
+            }
             ntC2->setStyleSheet("QLabel { margin-left: 2px; }");
             ui->Table_Measurements_Pol->setCellWidget(i, 3, ntC2);
         }
@@ -3505,7 +3515,12 @@ void PanelPolarimeter::setConfiguration(void){
 
             /* Create label for C3 */
             QLabel *ntC3 = new QLabel();
-            ntC3->setText(QString::number(ConfigureMeasurement->externSoftware->Impurity2Concentration.at(rowcounter-1)));
+            if(!ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->intervalMode){
+                ntC3->setText(QString::number(ConfigureMeasurement->externSoftware->Impurity2Concentration.at(rowcounter-1)));
+            }else{
+                ntC3->setText(QString::number(*std::max_element(ConfigureMeasurement->externSoftware->Impurity2Concentration.begin(),
+                                                                ConfigureMeasurement->externSoftware->Impurity2Concentration.end())));
+            }
             ntC3->setStyleSheet("QLabel { margin-left: 2px; }");
             ui->Table_Measurements_Pol->setCellWidget(i, 4, ntC3);
         }
@@ -3515,7 +3530,12 @@ void PanelPolarimeter::setConfiguration(void){
 
             /* Create label for C4 */
             QLabel *ntC4 = new QLabel();
-            ntC4->setText(QString::number(ConfigureMeasurement->externSoftware->Impurity3Concentration.at(rowcounter-1)));
+            if(!ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->intervalMode){
+                ntC4->setText(QString::number(ConfigureMeasurement->externSoftware->Impurity3Concentration.at(rowcounter-1)));
+            }else{
+                ntC4->setText(QString::number(*std::max_element(ConfigureMeasurement->externSoftware->Impurity3Concentration.begin(),
+                                                                ConfigureMeasurement->externSoftware->Impurity3Concentration.end())));
+            }
             ntC4->setStyleSheet("QLabel { margin-left: 2px; }");
             ui->Table_Measurements_Pol->setCellWidget(i, 5, ntC4);
         }
@@ -3525,17 +3545,27 @@ void PanelPolarimeter::setConfiguration(void){
 
             /* Create label for C5 */
             QLabel *ntC5 = new QLabel();
-            ntC5->setText(QString::number(ConfigureMeasurement->externSoftware->Impurity4Concentration.at(rowcounter-1)));
+            if(!ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->intervalMode){
+                ntC5->setText(QString::number(ConfigureMeasurement->externSoftware->Impurity4Concentration.at(rowcounter-1)));
+            }else{
+                ntC5->setText(QString::number(*std::max_element(ConfigureMeasurement->externSoftware->Impurity4Concentration.begin(),
+                                                                ConfigureMeasurement->externSoftware->Impurity4Concentration.end())));
+            }
             ntC5->setStyleSheet("QLabel { margin-left: 2px; }");
             ui->Table_Measurements_Pol->setCellWidget(i, 6, ntC5);
         }
 
         /* Is C6 active? */
-        if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(3)){
+        if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(5)){
 
             /* Create label for C6 */
             QLabel *ntC6 = new QLabel();
-            ntC6->setText(QString::number(ConfigureMeasurement->externSoftware->Impurity5Concentration.at(rowcounter-1)));
+            if(!ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->intervalMode){
+                ntC6->setText(QString::number(ConfigureMeasurement->externSoftware->Impurity5Concentration.at(rowcounter-1)));
+            }else{
+                ntC6->setText(QString::number(*std::max_element(ConfigureMeasurement->externSoftware->Impurity5Concentration.begin(),
+                                                                ConfigureMeasurement->externSoftware->Impurity5Concentration.end())));
+            }
             ntC6->setStyleSheet("QLabel { margin-left: 2px; }");
             ui->Table_Measurements_Pol->setCellWidget(i, 7, ntC6);
         }
@@ -3723,8 +3753,15 @@ void PanelPolarimeter::toggle_Load_Data(void)
         if (QMessageBox::Yes == QMessageBox::question(this, "Save FFT File", "Would you like to save the FFT from Raw Data?",
                                                       QMessageBox::Yes | QMessageBox::No))
         {
+            /* Save the substances names */
+            QStringList substancesNames;
+
+            for(int k = 0; k < 4; k++){
+                substancesNames.append("");
+            }
+
             /* Button 'yes' pressed; Save the FFT data where the user decides */
-            FFTL.saveFFTtoFile(fileInfoLoad, true);
+            FFTL.saveFFTtoFile(fileInfoLoad, true, substancesNames);
         }
     }
 

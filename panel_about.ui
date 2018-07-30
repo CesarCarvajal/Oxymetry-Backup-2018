@@ -58,7 +58,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Oxymetry 0.7</string>
+    <string>Oxymetry 0.7.1</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_compiler">
@@ -163,7 +163,22 @@
       <bool>true</bool>
      </property>
      <property name="plainText">
-      <string>Version 0.7: (15.06.2018)
+      <string>Version 0.7.1: (30.07.2018)
++ Configuration Files with exclusive extension .csar
++ More substances can be added (up to 7 substances)
++ Measurement Summary (.sum) file to load the average signals DC, W and 2W
++ Load of the measurement summary
++ Memory space for FFT and Raw Data files displayed
++ Addition of impurities is now dynamic through a button
++ The user can decide now the interval of time for the measurements (User Interval Mode)
++ The user can select the saving option sin the configuration window
++ Concentration values are now shown instead of the file names
++ The software highlights all the measurements already done
++ Names of substances are shown in the Pumps and FFT Files
+- Saving options aren't shown in the main panel anymore 
+- File names aren't shown in the measurement list anymore
+
+Version 0.7: (15.06.2018)
 + Zoom of Average signal plot, now the user is able to zoom in the plots.
 + New interface to hide/show plots.
 + The user can now Normalize the measurements in counts per second.
