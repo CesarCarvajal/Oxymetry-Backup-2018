@@ -176,6 +176,7 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
  */
 void configurePolMeasure::selectPath(void)
 {
+    /* Path variable */
     QString pathDataM = "";
 
     /* No directory chosen until now? */
@@ -257,7 +258,7 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
         ui->checkBox_Imp4->setChecked(true);
         ui->checkBox_Imp5->setChecked(true);
 
-        /* Enable button because one was removed */
+        /* Enable button because at least one substance was removed */
         ui->pushButton_addImpurity->setEnabled(true);
     }
 
@@ -364,7 +365,6 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
         /* Select FFT data saving for default */
         ui->checkBox_saveFFT->setChecked(true);
     }
-
 }
 
 /**
@@ -768,7 +768,7 @@ void configurePolMeasure::GetConfigurationData(void)
     externSoftware->maxConcentrations.replace(4,ui->doubleSpinBox_MaxImp4->value());
     externSoftware->maxConcentrations.replace(5,ui->doubleSpinBox_MaxImp5->value());
 
-    /* Save substances names */
+    /* Save substances names, starting from Impurity 1 since glucose is always glucose */
     externSoftware->ConfigurationFileGenerator->substancesNames.replace(0, ui->lineEdit_Imp1->text());
     externSoftware->ConfigurationFileGenerator->substancesNames.replace(1, ui->lineEdit_Imp2->text());
     externSoftware->ConfigurationFileGenerator->substancesNames.replace(2, ui->lineEdit_Imp3->text());
@@ -990,7 +990,6 @@ void configurePolMeasure::updateConfigurationValues(void)
         /* Even Gigabytes? */
         ui->doubleSpinBox_MSpace->setValue(space/1000000);
         ui->label_MSpace2->setText("GB");
-
     }
 
     /* Update file name preview */
@@ -1113,7 +1112,6 @@ void configurePolMeasure::updateForm(void)
 
     /* Update calculable parameters */
     updateConfigurationValues();
-
 }
 
 /**
@@ -1191,7 +1189,8 @@ void configurePolMeasure::addImpurities(void){
     if(!ui->checkBox_Imp1->isVisible()){
 
         /* Show the substance */
-        hideAdditionalSubstances(!ui->checkBox_Imp1->isVisible(), ui->checkBox_Imp2->isVisible(), ui->checkBox_Imp3->isVisible(), ui->checkBox_Imp4->isVisible(), ui->checkBox_Imp5->isVisible());
+        hideAdditionalSubstances(!ui->checkBox_Imp1->isVisible(), ui->checkBox_Imp2->isVisible(), ui->checkBox_Imp3->isVisible(),
+                                 ui->checkBox_Imp4->isVisible(), ui->checkBox_Imp5->isVisible());
         flag = true;
     }
 
@@ -1199,7 +1198,8 @@ void configurePolMeasure::addImpurities(void){
     if(ui->checkBox_Imp1->isVisible() && !ui->checkBox_Imp2->isVisible() && !flag){
 
         /* Show the substance */
-        hideAdditionalSubstances(ui->checkBox_Imp1->isVisible(),!ui->checkBox_Imp2->isVisible(), ui->checkBox_Imp3->isVisible(), ui->checkBox_Imp4->isVisible(), ui->checkBox_Imp5->isVisible());
+        hideAdditionalSubstances(ui->checkBox_Imp1->isVisible(),!ui->checkBox_Imp2->isVisible(), ui->checkBox_Imp3->isVisible(),
+                                 ui->checkBox_Imp4->isVisible(), ui->checkBox_Imp5->isVisible());
         flag = true;
     }
 
@@ -1207,7 +1207,8 @@ void configurePolMeasure::addImpurities(void){
     if(ui->checkBox_Imp2->isVisible() && !ui->checkBox_Imp3->isVisible() && !flag){
 
         /* Show the substance */
-        hideAdditionalSubstances(ui->checkBox_Imp1->isVisible(),ui->checkBox_Imp2->isVisible(), !ui->checkBox_Imp3->isVisible(), ui->checkBox_Imp4->isVisible(), ui->checkBox_Imp5->isVisible());
+        hideAdditionalSubstances(ui->checkBox_Imp1->isVisible(),ui->checkBox_Imp2->isVisible(), !ui->checkBox_Imp3->isVisible(),
+                                 ui->checkBox_Imp4->isVisible(), ui->checkBox_Imp5->isVisible());
         flag = true;
     }
 
@@ -1215,7 +1216,8 @@ void configurePolMeasure::addImpurities(void){
     if(ui->checkBox_Imp2->isVisible() && ui->checkBox_Imp3->isVisible() && !ui->checkBox_Imp4->isVisible() && !flag){
 
         /* Show the substance */
-        hideAdditionalSubstances(ui->checkBox_Imp1->isVisible(),ui->checkBox_Imp2->isVisible(), ui->checkBox_Imp3->isVisible(), !ui->checkBox_Imp4->isVisible(), ui->checkBox_Imp5->isVisible());
+        hideAdditionalSubstances(ui->checkBox_Imp1->isVisible(),ui->checkBox_Imp2->isVisible(), ui->checkBox_Imp3->isVisible(),
+                                 !ui->checkBox_Imp4->isVisible(), ui->checkBox_Imp5->isVisible());
         flag = true;
     }
 
@@ -1223,12 +1225,14 @@ void configurePolMeasure::addImpurities(void){
     if(ui->checkBox_Imp2->isVisible() && ui->checkBox_Imp3->isVisible() && ui->checkBox_Imp4->isVisible() && !ui->checkBox_Imp5->isVisible() && !flag){
 
         /* Show the substance */
-        hideAdditionalSubstances(ui->checkBox_Imp1->isVisible(),ui->checkBox_Imp2->isVisible(), ui->checkBox_Imp3->isVisible(), ui->checkBox_Imp4->isVisible(), !ui->checkBox_Imp5->isVisible());
+        hideAdditionalSubstances(ui->checkBox_Imp1->isVisible(),ui->checkBox_Imp2->isVisible(), ui->checkBox_Imp3->isVisible(),
+                                 ui->checkBox_Imp4->isVisible(), !ui->checkBox_Imp5->isVisible());
         flag = true;
     }
 
     /* All impurities are shown */
-    if(ui->checkBox_Imp1->isVisible() && ui->checkBox_Imp2->isVisible() && ui->checkBox_Imp3->isVisible() && ui->checkBox_Imp4->isVisible() && ui->checkBox_Imp5->isVisible()){
+    if(ui->checkBox_Imp1->isVisible() && ui->checkBox_Imp2->isVisible() && ui->checkBox_Imp3->isVisible() && ui->checkBox_Imp4->isVisible() &&
+            ui->checkBox_Imp5->isVisible()){
 
         /* user can't add more impurities */
         ui->pushButton_addImpurity->setEnabled(false);
@@ -1466,6 +1470,7 @@ void configurePolMeasure::checkStockValues(void){
  * @brief Update how many substances are there.
  */
 void configurePolMeasure::updateActiveSubstances(void){
+
     /* Count active substances */
     int activeSubs = 0;
 

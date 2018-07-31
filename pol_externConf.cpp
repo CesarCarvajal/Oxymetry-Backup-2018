@@ -104,7 +104,8 @@ void Pol_ExternConf::openPumpSoftware(void){
         }else{
 
             /* Show critical error if the shortcut doesn't exist or the software isn't installed */
-            showCritical(QString("Nemesys Pump Software shortcut in desktop named 'NEMESYS' is missing!, Please check if the software is installed, and create a desktop shortcut for it!"), QString(""));
+            showCritical(QString("Nemesys Pump Software shortcut in desktop named 'NEMESYS' is missing!, Please check if the software "
+                                 "is installed, and create a desktop shortcut for it!"), QString(""));
             return;
         }
     }
@@ -118,8 +119,12 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
     /* Gaps between concentrations */
     double gapGlucose = 0, gapImpurity1 = 0, gapImpurity2 = 0, gapImpurity3 = 0, gapImpurity4 = 0, gapImpurity5 = 0 ;
 
-    /* Set size of the concentrations vectors */
-    GlucoseConcentration.resize(ConfigurationFileGenerator->NConcentrations);
+    /* Is Glucose active? */
+    if(ConfigurationFileGenerator->activeSubstances.at(0)){
+        GlucoseConcentration.resize(ConfigurationFileGenerator->NConcentrations);
+        GlucoseFlow.resize(ConfigurationFileGenerator->NConcentrations);
+        gapGlucose = (maxConcentrations.at(0) - minConcentrations.at(0))/(ConfigurationFileGenerator->NConcentrations-1);
+    }
 
     /* Is Impurity 1 active? */
     if(ConfigurationFileGenerator->activeSubstances.at(1)){
@@ -158,29 +163,23 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
 
     /* Create vectors of Flows */
     WaterFlow.resize(ConfigurationFileGenerator->NConcentrations);
-    GlucoseFlow.resize(ConfigurationFileGenerator->NConcentrations);
 
     /* Measurements vector */
     QVector <double> Nmeasurements(ConfigurationFileGenerator->NConcentrations);
 
-    /* Get gaps between concentrations */
-    gapGlucose = (maxConcentrations.at(0) - minConcentrations.at(0))/(ConfigurationFileGenerator->NConcentrations-1);
-
     /* Don't get gap when the number of concentrations is 1 */
     if(ConfigurationFileGenerator->NConcentrations == 1){
-        gapGlucose = 0;
-        gapImpurity1 = 0;
-        gapImpurity2 = 0;
-        gapImpurity3 = 0;
-        gapImpurity4 = 0;
-        gapImpurity5 = 0;
+        gapGlucose = 0, gapImpurity1 = 0, gapImpurity2 = 0;
+        gapImpurity3 = 0, gapImpurity4 = 0, gapImpurity5 = 0;
     }
 
     /* Create vectors with indexes and solution concentrations */
     for(int k =0; k < ConfigurationFileGenerator->NConcentrations; k++){
 
-        /* Concentrations */
-        GlucoseConcentration.replace(k,(minConcentrations.at(0)) + (k*gapGlucose));
+        /* Is Glucose active? */
+        if(ConfigurationFileGenerator->activeSubstances.at(0)){
+            GlucoseConcentration.replace(k,(minConcentrations.at(0)) + (k*gapGlucose));
+        }
 
         /* Is Impurity 1 active? */
         if(ConfigurationFileGenerator->activeSubstances.at(1)){
@@ -363,6 +362,8 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
     }
 
     /* Flow Calculation */
+
+    /* Is the interval mode active? Then just calculate the flows for the maximum substance */
     if(ConfigurationFileGenerator->intervalMode){
 
         /* Get the flows for each substance */
@@ -504,7 +505,7 @@ void Pol_ExternConf::writeScripts(void){
 
     /* Create the Spectrometer Script */
     ConfigurationFileGenerator->GenerateSpectrometerConfiguration(pathForScripts, GlucoseConcentration, Impurity1Concentration, Impurity2Concentration,  Impurity3Concentration,
-                                                                   Impurity4Concentration,  Impurity5Concentration, stockSolutions, minWavelength,
+                                                                  Impurity4Concentration,  Impurity5Concentration, stockSolutions, minWavelength,
                                                                   maxWavelength, UserTimeInterval);
     /* Remove the existing pump files */
     removeExistingFiles();
@@ -520,39 +521,39 @@ void Pol_ExternConf::writeScripts(void){
     if(ConfigurationFileGenerator->activeSubstances.at(1)){
 
         /* Create the Impurity 1 pump script */
-        ConfigurationFileGenerator->GeneratePumpScripts(pathForScripts, "/C2PumpScript.nfp", Impurity1Flow);
+        ConfigurationFileGenerator->GeneratePumpScripts(pathForScripts, "/C2"+ ConfigurationFileGenerator->substancesNames.at(0) +"PumpScript.nfp", Impurity1Flow);
     }
 
     /* If impurity 2 is active, then generate its pump script */
     if(ConfigurationFileGenerator->activeSubstances.at(2)){
 
         /* Create the Impurity 2 pump script */
-        ConfigurationFileGenerator->GeneratePumpScripts(pathForScripts, "/C3PumpScript.nfp", Impurity2Flow);
+        ConfigurationFileGenerator->GeneratePumpScripts(pathForScripts, "/C3"+ ConfigurationFileGenerator->substancesNames.at(1) +"PumpScript.nfp", Impurity2Flow);
     }
 
     /* If impurity 3 is active, then generate its pump script */
     if(ConfigurationFileGenerator->activeSubstances.at(3)){
 
         /* Create the Impurity 3 pump script */
-        ConfigurationFileGenerator->GeneratePumpScripts(pathForScripts, "/C4PumpScript.nfp", Impurity3Flow);
+        ConfigurationFileGenerator->GeneratePumpScripts(pathForScripts, "/C4"+ ConfigurationFileGenerator->substancesNames.at(2) +"PumpScript.nfp", Impurity3Flow);
     }
 
     /* If impurity 4 is active, then generate its pump script */
     if(ConfigurationFileGenerator->activeSubstances.at(4)){
 
         /* Create the Impurity 4 pump script */
-        ConfigurationFileGenerator->GeneratePumpScripts(pathForScripts, "/C5PumpScript.nfp", Impurity4Flow);
+        ConfigurationFileGenerator->GeneratePumpScripts(pathForScripts, "/C5"+ ConfigurationFileGenerator->substancesNames.at(3) +"PumpScript.nfp", Impurity4Flow);
     }
 
     /* If impurity 5 is active, then generate its pump script */
     if(ConfigurationFileGenerator->activeSubstances.at(5)){
 
         /* Create the Impurity 5 pump script */
-        ConfigurationFileGenerator->GeneratePumpScripts(pathForScripts, "/C6PumpScript.nfp", Impurity5Flow);
+        ConfigurationFileGenerator->GeneratePumpScripts(pathForScripts, "/C6"+ ConfigurationFileGenerator->substancesNames.at(4) +"PumpScript.nfp", Impurity5Flow);
     }
 
     /* Create the Water pump script */
-    ConfigurationFileGenerator->GeneratePumpScripts(pathForScripts, "/WaterPumpScript.nfp", WaterFlow);
+    ConfigurationFileGenerator->GeneratePumpScripts(pathForScripts, "/C0WaterPumpScript.nfp", WaterFlow);
 }
 
 /**
@@ -560,67 +561,33 @@ void Pol_ExternConf::writeScripts(void){
  */
 void Pol_ExternConf::removeExistingFiles(void){
 
+    QFileInfo folderP(pathForScripts);
+
     /* Get folder information */
-    QFileInfo folder(pathForScripts);
+    QDir folder(folderP.absolutePath());
 
-    /* If there are some pump scripts already, remove them */
-    QFile file(folder.absolutePath() + "/C1GlucosePumpScript.nfp");
+    /* Check that it's not an empty folder */
+    if(folder.isEmpty()){
 
-    /* Does the pump file for glucose exist? */
-    if(file.exists()){
-
-        /* Remove the glucose pump file */
-        file.remove();
+        /* Show message if its empty */
+        return;
     }
 
-    /* If there are some pump scripts already, remove them */
-    QFile file2(folder.absolutePath() + "/C2PumpScript.nfp");
+    /* Get all pump files */
+    QStringList Files = folder.entryList(QStringList() << "*.nfp",QDir::Files | QDir::NoSymLinks, QDir::Time | QDir::Reversed);
 
-    /* Does the pump file for Impurity 1 exist? */
-    if(file2.exists()){
+    /* Remove the files */
+    for(int erase=0; erase < Files.length(); erase++){
 
-        /* Remove the impurity 1 pump file */
-        file2.remove();
-    }
+        /* If there are some pump scripts already, remove them */
+        QFile file(folder.absolutePath() + "/" + Files.at(erase));
 
-    /* If there are some pump scripts already, remove them */
-    QFile file3(folder.absolutePath() + "/C3PumpScript.nfp");
+        /* Does the pump file for glucose exist? */
+        if(file.exists()){
 
-    /* Does the pump file for Impurity 2 exists? */
-    if(file3.exists()){
-
-        /* Remove the impurity 2 pump file */
-        file3.remove();
-    }
-
-    /* If there are some pump scripts already, remove them */
-    QFile file4(folder.absolutePath() + "/C4PumpScript.nfp");
-
-    /* Does the pump file for Impurity 3 exists? */
-    if(file4.exists()){
-
-        /* Remove the impurity 3 pump file */
-        file4.remove();
-    }
-
-    /* If there are some pump scripts already, remove them */
-    QFile file5(folder.absolutePath() + "/C5PumpScript.nfp");
-
-    /* Does the pump file for Impurity 4 exists? */
-    if(file5.exists()){
-
-        /* Remove the impurity 4 pump file */
-        file5.remove();
-    }
-
-    /* If there are some pump scripts already, remove them */
-    QFile file6(folder.absolutePath() + "/C6PumpScript.nfp");
-
-    /* Does the pump file for Impurity 5 exists? */
-    if(file6.exists()){
-
-        /* Remove the impurity 5 pump file */
-        file6.remove();
+            /* Remove the glucose pump file */
+            file.remove();
+        }
     }
 }
 

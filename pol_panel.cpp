@@ -63,6 +63,7 @@
 #include "pol_waitingDialog.h"
 #include "ui_pol_ConfigureMeasurement.h"
 #include "pol_analizeData.h"
+#include "ui_pol_AnalizeData.h"
 
 /* Panel stuff */
 #include "panel_change_averages.h"
@@ -143,6 +144,7 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     ui->horizontalSpacer_Y->changeSize(20,12,QSizePolicy::Expanding,QSizePolicy::Fixed);
     ui->currentProgressBar_Pol->setVisible(false);
     ui->Tabs_Plots->setTabEnabled(1,false);
+    ui->Tabs_Plots->setTabEnabled(2,false);
     ui->label_PlotSaturated->setStyleSheet(QString("color: red; font: bold;"));
     ui->label_PlotSaturated->setVisible(false);
 
@@ -2077,7 +2079,12 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
 
         /* Hide or Show plot */
         ui->Table_Measurements_Pol->setVisible(!ui->Table_Measurements_Pol->isVisible());
-
+        ui->label_S1->setVisible(!ui->label_S1->isVisible());
+        ui->label_S2->setVisible(!ui->label_S2->isVisible());
+        ui->label_S3->setVisible(!ui->label_S3->isVisible());
+        ui->label_S4->setVisible(!ui->label_S4->isVisible());
+        ui->label_S5->setVisible(!ui->label_S5->isVisible());
+        ui->label_S6->setVisible(!ui->label_S6->isVisible());
     }
     /* Show/Hide the lateral panel */
     else if(label == ui->label_hideConf){
@@ -2100,6 +2107,12 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
         if(Runner->PolConfigured){
             ui->Table_Measurements_Pol->setVisible(!ui->list_devices_Pol->isVisible());
             ui->label_Measurements_Pol->setVisible(!ui->list_devices_Pol->isVisible());
+            ui->label_S1->setVisible(!ui->list_devices_Pol->isVisible());
+            ui->label_S2->setVisible(!ui->list_devices_Pol->isVisible());
+            ui->label_S3->setVisible(!ui->list_devices_Pol->isVisible());
+            ui->label_S4->setVisible(!ui->list_devices_Pol->isVisible());
+            ui->label_S5->setVisible(!ui->list_devices_Pol->isVisible());
+            ui->label_S6->setVisible(!ui->list_devices_Pol->isVisible());
         }
 
         /* Is the lateral panel visible? */
@@ -2152,12 +2165,11 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
     /* This is another condition to change the spacing so it looks nice */
     if(((ui->Table_Measurements_Pol->isVisible() && ui->qwtPlot_Pol_FFT->isVisible())
         || (ui->Table_Measurements_Pol->isVisible() && !ui->qwtPlot_Pol_FFT->isVisible())) && Runner->PolConfigured){
-        ui->verticalSpacerX->changeSize(20,13,QSizePolicy::Fixed,QSizePolicy::Fixed);
-    }
+        ui->verticalSpacerX->changeSize(0,1,QSizePolicy::Fixed,QSizePolicy::Fixed);
+    }else{
 
-    /* In case some elements from the lateral panel are hidden or shown again, change the spacing so they look good */
-    if(Runner->PolConfigured){
-        ui->verticalSpacerX->changeSize(20,13,QSizePolicy::Fixed,QSizePolicy::Expanding);
+        /* In case some elements from the lateral panel are hidden or shown again, change the spacing so they look good */
+            ui->verticalSpacerX->changeSize(0,1,QSizePolicy::Fixed,QSizePolicy::Expanding);
     }
 
     /* Catch check box event */
@@ -3359,37 +3371,58 @@ void PanelPolarimeter::setConfiguration(void){
     /* Zero row count of measurement list */
     ui->Table_Measurements_Pol->setRowCount(0);
 
+    QStringList substances;
+
     /* Show or hide the columns of the substances */
     if(!ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(0)){
         ui->Table_Measurements_Pol->hideColumn(2);
     }else{
         ui->Table_Measurements_Pol->showColumn(2);
+        substances.append(" C1 - Glucose");
     }
     if(!ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(1)){
         ui->Table_Measurements_Pol->hideColumn(3);
     }else{
         ui->Table_Measurements_Pol->showColumn(3);
+        substances.append(" C2 - " + ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->substancesNames.at(0));
     }
     if(!ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(2)){
         ui->Table_Measurements_Pol->hideColumn(4);
     }else{
         ui->Table_Measurements_Pol->showColumn(4);
+        substances.append(" C3 - " + ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->substancesNames.at(1));
     }
     if(!ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(3)){
         ui->Table_Measurements_Pol->hideColumn(5);
     }else{
         ui->Table_Measurements_Pol->showColumn(5);
+        substances.append(" C4 - " + ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->substancesNames.at(2));
     }
     if(!ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(4)){
         ui->Table_Measurements_Pol->hideColumn(6);
     }else{
         ui->Table_Measurements_Pol->showColumn(6);
+        substances.append(" C5 - " + ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->substancesNames.at(3));
     }
     if(!ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(5)){
         ui->Table_Measurements_Pol->hideColumn(7);
     }else{
         ui->Table_Measurements_Pol->showColumn(7);
+        substances.append(" C6 - " + ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->substancesNames.at(4));
     }
+
+    /* Add names */
+    for(int k=substances.length()-1; k < 6; k++){
+        substances.append("");
+    }
+
+    /* Set text for substances names */
+    ui->label_S1->setText(substances.at(0));
+    ui->label_S2->setText(substances.at(1));
+    ui->label_S3->setText(substances.at(2));
+    ui->label_S4->setText(substances.at(3));
+    ui->label_S5->setText(substances.at(4));
+    ui->label_S6->setText(substances.at(5));
 
     /* Set columns size */
     ui->Table_Measurements_Pol->setColumnWidth(2, 70);
@@ -3624,6 +3657,12 @@ void PanelPolarimeter::showUI_Item(bool UIstatus)
     /* Update items on UI */
     ui->label_Measurements_Pol->setVisible(UIstatus);
     ui->Table_Measurements_Pol->setVisible(UIstatus);
+    ui->label_S1->setVisible(UIstatus);
+    ui->label_S2->setVisible(UIstatus);
+    ui->label_S3->setVisible(UIstatus);
+    ui->label_S4->setVisible(UIstatus);
+    ui->label_S5->setVisible(UIstatus);
+    ui->label_S6->setVisible(UIstatus);
 
     /* Make the items to look nicer */
     if(UIstatus){
@@ -4299,8 +4338,17 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
         DataSelector->selectPath();
     }
 
+    /* Adjust the wavelengths range for the PLS */
+    DataSelector->ui->doubleSpinBox_minWavel->setMinimum(ptrSpectrometers[SpectrometerNumber]->getStartWavelength());
+    DataSelector->ui->doubleSpinBox_minWavel->setMaximum(ptrSpectrometers[SpectrometerNumber]->getStopWavelength());
+    DataSelector->ui->doubleSpinBox_maxWavel->setMinimum(ptrSpectrometers[SpectrometerNumber]->getStartWavelength());
+    DataSelector->ui->doubleSpinBox_maxWavel->setMaximum(ptrSpectrometers[SpectrometerNumber]->getStopWavelength());
+    DataSelector->ui->doubleSpinBox_maxWavel->setValue(PolarimetrySpectrometer->getMaximumWavelength());
+    DataSelector->ui->doubleSpinBox_minWavel->setValue(PolarimetrySpectrometer->getMinimumWavelength());
+
     /* Show the window */
     DataSelector->exec();
+
 }
 
 /**
