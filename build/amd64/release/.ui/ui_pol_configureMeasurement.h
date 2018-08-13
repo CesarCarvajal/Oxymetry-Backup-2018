@@ -283,7 +283,7 @@ public:
     {
         if (configurePolMeasure->objectName().isEmpty())
             configurePolMeasure->setObjectName(QStringLiteral("configurePolMeasure"));
-        configurePolMeasure->resize(1413, 825);
+        configurePolMeasure->resize(1413, 851);
         QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -1850,8 +1850,18 @@ public:
         QBrush brush3(QColor(170, 0, 0, 255));
         brush3.setStyle(Qt::SolidPattern);
         palette10.setBrush(QPalette::Active, QPalette::WindowText, brush3);
+        QBrush brush4(QColor(255, 255, 255, 255));
+        brush4.setStyle(Qt::SolidPattern);
+        palette10.setBrush(QPalette::Active, QPalette::Base, brush4);
+        QBrush brush5(QColor(255, 255, 0, 255));
+        brush5.setStyle(Qt::SolidPattern);
+        palette10.setBrush(QPalette::Active, QPalette::Window, brush5);
         palette10.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
+        palette10.setBrush(QPalette::Inactive, QPalette::Base, brush4);
+        palette10.setBrush(QPalette::Inactive, QPalette::Window, brush5);
         palette10.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        palette10.setBrush(QPalette::Disabled, QPalette::Base, brush5);
+        palette10.setBrush(QPalette::Disabled, QPalette::Window, brush5);
         label_timeLabel->setPalette(palette10);
 
         timeLayout->addWidget(label_timeLabel);
@@ -1863,10 +1873,10 @@ public:
         timeEdit_timeLabel->setMinimumSize(QSize(0, 0));
         timeEdit_timeLabel->setMaximumSize(QSize(16777215, 16777215));
         QPalette palette11;
-        QBrush brush4(QColor(255, 0, 0, 255));
-        brush4.setStyle(Qt::SolidPattern);
-        palette11.setBrush(QPalette::Active, QPalette::Text, brush4);
-        palette11.setBrush(QPalette::Inactive, QPalette::Text, brush4);
+        QBrush brush6(QColor(255, 0, 0, 255));
+        brush6.setStyle(Qt::SolidPattern);
+        palette11.setBrush(QPalette::Active, QPalette::Text, brush6);
+        palette11.setBrush(QPalette::Inactive, QPalette::Text, brush6);
         palette11.setBrush(QPalette::Disabled, QPalette::Text, brush1);
         timeEdit_timeLabel->setPalette(palette11);
         timeEdit_timeLabel->setFrame(true);
@@ -2096,11 +2106,11 @@ public:
         label_MSpace->setMinimumSize(QSize(120, 0));
         QPalette palette19;
         palette19.setBrush(QPalette::Active, QPalette::WindowText, brush);
-        QBrush brush5(QColor(0, 0, 0, 255));
-        brush5.setStyle(Qt::SolidPattern);
-        palette19.setBrush(QPalette::Active, QPalette::Text, brush5);
+        QBrush brush7(QColor(0, 0, 0, 255));
+        brush7.setStyle(Qt::SolidPattern);
+        palette19.setBrush(QPalette::Active, QPalette::Text, brush7);
         palette19.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
-        palette19.setBrush(QPalette::Inactive, QPalette::Text, brush5);
+        palette19.setBrush(QPalette::Inactive, QPalette::Text, brush7);
         palette19.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
         palette19.setBrush(QPalette::Disabled, QPalette::Text, brush1);
         label_MSpace->setPalette(palette19);
@@ -2112,9 +2122,9 @@ public:
         doubleSpinBox_MSpace->setMinimumSize(QSize(80, 0));
         doubleSpinBox_MSpace->setMaximumSize(QSize(80, 16777215));
         QPalette palette20;
-        palette20.setBrush(QPalette::Active, QPalette::WindowText, brush5);
+        palette20.setBrush(QPalette::Active, QPalette::WindowText, brush7);
         palette20.setBrush(QPalette::Active, QPalette::Text, brush2);
-        palette20.setBrush(QPalette::Inactive, QPalette::WindowText, brush5);
+        palette20.setBrush(QPalette::Inactive, QPalette::WindowText, brush7);
         palette20.setBrush(QPalette::Inactive, QPalette::Text, brush2);
         palette20.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
         palette20.setBrush(QPalette::Disabled, QPalette::Text, brush1);

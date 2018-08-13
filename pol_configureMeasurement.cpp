@@ -309,7 +309,7 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
             {
                 /* Show that this mode is active */
                 ui->label_intervalMode->setText("Interval Mode is Active");
-                ui->label_intervalMode->setStyleSheet("QLabel { color: red; }");
+                ui->label_intervalMode->setStyleSheet("QLabel { color: red; background: yellow;}");
 
                 /* Change labels colors and frames */
                 ui->label_timebetweenM->setStyleSheet("QLabel { color: black; }");
@@ -329,6 +329,7 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
 
             /* Restart notification of interval mode active */
             ui->label_intervalMode->setText("");
+            ui->label_intervalMode->setStyleSheet("QLabel { color: red; background: white;}");
             ui->label_timebetweenM->setStyleSheet("QLabel { color: rgb(0, 85, 0); }");
             ui->label2_timebetweenM->setStyleSheet("QLabel { color: rgb(0, 85, 0); }");
             ui->doubleSpinBox_timebetweenM->setStyleSheet("QDoubleSpinBox { color: rgb(0, 170, 0); }");
@@ -978,6 +979,9 @@ void configurePolMeasure::updateConfigurationValues(void)
         /* Show Kbytes */
         ui->doubleSpinBox_MSpace->setValue(space);
         ui->label_MSpace2->setText("KB");
+        ui->doubleSpinBox_MSpace->setStyleSheet("QDoubleSpinBox { color: green;  background: white;}");
+        ui->label_MSpace2->setStyleSheet("QLabel { color: green; background: white;}");
+        ui->label_MSpace->setStyleSheet("QLabel { color: rgb(0, 85, 0); background: white;}");
 
     }else if(space >= 1000 && space < 1000000){
 
@@ -985,11 +989,37 @@ void configurePolMeasure::updateConfigurationValues(void)
         ui->doubleSpinBox_MSpace->setValue(space/1000);
         ui->label_MSpace2->setText("MB");
 
+        if(space > 500000 ){
+            ui->doubleSpinBox_MSpace->setStyleSheet("QDoubleSpinBox { color: orange; background: white;}");
+            ui->label_MSpace2->setStyleSheet("QLabel { color: orange; background: white;}");
+            ui->label_MSpace->setStyleSheet("QLabel { color: rgb(204, 102, 0); background: white;}");
+
+        }else{
+            ui->doubleSpinBox_MSpace->setStyleSheet("QDoubleSpinBox { color: green; background: white;}");
+            ui->label_MSpace2->setStyleSheet("QLabel { color: green; background: white; }");
+            ui->label_MSpace->setStyleSheet("QLabel { color: rgb(0, 85, 0); background: white;}");
+        }
+
     }else{
 
         /* Even Gigabytes? */
         ui->doubleSpinBox_MSpace->setValue(space/1000000);
         ui->label_MSpace2->setText("GB");
+        ui->doubleSpinBox_MSpace->setStyleSheet("QDoubleSpinBox { color: red;  background: white;}");
+        ui->label_MSpace2->setStyleSheet("QLabel { color: red;  background: white;}");
+        ui->label_MSpace->setStyleSheet("QLabel { color: rgb(153, 0, 0);  background: white;}");
+
+        if(space > 5000000){
+
+            ui->doubleSpinBox_MSpace->setStyleSheet("QDoubleSpinBox { color: red;  background: yellow;}");
+            ui->label_MSpace2->setStyleSheet("QLabel { color: red;  background: yellow;}");
+            ui->label_MSpace->setStyleSheet("QLabel { color: rgb(153, 0, 0);  background: yellow;}");
+
+            /* Show message for saving options */
+            showWarning("The required memory space is greater than 5 GB, please consider performing less number of measurements, save only the FFT or avoid "
+                                                                                               "several repetitions.","");
+        }
+
     }
 
     /* Update file name preview */

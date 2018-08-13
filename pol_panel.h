@@ -299,6 +299,9 @@ private slots:
     /* Normalize Counts */
     void normalizeCounts(void);
 
+    /* Save instant spectra from calibration */
+    void saveFFTcalibration(void);
+
 public slots:
 
     /* Enable Help Non Modal Window */

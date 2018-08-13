@@ -242,7 +242,6 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
         signalMapper->setMapping(ui->label_HideRatio, ui->label_HideRatio);
         signalMapper->setMapping(ui->label_HideFFTProfile, ui->label_HideFFTProfile);
         signalMapper->setMapping(ui->label_HIdeLiveAverage, ui->label_HIdeLiveAverage);
-        signalMapper->setMapping(ui->label_prediction, ui->label_prediction);
         signalMapper->setMapping(ui->FFT_label_Pol, ui->FFT_label_Pol);
         signalMapper->setMapping(ui->label_Measurements_Pol, ui->label_Measurements_Pol);
         signalMapper->setMapping(ui->label_hideConf, ui->label_hideConf);
@@ -259,6 +258,7 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
 
     /* Connect buttons in Polarimeter Tab */
     connect(ui->button_Start_Meas_Pol, SIGNAL(clicked()), this, SLOT(toggle_Pol_Measurement()));
+    connect(ui->button_SaveInstantFFT, SIGNAL(clicked()), this, SLOT(saveFFTcalibration()));
     connect(ui->button_LoadData, SIGNAL(clicked()), this, SLOT(toggle_Load_Data()));
     connect(ui->help, SIGNAL(clicked()), this, SLOT(help_Pol()));
     connect(ui->waveToPlotFFT, SIGNAL(clicked()), signalMapper, SLOT(map()));
@@ -271,7 +271,6 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     connect(ui->button_AnalizeData, SIGNAL(clicked()), this, SLOT(select_Analize_Pol_Measurement()));
     connect(ui->label_HideFFTProfile, SIGNAL(clicked()), signalMapper, SLOT(map()));
     connect(ui->label_HIdeLiveAverage, SIGNAL(clicked()), signalMapper, SLOT(map()));
-    connect(ui->label_prediction, SIGNAL(clicked()), signalMapper, SLOT(map()));
     connect(ui->FFT_label_Pol, SIGNAL(clicked()), signalMapper, SLOT(map()));
     connect(ui->label_Measurements_Pol, SIGNAL(clicked()), signalMapper, SLOT(map()));
     connect(ui->label_hideConf, SIGNAL(clicked()), signalMapper, SLOT(map()));
@@ -368,6 +367,9 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
         ConfigureMeasurement->openPumps = true;
 
     }
+
+    /* Hide Button for saving actual spectra */
+    ui->button_SaveInstantFFT->setVisible(false);
 }
 
 /**
@@ -2034,13 +2036,6 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
         ui->qwtPlot_Pol_Average->setVisible(!ui->qwtPlot_Pol_Average->isVisible());
 
     }
-    /* Show/Hide Prediction Plot */
-    else if(label == ui->label_prediction){
-
-        /* Hide Prediction Plot if clicked */
-        ui->qwtPlot_Pol_Prediction->setVisible(!ui->qwtPlot_Pol_Prediction->isVisible());
-
-    }
     /* Show/Hide the FFT Plot */
     else if(label == ui->FFT_label_Pol){
 
@@ -2169,7 +2164,7 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
     }else{
 
         /* In case some elements from the lateral panel are hidden or shown again, change the spacing so they look good */
-            ui->verticalSpacerX->changeSize(0,1,QSizePolicy::Fixed,QSizePolicy::Expanding);
+        ui->verticalSpacerX->changeSize(0,1,QSizePolicy::Fixed,QSizePolicy::Expanding);
     }
 
     /* Catch check box event */
@@ -2291,12 +2286,10 @@ void PanelPolarimeter::initialize_Default_Calibration(void){
             /* Set the frequency */
             ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->Frequency = Freqresolution/4;
             PolarimetrySpectrometer->setFrequency(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->Frequency);
-            FFTL.FrequencyF = ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->Frequency;
         }else{
 
             /* If  Hz is ok according to the actual settings, then use this value */
             ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->Frequency = PolarimetrySpectrometer->getFrequency();
-            FFTL.FrequencyF = PolarimetrySpectrometer->getFrequency();
         }
     }
 
@@ -2309,6 +2302,8 @@ void PanelPolarimeter::initialize_Default_Calibration(void){
     FFTL.NrSpectra = PolarimetrySpectrometer->getNumberOfSpectra();
     FFTL.IntTime = PolarimetrySpectrometer->getIntegrationTime();
     FFTL.NrAverages = PolarimetrySpectrometer->getNumberOfSpectra();
+    FFTL.FrequencyF = PolarimetrySpectrometer->getFrequency();
+    FFTL.f_w = PolarimetrySpectrometer->getFrequency();
     FFTL.ConcentrationC1 = 0;
     FFTL.ConcentrationC2 = 0;
     FFTL.ConcentrationC3 = 0;
@@ -3983,6 +3978,9 @@ void PanelPolarimeter::toggle_Pol_Calibration(void)
         /* Show starting plots */
         showAllPlots();
 
+        /* Show Button for saving actual spectra */
+        ui->button_SaveInstantFFT->setVisible(true);
+
         /* Run type calibration with 0: Calibrating */
         run_Polarimetry(0);
     }
@@ -3993,6 +3991,9 @@ void PanelPolarimeter::toggle_Pol_Calibration(void)
 
         /* Show current progress bar */
         ui->currentProgressBar_Pol->setVisible(false);
+
+        /* Hide Button for saving actual spectra */
+        ui->button_SaveInstantFFT->setVisible(false);
 
         /* If a configuration was loaded then, get the changes */
         if(Runner->PolConfigured && editedConf){
@@ -4349,6 +4350,51 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
     /* Show the window */
     DataSelector->exec();
 
+}
+
+/**
+ * @brief Save the actual FFT from the calibration
+ */
+void PanelPolarimeter::saveFFTcalibration(){
+
+    /* If there is calibration running */
+    if(Runner->PolCalibrating){
+
+        QString text = "";
+
+        if(ConfigureMeasurement->configured){
+
+            /* Button 'yes' pressed; Save the FFT data where the user decides */
+            FFTL.saveFFTtoFile(text, true, ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->substancesNames);
+
+        }else{
+
+            /* Save the substances names */
+            QStringList substancesNames;
+
+            for(int k = 0; k < 4; k++){
+                substancesNames.append("");
+            }
+
+            FFTL.IntTime = PolarimetrySpectrometer->getIntegrationTime();
+            FFTL.NrAverages = PolarimetrySpectrometer->getNumberOfAverages();
+            FFTL.NrSpectra = PolarimetrySpectrometer->getNumberOfSpectra();
+            FFTL.FrequencyF = PolarimetrySpectrometer->getFrequency();
+            FFTL.changeFFTwavelength = true;
+            FFTL.ConcentrationC1 = -1;
+            FFTL.ConcentrationC2 = -1;
+            FFTL.ConcentrationC3 = -1;
+            FFTL.ConcentrationC4 = -1;
+            FFTL.ConcentrationC5 = -1;
+            FFTL.ConcentrationC6 = -1;
+            FFTL.MaximumIntensity = 0;
+            FFTL.normalizeCounts = PolarimetrySpectrometer->ui->checkBox_normalize->isChecked();
+
+            /* Button 'yes' pressed; Save the FFT data where the user decides */
+            FFTL.saveFFTtoFile(text, true, substancesNames);
+
+        }
+    }
 }
 
 /**

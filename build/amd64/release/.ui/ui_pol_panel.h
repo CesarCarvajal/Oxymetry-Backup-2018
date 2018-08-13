@@ -161,16 +161,17 @@ public:
     QFrame *line_comp;
     QSpacerItem *horizontalSpacer_31;
     QVBoxLayout *verticalLayout_5;
-    ClickableLabel *label_prediction;
+    QLabel *label_prediction;
     Plot *qwtPlot_Pol_Prediction;
     QSpacerItem *horizontalSpacer_7;
     QWidget *MeasStadistics;
     QVBoxLayout *verticalLayout_9;
     QFrame *line_8;
     QHBoxLayout *horizontalLayout_5;
+    QPushButton *button_LoadData;
     QPushButton *button_AnalizeData;
     QSpacerItem *horizontalSpacer_5;
-    QPushButton *button_LoadData;
+    QPushButton *button_SaveInstantFFT;
     QPushButton *Button_Save_Graphs_Pol;
     QSpacerItem *horizontalSpacer_9;
     QFrame *line_4;
@@ -747,7 +748,7 @@ public:
         Tabs_Plots->setEnabled(true);
         Tabs_Plots->setTabPosition(QTabWidget::North);
         Tabs_Plots->setTabShape(QTabWidget::Rounded);
-        Tabs_Plots->setIconSize(QSize(16, 16));
+        Tabs_Plots->setIconSize(QSize(14, 14));
         Tabs_Plots->setElideMode(Qt::ElideNone);
         Tabs_Plots->setUsesScrollButtons(true);
         Tabs_Plots->setDocumentMode(false);
@@ -1244,12 +1245,18 @@ public:
         label = new QLabel(MeasResults);
         label->setObjectName(QStringLiteral("label"));
         label->setMinimumSize(QSize(0, 14));
+        QPalette palette11;
+        palette11.setBrush(QPalette::Active, QPalette::WindowText, brush4);
+        palette11.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
+        palette11.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        label->setPalette(palette11);
         QFont font11;
         font11.setPointSize(9);
         font11.setBold(true);
-        font11.setUnderline(true);
+        font11.setUnderline(false);
         font11.setWeight(75);
         label->setFont(font11);
+        label->setCursor(QCursor(Qt::ArrowCursor));
         label->setAlignment(Qt::AlignCenter);
 
         verticalLayout_6->addWidget(label);
@@ -1283,11 +1290,16 @@ public:
 
         verticalLayout_5 = new QVBoxLayout();
         verticalLayout_5->setObjectName(QStringLiteral("verticalLayout_5"));
-        label_prediction = new ClickableLabel(MeasResults);
+        label_prediction = new QLabel(MeasResults);
         label_prediction->setObjectName(QStringLiteral("label_prediction"));
         label_prediction->setMinimumSize(QSize(0, 14));
+        QPalette palette12;
+        palette12.setBrush(QPalette::Active, QPalette::WindowText, brush4);
+        palette12.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
+        palette12.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        label_prediction->setPalette(palette12);
         label_prediction->setFont(font11);
-        label_prediction->setCursor(QCursor(Qt::PointingHandCursor));
+        label_prediction->setCursor(QCursor(Qt::ArrowCursor));
         label_prediction->setAlignment(Qt::AlignCenter);
 
         verticalLayout_5->addWidget(label_prediction);
@@ -1337,6 +1349,15 @@ public:
 
         horizontalLayout_5 = new QHBoxLayout();
         horizontalLayout_5->setObjectName(QStringLiteral("horizontalLayout_5"));
+        button_LoadData = new QPushButton(PanelPolarimeter);
+        button_LoadData->setObjectName(QStringLiteral("button_LoadData"));
+        button_LoadData->setMinimumSize(QSize(120, 30));
+        button_LoadData->setMaximumSize(QSize(120, 30));
+        button_LoadData->setIcon(icon4);
+        button_LoadData->setIconSize(QSize(20, 20));
+
+        horizontalLayout_5->addWidget(button_LoadData);
+
         button_AnalizeData = new QPushButton(PanelPolarimeter);
         button_AnalizeData->setObjectName(QStringLiteral("button_AnalizeData"));
         button_AnalizeData->setEnabled(true);
@@ -1351,14 +1372,15 @@ public:
 
         horizontalLayout_5->addItem(horizontalSpacer_5);
 
-        button_LoadData = new QPushButton(PanelPolarimeter);
-        button_LoadData->setObjectName(QStringLiteral("button_LoadData"));
-        button_LoadData->setMinimumSize(QSize(120, 30));
-        button_LoadData->setMaximumSize(QSize(120, 30));
-        button_LoadData->setIcon(icon4);
-        button_LoadData->setIconSize(QSize(20, 20));
+        button_SaveInstantFFT = new QPushButton(PanelPolarimeter);
+        button_SaveInstantFFT->setObjectName(QStringLiteral("button_SaveInstantFFT"));
+        button_SaveInstantFFT->setEnabled(true);
+        button_SaveInstantFFT->setMinimumSize(QSize(120, 30));
+        button_SaveInstantFFT->setMaximumSize(QSize(120, 30));
+        button_SaveInstantFFT->setIcon(icon4);
+        button_SaveInstantFFT->setIconSize(QSize(20, 20));
 
-        horizontalLayout_5->addWidget(button_LoadData);
+        horizontalLayout_5->addWidget(button_SaveInstantFFT);
 
         Button_Save_Graphs_Pol = new QPushButton(PanelPolarimeter);
         Button_Save_Graphs_Pol->setObjectName(QStringLiteral("Button_Save_Graphs_Pol"));
@@ -1680,13 +1702,14 @@ public:
         Tabs_Plots->setTabText(Tabs_Plots->indexOf(MeasResults), QApplication::translate("PanelPolarimeter", "Measurement Results", Q_NULLPTR));
         Tabs_Plots->setTabText(Tabs_Plots->indexOf(MeasStadistics), QApplication::translate("PanelPolarimeter", "Measurement Stadistics", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        button_AnalizeData->setToolTip(QApplication::translate("PanelPolarimeter", "Analize Data", Q_NULLPTR));
-#endif // QT_NO_TOOLTIP
-        button_AnalizeData->setText(QApplication::translate("PanelPolarimeter", "Analize Data", Q_NULLPTR));
-#ifndef QT_NO_TOOLTIP
         button_LoadData->setToolTip(QApplication::translate("PanelPolarimeter", "Load Data from Files", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         button_LoadData->setText(QApplication::translate("PanelPolarimeter", " Load Data", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        button_AnalizeData->setToolTip(QApplication::translate("PanelPolarimeter", "Analize Data", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        button_AnalizeData->setText(QApplication::translate("PanelPolarimeter", "Analize Data", Q_NULLPTR));
+        button_SaveInstantFFT->setText(QApplication::translate("PanelPolarimeter", "Save Spectra", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         Button_Save_Graphs_Pol->setToolTip(QApplication::translate("PanelPolarimeter", "Save Graphs as PDF", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
