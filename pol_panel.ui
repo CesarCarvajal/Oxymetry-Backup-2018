@@ -832,6 +832,9 @@
            <property name="text">
             <string>C1 - Glucose</string>
            </property>
+           <property name="alignment">
+            <set>Qt::AlignJustify|Qt::AlignVCenter</set>
+           </property>
           </widget>
          </item>
          <item>
@@ -982,8 +985,15 @@
            <property name="text">
             <string>C2 - Impurity 1</string>
            </property>
+           <property name="alignment">
+            <set>Qt::AlignJustify|Qt::AlignVCenter</set>
+           </property>
           </widget>
          </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_19">
          <item>
           <widget class="QLabel" name="label_S3">
            <property name="sizePolicy">
@@ -1132,12 +1142,11 @@
            <property name="text">
             <string>C3 - Impurity 2</string>
            </property>
+           <property name="alignment">
+            <set>Qt::AlignJustify|Qt::AlignVCenter</set>
+           </property>
           </widget>
          </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_19">
          <item>
           <widget class="QLabel" name="label_S4">
            <property name="sizePolicy">
@@ -1286,8 +1295,15 @@
            <property name="text">
             <string>C4 - Impurity 3</string>
            </property>
+           <property name="alignment">
+            <set>Qt::AlignJustify|Qt::AlignVCenter</set>
+           </property>
           </widget>
          </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_20">
          <item>
           <widget class="QLabel" name="label_S5">
            <property name="sizePolicy">
@@ -1435,6 +1451,9 @@
            </property>
            <property name="text">
             <string>C5 - Impurity 4</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignJustify|Qt::AlignVCenter</set>
            </property>
           </widget>
          </item>
@@ -1585,6 +1604,9 @@
            </property>
            <property name="text">
             <string>C6 - Impurity 5</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignJustify|Qt::AlignVCenter</set>
            </property>
           </widget>
          </item>
@@ -1907,7 +1929,7 @@
             <enum>QTabWidget::Rounded</enum>
            </property>
            <property name="currentIndex">
-            <number>0</number>
+            <number>1</number>
            </property>
            <property name="iconSize">
             <size>
@@ -2989,7 +3011,7 @@
                <item>
                 <layout class="QHBoxLayout" name="horizontalLayout_16">
                  <item>
-                  <widget class="QLabel" name="label_2">
+                  <widget class="ClickableLabel" name="label_2">
                    <property name="minimumSize">
                     <size>
                      <width>100</width>
@@ -3076,7 +3098,7 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLabel" name="label_5">
+                  <widget class="ClickableLabel" name="label_5">
                    <property name="minimumSize">
                     <size>
                      <width>100</width>
@@ -3205,19 +3227,18 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="Plot" name="frame">
+                  <widget class="QWidget" name="widget" native="true">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                      <horstretch>0</horstretch>
                      <verstretch>0</verstretch>
                     </sizepolicy>
                    </property>
-                   <property name="frameShape">
-                    <enum>QFrame::StyledPanel</enum>
-                   </property>
-                   <property name="frameShadow">
-                    <enum>QFrame::Raised</enum>
-                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_22">
+                    <item>
+                     <layout class="QHBoxLayout" name="VLP"/>
+                    </item>
+                   </layout>
                   </widget>
                  </item>
                 </layout>
@@ -3332,6 +3353,9 @@
                  </item>
                  <item>
                   <widget class="Plot" name="qwtPlot_Pol_Prediction">
+                   <property name="enabled">
+                    <bool>true</bool>
+                   </property>
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                      <horstretch>0</horstretch>

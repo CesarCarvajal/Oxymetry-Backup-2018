@@ -62,9 +62,6 @@ public:
     /* Save if there was a configuration loaded */
     bool configured;
 
-    /* Was the pumps software open already? */
-    bool openPumps;
-
     /* File information for saving data of measurements */
     QFileInfo pathDataMeasurements;
 

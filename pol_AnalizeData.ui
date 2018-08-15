@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>782</width>
-    <height>757</height>
+    <height>749</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -412,7 +412,7 @@
               <property name="minimumSize">
                <size>
                 <width>0</width>
-                <height>200</height>
+                <height>150</height>
                </size>
               </property>
               <property name="cursor" stdset="0">
@@ -509,7 +509,7 @@
               <property name="minimumSize">
                <size>
                 <width>0</width>
-                <height>200</height>
+                <height>150</height>
                </size>
               </property>
               <property name="cursor" stdset="0">
@@ -1181,7 +1181,7 @@
         <enum>Qt::Vertical</enum>
        </property>
        <property name="sizeType">
-        <enum>QSizePolicy::Expanding</enum>
+        <enum>QSizePolicy::Fixed</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>

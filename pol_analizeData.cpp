@@ -80,6 +80,7 @@ selectAnalizeData::selectAnalizeData(QWidget *parent) :
     connect(ui->checkBox_stepsSelec, SIGNAL(clicked()), signalMapperC, SLOT(map()));
     connect(ui->checkBox_SelecManual, SIGNAL(clicked()), signalMapperC, SLOT(map()));
 
+    /* Signal mapper */
     signalMapperC->setMapping(ui->radiobutton_selectData, ui->radiobutton_selectData);
     signalMapperC->setMapping(ui->radiobutton_selectSet, ui->radiobutton_selectSet);
     signalMapperC->setMapping(ui->listWidget_Calibration, ui->listWidget_Calibration);
@@ -119,6 +120,21 @@ selectAnalizeData::selectAnalizeData(QWidget *parent) :
     ui->spinBox_stepsSelec->hide();
     ui->checkBox_SelecManual->hide();
 
+}
+
+/**
+ * @brief Adjust the automatic loading of the data
+ */
+void selectAnalizeData::automaticAnalize(QString PathAuto){
+
+    /* Set the automatic loading on */
+    automaticLoading = true;
+
+    /* Give the path for the files */
+    pathDataM = PathAuto;
+
+    /* Select the path from the measured data */
+    selectPath();
 }
 
 /**
@@ -173,7 +189,8 @@ void selectAnalizeData::updateSelectionList(void){
     cleanList();
 
     /* Add the FFT files to the list */
-    FFTFilesCalibration = Dir.entryList(QStringList() << "*R"+QString::number(ui->spinBox_repselec->value())+".FFT",QDir::Files | QDir::NoSymLinks, QDir::Time | QDir::Reversed);
+    FFTFilesCalibration = Dir.entryList(QStringList() << "*R"+QString::number(ui->spinBox_repselec->value())
+                                        +".FFT",QDir::Files | QDir::NoSymLinks, QDir::Time | QDir::Reversed);
 
     /* Add files to the list */
     addFilesToList();
@@ -183,7 +200,6 @@ void selectAnalizeData::updateSelectionList(void){
     ui->checkBox_stepsSelec->setChecked(false);
     ui->checkBox_RandomSort->setChecked(false);
     ui->spinBox_stepsSelec->setEnabled(false);
-
 }
 
 /**
@@ -264,6 +280,9 @@ void selectAnalizeData::selectPath(void)
         /* Add initial files to the list */
         addFilesToList();
 
+        /* Read information from files */
+        readFiles(false);
+
         /* Show Ui Items */
         ui->checkBox_RandomSort->show();
         ui->checkBox_stepsSelec->show();
@@ -282,6 +301,68 @@ void selectAnalizeData::selectPath(void)
             /* Disable button to analyze */
             ui->pushButton_generate->setEnabled(true);
         }
+    }
+}
+
+/**
+ * @brief Read files to analize
+ */
+void selectAnalizeData::readFiles(bool readLongData)
+{
+    /* Just get the header information */
+    if(!readLongData && !FFTFilesCalibration.isEmpty()){
+
+        /* Clear combo box of substances */
+        ui->comboBox_Substance->clear();
+
+        /* Open the file to get the Nr of Spectra and Average Nr. */
+        QFile file(pathDataM + "/" + FFTFilesCalibration.at(0));
+
+        /* Row of the file */
+        QString ReadRow;
+
+        /* Does the File exists? */
+        if(!file.exists()){
+            /* If not, tell the user that it coulnd't be found */
+            showWarning("File not Found!", "");
+            return;
+        }
+
+        /* Open the file */
+        if(file.open(QIODevice::ReadOnly)) {
+
+            QTextStream stream(&file);
+
+            /* Read lines */
+            while(!stream.atEnd()){
+
+                /* Read a line from the file */
+                ReadRow = stream.readLine();
+
+                /* Read the text and get the values */
+                QStringList Readed_Row = ReadRow.split(": ");
+
+                    /* Concentrations found */
+                if(ReadRow.contains("Concentrations")){
+
+                    /* Get substances names */
+                    QString Substances = Readed_Row.at(1);
+                    QStringList ListS = Substances.split("/");
+                    ListS.removeLast();
+
+                    /* Add substances */
+                    ui->comboBox_Substance->addItems(ListS);
+
+                    /* From here ahead just counts and other data */
+                }else if(ReadRow.contains("Wavelength")){
+
+                    break;
+                }
+            }
+        }
+
+        /* Close files */
+        file.close();
     }
 }
 

@@ -135,7 +135,7 @@ public:
     {
         if (selectAnalizeData->objectName().isEmpty())
             selectAnalizeData->setObjectName(QStringLiteral("selectAnalizeData"));
-        selectAnalizeData->resize(782, 757);
+        selectAnalizeData->resize(782, 749);
         QSizePolicy sizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -326,7 +326,7 @@ public:
 
         listWidget_Calibration = new QListWidget(SelectFiles);
         listWidget_Calibration->setObjectName(QStringLiteral("listWidget_Calibration"));
-        listWidget_Calibration->setMinimumSize(QSize(0, 200));
+        listWidget_Calibration->setMinimumSize(QSize(0, 150));
         listWidget_Calibration->viewport()->setProperty("cursor", QVariant(QCursor(Qt::PointingHandCursor)));
         listWidget_Calibration->setContextMenuPolicy(Qt::CustomContextMenu);
         listWidget_Calibration->setFrameShape(QFrame::StyledPanel);
@@ -365,7 +365,7 @@ public:
         listWidget_Validation = new QListWidget(SelectFiles);
         listWidget_Validation->setObjectName(QStringLiteral("listWidget_Validation"));
         listWidget_Validation->setEnabled(true);
-        listWidget_Validation->setMinimumSize(QSize(0, 200));
+        listWidget_Validation->setMinimumSize(QSize(0, 150));
         listWidget_Validation->viewport()->setProperty("cursor", QVariant(QCursor(Qt::PointingHandCursor)));
         listWidget_Validation->setAutoScrollMargin(25);
         listWidget_Validation->setEditTriggers(QAbstractItemView::SelectedClicked);
@@ -675,7 +675,7 @@ public:
 
         verticalLayout->addWidget(PLS);
 
-        verticalSpacer_4 = new QSpacerItem(20, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
+        verticalSpacer_4 = new QSpacerItem(20, 10, QSizePolicy::Minimum, QSizePolicy::Fixed);
 
         verticalLayout->addItem(verticalSpacer_4);
 

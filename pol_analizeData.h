@@ -113,10 +113,16 @@ private slots:
     /* left click menu */
     void showContextMenu(const QPoint &pos);
 
-public slots:
-
     /* Select files path */
     void selectPath(void);
+
+    /* Read information from files */
+    void readFiles(bool readLongData);
+
+public slots:
+
+    /* Adjust the automatic loading of data */
+    void automaticAnalize(QString PathAuto);
 
 };
 

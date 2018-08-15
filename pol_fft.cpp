@@ -377,63 +377,78 @@ void fft::ReadFile(QString FilePath)
             ReadRow = stream.readLine();
 
             /* Read the text and get the values */
-            QStringList Readed_Row = ReadRow.split(" ");
+            QStringList Readed_Row = ReadRow.split(": ");
 
             /* Integration time found */
             if(ReadRow.contains("Integration") && IntTime==-1){
 
+                /* Separate again the string */
+                QStringList InteTime = Readed_Row.at(1).split(" ");
+
                 /* Get the integration time from file */
-                IntTime = QString(Readed_Row.at(2)).replace(",",".").toDouble();
+                IntTime = QString(InteTime.at(0)).replace(",",".").toDouble();
 
                 /* Number of Spectra found */
-            }else if(ReadRow.contains("Spectra") && NrSpectra==-1){
+            }else if(ReadRow.contains("pectra: ") && NrSpectra==-1){
 
                 /* Get the number of spectra from file */
-                NrSpectra = Readed_Row.at(3).toInt();
+                NrSpectra = Readed_Row.at(1).toInt();
 
                 /* Number of Averages found */
-            }else if(ReadRow.contains("Averages") && NrAverages==-1){
+            }else if(ReadRow.contains("verages: ") && NrAverages==-1){
 
                 /* Get the number of averages from file */
-                NrAverages = Readed_Row.at(3).toInt();
+                NrAverages = Readed_Row.at(1).toInt();
 
                 /* Frequency found */
-            }else if(ReadRow.contains("Frequency") && FrequencyF==-1){
+            }else if(ReadRow.contains("Frequency: ") && FrequencyF==-1){
+
+                /* Separate again the string */
+                QStringList FreqF = Readed_Row.at(1).split(" ");
 
                 /* Get the frequency from file */
-                FrequencyF = QString(Readed_Row.at(1)).replace(",",".").toDouble();
+                FrequencyF = QString(FreqF.at(0)).replace(",",".").toDouble();
 
                 /* Concentrations found */
-            }else if(ReadRow.contains("Concentrations") && ConcentrationC1==-1 && ConcentrationC2==-1 && ConcentrationC3==-1 && ConcentrationC4==-1 && ConcentrationC5==-1 && ConcentrationC6==-1){
+            }else if(ReadRow.contains("Concentrations: ") && ConcentrationC1==-1 && ConcentrationC2==-1 && ConcentrationC3==-1 && ConcentrationC4==-1 && ConcentrationC5==-1 && ConcentrationC6==-1){
+
+                /* Concentrations */
+                QStringList Concentrations = Readed_Row.at(2).split(",");
 
                 /* Is there glucose? */
                 if(ReadRow.contains("C1")){
-                    ConcentrationC1 = QString(Readed_Row.at(2)).replace(",",".").toDouble();
+                    ConcentrationC1 = QString(Concentrations.at(0)).replace(",",".").toDouble();
+                    Concentrations.removeFirst();
                 }
 
                 /* Is there Impurity 1? */
                 if(ReadRow.contains("C2")){
-                    ConcentrationC2 = QString(Readed_Row.at(4)).replace(",",".").toDouble();
+                    ConcentrationC2 = QString(Concentrations.at(0)).replace(",",".").toDouble();
+                    Concentrations.removeFirst();
                 }
 
                 /* Is there Impurity 2? */
                 if(ReadRow.contains("C3")){
-                    ConcentrationC3 = QString(Readed_Row.at(6)).replace(",",".").toDouble();
+                    ConcentrationC3 = QString(Concentrations.at(0)).replace(",",".").toDouble();
+                    Concentrations.removeFirst();
                 }
 
                 /* Is there Impurity 3? */
                 if(ReadRow.contains("C4")){
-                    ConcentrationC4 = QString(Readed_Row.at(8)).replace(",",".").toDouble();
+                    ConcentrationC4 = QString(Concentrations.at(0)).replace(",",".").toDouble();
+                    Concentrations.removeFirst();
                 }
 
                 /* Is there Impurity 4? */
                 if(ReadRow.contains("C5")){
-                    ConcentrationC5 = QString(Readed_Row.at(10)).replace(",",".").toDouble();
+                    ConcentrationC5 =QString( Concentrations.at(0)).replace(",",".").toDouble();
+                    Concentrations.removeFirst();
                 }
 
                 /* Is there Impurity 5? */
                 if(ReadRow.contains("C6")){
-                    ConcentrationC6 = QString(Readed_Row.at(12)).replace(",",".").toDouble();
+                    ConcentrationC6 = QString(Concentrations.at(0)).replace(",",".").toDouble();
+                    Concentrations.removeFirst();
                 }
 
                 /* From here ahead just counts and other data */
@@ -442,6 +457,13 @@ void fft::ReadFile(QString FilePath)
                 break;
             }
         }
+    }
+
+    /* If some value is missing */
+    if(IntTime == -1 || NrSpectra == -1 || NrAverages == -1 || FrequencyF == -1){
+
+        /* Show warning for old or incomplete files */
+        showWarning("One configuration file wasn't loaded properly, please check that all the values are written inside the file or its version.","");
     }
 
     /* Close files */
@@ -571,36 +593,36 @@ void fft::saveFFTtoFile(QFileInfo FileDetails, bool userSaving, QStringList subs
 
     /* Is there Impurity 1? */
     if(ConcentrationC2 >= 0){
-        concentrations.append(" , " + QString::number(ConcentrationC2));
+        concentrations.append("," + QString::number(ConcentrationC2));
         conc.append("C2-" + substancesNames.at(0) + "/");
     }
 
     /* Is there Impurity 2? */
     if(ConcentrationC3 >= 0){
-        concentrations.append(" , " + QString::number(ConcentrationC3));
+        concentrations.append("," + QString::number(ConcentrationC3));
         conc.append("C3-" + substancesNames.at(1) + "/");
     }
 
     /* Is there Impurity 3? */
     if(ConcentrationC4 >= 0){
-        concentrations.append(" , " + QString::number(ConcentrationC4));
+        concentrations.append("," + QString::number(ConcentrationC4));
         conc.append("C4-" + substancesNames.at(2) + "/");
     }
 
     /* Is there Impurity 4? */
     if(ConcentrationC5 >= 0){
-        concentrations.append(" , " + QString::number(ConcentrationC5));
+        concentrations.append("," + QString::number(ConcentrationC5));
         conc.append("C5-" + substancesNames.at(3) + "/");
     }
 
     /* Is there Impurity 2? */
     if(ConcentrationC6 >= 0){
-        concentrations.append(" , " + QString::number(ConcentrationC6));
+        concentrations.append("," + QString::number(ConcentrationC6));
         conc.append("C6-" + substancesNames.at(4) + "/");
     }
 
     /* Write the concentrations to the file */
-    fprintf(fileFFT, "Concentrations %s: %s\n\n", conc.toLatin1().data() , concentrations.toLatin1().data());
+    fprintf(fileFFT, "Concentrations: %s: %s\n\n", conc.toLatin1().data() , concentrations.toLatin1().data());
 
     /* Loop through the wavelengths */
     for (int z = 0; z < wavelengths.length(); z++){

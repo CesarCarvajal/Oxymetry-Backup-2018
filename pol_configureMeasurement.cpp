@@ -318,6 +318,7 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
                 ui->doubleSpinBox_timebetweenM->setReadOnly(false);
                 ui->doubleSpinBox_timebetweenM->setButtonSymbols(QDoubleSpinBox::UpDownArrows);
                 ui->doubleSpinBox_timebetweenM->setFrame(true);
+                ui->label2_timebetweenM->setText("min");
 
             }else{
 
@@ -560,10 +561,22 @@ void configurePolMeasure::loadConfiguration(void)
     /* Enable directory field and 'start' button */
     ui->lineEdit_path->setEnabled(true);
 
-    /* Run pumps software */
-    if(openPumps){
+    /* The process for the pumps is named as: */
+    const QString &process = "neMESYS_UserInterface.exe";
+
+    /* Get the tasklist of windows and look for that process */
+    QProcess tasklist;
+    tasklist.start(
+                "tasklist",
+                QStringList() << "/NH"
+                << "/FO" << "CSV"
+                << "/FI" << QString("IMAGENAME eq %1").arg(process));
+    tasklist.waitForFinished();
+    QString output = tasklist.readAllStandardOutput();
+
+    /* Run pumps software if it wasn't running already */
+    if(!output.startsWith(QString("\"%1").arg(process))){
         externSoftware->openPumpSoftware();
-        openPumps = false;
     }
 
     /* Finish the window */
@@ -1017,7 +1030,7 @@ void configurePolMeasure::updateConfigurationValues(void)
 
             /* Show message for saving options */
             showWarning("The required memory space is greater than 5 GB, please consider performing less number of measurements, save only the FFT or avoid "
-                                                                                               "several repetitions.","");
+                        "several repetitions.","");
         }
 
     }

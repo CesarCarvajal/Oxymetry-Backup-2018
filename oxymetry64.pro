@@ -1,4 +1,4 @@
-QT += core gui widgets serialport
+QT += core gui widgets serialport datavisualization
 
 TARGET = oxymetry64
 TEMPLATE = app

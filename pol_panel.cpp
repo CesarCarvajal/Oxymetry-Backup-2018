@@ -32,6 +32,9 @@
 #include <QSizePolicy>
 #include <QTime>
 #include <QDate>
+#include <QtDataVisualization>
+
+using namespace QtDataVisualization;
 
 /*
  * Internal includes
@@ -336,7 +339,6 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     ui->qwtPlot_Pol_Prediction->setYAxisTitle("Predicted (mg/dL)");
     ui->qwtPlot_Pol_Prediction->setXAxis(0.0, 500);
     ui->qwtPlot_Pol_Prediction->setYAxis(0.0, 500);
-    ui->qwtPlot_Pol_Prediction->setVisible(false);
     ui->label_RemainingTime->setVisible(false);
 
     /* Show and format all plots */
@@ -362,14 +364,30 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
 
         /* Update x-axis of graphs depending on Wavelengths */
         update_Wavelength_Range();
-
-        /* Enable the opening of the pumps software */
-        ConfigureMeasurement->openPumps = true;
-
     }
 
     /* Hide Button for saving actual spectra */
     ui->button_SaveInstantFFT->setVisible(false);
+
+    /*
+    Q3DSurface *surface = new Q3DSurface;
+        QSurfaceDataArray *data = new QSurfaceDataArray;
+        QSurfaceDataRow *dataRow1 = new QSurfaceDataRow;
+        QSurfaceDataRow *dataRow2 = new QSurfaceDataRow;
+
+        *dataRow1 << QVector3D(0.0f, 0.0f, 0.0f) << QVector3D(1.0f, 1.0f, 1.0f);
+        *dataRow2 << QVector3D(2.0f, 1.0f, 1.0f) << QVector3D(4.0f, 4.0f, 0.0f);
+        *data << dataRow1 << dataRow2;
+
+        QSurface3DSeries *series = new QSurface3DSeries;
+        series->dataProxy()->resetArray(data);
+        surface->addSeries(series);
+        surface->showMaximized();
+
+    QWidget *container = QWidget::createWindowContainer(surface);
+
+    ui->VLP->addWidget(container);
+    */
 }
 
 /**
@@ -667,6 +685,7 @@ void PanelPolarimeter::adjust_Run_End(){
         if(totalMeasuretime == 0){break;}
     }
 
+    /* If the measurement stopped by its own, then save the summary */
     if(!Runner->Stopped && !abort_everything){
         /* Save the summary */
         write_Summary();
@@ -1541,7 +1560,6 @@ void PanelPolarimeter::clean_All_Pol(void){
     ui->label_totalM->setVisible(false);
     ui->label_remaining->setVisible(false);
     ui->horizontalSpacer_Y->changeSize(20,12,QSizePolicy::Expanding,QSizePolicy::Fixed);
-    ui->qwtPlot_Pol_Prediction->setVisible(false);
     ui->label_RemainingTime->setVisible(false);
 
     /* Show current progress bar*/
@@ -1654,7 +1672,6 @@ void PanelPolarimeter::clear_Plot(void) {
     ui->qwtPlot_Pol_w_2w->update();
     ui->qwtPlot_Pol_Compensation->update();
     ui->qwtPlot_Pol_FFT->update();
-    ui->qwtPlot_Pol_Prediction->update();
     ui->qwtPlot_Pol_FFT->updateLayout();
     ui->waveToPlotFFT->setText("");
 
@@ -2102,12 +2119,12 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
         if(Runner->PolConfigured){
             ui->Table_Measurements_Pol->setVisible(!ui->list_devices_Pol->isVisible());
             ui->label_Measurements_Pol->setVisible(!ui->list_devices_Pol->isVisible());
-            ui->label_S1->setVisible(!ui->list_devices_Pol->isVisible());
-            ui->label_S2->setVisible(!ui->list_devices_Pol->isVisible());
-            ui->label_S3->setVisible(!ui->list_devices_Pol->isVisible());
-            ui->label_S4->setVisible(!ui->list_devices_Pol->isVisible());
-            ui->label_S5->setVisible(!ui->list_devices_Pol->isVisible());
-            ui->label_S6->setVisible(!ui->list_devices_Pol->isVisible());
+            ui->label_S1->setVisible(!ui->list_devices_Pol->isVisible() && ui->label_S1->text()!="");
+            ui->label_S2->setVisible(!ui->list_devices_Pol->isVisible() && ui->label_S2->text()!="");
+            ui->label_S3->setVisible(!ui->list_devices_Pol->isVisible() && ui->label_S3->text()!="");
+            ui->label_S4->setVisible(!ui->list_devices_Pol->isVisible() && ui->label_S4->text()!="");
+            ui->label_S5->setVisible(!ui->list_devices_Pol->isVisible() && ui->label_S5->text()!="");
+            ui->label_S6->setVisible(!ui->list_devices_Pol->isVisible() && ui->label_S6->text()!="");
         }
 
         /* Is the lateral panel visible? */
@@ -2158,13 +2175,13 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
     }
 
     /* This is another condition to change the spacing so it looks nice */
-    if(((ui->Table_Measurements_Pol->isVisible() && ui->qwtPlot_Pol_FFT->isVisible())
-        || (ui->Table_Measurements_Pol->isVisible() && !ui->qwtPlot_Pol_FFT->isVisible())) && Runner->PolConfigured){
-        ui->verticalSpacerX->changeSize(0,1,QSizePolicy::Fixed,QSizePolicy::Fixed);
+    if((ui->Table_Measurements_Pol->isVisible() && ui->qwtPlot_Pol_FFT->isVisible())
+            && Runner->PolConfigured){
+        ui->verticalSpacerX->changeSize(20,13,QSizePolicy::Fixed,QSizePolicy::Fixed);
     }else{
 
         /* In case some elements from the lateral panel are hidden or shown again, change the spacing so they look good */
-        ui->verticalSpacerX->changeSize(0,1,QSizePolicy::Fixed,QSizePolicy::Expanding);
+        ui->verticalSpacerX->changeSize(20,13,QSizePolicy::Fixed,QSizePolicy::Expanding);
     }
 
     /* Catch check box event */
@@ -2933,7 +2950,6 @@ void PanelPolarimeter::plot_FFT(void){
     ui->qwtPlot_Pol_w_2w->updateLayout();
     ui->qwtPlot_Pol_FFT->update();
     ui->qwtPlot_Pol_FFT->updateLayout();
-    ui->qwtPlot_Pol_Prediction->update();
 }
 
 /**
@@ -3418,6 +3434,13 @@ void PanelPolarimeter::setConfiguration(void){
     ui->label_S4->setText(substances.at(3));
     ui->label_S5->setText(substances.at(4));
     ui->label_S6->setText(substances.at(5));
+
+    ui->label_S1->setVisible(ui->label_S1->text()!="");
+    ui->label_S2->setVisible(ui->label_S2->text()!="");
+    ui->label_S3->setVisible(ui->label_S3->text()!="");
+    ui->label_S4->setVisible(ui->label_S4->text()!="");
+    ui->label_S5->setVisible(ui->label_S5->text()!="");
+    ui->label_S6->setVisible(ui->label_S6->text()!="");
 
     /* Set columns size */
     ui->Table_Measurements_Pol->setColumnWidth(2, 70);
@@ -3969,7 +3992,6 @@ void PanelPolarimeter::toggle_Pol_Calibration(void)
         ui->label_totalM->setVisible(false);
         ui->label_remaining->setVisible(false);
         ui->horizontalSpacer_Y->changeSize(20,12,QSizePolicy::Expanding,QSizePolicy::Fixed);
-        ui->qwtPlot_Pol_Prediction->setVisible(false);
         ui->label_RemainingTime->setVisible(false);
 
         /* Restart flag for edition of configuration during the calibration */
@@ -4118,7 +4140,7 @@ void PanelPolarimeter::write_To_File(FILE *file, double *a_pSpectrum, int WParam
         fprintf(file, "Integration Time: %.2f ms\n", ptrSpectrometers[SpectrometerNumber]->getIntegrationTime());
         fprintf(file, "Nr. of Spectra: %i\n", ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->NrSpectra);
         fprintf(file, "Nr. of Averages: %i\n", ptrSpectrometers[SpectrometerNumber]->getNumberOfAverages());
-        fprintf(file, "Frequency: %.2f\n", FFTL.FrequencyF);
+        fprintf(file, "Frequency: %.2f Hz\n", FFTL.FrequencyF);
 
         /* Include the concentrations in the file */
         QString concentrations, conc = "";
@@ -4129,7 +4151,7 @@ void PanelPolarimeter::write_To_File(FILE *file, double *a_pSpectrum, int WParam
             /* Write C1 */
             FFTL.ConcentrationC1 = ConfigureMeasurement->externSoftware->GlucoseConcentration.at(Timeindex-1);
             concentrations.append(QString::number(FFTL.ConcentrationC1));
-            conc.append("C1");
+            conc.append("C1/");
         }
 
         /* Is Impurity 1 active? */
@@ -4137,8 +4159,8 @@ void PanelPolarimeter::write_To_File(FILE *file, double *a_pSpectrum, int WParam
 
             /* Write C2 */
             FFTL.ConcentrationC2 = ConfigureMeasurement->externSoftware->Impurity1Concentration.at(Timeindex-1);
-            concentrations.append(" , " + QString::number(FFTL.ConcentrationC2));
-            conc.append("C2");
+            concentrations.append("," + QString::number(FFTL.ConcentrationC2));
+            conc.append("C2/");
         }
 
         /* Is Impurity 2 active? */
@@ -4146,8 +4168,8 @@ void PanelPolarimeter::write_To_File(FILE *file, double *a_pSpectrum, int WParam
 
             /* Write C3 */
             FFTL.ConcentrationC3 = ConfigureMeasurement->externSoftware->Impurity2Concentration.at(Timeindex-1);
-            concentrations.append(" , " + QString::number(FFTL.ConcentrationC3));
-            conc.append("C3");
+            concentrations.append("," + QString::number(FFTL.ConcentrationC3));
+            conc.append("C3/");
         }
 
         /* Is Impurity 3 active? */
@@ -4155,8 +4177,8 @@ void PanelPolarimeter::write_To_File(FILE *file, double *a_pSpectrum, int WParam
 
             /* Write C4 */
             FFTL.ConcentrationC4 = ConfigureMeasurement->externSoftware->Impurity3Concentration.at(Timeindex-1);
-            concentrations.append(" , " + QString::number(FFTL.ConcentrationC4));
-            conc.append("C4");
+            concentrations.append("," + QString::number(FFTL.ConcentrationC4));
+            conc.append("C4/");
         }
 
         /* Is Impurity 4 active? */
@@ -4164,8 +4186,8 @@ void PanelPolarimeter::write_To_File(FILE *file, double *a_pSpectrum, int WParam
 
             /* Write C5 */
             FFTL.ConcentrationC5 = ConfigureMeasurement->externSoftware->Impurity4Concentration.at(Timeindex-1);
-            concentrations.append(" , " + QString::number(FFTL.ConcentrationC5));
-            conc.append("C5");
+            concentrations.append("," + QString::number(FFTL.ConcentrationC5));
+            conc.append("C5/");
         }
 
         /* Is Impurity 5 active? */
@@ -4173,11 +4195,11 @@ void PanelPolarimeter::write_To_File(FILE *file, double *a_pSpectrum, int WParam
 
             /* Write C6 */
             FFTL.ConcentrationC6 = ConfigureMeasurement->externSoftware->Impurity5Concentration.at(Timeindex-1);
-            concentrations.append(" , " + QString::number(FFTL.ConcentrationC6));
-            conc.append("C6");
+            concentrations.append("," + QString::number(FFTL.ConcentrationC6));
+            conc.append("C6/");
         }
 
-        fprintf(file, "Concentrations %s: %s\n\n", conc.toLatin1().data() ,concentrations.toLatin1().data());
+        fprintf(file, "Concentrations: %s: %s\n\n", conc.toLatin1().data() ,concentrations.toLatin1().data());
     }
 
     /* Save wavelengths */
@@ -4329,14 +4351,11 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
     /* After the measurement, open the analize data window automatically */
     if(Runner->automaticData && !fileInfoSaving.absolutePath().isEmpty()){
 
-        /* Set the automatic loading on */
-        DataSelector->automaticLoading = true;
+        /* Automatic loading of the data from here */
+        QString PathAuto = fileInfoSaving.absolutePath() + "/FFT Data/";
 
-        /* Give the path for the files */
-        DataSelector->pathDataM = fileInfoSaving.absolutePath() + "/FFT Data/";
-
-        /* Select the path from the measured data */
-        DataSelector->selectPath();
+        /* Analize data after finishing the measurements */
+        DataSelector->automaticAnalize(PathAuto);
     }
 
     /* Adjust the wavelengths range for the PLS */
@@ -4360,22 +4379,26 @@ void PanelPolarimeter::saveFFTcalibration(){
     /* If there is calibration running */
     if(Runner->PolCalibrating){
 
+        /* Here the user selects the file path and name */
         QString text = "";
 
+        /* Was the calibration configured? */
         if(ConfigureMeasurement->configured){
 
-            /* Button 'yes' pressed; Save the FFT data where the user decides */
+            /* Then save the FFT with the actual information */
             FFTL.saveFFTtoFile(text, true, ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->substancesNames);
 
         }else{
 
-            /* Save the substances names */
+            /* Substance names doesn't make sense here, since no configuration has been created */
             QStringList substancesNames;
 
+            /* Fill vector with nothing */
             for(int k = 0; k < 4; k++){
                 substancesNames.append("");
             }
 
+            /* Initialize some variables with the actual values, since no configuration has been created */
             FFTL.IntTime = PolarimetrySpectrometer->getIntegrationTime();
             FFTL.NrAverages = PolarimetrySpectrometer->getNumberOfAverages();
             FFTL.NrSpectra = PolarimetrySpectrometer->getNumberOfSpectra();
@@ -4390,7 +4413,7 @@ void PanelPolarimeter::saveFFTcalibration(){
             FFTL.MaximumIntensity = 0;
             FFTL.normalizeCounts = PolarimetrySpectrometer->ui->checkBox_normalize->isChecked();
 
-            /* Button 'yes' pressed; Save the FFT data where the user decides */
+            /* Save the actual FFT shown in the calibration */
             FFTL.saveFFTtoFile(text, true, substancesNames);
 
         }
