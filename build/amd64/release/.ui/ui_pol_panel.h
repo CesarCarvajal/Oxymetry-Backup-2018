@@ -35,7 +35,6 @@ class Ui_PanelPolarimeter
 {
 public:
     QGridLayout *gridLayout;
-    QFrame *line_5;
     QHBoxLayout *horizonalLayout_2;
     QVBoxLayout *verticalLayout_8;
     ClickableLabel *label_hideConf;
@@ -81,7 +80,6 @@ public:
     QSpacerItem *horizontalSpacer_2;
     QFrame *line_2;
     QVBoxLayout *verticalLayout_7;
-    QFrame *line_6;
     QVBoxLayout *verticalLayout_2;
     QTabWidget *Tabs_Plots;
     QWidget *liveData;
@@ -206,13 +204,6 @@ public:
         PanelPolarimeter->setMinimumSize(QSize(0, 0));
         gridLayout = new QGridLayout(PanelPolarimeter);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
-        line_5 = new QFrame(PanelPolarimeter);
-        line_5->setObjectName(QStringLiteral("line_5"));
-        line_5->setFrameShape(QFrame::VLine);
-        line_5->setFrameShadow(QFrame::Sunken);
-
-        gridLayout->addWidget(line_5, 0, 1, 1, 1);
-
         horizonalLayout_2 = new QHBoxLayout();
         horizonalLayout_2->setObjectName(QStringLiteral("horizonalLayout_2"));
         verticalLayout_8 = new QVBoxLayout();
@@ -741,20 +732,15 @@ public:
 
         line_2 = new QFrame(PanelPolarimeter);
         line_2->setObjectName(QStringLiteral("line_2"));
-        line_2->setFrameShape(QFrame::VLine);
         line_2->setFrameShadow(QFrame::Sunken);
+        line_2->setLineWidth(1);
+        line_2->setMidLineWidth(0);
+        line_2->setFrameShape(QFrame::VLine);
 
         horizonalLayout_2->addWidget(line_2);
 
         verticalLayout_7 = new QVBoxLayout();
         verticalLayout_7->setObjectName(QStringLiteral("verticalLayout_7"));
-        line_6 = new QFrame(PanelPolarimeter);
-        line_6->setObjectName(QStringLiteral("line_6"));
-        line_6->setFrameShape(QFrame::HLine);
-        line_6->setFrameShadow(QFrame::Sunken);
-
-        verticalLayout_7->addWidget(line_6);
-
         verticalLayout_2 = new QVBoxLayout();
         verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
         Tabs_Plots = new QTabWidget(PanelPolarimeter);
@@ -941,6 +927,8 @@ public:
 
         line_rawratio = new QFrame(liveData);
         line_rawratio->setObjectName(QStringLiteral("line_rawratio"));
+        line_rawratio->setLineWidth(1);
+        line_rawratio->setMidLineWidth(0);
         line_rawratio->setFrameShape(QFrame::VLine);
         line_rawratio->setFrameShadow(QFrame::Sunken);
 
@@ -988,6 +976,8 @@ public:
 
         line_HLive = new QFrame(liveData);
         line_HLive->setObjectName(QStringLiteral("line_HLive"));
+        line_HLive->setLineWidth(1);
+        line_HLive->setMidLineWidth(0);
         line_HLive->setFrameShape(QFrame::HLine);
         line_HLive->setFrameShadow(QFrame::Sunken);
 
@@ -1035,6 +1025,8 @@ public:
 
         line_FFT = new QFrame(liveData);
         line_FFT->setObjectName(QStringLiteral("line_FFT"));
+        line_FFT->setLineWidth(1);
+        line_FFT->setMidLineWidth(0);
         line_FFT->setFrameShape(QFrame::VLine);
         line_FFT->setFrameShadow(QFrame::Sunken);
 

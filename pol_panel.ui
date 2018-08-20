@@ -26,13 +26,6 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="1">
-    <widget class="Line" name="line_5">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="0">
     <layout class="QHBoxLayout" name="horizonalLayout_2">
      <item>
@@ -1901,6 +1894,15 @@
      </item>
      <item>
       <widget class="Line" name="line_2">
+       <property name="frameShadow">
+        <enum>QFrame::Sunken</enum>
+       </property>
+       <property name="lineWidth">
+        <number>1</number>
+       </property>
+       <property name="midLineWidth">
+        <number>0</number>
+       </property>
        <property name="orientation">
         <enum>Qt::Vertical</enum>
        </property>
@@ -1908,13 +1910,6 @@
      </item>
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_7">
-       <item>
-        <widget class="Line" name="line_6">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
@@ -2382,6 +2377,12 @@
                </item>
                <item>
                 <widget class="Line" name="line_rawratio">
+                 <property name="lineWidth">
+                  <number>1</number>
+                 </property>
+                 <property name="midLineWidth">
+                  <number>0</number>
+                 </property>
                  <property name="orientation">
                   <enum>Qt::Vertical</enum>
                  </property>
@@ -2519,6 +2520,12 @@
              </item>
              <item>
               <widget class="Line" name="line_HLive">
+               <property name="lineWidth">
+                <number>1</number>
+               </property>
+               <property name="midLineWidth">
+                <number>0</number>
+               </property>
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
                </property>
@@ -2656,6 +2663,12 @@
                </item>
                <item>
                 <widget class="Line" name="line_FFT">
+                 <property name="lineWidth">
+                  <number>1</number>
+                 </property>
+                 <property name="midLineWidth">
+                  <number>0</number>
+                 </property>
                  <property name="orientation">
                   <enum>Qt::Vertical</enum>
                  </property>

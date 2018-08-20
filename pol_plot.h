@@ -23,6 +23,9 @@
 
 /* Qwt library */
 #include "qwt_plot_curve.h"
+#include <QtDataVisualization>
+
+using namespace QtDataVisualization;
 
 
 /**
@@ -48,6 +51,10 @@ public:
 
     /* Maximum value on Y axis */
     double maxYValue;
+
+    /* 3D Surface */
+    Q3DSurface *surface;
+    //Q3DScatter *scatter;
 
     /* Maximum value on X axis of average plot */
     double maxXtime;

@@ -32,9 +32,6 @@
 #include <QSizePolicy>
 #include <QTime>
 #include <QDate>
-#include <QtDataVisualization>
-
-using namespace QtDataVisualization;
 
 /*
  * Internal includes
@@ -147,6 +144,7 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     ui->horizontalSpacer_Y->changeSize(20,12,QSizePolicy::Expanding,QSizePolicy::Fixed);
     ui->currentProgressBar_Pol->setVisible(false);
     ui->Tabs_Plots->setTabEnabled(1,false);
+    ui->qwtPlot_Pol_Prediction->setVisible(false);
     ui->Tabs_Plots->setTabEnabled(2,false);
     ui->label_PlotSaturated->setStyleSheet(QString("color: red; font: bold;"));
     ui->label_PlotSaturated->setVisible(false);
@@ -369,25 +367,12 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     /* Hide Button for saving actual spectra */
     ui->button_SaveInstantFFT->setVisible(false);
 
-    /*
-    Q3DSurface *surface = new Q3DSurface;
-        QSurfaceDataArray *data = new QSurfaceDataArray;
-        QSurfaceDataRow *dataRow1 = new QSurfaceDataRow;
-        QSurfaceDataRow *dataRow2 = new QSurfaceDataRow;
+    //QWidget *container = QWidget::createWindowContainer(PolPlotter->surface);
 
-        *dataRow1 << QVector3D(0.0f, 0.0f, 0.0f) << QVector3D(1.0f, 1.0f, 1.0f);
-        *dataRow2 << QVector3D(2.0f, 1.0f, 1.0f) << QVector3D(4.0f, 4.0f, 0.0f);
-        *data << dataRow1 << dataRow2;
+    //QWidget *container = QWidget::createWindowContainer(PolPlotter->scatter);
 
-        QSurface3DSeries *series = new QSurface3DSeries;
-        series->dataProxy()->resetArray(data);
-        surface->addSeries(series);
-        surface->showMaximized();
+    //ui->VLP->addWidget(container);
 
-    QWidget *container = QWidget::createWindowContainer(surface);
-
-    ui->VLP->addWidget(container);
-    */
 }
 
 /**
@@ -761,11 +746,14 @@ void PanelPolarimeter::adjust_Run_Start(short int typeRun){
 
     /* Disable buttons and labels when running polarimetry */
     ui->button_LoadData->setEnabled(false);
+    ui->button_LoadData->setVisible(false);
     ui->button_AnalizeData->setEnabled(false);
+    ui->button_AnalizeData->setVisible(false);
     ui->button_Start_Meas_Pol->setEnabled(false);
     ui->button_calibrate->setEnabled(false);
     ui->button_Pol_ConfigureMeasurement->setEnabled(false);
     ui->label_clearAll->setEnabled(false);
+    ui->label_clearAll->setVisible(false);
     ui->label_clearAll->setStyleSheet("QLabel { color: gray;}");
 
     /* Is the spectrometer enabled? */
@@ -3790,8 +3778,11 @@ void PanelPolarimeter::stop_Run_Polarimetry(void) {
     /* Enable buttons again */
     ui->button_Pol_ConfigureMeasurement->setEnabled(true);
     ui->button_LoadData->setEnabled(true);
+    ui->button_LoadData->setVisible(true);
     ui->button_AnalizeData->setEnabled(true);
+    ui->button_AnalizeData->setVisible(true);
     ui->label_clearAll->setEnabled(true);
+    ui->label_clearAll->setVisible(true);
     ui->label_clearAll->setStyleSheet("QLabel { color: blue;}");
 
     /* Emit signal to enable the preview buttons */
