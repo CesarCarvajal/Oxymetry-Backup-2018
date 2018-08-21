@@ -38,6 +38,8 @@ Pol_Plot::Pol_Plot()
 
     /* §D Surface */
     surface = new Q3DSurface;
+    series = new QSurface3DSeries;
+
     //scatter = new Q3DScatter;
 
     /* Max value for plotting Y axis in Averages */
@@ -95,44 +97,6 @@ Pol_Plot::Pol_Plot()
     scatter->addSeries(series);
     scatter->show();
 */
-/*
-    QSurfaceDataArray *data = new QSurfaceDataArray;
-    QSurfaceDataRow *dataRow1 = new QSurfaceDataRow;
-    QSurfaceDataRow *dataRow2 = new QSurfaceDataRow;
-    QSurfaceDataRow *dataRow3 = new QSurfaceDataRow;
-    QSurfaceDataRow *dataRow4 = new QSurfaceDataRow;
-    QSurfaceDataRow *dataRow5 = new QSurfaceDataRow;
-    QSurfaceDataRow *dataRow6 = new QSurfaceDataRow;
-
-    *dataRow1 << QVector3D(320,10,0) << QVector3D(420,10,250) << QVector3D(502,20,500);
-    *dataRow2 << QVector3D(320,20,0) << QVector3D(420,20,250)<< QVector3D(502,30,500) ;
-    *dataRow3  << QVector3D(320,30,0) << QVector3D(420,30,250)<< QVector3D(502,40,500);
-    *dataRow4  << QVector3D(320,40,0) << QVector3D(420,40,250)<< QVector3D(502,50,500);
-    *dataRow5  << QVector3D(320,50,0) << QVector3D(420,50,250)<< QVector3D(502,60,500);
-    *dataRow6  << QVector3D(320,60,0) << QVector3D(420,60,250)<< QVector3D(502,70,500);
-
-    *data << dataRow1 << dataRow2 << dataRow3 << dataRow4 << dataRow5 << dataRow6;
-
-    QSurface3DSeries *series = new QSurface3DSeries;
-    series->dataProxy()->resetArray(data);
-    surface->addSeries(series);
-    surface->show();
-
-    surface->scene()->activeCamera()->setCameraPosition(45, 45, 100); // horizontal in °, vertikal in °, zoom in %
-
-    QLinearGradient gr;
-    gr.setColorAt(0.0, Qt::blue);
-    gr.setColorAt(0.2, Qt::cyan);
-    gr.setColorAt(0.4, Qt::green);
-    gr.setColorAt(0.6, Qt::yellow);
-    gr.setColorAt(0.8, Qt::red);
-    gr.setColorAt(1.0, Qt::black);
-
-    surface->seriesList().at(0)->setBaseGradient(gr);
-    surface->seriesList().at(0)->setColorStyle(Q3DTheme::ColorStyleRangeGradient);
-*/
-    //scatter->seriesList().at(0)->setBaseGradient(gr);
-    //scatter->seriesList().at(0)->setColorStyle(Q3DTheme::ColorStyleRangeGradient);
 
 }
 

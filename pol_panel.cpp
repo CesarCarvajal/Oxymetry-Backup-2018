@@ -143,8 +143,8 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     ui->label_remaining->setVisible(false);
     ui->horizontalSpacer_Y->changeSize(20,12,QSizePolicy::Expanding,QSizePolicy::Fixed);
     ui->currentProgressBar_Pol->setVisible(false);
-    ui->Tabs_Plots->setTabEnabled(1,false);
     ui->qwtPlot_Pol_Prediction->setVisible(false);
+    ui->Tabs_Plots->setTabEnabled(1,false);
     ui->Tabs_Plots->setTabEnabled(2,false);
     ui->label_PlotSaturated->setStyleSheet(QString("color: red; font: bold;"));
     ui->label_PlotSaturated->setVisible(false);
@@ -366,12 +366,14 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
 
     /* Hide Button for saving actual spectra */
     ui->button_SaveInstantFFT->setVisible(false);
+    ui->Button_Save_Graphs_Pol->setVisible(false);
 
-    //QWidget *container = QWidget::createWindowContainer(PolPlotter->surface);
+    container = QWidget::createWindowContainer(PolPlotter->surface);
+
+    /* Add the 3D plot to the widget */
+    ui->VLP->addWidget(container);
 
     //QWidget *container = QWidget::createWindowContainer(PolPlotter->scatter);
-
-    //ui->VLP->addWidget(container);
 
 }
 
@@ -723,6 +725,9 @@ void PanelPolarimeter::adjust_Run_Start(short int typeRun){
 
     /* Emit signal to disable preview buttons */
     DisEnablePreview(false);
+
+    /* Enable saving plots to PDF button*/
+    ui->Button_Save_Graphs_Pol->setVisible(true);
 
     /* Show current progress bar for the Measurements and Calibration */
     ui->currentProgressBar_Pol->setVisible(true);
@@ -1552,6 +1557,7 @@ void PanelPolarimeter::clean_All_Pol(void){
 
     /* Show current progress bar*/
     ui->currentProgressBar_Pol->setVisible(false);
+    ui->Button_Save_Graphs_Pol->setVisible(false);
 
     /* Restart FFT intensities plot */
     ui->qwtPlot_Pol_FFT->setAxisScale(QwtPlot::xBottom, 0, 21, 7);
@@ -3795,7 +3801,7 @@ void PanelPolarimeter::stop_Run_Polarimetry(void) {
 void PanelPolarimeter::toggle_Load_Data(void)
 {
     /* Is there something already analyzed by FFT? */
-    if(PolPlotter->FFT_DC != nullptr && isFFTData == false){
+    if(PolPlotter->FFT_DC != nullptr && !FFTL.fft_DC.isEmpty() && isFFTData == false){
 
         /* File doens't exists. Did we ask the user to save the analyzed data from raw data? */
         if (QMessageBox::Yes == QMessageBox::question(this, "Save FFT File", "Would you like to save the FFT from Raw Data?",
@@ -3887,8 +3893,9 @@ void PanelPolarimeter::toggle_Load_Data(void)
 
         /* Load and analyze raw data */
         Load_Summary();
-    }
+        ui->Button_Save_Graphs_Pol->setVisible(true);
 
+    }
 
     /* Which button was pressed? */
     if ((msgBox.clickedButton() == Raw || msgBox.clickedButton() == FFT) && dataloaded) {
@@ -3934,6 +3941,7 @@ void PanelPolarimeter::toggle_Load_Data(void)
 
         /* Show current progress bar*/
         ui->currentProgressBar_Pol->setVisible(false);
+        ui->Button_Save_Graphs_Pol->setVisible(true);
     }
 
     /* Update Information bar */
@@ -4359,6 +4367,31 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
 
     /* Show the window */
     DataSelector->exec();
+
+    ui->Button_Save_Graphs_Pol->setVisible(true);
+
+    ui->Tabs_Plots->setTabEnabled(1,true);
+    ui->Tabs_Plots->setTabEnabled(2,true);
+
+    PolPlotter->series->dataProxy()->resetArray(DataSelector->data3D);
+    PolPlotter->surface->addSeries(PolPlotter->series);
+    PolPlotter->surface->show();
+
+    PolPlotter->surface->scene()->activeCamera()->setCameraPosition(45, 45, 100); // horizontal in °, vertikal in °, zoom in %
+
+    QLinearGradient gr;
+    gr.setColorAt(0.0, Qt::blue);
+    gr.setColorAt(0.2, Qt::cyan);
+    gr.setColorAt(0.4, Qt::green);
+    gr.setColorAt(0.6, Qt::yellow);
+    gr.setColorAt(0.8, Qt::red);
+    gr.setColorAt(1.0, Qt::black);
+
+    PolPlotter->surface->seriesList().at(0)->setBaseGradient(gr);
+    PolPlotter->surface->seriesList().at(0)->setColorStyle(Q3DTheme::ColorStyleRangeGradient);
+
+    //scatter->seriesList().at(0)->setBaseGradient(gr);
+    //scatter->seriesList().at(0)->setColorStyle(Q3DTheme::ColorStyleRangeGradient);
 
 }
 

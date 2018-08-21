@@ -1298,7 +1298,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_generate">
+        <widget class="QPushButton" name="pushButton_Analize">
          <property name="enabled">
           <bool>false</bool>
          </property>

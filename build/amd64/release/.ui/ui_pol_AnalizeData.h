@@ -129,7 +129,7 @@ public:
     QSpacerItem *horizontalSpacer_8;
     QPushButton *pushButton_select;
     QSpacerItem *horizontalSpacer_6;
-    QPushButton *pushButton_generate;
+    QPushButton *pushButton_Analize;
 
     void setupUi(QDialog *selectAnalizeData)
     {
@@ -715,15 +715,15 @@ public:
 
         horizontalLayout_9->addItem(horizontalSpacer_6);
 
-        pushButton_generate = new QPushButton(selectAnalizeData);
-        pushButton_generate->setObjectName(QStringLiteral("pushButton_generate"));
-        pushButton_generate->setEnabled(false);
-        sizePolicy4.setHeightForWidth(pushButton_generate->sizePolicy().hasHeightForWidth());
-        pushButton_generate->setSizePolicy(sizePolicy4);
-        pushButton_generate->setMinimumSize(QSize(150, 30));
-        pushButton_generate->setAutoDefault(false);
+        pushButton_Analize = new QPushButton(selectAnalizeData);
+        pushButton_Analize->setObjectName(QStringLiteral("pushButton_Analize"));
+        pushButton_Analize->setEnabled(false);
+        sizePolicy4.setHeightForWidth(pushButton_Analize->sizePolicy().hasHeightForWidth());
+        pushButton_Analize->setSizePolicy(sizePolicy4);
+        pushButton_Analize->setMinimumSize(QSize(150, 30));
+        pushButton_Analize->setAutoDefault(false);
 
-        horizontalLayout_9->addWidget(pushButton_generate);
+        horizontalLayout_9->addWidget(pushButton_Analize);
 
 
         verticalLayout->addLayout(horizontalLayout_9);
@@ -780,9 +780,9 @@ public:
 #endif // QT_NO_TOOLTIP
         pushButton_select->setText(QApplication::translate("selectAnalizeData", "Load Data", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        pushButton_generate->setToolTip(QApplication::translate("selectAnalizeData", "Generate Configuration File", Q_NULLPTR));
+        pushButton_Analize->setToolTip(QApplication::translate("selectAnalizeData", "Generate Configuration File", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        pushButton_generate->setText(QApplication::translate("selectAnalizeData", "Analize", Q_NULLPTR));
+        pushButton_Analize->setText(QApplication::translate("selectAnalizeData", "Analize", Q_NULLPTR));
     } // retranslateUi
 
 };

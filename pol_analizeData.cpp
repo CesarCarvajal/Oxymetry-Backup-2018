@@ -63,6 +63,7 @@ selectAnalizeData::selectAnalizeData(QWidget *parent) :
     /* Connect Button of cancel */
     connect(ui->pushButton_select, SIGNAL(clicked()), this, SLOT(allowSelectPath()));
     connect(ui->pushButton_cancel, SIGNAL(clicked()), this, SLOT(cancel()));
+    connect(ui->pushButton_Analize, SIGNAL(clicked()), this, SLOT(analizeData()));
     connect(ui->spinBox_repselec, SIGNAL(valueChanged(int)), this, SLOT(updateSelectionList()));
     connect(ui->spinBox_calSet, SIGNAL(valueChanged(int)), this, SLOT(setDataSets()));
     connect(ui->spinBox_ValSet, SIGNAL(valueChanged(int)), this, SLOT(setDataSets()));
@@ -119,6 +120,8 @@ selectAnalizeData::selectAnalizeData(QWidget *parent) :
     ui->checkBox_stepsSelec->hide();
     ui->spinBox_stepsSelec->hide();
     ui->checkBox_SelecManual->hide();
+
+    data3D = new QSurfaceDataArray;
 
 }
 
@@ -252,7 +255,7 @@ void selectAnalizeData::selectPath(void)
         FFTFilesValidation.clear();
 
         /* Disable button to analyze */
-        ui->pushButton_generate->setEnabled(false);
+        ui->pushButton_Analize->setEnabled(false);
 
         /* Clean Lists */
         cleanList();
@@ -299,7 +302,7 @@ void selectAnalizeData::selectPath(void)
             setDataSets();
 
             /* Disable button to analyze */
-            ui->pushButton_generate->setEnabled(true);
+            ui->pushButton_Analize->setEnabled(true);
         }
     }
 }
@@ -342,7 +345,7 @@ void selectAnalizeData::readFiles(bool readLongData)
                 /* Read the text and get the values */
                 QStringList Readed_Row = ReadRow.split(": ");
 
-                    /* Concentrations found */
+                /* Concentrations found */
                 if(ReadRow.contains("Concentrations")){
 
                     /* Get substances names */
@@ -363,6 +366,33 @@ void selectAnalizeData::readFiles(bool readLongData)
 
         /* Close files */
         file.close();
+    }
+
+    /* Get the data from files */
+    if(readLongData && !FFTFilesCalibration.isEmpty()){
+
+        QStringList allFiles;
+        allFiles.append(FFTFilesCalibration);
+        allFiles.append(FFTFilesValidation);
+        allFiles = sortFiles(allFiles);
+
+        for(int index = 0; index < allFiles.length(); index++){
+
+
+        }
+
+        QSurfaceDataRow *dataRow1 = new QSurfaceDataRow;
+        QSurfaceDataRow *dataRow2 = new QSurfaceDataRow;
+        QSurfaceDataRow *dataRow3 = new QSurfaceDataRow;
+        QSurfaceDataRow *dataRow4 = new QSurfaceDataRow;
+
+        *dataRow4 << QVector3D(200,0,500) << QVector3D(400,0,500) << QVector3D(600,0,500) << QVector3D(800,0,500);
+        *dataRow3 << QVector3D(200,0.2,400) << QVector3D(400,0.1,400) << QVector3D(600,0.1,400) << QVector3D(800,0.5,400);
+        *dataRow2 << QVector3D(200,0.4,200) << QVector3D(400,0.3,200) << QVector3D(600,0.5,200) << QVector3D(800,0.3,200);
+        *dataRow1 << QVector3D(200,1,0) << QVector3D(400,0.05,0) << QVector3D(600,1,0) << QVector3D(800,1,0);
+
+        *data3D << dataRow1 << dataRow2 << dataRow3 << dataRow4;
+
     }
 }
 
@@ -416,7 +446,7 @@ void selectAnalizeData::handleClickEvent(QWidget *widget)
             FFTFilesValidation.clear();
 
             /* Disable button to analyze */
-            ui->pushButton_generate->setEnabled(false);
+            ui->pushButton_Analize->setEnabled(false);
 
             /* Clean Lists */
             cleanList();
@@ -446,7 +476,7 @@ void selectAnalizeData::handleClickEvent(QWidget *widget)
         setDataSets();
 
         /* Enable the button to analyze data */
-        ui->pushButton_generate->setEnabled(!FFTFilesCalibration.isEmpty() && !FFTFilesValidation.isEmpty());
+        ui->pushButton_Analize->setEnabled(!FFTFilesCalibration.isEmpty() && !FFTFilesValidation.isEmpty());
     }
 
     /* Click in the calibration or validation list */
@@ -726,7 +756,7 @@ void selectAnalizeData::cleanList(void){
     connect(ui->listWidget_Calibration, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
 
     /* Enable the button to analyze data */
-    ui->pushButton_generate->setEnabled(!FFTFilesCalibration.isEmpty() && !FFTFilesValidation.isEmpty());
+    ui->pushButton_Analize->setEnabled(!FFTFilesCalibration.isEmpty() && !FFTFilesValidation.isEmpty());
 
 }
 
@@ -761,6 +791,17 @@ void selectAnalizeData::showContextMenu(const QPoint &pos)
 
     // Show context menu at handling position
     LMenu.exec(globalPos);
+
+}
+
+/**
+ * @brief Analize data from the files
+ */
+void selectAnalizeData::analizeData(void){
+
+    readFiles(true);
+
+
 
 }
 

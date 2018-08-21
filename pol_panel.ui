@@ -1924,7 +1924,7 @@
             <enum>QTabWidget::Rounded</enum>
            </property>
            <property name="currentIndex">
-            <number>1</number>
+            <number>0</number>
            </property>
            <property name="iconSize">
             <size>
@@ -3439,38 +3439,6 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_5">
          <item>
-          <widget class="QPushButton" name="button_LoadData">
-           <property name="minimumSize">
-            <size>
-             <width>120</width>
-             <height>30</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>120</width>
-             <height>30</height>
-            </size>
-           </property>
-           <property name="toolTip">
-            <string>Load Data from Files</string>
-           </property>
-           <property name="text">
-            <string> Load Data</string>
-           </property>
-           <property name="icon">
-            <iconset resource="icons.qrc">
-             <normaloff>:/polarimeter/Load.ico</normaloff>:/polarimeter/Load.ico</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>20</width>
-             <height>20</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item>
           <widget class="QPushButton" name="button_AnalizeData">
            <property name="enabled">
             <bool>true</bool>
@@ -3496,6 +3464,38 @@
            <property name="icon">
             <iconset resource="icons.qrc">
              <normaloff>:/polarimeter/PC.ico</normaloff>:/polarimeter/PC.ico</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="button_LoadData">
+           <property name="minimumSize">
+            <size>
+             <width>120</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>120</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Load Data from Files</string>
+           </property>
+           <property name="text">
+            <string> Load Data</string>
+           </property>
+           <property name="icon">
+            <iconset resource="icons.qrc">
+             <normaloff>:/polarimeter/Load.ico</normaloff>:/polarimeter/Load.ico</iconset>
            </property>
            <property name="iconSize">
             <size>

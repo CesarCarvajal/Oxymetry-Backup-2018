@@ -101,6 +101,9 @@ private:
     /* Plot Objetct */
     Pol_Plot *PolPlotter = nullptr;
 
+    /* Widget container for 3D plot */
+    QWidget *container;
+
     /* Start measurement button color */
     QString greenButton = "color: rgb(0,128,0)", RedButton = "color: rgb(250,0,0)", grayButton = "color: rgb(211,211,211)";
 

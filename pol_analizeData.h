@@ -25,6 +25,9 @@
 #include <QSignalMapper>
 #include <QFileInfo>
 #include <QDir>
+#include <QtDataVisualization>
+
+using namespace QtDataVisualization;
 
 /* Internal includes */
 
@@ -52,6 +55,9 @@ public:
 
     /* Data path */
     QString pathDataM;
+
+    /* Data for 3D plot */
+    QSurfaceDataArray *data3D;
 
 private:
 
@@ -118,6 +124,9 @@ private slots:
 
     /* Read information from files */
     void readFiles(bool readLongData);
+
+    /* Analize data */
+    void analizeData(void);
 
 public slots:
 

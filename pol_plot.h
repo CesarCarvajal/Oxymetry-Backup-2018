@@ -56,6 +56,8 @@ public:
     Q3DSurface *surface;
     //Q3DScatter *scatter;
 
+    QSurface3DSeries *series;
+
     /* Maximum value on X axis of average plot */
     double maxXtime;
 
