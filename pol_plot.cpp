@@ -31,7 +31,7 @@ using namespace QtDataVisualization;
 Pol_Plot::Pol_Plot()
 {
     /* Plot Average, range of time plotting */
-    time_plot=400;
+    time_plot=450;
 
     /* Running time of Averages */
     counts_average_time = 0;

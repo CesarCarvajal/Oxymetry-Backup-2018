@@ -318,7 +318,7 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
 
     /* Set top axis with Measurement number for averages */
     ui->qwtPlot_Pol_Average->enableAxis(QwtPlot::xTop);
-    ui->qwtPlot_Pol_Average->setXAxisTop(-0.8 , 20.3, 2);
+    ui->qwtPlot_Pol_Average->setXAxisTop(-0.8 , 40.3, 2);
 
     /* FFT Curve at a certain Wavelength */
     ui->qwtPlot_Pol_FFT->setXAxis(0.0, 21);
@@ -369,12 +369,10 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     ui->Button_Save_Graphs_Pol->setVisible(false);
 
     container = QWidget::createWindowContainer(PolPlotter->surface);
+    //container = QWidget::createWindowContainer(PolPlotter->scatter);
 
     /* Add the 3D plot to the widget */
     ui->VLP->addWidget(container);
-
-    //QWidget *container = QWidget::createWindowContainer(PolPlotter->scatter);
-
 }
 
 /**
@@ -388,7 +386,7 @@ void PanelPolarimeter::adjust_Average_Plot_Time(void){
                          ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->NrAverages/1000);
 
     /* Plot always 20 measurements per refresh */
-    PolPlotter->time_plot = (measuringTime + measuringTime/3 + 12)*20;
+    PolPlotter->time_plot = (measuringTime + measuringTime/3 + 12)*40;
 
     /* Adjust axes according to the values */
     minXAverage = PolPlotter->averaged_Signal_time.at(0);
@@ -657,7 +655,7 @@ void PanelPolarimeter::adjust_Run_End(){
                                                  + ConvertedTime.at(1));
             }
 
-            /* Plot 300 points for all the measurements */
+            /* Plot 350 points for all the measurements */
             if(t % Runner->measurementPlotTimeInterval == 0){
 
                 /* Plot last entry */
@@ -801,8 +799,26 @@ void PanelPolarimeter::adjust_Run_Start(short int typeRun){
         /* Calculate the total time length of the measurements */
         int measurementLength = ConfigureMeasurement->totalMtime;
 
-        /* Adjust the intervals of averages plot during the measurements, to get 300 points */
-        Runner->measurementPlotTimeInterval = int(ceil(ConfigureMeasurement->totalMtime/300));
+        /* How many values should be shown in the average plot? */
+        int TotalNMeas = ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->NConcentrations*ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->repetition;
+
+        /* Adjust the intervals of averages plot during the measurements, to get 300 points or more depending on the number of measurements */
+        if( TotalNMeas  > 300 && TotalNMeas < 800){
+            Runner->measurementPlotTimeInterval = int(ceil(ConfigureMeasurement->totalMtime/(TotalNMeas*2)));
+            PolPlotter->time_plot = (TotalNMeas*2) + 100;
+
+            /* More than 800 */
+        }else if(TotalNMeas >= 800){
+
+            Runner->measurementPlotTimeInterval = int(ceil(ConfigureMeasurement->totalMtime/(1500)));
+            PolPlotter->time_plot = 1600;
+
+        }else
+        {
+            /* Less than 300 */
+            Runner->measurementPlotTimeInterval = int(ceil(ConfigureMeasurement->totalMtime/350));
+            PolPlotter->time_plot = 450;
+        }
 
         /* Adjust axis for the measurements */
         minXAverage = 0;
@@ -1598,7 +1614,7 @@ void PanelPolarimeter::clean_All_Pol(void){
     maxYRaw = 0;
     maxYAverage = 0;
     ui->qwtPlot_Pol_Average->setXAxis(minXAverage, maxXAverage);
-    ui->qwtPlot_Pol_Average->setXAxisTop(-0.8 , 20.3, 2);
+    ui->qwtPlot_Pol_Average->setXAxisTop(-0.8 , 40.3, 2);
 
     /* Nothing is running */
     Runner = new Pol_Measurements();
@@ -2258,7 +2274,7 @@ void PanelPolarimeter::initialize_Calibration(void){
     ui->button_Start_Meas_Pol->setStyleSheet(grayButton);
 
     /* Adjust top axis of averages */
-    ui->qwtPlot_Pol_Average->setXAxisTop(-0.8 , 20.3, 2);
+    ui->qwtPlot_Pol_Average->setXAxisTop(-0.8 , 40.3, 2);
 
     /* Ajust X axis of time plotting */
     adjust_Average_Plot_Time();
@@ -2583,7 +2599,7 @@ void PanelPolarimeter::pol_Calibrate(void){
     int minimumLiveTime = measuringTime + measuringTime/3 + 12;
 
     /* Always plot at 10 measurement values */
-    PolPlotter->time_plot = minimumLiveTime*20;
+    PolPlotter->time_plot = minimumLiveTime*40;
 
     /* Change from ms on timer to just seconds of running the calibration */
     if(Runner->timerMS.elapsed()/1000 > Runner->Timer_In_Seconds){
@@ -2716,6 +2732,8 @@ void PanelPolarimeter::plot_Average(void){
 
     /* Update plots */
     ui->qwtPlot_Pol_Average->update();
+
+    //qDebug() << "Length of time: " << PolPlotter->averaged_Signal_time.length() << " --- its values is: " << PolPlotter->averaged_Signal_time.at(PolPlotter->averaged_Signal_time.length()-1) <<  "  ---- Timeplot is: " <<  PolPlotter->time_plot;
 
     /* If we have more than certain amount of values in the plot, change the X axis */
     if(PolPlotter->averaged_Signal_time.length() > PolPlotter->time_plot){
@@ -4297,10 +4315,12 @@ void PanelPolarimeter::write_Summary() {
     file = nullptr;
 
     /* Restart vectors */
+/*
     PolPlotter->averaged_Signal_time.resize(0);
     PolPlotter->AverageDC.resize(0);
     PolPlotter->AverageW.resize(0);
     PolPlotter->Average2W.resize(0);
+*/
 }
 
 /**
@@ -4375,7 +4395,6 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
 
     PolPlotter->series->dataProxy()->resetArray(DataSelector->data3D);
     PolPlotter->surface->addSeries(PolPlotter->series);
-    PolPlotter->surface->show();
 
     PolPlotter->surface->scene()->activeCamera()->setCameraPosition(45, 45, 100); // horizontal in °, vertikal in °, zoom in %
 
