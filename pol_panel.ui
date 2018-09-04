@@ -1924,7 +1924,7 @@
             <enum>QTabWidget::Rounded</enum>
            </property>
            <property name="currentIndex">
-            <number>0</number>
+            <number>1</number>
            </property>
            <property name="iconSize">
             <size>
@@ -3036,6 +3036,9 @@
                      <pointsize>7</pointsize>
                     </font>
                    </property>
+                   <property name="cursor">
+                    <cursorShape>PointingHandCursor</cursorShape>
+                   </property>
                    <property name="text">
                     <string>&lt;&lt; Hide Spectra</string>
                    </property>
@@ -3114,7 +3117,7 @@
                   <widget class="ClickableLabel" name="label_5">
                    <property name="minimumSize">
                     <size>
-                     <width>100</width>
+                     <width>70</width>
                      <height>0</height>
                     </size>
                    </property>
@@ -3122,6 +3125,9 @@
                     <font>
                      <pointsize>7</pointsize>
                     </font>
+                   </property>
+                   <property name="cursor">
+                    <cursorShape>PointingHandCursor</cursorShape>
                    </property>
                    <property name="text">
                     <string>&gt;&gt; Hide Prediction</string>

@@ -1179,6 +1179,7 @@ public:
         QFont font10;
         font10.setPointSize(7);
         label_2->setFont(font10);
+        label_2->setCursor(QCursor(Qt::PointingHandCursor));
 
         horizontalLayout_16->addWidget(label_2);
 
@@ -1218,8 +1219,9 @@ public:
 
         label_5 = new ClickableLabel(MeasResults);
         label_5->setObjectName(QStringLiteral("label_5"));
-        label_5->setMinimumSize(QSize(100, 0));
+        label_5->setMinimumSize(QSize(70, 0));
         label_5->setFont(font10);
+        label_5->setCursor(QCursor(Qt::PointingHandCursor));
 
         horizontalLayout_18->addWidget(label_5);
 
@@ -1554,7 +1556,7 @@ public:
         retranslateUi(PanelPolarimeter);
 
         list_devices_Pol->setCurrentRow(-1);
-        Tabs_Plots->setCurrentIndex(0);
+        Tabs_Plots->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(PanelPolarimeter);

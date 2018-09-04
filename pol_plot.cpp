@@ -40,8 +40,6 @@ Pol_Plot::Pol_Plot()
     surface = new Q3DSurface;
     series = new QSurface3DSeries;
 
-    //scatter = new Q3DScatter;
-
     /* Max value for plotting Y axis in Averages */
     maxYValue = 0;
 
@@ -79,7 +77,8 @@ Pol_Plot::Pol_Plot()
     predictionSignal = new QwtPlotCurve("");
     predictionSignal->setPen(QPen("black"));
     predictionSignal->setItemAttribute(QwtPlotItem::Legend, false);
-/*
+
+    /*
     QScatter3DSeries *series = new QScatter3DSeries;
     QScatterDataArray data;
 
@@ -98,6 +97,44 @@ Pol_Plot::Pol_Plot()
     scatter->show();
 */
 
+}
+
+
+/**
+ * @brief Adjust 3D plot.
+ */
+void Pol_Plot::adjust3DPlot(void){
+
+    /* Adjust color painting */
+    QLinearGradient gr;
+    gr.setColorAt(0.0, Qt::blue);
+    gr.setColorAt(0.2, Qt::cyan);
+    gr.setColorAt(0.4, Qt::green);
+    gr.setColorAt(0.6, Qt::yellow);
+    gr.setColorAt(0.8, Qt::red);
+    gr.setColorAt(1.0, Qt::black);
+    surface->seriesList().at(0)->setBaseGradient(gr);
+    surface->seriesList().at(0)->setColorStyle(Q3DTheme::ColorStyle::ColorStyleRangeGradient);
+    surface->seriesList().at(0)->setDrawMode(QSurface3DSeries::DrawSurface);
+
+    surface->axisX()->setAutoAdjustRange(true);
+    surface->axisY()->setAutoAdjustRange(true);
+    surface->axisZ()->setAutoAdjustRange(true);
+    surface->axisX()->setLabelFormat("%d");
+    surface->axisY()->setLabelFormat("%.1f ");
+    surface->axisZ()->setLabelFormat("%d");
+    surface->axisX()->setTitle(QStringLiteral("Wavelength (nm)"));
+    surface->axisZ()->setTitle(QStringLiteral("Concentration (mg/dl)"));
+    surface->axisX()->setTitleVisible(true);
+    surface->axisY()->setTitleVisible(true);
+    surface->axisZ()->setTitleVisible(true);
+    surface->scene()->activeCamera()->setCameraPosition(45, 45, 100); // horizontal in °, vertikal in °, zoom in %
+    surface->setSelectionMode(QAbstract3DGraph::SelectionItemAndRow
+                              | QAbstract3DGraph::SelectionSlice);
+
+    surface->activeTheme()->setLabelBorderEnabled(false);
+    surface->activeTheme()->setLabelTextColor(QColor(QRgb(Qt::black)));
+    surface->activeTheme()->setFont(QFont(QStringLiteral("Arial"), 40));
 }
 
 /**

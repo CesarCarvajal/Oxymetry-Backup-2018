@@ -64,6 +64,7 @@
 #include "ui_pol_ConfigureMeasurement.h"
 #include "pol_analizeData.h"
 #include "ui_pol_AnalizeData.h"
+#include "Q3DTheme"
 
 /* Panel stuff */
 #include "panel_change_averages.h"
@@ -143,7 +144,6 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     ui->label_remaining->setVisible(false);
     ui->horizontalSpacer_Y->changeSize(20,12,QSizePolicy::Expanding,QSizePolicy::Fixed);
     ui->currentProgressBar_Pol->setVisible(false);
-    ui->qwtPlot_Pol_Prediction->setVisible(false);
     ui->Tabs_Plots->setTabEnabled(1,false);
     ui->Tabs_Plots->setTabEnabled(2,false);
     ui->label_PlotSaturated->setStyleSheet(QString("color: red; font: bold;"));
@@ -337,6 +337,7 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     ui->qwtPlot_Pol_Prediction->setYAxisTitle("Predicted (mg/dL)");
     ui->qwtPlot_Pol_Prediction->setXAxis(0.0, 500);
     ui->qwtPlot_Pol_Prediction->setYAxis(0.0, 500);
+
     ui->label_RemainingTime->setVisible(false);
 
     /* Show and format all plots */
@@ -2733,7 +2734,9 @@ void PanelPolarimeter::plot_Average(void){
     /* Update plots */
     ui->qwtPlot_Pol_Average->update();
 
-    //qDebug() << "Length of time: " << PolPlotter->averaged_Signal_time.length() << " --- its values is: " << PolPlotter->averaged_Signal_time.at(PolPlotter->averaged_Signal_time.length()-1) <<  "  ---- Timeplot is: " <<  PolPlotter->time_plot;
+    // qDebug() << "Length of time: " << PolPlotter->averaged_Signal_time.length() << " --- its values is: "
+    //          << PolPlotter->averaged_Signal_time.at(PolPlotter->averaged_Signal_time.length()-1) <<  "  ---- Timeplot is: " <<  PolPlotter->time_plot
+    //           << " I(w) is: " << PolPlotter->AverageW.at(PolPlotter->AverageW.length()-1) << " I(2w) is: " << PolPlotter->Average2W.at(PolPlotter->Average2W.length()-1) ;
 
     /* If we have more than certain amount of values in the plot, change the X axis */
     if(PolPlotter->averaged_Signal_time.length() > PolPlotter->time_plot){
@@ -4315,7 +4318,7 @@ void PanelPolarimeter::write_Summary() {
     file = nullptr;
 
     /* Restart vectors */
-/*
+    /*
     PolPlotter->averaged_Signal_time.resize(0);
     PolPlotter->AverageDC.resize(0);
     PolPlotter->AverageW.resize(0);
@@ -4388,30 +4391,25 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
     /* Show the window */
     DataSelector->exec();
 
-    ui->Button_Save_Graphs_Pol->setVisible(true);
+    if(!DataSelector->canceled){
 
-    ui->Tabs_Plots->setTabEnabled(1,true);
-    ui->Tabs_Plots->setTabEnabled(2,true);
+        /* Allow to save plots again */
+        ui->Button_Save_Graphs_Pol->setVisible(true);
 
-    PolPlotter->series->dataProxy()->resetArray(DataSelector->data3D);
-    PolPlotter->surface->addSeries(PolPlotter->series);
+        /* Enable tabs with the calculate information */
+        ui->Tabs_Plots->setTabEnabled(1,true);
+        ui->Tabs_Plots->setTabEnabled(2,false);
 
-    PolPlotter->surface->scene()->activeCamera()->setCameraPosition(45, 45, 100); // horizontal in °, vertikal in °, zoom in %
+        /* Get the data from the dialog */
+        PolPlotter->series->dataProxy()->resetArray(DataSelector->data3D);
 
-    QLinearGradient gr;
-    gr.setColorAt(0.0, Qt::blue);
-    gr.setColorAt(0.2, Qt::cyan);
-    gr.setColorAt(0.4, Qt::green);
-    gr.setColorAt(0.6, Qt::yellow);
-    gr.setColorAt(0.8, Qt::red);
-    gr.setColorAt(1.0, Qt::black);
+        /* Add the data series */
+        PolPlotter->surface->addSeries(PolPlotter->series);
 
-    PolPlotter->surface->seriesList().at(0)->setBaseGradient(gr);
-    PolPlotter->surface->seriesList().at(0)->setColorStyle(Q3DTheme::ColorStyleRangeGradient);
+        PolPlotter->surface->axisY()->setTitle(DataSelector->ui->comboBox_DetSignal->currentText());
 
-    //scatter->seriesList().at(0)->setBaseGradient(gr);
-    //scatter->seriesList().at(0)->setColorStyle(Q3DTheme::ColorStyleRangeGradient);
-
+        PolPlotter->adjust3DPlot();
+    }
 }
 
 /**

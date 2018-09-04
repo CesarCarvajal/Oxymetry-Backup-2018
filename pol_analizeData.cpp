@@ -121,6 +121,9 @@ selectAnalizeData::selectAnalizeData(QWidget *parent) :
     ui->spinBox_stepsSelec->hide();
     ui->checkBox_SelecManual->hide();
 
+    /* not canceled */
+    canceled = false;
+
     data3D = new QSurfaceDataArray;
 
 }
@@ -284,7 +287,7 @@ void selectAnalizeData::selectPath(void)
         addFilesToList();
 
         /* Read information from files */
-        readFiles(false);
+        readInitialFile(false, pathDataM + "/" + FFTFilesCalibration.at(0));
 
         /* Show Ui Items */
         ui->checkBox_RandomSort->show();
@@ -308,18 +311,20 @@ void selectAnalizeData::selectPath(void)
 }
 
 /**
- * @brief Read files to analize
+ * @brief Read Initial file to analize
  */
-void selectAnalizeData::readFiles(bool readLongData)
+void selectAnalizeData::readInitialFile(bool list, QString path)
 {
     /* Just get the header information */
-    if(!readLongData && !FFTFilesCalibration.isEmpty()){
+    if(!FFTFilesCalibration.isEmpty()){
 
-        /* Clear combo box of substances */
-        ui->comboBox_Substance->clear();
+        if(!list){
+            /* Clear combo box of substances */
+            ui->comboBox_Substance->clear();
+        }
 
         /* Open the file to get the Nr of Spectra and Average Nr. */
-        QFile file(pathDataM + "/" + FFTFilesCalibration.at(0));
+        QFile file(path);
 
         /* Row of the file */
         QString ReadRow;
@@ -348,13 +353,20 @@ void selectAnalizeData::readFiles(bool readLongData)
                 /* Concentrations found */
                 if(ReadRow.contains("Concentrations")){
 
-                    /* Get substances names */
-                    QString Substances = Readed_Row.at(1);
-                    QStringList ListS = Substances.split("/");
-                    ListS.removeLast();
+                    if(!list){
+                        /* Get substances names */
+                        QString Substances = Readed_Row.at(1);
+                        QStringList ListS = Substances.split("/");
+                        ListS.removeLast();
 
-                    /* Add substances */
-                    ui->comboBox_Substance->addItems(ListS);
+                        /* Add substances */
+                        ui->comboBox_Substance->addItems(ListS);
+
+                    }else{
+
+                        QString Substances = Readed_Row.at(2);
+                        concentrationsList = Substances.split(",");
+                    }
 
                     /* From here ahead just counts and other data */
                 }else if(ReadRow.contains("Wavelength")){
@@ -367,33 +379,142 @@ void selectAnalizeData::readFiles(bool readLongData)
         /* Close files */
         file.close();
     }
+}
 
+/**
+ * @brief Read files to analize
+ */
+void selectAnalizeData::readFiles(void)
+{
     /* Get the data from files */
-    if(readLongData && !FFTFilesCalibration.isEmpty()){
+    if(!FFTFilesCalibration.isEmpty()){
 
+        /* resize vectors */
+        wavelengths.resize(0);
+
+        /* Save all the file names in one variable */
         QStringList allFiles;
         allFiles.append(FFTFilesCalibration);
         allFiles.append(FFTFilesValidation);
         allFiles = sortFiles(allFiles);
 
+        /* Create Folder to store the data analysis results */
+        QDir(pathDataM).mkdir("Data_Analysis");
+
+        QSurfaceDataArray *dataArray = new QSurfaceDataArray;
+        dataArray->reserve(allFiles.length());
+
         for(int index = 0; index < allFiles.length(); index++){
 
+            /* Read the concentration from the files */
+            readInitialFile(true, pathDataM + "/" + allFiles.at(index));
 
+            /* This vector saves the information per file or per concentration */
+            signal.resize(0);
+
+            /* Open the file to get the Nr of Spectra and Average Nr. */
+            QFile file(pathDataM + "/" + allFiles.at(index));
+
+            /* Row of the file */
+            QString ReadRow;
+
+            /* Does the File exists? */
+            if(!file.exists()){
+                /* If not, tell the user that it coulnd't be found */
+                showWarning("File not Found!", "");
+                return;
+            }
+
+            /* Open the file */
+            if(file.open(QIODevice::ReadOnly)) {
+
+                QTextStream stream(&file);
+
+                /* Read lines */
+                while(!stream.atEnd()){
+
+                    /* When should it start reading the FFT data? */
+                    bool read = false;
+
+                    /* Read a line from the file */
+                    ReadRow = stream.readLine();
+
+                    /* Indicates where to start reading the numerical information from file */
+                    QString in = ReadRow.at(1);
+
+                    /* If a number was found at the first position, then start reading */
+                    in.toInt(&read);
+
+                    /* start reading numbers */
+                    if(read){
+
+                        /* Get the values from the line separated by 2 tabulars and replace (,) by (.) to read numbers */
+                        QStringList Readed_Row = ReadRow.split("\t\t");
+                        Readed_Row.replaceInStrings(",",".");
+
+                        /* We don't need all the saved values */
+                        if(Readed_Row.at(0).toDouble() > ui->doubleSpinBox_maxWavel->value()){break;}
+                        if(Readed_Row.at(0).toDouble() < ui->doubleSpinBox_minWavel->value()){continue;}
+
+                        /* Save the wavelengths in Position 0 */
+                        if(index < 1){
+                            wavelengths.append(Readed_Row.at(0).toDouble());
+                        }
+
+                        /* 4th column is the ratio */
+                        if(ui->comboBox_DetSignal->currentIndex() == 0){
+                            signal.append(Readed_Row.at(4).toDouble());
+                        }
+
+                        /* 2nd column is I(w) */
+                        if(ui->comboBox_DetSignal->currentIndex() == 1){
+                            signal.append(Readed_Row.at(2).toDouble());
+                        }
+
+                        /* 3rd column is I(2w) */
+                        if(ui->comboBox_DetSignal->currentIndex() == 2){
+                            signal.append(Readed_Row.at(3).toDouble());
+                        }
+
+                        /* 1st column is I(DC) */
+                        if(ui->comboBox_DetSignal->currentIndex() == 3){
+                            signal.append(Readed_Row.at(1).toDouble());
+                        }
+                    }
+                }
+            }
+
+            /* Rows of 3D plot */
+            QSurfaceDataRow *newRow = new QSurfaceDataRow(wavelengths.length());
+
+            for (int j = 0; j < wavelengths.length(); j++)
+                (*newRow)[j].setPosition(QVector3D(wavelengths.at(j), signal.at(j), QString(concentrationsList.at(ui->comboBox_Substance->currentIndex())).toDouble()));
+
+            /* All information for the 3D plot */
+            *data3D << newRow;
+
+            /* Restart the vector */
+            concentrationsList.clear();
         }
-
-        QSurfaceDataRow *dataRow1 = new QSurfaceDataRow;
-        QSurfaceDataRow *dataRow2 = new QSurfaceDataRow;
-        QSurfaceDataRow *dataRow3 = new QSurfaceDataRow;
-        QSurfaceDataRow *dataRow4 = new QSurfaceDataRow;
-
-        *dataRow4 << QVector3D(200,0,500) << QVector3D(400,0,500) << QVector3D(600,0,500) << QVector3D(800,0,500);
-        *dataRow3 << QVector3D(200,0.2,400) << QVector3D(400,0.1,400) << QVector3D(600,0.1,400) << QVector3D(800,0.5,400);
-        *dataRow2 << QVector3D(200,0.4,200) << QVector3D(400,0.3,200) << QVector3D(600,0.5,200) << QVector3D(800,0.3,200);
-        *dataRow1 << QVector3D(200,1,0) << QVector3D(400,0.05,0) << QVector3D(600,1,0) << QVector3D(800,1,0);
-
-        *data3D << dataRow1 << dataRow2 << dataRow3 << dataRow4;
-
     }
+}
+
+/**
+ * @brief Read data for the 3D plot
+ */
+void selectAnalizeData::createData3D()
+{
+    QSurfaceDataRow *dataRow1 = new QSurfaceDataRow;
+    QSurfaceDataRow *dataRow2 = new QSurfaceDataRow;
+    QSurfaceDataRow *dataRow3 = new QSurfaceDataRow;
+    QSurfaceDataRow *dataRow4 = new QSurfaceDataRow;
+
+    *dataRow4 << QVector3D(200,0,500) << QVector3D(400,0,500) << QVector3D(600,0,500) << QVector3D(800,0,500);
+    *dataRow3 << QVector3D(200,0.2,400) << QVector3D(400,0.1,400) << QVector3D(600,0.1,400) << QVector3D(800,0.5,400);
+    *dataRow2 << QVector3D(200,0.4,200) << QVector3D(400,0.3,200) << QVector3D(600,0.5,200) << QVector3D(800,0.3,200);
+    *dataRow1 << QVector3D(200,1,0) << QVector3D(400,0.05,0) << QVector3D(600,1,0) << QVector3D(800,1,0);
+
+    *data3D << dataRow1 << dataRow2 << dataRow3 << dataRow4;
 }
 
 /**
@@ -720,6 +841,9 @@ void selectAnalizeData::findRepetitions(void)
 void selectAnalizeData::cancel(void)
 {
 
+    /* Save it was canceled */
+    canceled = true;
+
     /* Close dialog */
     reject();
 }
@@ -799,7 +923,7 @@ void selectAnalizeData::showContextMenu(const QPoint &pos)
  */
 void selectAnalizeData::analizeData(void){
 
-    readFiles(true);
+    readFiles();
 
 
 

@@ -59,6 +59,12 @@ public:
     /* Data for 3D plot */
     QSurfaceDataArray *data3D;
 
+    /* Save the concentrations */
+    QStringList concentrationsList;
+
+    /* window canceled */
+    bool canceled;
+
 private:
 
     /* Own signal mapper for buttons and labels in configuration window */
@@ -72,6 +78,12 @@ private:
 
     /* Files for calibration */
     QStringList FFTFilesCalibration, FFTFilesValidation;
+
+    /* Size of Nr Waves */
+    QVector<double> wavelengths;
+
+    /* Size of Nr Waves */
+    QVector<double> signal;
 
     /* How many repetitions are there?  */
     int repetitions;
@@ -98,6 +110,9 @@ private slots:
     /* Allow the user to load data manually */
     void allowSelectPath(void);
 
+    /* Create data for 3D plot */
+    void createData3D(void);
+
     /* Organize files per steps */
     void selectFileSteps(void);
 
@@ -123,7 +138,10 @@ private slots:
     void selectPath(void);
 
     /* Read information from files */
-    void readFiles(bool readLongData);
+    void readFiles(void);
+
+    /* Read initial data */
+    void readInitialFile(bool list, QString path);
 
     /* Analize data */
     void analizeData(void);
