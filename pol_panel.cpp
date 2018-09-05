@@ -4165,11 +4165,11 @@ void PanelPolarimeter::write_To_File(FILE *file, double *a_pSpectrum, int WParam
         /* Include the concentrations in the file */
         QString concentrations, conc = "";
 
-        /* Is glucose active? */
+       /* Is glucose active? */
         if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(0)){
 
             /* Write C1 */
-            FFTL.ConcentrationC1 = ConfigureMeasurement->externSoftware->GlucoseConcentration.at(Timeindex-1);
+            FFTL.ConcentrationC1 = ui->Table_Measurements_Pol->item(Timeindex-1, 2)->text().toDouble();
             concentrations.append(QString::number(FFTL.ConcentrationC1));
             conc.append("C1/");
         }
@@ -4178,7 +4178,7 @@ void PanelPolarimeter::write_To_File(FILE *file, double *a_pSpectrum, int WParam
         if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(1)){
 
             /* Write C2 */
-            FFTL.ConcentrationC2 = ConfigureMeasurement->externSoftware->Impurity1Concentration.at(Timeindex-1);
+            FFTL.ConcentrationC2 = ui->Table_Measurements_Pol->item(Timeindex-1, 3)->text().toDouble();
             concentrations.append("," + QString::number(FFTL.ConcentrationC2));
             conc.append("C2/");
         }
@@ -4187,7 +4187,7 @@ void PanelPolarimeter::write_To_File(FILE *file, double *a_pSpectrum, int WParam
         if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(2)){
 
             /* Write C3 */
-            FFTL.ConcentrationC3 = ConfigureMeasurement->externSoftware->Impurity2Concentration.at(Timeindex-1);
+            FFTL.ConcentrationC3 = ui->Table_Measurements_Pol->item(Timeindex-1, 4)->text().toDouble();
             concentrations.append("," + QString::number(FFTL.ConcentrationC3));
             conc.append("C3/");
         }
@@ -4196,7 +4196,7 @@ void PanelPolarimeter::write_To_File(FILE *file, double *a_pSpectrum, int WParam
         if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(3)){
 
             /* Write C4 */
-            FFTL.ConcentrationC4 = ConfigureMeasurement->externSoftware->Impurity3Concentration.at(Timeindex-1);
+            FFTL.ConcentrationC4 = ui->Table_Measurements_Pol->item(Timeindex-1, 5)->text().toDouble();
             concentrations.append("," + QString::number(FFTL.ConcentrationC4));
             conc.append("C4/");
         }
@@ -4205,7 +4205,7 @@ void PanelPolarimeter::write_To_File(FILE *file, double *a_pSpectrum, int WParam
         if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(4)){
 
             /* Write C5 */
-            FFTL.ConcentrationC5 = ConfigureMeasurement->externSoftware->Impurity4Concentration.at(Timeindex-1);
+            FFTL.ConcentrationC5 = ui->Table_Measurements_Pol->item(Timeindex-1, 6)->text().toDouble();
             concentrations.append("," + QString::number(FFTL.ConcentrationC5));
             conc.append("C5/");
         }
@@ -4214,7 +4214,7 @@ void PanelPolarimeter::write_To_File(FILE *file, double *a_pSpectrum, int WParam
         if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(5)){
 
             /* Write C6 */
-            FFTL.ConcentrationC6 = ConfigureMeasurement->externSoftware->Impurity5Concentration.at(Timeindex-1);
+            FFTL.ConcentrationC6 = ui->Table_Measurements_Pol->item(Timeindex-1, 7)->text().toDouble();
             concentrations.append("," + QString::number(FFTL.ConcentrationC6));
             conc.append("C6/");
         }

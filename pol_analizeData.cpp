@@ -391,6 +391,8 @@ void selectAnalizeData::readFiles(void)
 
         /* resize vectors */
         wavelengths.resize(0);
+        signal.resize(0);
+        data3D = new QSurfaceDataArray;
 
         /* Save all the file names in one variable */
         QStringList allFiles;
@@ -925,7 +927,7 @@ void selectAnalizeData::analizeData(void){
 
     readFiles();
 
-
+    accept();
 
 }
 
