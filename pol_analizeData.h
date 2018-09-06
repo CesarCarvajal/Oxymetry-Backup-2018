@@ -104,6 +104,9 @@ private slots:
     /* Sort files */
     QStringList sortFiles(QStringList List);
 
+    /* Sort files according to the substance */
+    QStringList sortFiles2(QStringList List);
+
     /* Add files to the lists */
     void addFilesToList(void);
 

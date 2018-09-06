@@ -364,11 +364,12 @@ void selectAnalizeData::readInitialFile(bool list, QString path)
 
                     }else{
 
+                        /* Get subtances concentrations */
                         QString Substances = Readed_Row.at(2);
                         concentrationsList = Substances.split(",");
                     }
 
-                    /* From here ahead just counts and other data */
+                    /* From here ahead just counts and other data, not needed yet */
                 }else if(ReadRow.contains("Wavelength")){
 
                     break;
@@ -398,7 +399,16 @@ void selectAnalizeData::readFiles(void)
         QStringList allFiles;
         allFiles.append(FFTFilesCalibration);
         allFiles.append(FFTFilesValidation);
-        allFiles = sortFiles(allFiles);
+
+        /* Sort files appropriatelly, if the first concentration should be taken */
+        if(ui->comboBox_Substance->currentIndex() == 0){
+            allFiles = sortFiles(allFiles);
+
+        }else{
+
+            /* Different substance sort */
+            allFiles = sortFiles2(allFiles);
+        }
 
         /* Create Folder to store the data analysis results */
         QDir(pathDataM).mkdir("Data_Analysis");
@@ -752,6 +762,56 @@ QStringList selectAnalizeData::sortFiles(QStringList List)
 
     return List;
 
+}
+
+/**
+ * @brief Sort the list with the files names acording to the substance
+ * in: Qstring List to be sorted
+ * out: Sorted list
+ */
+QStringList selectAnalizeData::sortFiles2(QStringList List)
+{
+    /* Create a temporal list */
+    QStringList temp;
+
+    /* Needed to organize the data according to the files */
+    for(int remover = 0; remover < List.length(); remover++){
+
+        /* Get the file name */
+        QString name = List.at(remover);
+
+        /* Iterate in the substances to find the right one */
+        for(int k =0; k < ui->comboBox_Substance->currentIndex(); k++){
+
+            /* Remove other substances from the name */
+            name.remove(0,name.indexOf("C")+3);
+        }
+
+        /* Save the names of the substances */
+             temp.append(name);
+    }
+
+    /* Sort the temporal file list of substances */
+    temp = sortFiles(temp);
+
+    /* Save the sorted names in a new list */
+    QStringList sorted;
+
+    /* Iterate to find them */
+    for(int i = 0; i < temp.length(); i++){
+        for(int sorter = 0; sorter < List.length(); sorter++){
+
+            /* When the original list finds a match with the sort criteria then add it to the sorted list */
+            if(QString(List.at(sorter)).contains(temp.at(i))){
+
+                /* Add the right order according to the substances */
+                sorted.append(List.at(sorter));
+            }
+        }
+    }
+
+    /* return the files sorted according to the selected susbtance */
+    return sorted;
 }
 
 /**

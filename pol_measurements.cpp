@@ -72,6 +72,11 @@ Pol_Measurements::Pol_Measurements()
     /* Elapsed time in between measurements during live FFT */
     Calibration_Progress = 0;
 
+    /* Start the time index in 0 */
+    Timeindex = 0;
+
+    /* Start the  vector index in -1 */
+    vectorIndex = -1;
 }
 
 /**

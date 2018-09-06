@@ -124,7 +124,6 @@ void Pol_Plot::adjust3DPlot(void){
     surface->axisY()->setLabelFormat("%.1f ");
     surface->axisZ()->setLabelFormat("%d");
     surface->axisX()->setTitle(QStringLiteral("Wavelength (nm)"));
-    surface->axisZ()->setTitle(QStringLiteral("Concentration (mg/dl)"));
     surface->axisX()->setTitleVisible(true);
     surface->axisY()->setTitleVisible(true);
     surface->axisZ()->setTitleVisible(true);
