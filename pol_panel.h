@@ -121,9 +121,6 @@ private:
     /* The number of the spectrometer in use for polarimeter */
     int SpectrometerNumber;
 
-    /* Index of configured waiting time in measurements */
-    unsigned int Timeindex;
-
     /* Distinguish between raw and fft data */
     bool isFFTData;
 

@@ -102,9 +102,6 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     /* No data loaded before */
     dataloaded = false;
 
-    /* Start the time index in 0 */
-    Timeindex = 0;
-
     /* Restart FFT flag */
     isFFTData = true;
 
@@ -782,7 +779,10 @@ void PanelPolarimeter::adjust_Run_Start(short int typeRun){
         Runner->setMeasurementRunning(true);
 
         /* Time measurement index for Measurements, restart to 0 when starting a measurement */
-        Timeindex = 0;
+        Runner->Timeindex = 0;
+
+        /* Restart vector positions */
+        Runner->vectorIndex = -1;
 
         /* Update polarimetric Measurement button */
         ui->button_Start_Meas_Pol->setText("Stop Measurement");
@@ -793,6 +793,10 @@ void PanelPolarimeter::adjust_Run_Start(short int typeRun){
         /* Restart Measurement progress bars */
         ui->currentProgressBar_Pol->setValue(0);
         ui->TotalProgressBar_Pol->setValue(0);
+
+        /* Hide tabs */
+        ui->Tabs_Plots->setTabEnabled(1,false);
+        ui->Tabs_Plots->setTabEnabled(2,false);
 
         /* Show the remaining label */
         ui->label_remaining->setVisible(true);
@@ -1532,9 +1536,6 @@ void PanelPolarimeter::change_Wavelength_FFT_Pol(void){
  */
 void PanelPolarimeter::clean_All_Pol(void){
 
-    /* Local */
-    Timeindex = 0;
-
     /* Data loaded */
     UserLoadDataPath = "";
 
@@ -1571,6 +1572,10 @@ void PanelPolarimeter::clean_All_Pol(void){
     ui->label_remaining->setVisible(false);
     ui->horizontalSpacer_Y->changeSize(20,12,QSizePolicy::Expanding,QSizePolicy::Fixed);
     ui->label_RemainingTime->setVisible(false);
+
+    /* Enable tabs with the calculate information */
+    ui->Tabs_Plots->setTabEnabled(1,false);
+    ui->Tabs_Plots->setTabEnabled(2,false);
 
     /* Show current progress bar*/
     ui->currentProgressBar_Pol->setVisible(false);
@@ -2276,6 +2281,13 @@ void PanelPolarimeter::initialize_Calibration(void){
 
     /* Adjust top axis of averages */
     ui->qwtPlot_Pol_Average->setXAxisTop(-0.8 , 40.3, 2);
+    minXAverage = 0;
+    maxYAverage = 0;
+    PolPlotter->maxXtime = 0;
+    ui->qwtPlot_Pol_Average->setXAxis(0.0, PolPlotter->time_plot);
+
+    /* Update plots */
+    ui->qwtPlot_Pol_Average->updateLayout();
 
     /* Ajust X axis of time plotting */
     adjust_Average_Plot_Time();
@@ -2285,6 +2297,15 @@ void PanelPolarimeter::initialize_Calibration(void){
  * @brief Initialize the calibration with default values
  */
 void PanelPolarimeter::initialize_Default_Calibration(void){
+
+    /* Restart axes */
+    minXAverage = 0;
+    maxYAverage = 0;
+    PolPlotter->maxXtime = 0;
+    ui->qwtPlot_Pol_Average->setXAxis(0.0, PolPlotter->time_plot);
+
+    /* Update plots */
+    ui->qwtPlot_Pol_Average->updateLayout();
 
     /* If there is a value in the spectrometer, then adjust the frequency according to the resolution */
     double Freqresolution = 1000/ptrSpectrometers[SpectrometerNumber]->getIntegrationTime();
@@ -2364,6 +2385,7 @@ void PanelPolarimeter::Load_Summary(void) {
     PolPlotter->AverageDC.resize(0);
     PolPlotter->AverageW.resize(0);
     PolPlotter->Average2W.resize(0);
+    PolPlotter->AverageRatio.resize(0);
 
     /* Enroute File */
     QFile file(DataPath);
@@ -2437,6 +2459,9 @@ void PanelPolarimeter::Load_Summary(void) {
     /* Close file */
     file.close();
 
+    int maxiYAverage = ceil((ceil(*std::max_element(PolPlotter->AverageDC.begin(), PolPlotter->AverageDC.end())))*1.1);
+    ui->qwtPlot_Pol_Average->setYAxis(0.0, maxiYAverage);
+
     /* Add signals to the plots */
     PolPlotter->Average_DC_Signal->setSamples(PolPlotter->averaged_Signal_time, PolPlotter->AverageDC);
     PolPlotter->Average_DC_Signal->setTitle(" Ī(DC)");
@@ -2445,10 +2470,26 @@ void PanelPolarimeter::Load_Summary(void) {
     PolPlotter->Average_2W_Signal->setSamples(PolPlotter->averaged_Signal_time, PolPlotter->Average2W);
     PolPlotter->Average_2W_Signal->setTitle(" Ī(2ω)");
 
+    QVector<double> AverageRatio;
+
+    for(int k = 0; k < PolPlotter->AverageW.length(); k++){
+
+        if(PolPlotter->Average2W.at(k) == 0){
+            AverageRatio.append(0);
+
+        }else{
+            AverageRatio.append(PolPlotter->AverageW.at(k)/PolPlotter->Average2W.at(k));
+        }
+    }
+
+    PolPlotter->Average_Ratio_Signal->setSamples(PolPlotter->averaged_Signal_time, AverageRatio);
+    PolPlotter->Average_Ratio_Signal->setTitle(" Ī(DC)/Ī(2ω)");
+
     /* Attach graphs */
     PolPlotter->Average_DC_Signal->attach(ui->qwtPlot_Pol_Average);
     PolPlotter->Average_W_Signal->attach(ui->qwtPlot_Pol_Average);
     PolPlotter->Average_2W_Signal->attach(ui->qwtPlot_Pol_Average);
+    PolPlotter->Average_Ratio_Signal->attach(ui->qwtPlot_Pol_Average);
 
     /* Just add a certain time to the plot */
     int maximal = *std::max_element(PolPlotter->averaged_Signal_time.begin(), PolPlotter->averaged_Signal_time.end());
@@ -2482,6 +2523,7 @@ void PanelPolarimeter::Load_Summary(void) {
     PolPlotter->AverageDC.resize(0);
     PolPlotter->AverageW.resize(0);
     PolPlotter->Average2W.resize(0);
+    PolPlotter->AverageRatio.resize(0);
 
     /* Update information bar */
     ui->info->setText("");
@@ -2721,6 +2763,7 @@ void PanelPolarimeter::plot_Average(void){
     PolPlotter->Average_DC_Signal->attach(ui->qwtPlot_Pol_Average);
     PolPlotter->Average_W_Signal->attach(ui->qwtPlot_Pol_Average);
     PolPlotter->Average_2W_Signal->attach(ui->qwtPlot_Pol_Average);
+    PolPlotter->Average_Ratio_Signal->attach(ui->qwtPlot_Pol_Average);
 
     /* Is there a new maximum value for the Y axis to resize it? Usually DC is the largest of all three */
     if(maxYAverage < ceil((PolPlotter->maxYValue)*1.1)){
@@ -2814,13 +2857,13 @@ void PanelPolarimeter::pol_Measure(void){
     QString path(fileInfoSaving.absoluteDir().path() + "/");
 
     /* Check if we have more entries to do */
-    if (Timeindex < (unsigned int)ConfigureMeasurement->timePoint.length())
+    if (Runner->Timeindex < (unsigned int)ConfigureMeasurement->timePoint.length())
     {
         /* Next Measurement starts now? */
-        if (Runner->timerMS.elapsed() >= ConfigureMeasurement->timePoint[Timeindex])
+        if (Runner->timerMS.elapsed() >= ConfigureMeasurement->timePoint[Runner->Timeindex])
         {
             /* Save the raw data as .CS file */
-            path.append(ConfigureMeasurement->savingFilesNames[Timeindex] + ".CS");
+            path.append(ConfigureMeasurement->savingFilesNames[Runner->Timeindex] + ".CS");
 
             /* Check if spectrometer is still measuring */
             if (ptrSpectrometers[SpectrometerNumber]->isMeasuring())
@@ -2852,12 +2895,15 @@ void PanelPolarimeter::pol_Measure(void){
             /* Select the row that belongs to the measurement */
             ui->Table_Measurements_Pol->setSelectionBehavior(QAbstractItemView::SelectRows);
             ui->Table_Measurements_Pol->setSelectionMode(QAbstractItemView::SingleSelection);
-            ui->Table_Measurements_Pol->selectRow(Timeindex);
+            ui->Table_Measurements_Pol->selectRow(Runner->Timeindex);
             ui->Table_Measurements_Pol->setSelectionMode(QAbstractItemView::NoSelection);
-            ui->Table_Measurements_Pol->cellWidget(Timeindex, 0)->setStyleSheet("qproperty-alignment: AlignCenter;" "background-color: rgb(0, 153, 255)");
+            ui->Table_Measurements_Pol->cellWidget(Runner->Timeindex, 0)->setStyleSheet("qproperty-alignment: AlignCenter;" "background-color: rgb(0, 153, 255)");
 
             /* Go to next entry */
-            Timeindex++;
+            Runner->Timeindex++;
+
+            /* Go to next entry vector */
+            Runner->vectorIndex++;
 
             /* The spectrometer is busy with the Measurements */
             Runner->showRaw = false;
@@ -2884,7 +2930,7 @@ void PanelPolarimeter::pol_Measure(void){
     }
 
     /* Show the progress of the Measurements */
-    pol_Measurement_Progress(Timeindex);
+    pol_Measurement_Progress(Runner->Timeindex);
 }
 
 /**
@@ -4169,54 +4215,118 @@ void PanelPolarimeter::write_To_File(FILE *file, double *a_pSpectrum, int WParam
         if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(0)){
 
             /* Write C1 */
-            FFTL.ConcentrationC1 = ConfigureMeasurement->externSoftware->GlucoseConcentration.at(Timeindex-1);
+            FFTL.ConcentrationC1 = ConfigureMeasurement->externSoftware->GlucoseConcentration.at(Runner->vectorIndex);
             concentrations.append(QString::number(FFTL.ConcentrationC1));
             conc.append("C1/");
+        }else{
+
+            /* No concentration C1 in this measurement */
+            FFTL.ConcentrationC1 = -1;
+        }
+
+        /* Which substances are active? */
+        if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(0)
+                && (ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(1) ||
+                    ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(2) ||
+                    ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(3) ||
+                    ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(4) ||
+                    ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(5))){
+            concentrations.append(",");
         }
 
         /* Is Impurity 1 active? */
         if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(1)){
 
             /* Write C2 */
-            FFTL.ConcentrationC2 = ConfigureMeasurement->externSoftware->Impurity1Concentration.at(Timeindex-1);
-            concentrations.append("," + QString::number(FFTL.ConcentrationC2));
+            FFTL.ConcentrationC2 = ConfigureMeasurement->externSoftware->Impurity1Concentration.at(Runner->vectorIndex);
+            concentrations.append(QString::number(FFTL.ConcentrationC2));
             conc.append("C2/");
+        }else{
+
+            /* No concentration C2 in this measurement */
+            FFTL.ConcentrationC2 = -1;
+        }
+
+        /* Which substances are active? */
+        if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(1)
+                && (ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(2) ||
+                    ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(3) ||
+                    ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(4) ||
+                    ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(5))){
+            concentrations.append(",");
         }
 
         /* Is Impurity 2 active? */
         if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(2)){
 
             /* Write C3 */
-            FFTL.ConcentrationC3 = ConfigureMeasurement->externSoftware->Impurity2Concentration.at(Timeindex-1);
-            concentrations.append("," + QString::number(FFTL.ConcentrationC3));
+            FFTL.ConcentrationC3 = ConfigureMeasurement->externSoftware->Impurity2Concentration.at(Runner->vectorIndex);
+            concentrations.append(QString::number(FFTL.ConcentrationC3));
             conc.append("C3/");
+        }else{
+
+            /* No concentration C3 in this measurement */
+            FFTL.ConcentrationC3 = -1;
+        }
+
+        /* Which substances are active? */
+        if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(2)
+                && (ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(3) ||
+                    ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(4) ||
+                    ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(5))){
+            concentrations.append(",");
         }
 
         /* Is Impurity 3 active? */
         if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(3)){
 
             /* Write C4 */
-            FFTL.ConcentrationC4 = ConfigureMeasurement->externSoftware->Impurity3Concentration.at(Timeindex-1);
-            concentrations.append("," + QString::number(FFTL.ConcentrationC4));
+            FFTL.ConcentrationC4 = ConfigureMeasurement->externSoftware->Impurity3Concentration.at(Runner->vectorIndex);
+            concentrations.append(QString::number(FFTL.ConcentrationC4));
             conc.append("C4/");
+        }else{
+
+            /* No concentration C4 in this measurement */
+            FFTL.ConcentrationC4 = -1;
+        }
+
+        /* Which substances are active? */
+        if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(3)
+                && (ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(4) ||
+                    ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(5))){
+            concentrations.append(",");
         }
 
         /* Is Impurity 4 active? */
         if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(4)){
 
             /* Write C5 */
-            FFTL.ConcentrationC5 = ConfigureMeasurement->externSoftware->Impurity4Concentration.at(Timeindex-1);
+            FFTL.ConcentrationC5 = ConfigureMeasurement->externSoftware->Impurity4Concentration.at(Runner->vectorIndex);
             concentrations.append("," + QString::number(FFTL.ConcentrationC5));
             conc.append("C5/");
+        }else{
+
+            /* No concentration C5 in this measurement */
+            FFTL.ConcentrationC5 = -1;
+        }
+
+        /* Which substances are active? */
+        if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(4)
+                && (ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(5))){
+            concentrations.append(",");
         }
 
         /* Is Impurity 5 active? */
         if(ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->activeSubstances.at(5)){
 
             /* Write C6 */
-            FFTL.ConcentrationC6 = ConfigureMeasurement->externSoftware->Impurity5Concentration.at(Timeindex-1);
-            concentrations.append("," + QString::number(FFTL.ConcentrationC6));
+            FFTL.ConcentrationC6 = ConfigureMeasurement->externSoftware->Impurity5Concentration.at(Runner->vectorIndex);
+            concentrations.append(QString::number(FFTL.ConcentrationC6));
             conc.append("C6/");
+        }else{
+
+            /* No concentration C6 in this measurement */
+            FFTL.ConcentrationC6 = -1;
         }
 
         fprintf(file, "Concentrations: %s: %s\n\n", conc.toLatin1().data() ,concentrations.toLatin1().data());
@@ -4254,6 +4364,17 @@ void PanelPolarimeter::write_To_File(FILE *file, double *a_pSpectrum, int WParam
             fprintf(file, "\t\t%.2f", *(a_pSpectrum + ptrSpectrometers[SpectrometerNumber]->getNumberOfPixels() * k + j));
         }
         fprintf(file, "\n");
+    }
+
+    /* If calibration is running, then this isn't necessary */
+    if( !Runner->PolCalibrating){
+
+        /* Restart vector positions counter for the concentrations */
+        if(Runner->Timeindex % ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->NConcentrations == 0){
+
+            /* Get the vector position */
+            Runner->vectorIndex = -1;
+        }
     }
 }
 
@@ -4316,14 +4437,6 @@ void PanelPolarimeter::write_Summary() {
 
     /* Free pointer */
     file = nullptr;
-
-    /* Restart vectors */
-    /*
-    PolPlotter->averaged_Signal_time.resize(0);
-    PolPlotter->AverageDC.resize(0);
-    PolPlotter->AverageW.resize(0);
-    PolPlotter->Average2W.resize(0);
-*/
 }
 
 /**
@@ -4391,6 +4504,7 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
     /* Show the window */
     DataSelector->exec();
 
+    /* If the user canceled the data analysis */
     if(!DataSelector->canceled){
 
         /* Allow to save plots again */
@@ -4406,8 +4520,11 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
         /* Add the data series */
         PolPlotter->surface->addSeries(PolPlotter->series);
 
+        /* Name axes */
         PolPlotter->surface->axisY()->setTitle(DataSelector->ui->comboBox_DetSignal->currentText());
+        PolPlotter->surface->axisZ()->setTitle(DataSelector->ui->comboBox_Substance->currentText().remove(0,3) + QStringLiteral(" Concentration (mg/dl)"));
 
+        /* Configure the 3D plot */
         PolPlotter->adjust3DPlot();
     }
 }

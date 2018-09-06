@@ -591,33 +591,58 @@ void fft::saveFFTtoFile(QFileInfo FileDetails, bool userSaving, QStringList subs
         conc.append("C1-Glucose/");
     }
 
+    /* More substances? */
+    if(ConcentrationC1 >= 0 && (ConcentrationC2 >= 0 || ConcentrationC3 >= 0 || ConcentrationC4 >= 0 || ConcentrationC5 >= 0 || ConcentrationC6 >= 0)){
+        concentrations.append(",");
+    }
+
     /* Is there Impurity 1? */
     if(ConcentrationC2 >= 0){
-        concentrations.append("," + QString::number(ConcentrationC2));
+        concentrations.append(QString::number(ConcentrationC2));
         conc.append("C2-" + substancesNames.at(0) + "/");
+    }
+
+    /* More substances? */
+    if(ConcentrationC2 >= 0 && (ConcentrationC3 >= 0 || ConcentrationC4 >= 0 || ConcentrationC5 >= 0 || ConcentrationC6 >= 0)){
+        concentrations.append(",");
     }
 
     /* Is there Impurity 2? */
     if(ConcentrationC3 >= 0){
-        concentrations.append("," + QString::number(ConcentrationC3));
+        concentrations.append(QString::number(ConcentrationC3));
         conc.append("C3-" + substancesNames.at(1) + "/");
+    }
+
+    /* More substances? */
+    if(ConcentrationC3 >= 0 && (ConcentrationC4 >= 0 || ConcentrationC5 >= 0 || ConcentrationC6 >= 0)){
+        concentrations.append(",");
     }
 
     /* Is there Impurity 3? */
     if(ConcentrationC4 >= 0){
-        concentrations.append("," + QString::number(ConcentrationC4));
+        concentrations.append(QString::number(ConcentrationC4));
         conc.append("C4-" + substancesNames.at(2) + "/");
+    }
+
+    /* More substances? */
+    if(ConcentrationC4 >= 0 && (ConcentrationC5 >= 0 || ConcentrationC6 >= 0)){
+        concentrations.append(",");
     }
 
     /* Is there Impurity 4? */
     if(ConcentrationC5 >= 0){
-        concentrations.append("," + QString::number(ConcentrationC5));
+        concentrations.append(QString::number(ConcentrationC5));
         conc.append("C5-" + substancesNames.at(3) + "/");
+    }
+
+    /* More substances? */
+    if(ConcentrationC5 >= 0 && (ConcentrationC6 >= 0)){
+        concentrations.append(",");
     }
 
     /* Is there Impurity 2? */
     if(ConcentrationC6 >= 0){
-        concentrations.append("," + QString::number(ConcentrationC6));
+        concentrations.append(QString::number(ConcentrationC6));
         conc.append("C6-" + substancesNames.at(4) + "/");
     }
 

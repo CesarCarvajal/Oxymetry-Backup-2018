@@ -81,6 +81,12 @@ public:
     /* Time busy with FFT */
     int liveFFT_Time;
 
+    /* Index of configured waiting time in measurements */
+    unsigned int Timeindex;
+
+    /* Index of configured waiting time in measurements */
+    unsigned int vectorIndex;
+
 public:
 
     /* Is the measurement running? */

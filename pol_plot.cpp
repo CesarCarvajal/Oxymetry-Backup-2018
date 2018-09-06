@@ -53,6 +53,8 @@ Pol_Plot::Pol_Plot()
     Average_W_Signal->setPen(QPen(QColor( 0,179,0 )));
     Average_2W_Signal = new QwtPlotCurve("I(2ω)");
     Average_2W_Signal->setPen(QPen(QColor( 230,92,0 )));
+    Average_Ratio_Signal = new QwtPlotCurve("I(ω)/I(2ω)");
+    Average_Ratio_Signal->setPen(QPen(QColor( 0,0,0 )));
 
     /* Create the DC, W and 2W plots */
     FFT_DC = new QwtPlotCurve("I(DC)");
@@ -124,7 +126,6 @@ void Pol_Plot::adjust3DPlot(void){
     surface->axisY()->setLabelFormat("%.1f ");
     surface->axisZ()->setLabelFormat("%d");
     surface->axisX()->setTitle(QStringLiteral("Wavelength (nm)"));
-    surface->axisZ()->setTitle(QStringLiteral("Concentration (mg/dl)"));
     surface->axisX()->setTitleVisible(true);
     surface->axisY()->setTitleVisible(true);
     surface->axisZ()->setTitleVisible(true);
@@ -205,12 +206,20 @@ void Pol_Plot::plotAverages(bool dataloaded, QVector<double> FFTLfft_DC, QVector
         AverageDC.append(0);
         AverageW.append(0);
         Average2W.append(0);
+        AverageRatio.append(0);
+
     }else{
         /* Now there is data to plot, so add the averages to the queue to plot */
         AverageDC.append(average_DC/FFTLwavelengths.length());
         AverageW.append(average_W/FFTLwavelengths.length());
         Average2W.append(average_2W/FFTLwavelengths.length());
         maxYValue =  ceil(*std::max_element(AverageDC.begin(), AverageDC.end()));
+
+        if(average_2W == 0){
+            AverageRatio.append(0);
+        }else{
+            AverageRatio.append(average_W/average_2W);
+        }
     }
 
     /* Is there a long measurement */
@@ -231,6 +240,8 @@ void Pol_Plot::plotAverages(bool dataloaded, QVector<double> FFTLfft_DC, QVector
     Average_W_Signal->setTitle(" Ī(ω) = " + QString().setNum(AverageW.last(), 'f', 2) + " ");
     Average_2W_Signal->setSamples(averaged_Signal_time, Average2W);
     Average_2W_Signal->setTitle(" Ī(2ω) = " + QString().setNum(Average2W.last(), 'f', 2) + " ");
+    Average_Ratio_Signal->setSamples(averaged_Signal_time, AverageRatio);
+    Average_Ratio_Signal->setTitle(" Ī(ω)/Ī(2ω) = " + QString().setNum(AverageRatio.last(), 'f', 2) + " ");
 
     /* Whats the maximum time reached on the vector until now? */
     maxXtime = *std::max_element(averaged_Signal_time.begin(), averaged_Signal_time.end());
@@ -248,6 +259,7 @@ void Pol_Plot::clean_AllPlots(void){
         Average_DC_Signal->detach();
         Average_W_Signal->detach();
         Average_2W_Signal->detach();
+        Average_Ratio_Signal->detach();
         Compensation_Signal->detach();
         FFT_oneWave->detach();
         FFT_DC->detach();
@@ -261,6 +273,7 @@ void Pol_Plot::clean_AllPlots(void){
     AverageDC.resize(0);
     AverageW.resize(0);
     Average2W.resize(0);
+    AverageRatio.resize(0);
     counts_average_time = 0;
 }
 
@@ -278,6 +291,10 @@ Pol_Plot::~Pol_Plot(void)
         Average_W_Signal->detach();
         delete Average_W_Signal;
         Average_W_Signal= nullptr;
+
+        Average_Ratio_Signal->detach();
+        delete Average_Ratio_Signal;
+        Average_Ratio_Signal= nullptr;
 
         Average_2W_Signal->detach();
         delete Average_2W_Signal;

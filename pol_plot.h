@@ -42,12 +42,12 @@ public:
     /* Polarimetry curves */
     QwtPlotCurve *FFT_oneWave, *predictionSignal;
     QwtPlotCurve *FFT_DC, *FFT_W, *FFT_2W;
-    QwtPlotCurve *Compensation_Signal;
+    QwtPlotCurve *Compensation_Signal, *Average_Ratio_Signal;
     QwtPlotCurve *Average_DC_Signal, *Average_W_Signal, *Average_2W_Signal;
 
     /* Vectors for live Plotting */
     QVector<double> averaged_Signal_time;
-    QVector<double> AverageDC, AverageW, Average2W;
+    QVector<double> AverageDC, AverageW, Average2W, AverageRatio;
 
     /* Maximum value on Y axis */
     double maxYValue;
