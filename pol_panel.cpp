@@ -4366,6 +4366,7 @@ void PanelPolarimeter::write_To_File(FILE *file, double *a_pSpectrum, int WParam
         fprintf(file, "\n");
     }
 
+<<<<<<< HEAD
     /* If calibration is running, then this isn't necessary */
     if( !Runner->PolCalibrating){
 
@@ -4375,6 +4376,12 @@ void PanelPolarimeter::write_To_File(FILE *file, double *a_pSpectrum, int WParam
             /* Get the vector position */
             Runner->vectorIndex = -1;
         }
+=======
+    /* Restart vector positions counter for the concentrations */
+    if( Runner->Timeindex % ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->NConcentrations == 0){
+
+        Runner->vectorIndex = -1;
+>>>>>>> 85327c6b548c07ef9f6787fde9555c4f4802a4b0
     }
 }
 
