@@ -22,7 +22,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_selectAnalizeData_t {
     QByteArrayData data[28];
-    char stringdata0[319];
+    char stringdata0[324];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -42,32 +42,32 @@ QT_MOC_LITERAL(7, 69, 4), // "List"
 QT_MOC_LITERAL(8, 74, 10), // "sortFiles2"
 QT_MOC_LITERAL(9, 85, 14), // "addFilesToList"
 QT_MOC_LITERAL(10, 100, 15), // "allowSelectPath"
-QT_MOC_LITERAL(11, 116, 12), // "createData3D"
-QT_MOC_LITERAL(12, 129, 15), // "selectFileSteps"
-QT_MOC_LITERAL(13, 145, 19), // "updateSelectionList"
-QT_MOC_LITERAL(14, 165, 15), // "findRepetitions"
-QT_MOC_LITERAL(15, 181, 9), // "cleanList"
-QT_MOC_LITERAL(16, 191, 11), // "setDataSets"
-QT_MOC_LITERAL(17, 203, 10), // "removeItem"
-QT_MOC_LITERAL(18, 214, 15), // "showContextMenu"
-QT_MOC_LITERAL(19, 230, 3), // "pos"
-QT_MOC_LITERAL(20, 234, 10), // "selectPath"
-QT_MOC_LITERAL(21, 245, 9), // "readFiles"
-QT_MOC_LITERAL(22, 255, 15), // "readInitialFile"
-QT_MOC_LITERAL(23, 271, 4), // "list"
-QT_MOC_LITERAL(24, 276, 4), // "path"
-QT_MOC_LITERAL(25, 281, 11), // "analizeData"
-QT_MOC_LITERAL(26, 293, 16), // "automaticAnalize"
-QT_MOC_LITERAL(27, 310, 8) // "PathAuto"
+QT_MOC_LITERAL(11, 116, 15), // "selectFileSteps"
+QT_MOC_LITERAL(12, 132, 19), // "updateSelectionList"
+QT_MOC_LITERAL(13, 152, 15), // "findRepetitions"
+QT_MOC_LITERAL(14, 168, 9), // "cleanList"
+QT_MOC_LITERAL(15, 178, 11), // "setDataSets"
+QT_MOC_LITERAL(16, 190, 10), // "removeItem"
+QT_MOC_LITERAL(17, 201, 15), // "showContextMenu"
+QT_MOC_LITERAL(18, 217, 3), // "pos"
+QT_MOC_LITERAL(19, 221, 17), // "activateLogarithm"
+QT_MOC_LITERAL(20, 239, 10), // "selectPath"
+QT_MOC_LITERAL(21, 250, 9), // "readFiles"
+QT_MOC_LITERAL(22, 260, 15), // "readInitialFile"
+QT_MOC_LITERAL(23, 276, 4), // "list"
+QT_MOC_LITERAL(24, 281, 4), // "path"
+QT_MOC_LITERAL(25, 286, 11), // "analizeData"
+QT_MOC_LITERAL(26, 298, 16), // "automaticAnalize"
+QT_MOC_LITERAL(27, 315, 8) // "PathAuto"
 
     },
     "selectAnalizeData\0cancel\0\0handleClickEvent\0"
     "QWidget*\0widget\0sortFiles\0List\0"
     "sortFiles2\0addFilesToList\0allowSelectPath\0"
-    "createData3D\0selectFileSteps\0"
-    "updateSelectionList\0findRepetitions\0"
-    "cleanList\0setDataSets\0removeItem\0"
-    "showContextMenu\0pos\0selectPath\0readFiles\0"
+    "selectFileSteps\0updateSelectionList\0"
+    "findRepetitions\0cleanList\0setDataSets\0"
+    "removeItem\0showContextMenu\0pos\0"
+    "activateLogarithm\0selectPath\0readFiles\0"
     "readInitialFile\0list\0path\0analizeData\0"
     "automaticAnalize\0PathAuto"
 };
@@ -99,8 +99,8 @@ static const uint qt_meta_data_selectAnalizeData[] = {
       14,    0,  124,    2, 0x08 /* Private */,
       15,    0,  125,    2, 0x08 /* Private */,
       16,    0,  126,    2, 0x08 /* Private */,
-      17,    0,  127,    2, 0x08 /* Private */,
-      18,    1,  128,    2, 0x08 /* Private */,
+      17,    1,  127,    2, 0x08 /* Private */,
+      19,    0,  130,    2, 0x08 /* Private */,
       20,    0,  131,    2, 0x08 /* Private */,
       21,    0,  132,    2, 0x08 /* Private */,
       22,    2,  133,    2, 0x08 /* Private */,
@@ -120,8 +120,8 @@ static const uint qt_meta_data_selectAnalizeData[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void, QMetaType::QPoint,   18,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::QPoint,   19,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, QMetaType::Bool, QMetaType::QString,   23,   24,
@@ -145,14 +145,14 @@ void selectAnalizeData::qt_static_metacall(QObject *_o, QMetaObject::Call _c, in
             if (_a[0]) *reinterpret_cast< QStringList*>(_a[0]) = std::move(_r); }  break;
         case 4: _t->addFilesToList(); break;
         case 5: _t->allowSelectPath(); break;
-        case 6: _t->createData3D(); break;
-        case 7: _t->selectFileSteps(); break;
-        case 8: _t->updateSelectionList(); break;
-        case 9: _t->findRepetitions(); break;
-        case 10: _t->cleanList(); break;
-        case 11: _t->setDataSets(); break;
-        case 12: _t->removeItem(); break;
-        case 13: _t->showContextMenu((*reinterpret_cast< const QPoint(*)>(_a[1]))); break;
+        case 6: _t->selectFileSteps(); break;
+        case 7: _t->updateSelectionList(); break;
+        case 8: _t->findRepetitions(); break;
+        case 9: _t->cleanList(); break;
+        case 10: _t->setDataSets(); break;
+        case 11: _t->removeItem(); break;
+        case 12: _t->showContextMenu((*reinterpret_cast< const QPoint(*)>(_a[1]))); break;
+        case 13: _t->activateLogarithm(); break;
         case 14: _t->selectPath(); break;
         case 15: _t->readFiles(); break;
         case 16: _t->readInitialFile((*reinterpret_cast< bool(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2]))); break;

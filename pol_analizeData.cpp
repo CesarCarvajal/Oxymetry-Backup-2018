@@ -68,6 +68,7 @@ selectAnalizeData::selectAnalizeData(QWidget *parent) :
     connect(ui->spinBox_calSet, SIGNAL(valueChanged(int)), this, SLOT(setDataSets()));
     connect(ui->spinBox_ValSet, SIGNAL(valueChanged(int)), this, SLOT(setDataSets()));
     connect(ui->spinBox_stepsSelec, SIGNAL(valueChanged(int)), this, SLOT(selectFileSteps()));
+    connect(ui->comboBox_DetSignal, SIGNAL(currentIndexChanged(int)), this, SLOT(activateLogarithm()));
 
     /* Connect signals */
     connect(ui->radiobutton_selectData, SIGNAL(clicked()), signalMapperC, SLOT(map()));
@@ -80,6 +81,7 @@ selectAnalizeData::selectAnalizeData(QWidget *parent) :
     connect(ui->checkBox_RandomSort, SIGNAL(clicked()), signalMapperC, SLOT(map()));
     connect(ui->checkBox_stepsSelec, SIGNAL(clicked()), signalMapperC, SLOT(map()));
     connect(ui->checkBox_SelecManual, SIGNAL(clicked()), signalMapperC, SLOT(map()));
+    connect(ui->checkBox_applyLogarithm, SIGNAL(clicked()), signalMapperC, SLOT(map()));
 
     /* Signal mapper */
     signalMapperC->setMapping(ui->radiobutton_selectData, ui->radiobutton_selectData);
@@ -91,6 +93,7 @@ selectAnalizeData::selectAnalizeData(QWidget *parent) :
     signalMapperC->setMapping(ui->checkBox_RandomSort, ui->checkBox_RandomSort);
     signalMapperC->setMapping(ui->checkBox_stepsSelec, ui->checkBox_stepsSelec);
     signalMapperC->setMapping(ui->checkBox_SelecManual, ui->checkBox_SelecManual);
+    signalMapperC->setMapping(ui->checkBox_applyLogarithm, ui->checkBox_applyLogarithm);
 
     /* Connect signal mapper action */
     connect(signalMapperC, SIGNAL(mapped(QWidget *)), this, SLOT(handleClickEvent(QWidget *)));
@@ -124,7 +127,9 @@ selectAnalizeData::selectAnalizeData(QWidget *parent) :
     /* not canceled */
     canceled = false;
 
+    /* Create the data array for the 3D spectra plot */
     data3D = new QSurfaceDataArray;
+    data3DNormalized = new QSurfaceDataArray;
 
 }
 
@@ -359,7 +364,7 @@ void selectAnalizeData::readInitialFile(bool list, QString path)
                         QStringList ListS = Substances.split("/");
                         ListS.removeLast();
 
-                        /* Add substances */
+                        /* Add substances names */
                         ui->comboBox_Substance->addItems(ListS);
 
                     }else{
@@ -394,6 +399,7 @@ void selectAnalizeData::readFiles(void)
         wavelengths.resize(0);
         signal.resize(0);
         data3D = new QSurfaceDataArray;
+        data3DNormalized = new QSurfaceDataArray;
 
         /* Save all the file names in one variable */
         QStringList allFiles;
@@ -414,7 +420,9 @@ void selectAnalizeData::readFiles(void)
         QDir(pathDataM).mkdir("Data_Analysis");
 
         QSurfaceDataArray *dataArray = new QSurfaceDataArray;
+        QSurfaceDataArray *dataArray_norm = new QSurfaceDataArray;
         dataArray->reserve(allFiles.length());
+        dataArray_norm->reserve(allFiles.length());
 
         for(int index = 0; index < allFiles.length(); index++){
 
@@ -485,7 +493,14 @@ void selectAnalizeData::readFiles(void)
 
                         /* 3rd column is I(2w) */
                         if(ui->comboBox_DetSignal->currentIndex() == 2){
-                            signal.append(Readed_Row.at(3).toDouble());
+                            double data2W = Readed_Row.at(3).toDouble();
+
+                            /* use the logarithm with I(2W) */
+                            if(ui->checkBox_applyLogarithm->isChecked()){
+                                data2W = log10(data2W);
+                            }
+                            /* Add the signal to the plot */
+                            signal.append(data2W);
                         }
 
                         /* 1st column is I(DC) */
@@ -498,35 +513,28 @@ void selectAnalizeData::readFiles(void)
 
             /* Rows of 3D plot */
             QSurfaceDataRow *newRow = new QSurfaceDataRow(wavelengths.length());
+            QSurfaceDataRow *newRow_norm = new QSurfaceDataRow(wavelengths.length());
 
+            /* get the data for the 3D plot */
             for (int j = 0; j < wavelengths.length(); j++)
-                (*newRow)[j].setPosition(QVector3D(wavelengths.at(j), signal.at(j), QString(concentrationsList.at(ui->comboBox_Substance->currentIndex())).toDouble()));
+                (*newRow)[j].setPosition(QVector3D(wavelengths.at(j), signal.at(j),
+                                                   QString(concentrationsList.at(ui->comboBox_Substance->currentIndex())).toDouble()));
 
             /* All information for the 3D plot */
             *data3D << newRow;
+
+            /* get the data for the 3D plot */
+            for (int j = 0; j < wavelengths.length(); j++)
+                (*newRow_norm)[j].setPosition(QVector3D(wavelengths.at(j), signal.at(j)/(data3D->at(0)->at(j).y()),
+                                                   QString(concentrationsList.at(ui->comboBox_Substance->currentIndex())).toDouble()));
+
+            /* All information for the 3D plot */
+            *data3DNormalized << newRow_norm;
 
             /* Restart the vector */
             concentrationsList.clear();
         }
     }
-}
-
-/**
- * @brief Read data for the 3D plot
- */
-void selectAnalizeData::createData3D()
-{
-    QSurfaceDataRow *dataRow1 = new QSurfaceDataRow;
-    QSurfaceDataRow *dataRow2 = new QSurfaceDataRow;
-    QSurfaceDataRow *dataRow3 = new QSurfaceDataRow;
-    QSurfaceDataRow *dataRow4 = new QSurfaceDataRow;
-
-    *dataRow4 << QVector3D(200,0,500) << QVector3D(400,0,500) << QVector3D(600,0,500) << QVector3D(800,0,500);
-    *dataRow3 << QVector3D(200,0.2,400) << QVector3D(400,0.1,400) << QVector3D(600,0.1,400) << QVector3D(800,0.5,400);
-    *dataRow2 << QVector3D(200,0.4,200) << QVector3D(400,0.3,200) << QVector3D(600,0.5,200) << QVector3D(800,0.3,200);
-    *dataRow1 << QVector3D(200,1,0) << QVector3D(400,0.05,0) << QVector3D(600,1,0) << QVector3D(800,1,0);
-
-    *data3D << dataRow1 << dataRow2 << dataRow3 << dataRow4;
 }
 
 /**
@@ -587,7 +595,8 @@ void selectAnalizeData::handleClickEvent(QWidget *widget)
             /* Are there repetitions */
             if(repetitions > 0){
                 /* Add the FFT files to the list */
-                FFTFilesCalibration = Dir.entryList(QStringList() << "*R"+QString::number(ui->spinBox_repselec->value())+".FFT",QDir::Files | QDir::NoSymLinks, QDir::Time | QDir::Reversed);
+                FFTFilesCalibration = Dir.entryList(QStringList() << "*R"+QString::number(ui->spinBox_repselec->value())
+                                                    +".FFT",QDir::Files | QDir::NoSymLinks, QDir::Time | QDir::Reversed);
             }else{
                 /* Add the FFT files to the list */
                 FFTFilesCalibration = Dir.entryList(QStringList() << "*.FFT",QDir::Files | QDir::NoSymLinks, QDir::Time | QDir::Reversed);
@@ -752,6 +761,7 @@ QStringList selectAnalizeData::sortFiles(QStringList List)
     QCollator collator;
     collator.setNumericMode(true);
 
+    /* Sort the vector */
     std::sort(
                 List.begin(),
                 List.end(),
@@ -788,7 +798,7 @@ QStringList selectAnalizeData::sortFiles2(QStringList List)
         }
 
         /* Save the names of the substances */
-             temp.append(name);
+        temp.append(name);
     }
 
     /* Sort the temporal file list of substances */
@@ -977,6 +987,16 @@ void selectAnalizeData::showContextMenu(const QPoint &pos)
 
     // Show context menu at handling position
     LMenu.exec(globalPos);
+
+}
+
+/**
+ * @brief Automatically activate logarithm when the selected signal is I(2W)
+ */
+void selectAnalizeData::activateLogarithm(void){
+
+    /* Select or deselect the option automatically */
+   ui->comboBox_DetSignal->currentIndex() == 2 ? ui->checkBox_applyLogarithm->setChecked(true) : ui->checkBox_applyLogarithm->setChecked(false);
 
 }
 

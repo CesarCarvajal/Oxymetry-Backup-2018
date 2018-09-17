@@ -36,9 +36,11 @@ Pol_Plot::Pol_Plot()
     /* Running time of Averages */
     counts_average_time = 0;
 
-    /* §D Surface */
-    surface = new Q3DSurface;
-    series = new QSurface3DSeries;
+    /* 3D Surface */
+    surface = new Q3DSurface();
+    series = new QSurface3DSeries();
+    surface_norm = new Q3DSurface();
+    series_norm = new QSurface3DSeries();
 
     /* Max value for plotting Y axis in Averages */
     maxYValue = 0;
@@ -79,26 +81,6 @@ Pol_Plot::Pol_Plot()
     predictionSignal = new QwtPlotCurve("");
     predictionSignal->setPen(QPen("black"));
     predictionSignal->setItemAttribute(QwtPlotItem::Legend, false);
-
-    /*
-    QScatter3DSeries *series = new QScatter3DSeries;
-    QScatterDataArray data;
-
-    data <<    << QVector3D(320,0,0) << QVector3D(420,1,250) << QVector3D(502,2,500)
-     << QVector3D(320,1,0) << QVector3D(420,2,250)<< QVector3D(502,3,500)
-      << QVector3D(320,2,0) << QVector3D(420,3,250)<< QVector3D(502,4,500)
-      << QVector3D(320,3,0) << QVector3D(420,4,250)<< QVector3D(502,5,500)
-      << QVector3D(320,3,0) << QVector3D(420,4,250)<< QVector3D(502,5,500)
-      << QVector3D(320,3,0) << QVector3D(420,4,250)<< QVector3D(502,5,500)
-
-    //  data << QVector3D(0,0,2) << QVector3D(1,0,2) << QVector3D(2,0,2) << QVector3D(0,1,1) << QVector3D(1,1,1) << QVector3D(2,1,1) << QVector3D(0,2,0)
-    //   << QVector3D(1,2,0) << QVector3D(2,2,0);
-
-    series->dataProxy()->addItems(data);
-    scatter->addSeries(series);
-    scatter->show();
-*/
-
 }
 
 
@@ -119,23 +101,54 @@ void Pol_Plot::adjust3DPlot(void){
     surface->seriesList().at(0)->setColorStyle(Q3DTheme::ColorStyle::ColorStyleRangeGradient);
     surface->seriesList().at(0)->setDrawMode(QSurface3DSeries::DrawSurface);
 
+    /* Adjust color painting */
+    QLinearGradient gr2;
+    gr2.setColorAt(0.0, Qt::red);
+    gr2.setColorAt(0.2, Qt::magenta);
+    gr2.setColorAt(0.4, Qt::yellow);
+    gr2.setColorAt(0.6, Qt::green);
+    gr2.setColorAt(0.8, Qt::cyan);
+    gr2.setColorAt(1.0, Qt::blue);
+    surface_norm->seriesList().at(0)->setBaseGradient(gr2);
+    surface_norm->seriesList().at(0)->setColorStyle(Q3DTheme::ColorStyle::ColorStyleRangeGradient);
+    surface_norm->seriesList().at(0)->setDrawMode(QSurface3DSeries::DrawSurface);
+
+    /* Adjust axes */
     surface->axisX()->setAutoAdjustRange(true);
     surface->axisY()->setAutoAdjustRange(true);
     surface->axisZ()->setAutoAdjustRange(true);
     surface->axisX()->setLabelFormat("%d");
     surface->axisY()->setLabelFormat("%.1f ");
-    surface->axisZ()->setLabelFormat("%d");
+    surface->axisZ()->setLabelFormat("%.1f");
     surface->axisX()->setTitle(QStringLiteral("Wavelength (nm)"));
     surface->axisX()->setTitleVisible(true);
     surface->axisY()->setTitleVisible(true);
     surface->axisZ()->setTitleVisible(true);
-    surface->scene()->activeCamera()->setCameraPosition(45, 45, 100); // horizontal in °, vertikal in °, zoom in %
+    surface->scene()->activeCamera()->setCameraPosition(45, 45, 80); // horizontal in °, vertikal in °, zoom in %
     surface->setSelectionMode(QAbstract3DGraph::SelectionItemAndRow
+                              | QAbstract3DGraph::SelectionSlice);
+
+    surface_norm->axisX()->setAutoAdjustRange(true);
+    surface_norm->axisY()->setAutoAdjustRange(true);
+    surface_norm->axisZ()->setAutoAdjustRange(true);
+    surface_norm->axisX()->setLabelFormat("%d");
+    surface_norm->axisY()->setLabelFormat("%.3f ");
+    surface_norm->axisZ()->setLabelFormat("%.1f");
+    surface_norm->axisX()->setTitle(QStringLiteral("Wavelength (nm)"));
+    surface_norm->axisX()->setTitleVisible(true);
+    surface_norm->axisY()->setTitleVisible(true);
+    surface_norm->axisZ()->setTitleVisible(true);
+    surface_norm->scene()->activeCamera()->setCameraPosition(45, 45, 80); // horizontal in °, vertikal in °, zoom in %
+    surface_norm->setSelectionMode(QAbstract3DGraph::SelectionItemAndRow
                               | QAbstract3DGraph::SelectionSlice);
 
     surface->activeTheme()->setLabelBorderEnabled(false);
     surface->activeTheme()->setLabelTextColor(QColor(QRgb(Qt::black)));
     surface->activeTheme()->setFont(QFont(QStringLiteral("Arial"), 40));
+
+    surface_norm->activeTheme()->setLabelBorderEnabled(false);
+    surface_norm->activeTheme()->setLabelTextColor(QColor(QRgb(Qt::black)));
+    surface_norm->activeTheme()->setFont(QFont(QStringLiteral("Arial"), 40));
 }
 
 /**
@@ -154,15 +167,6 @@ void Pol_Plot::Plot_FFT_Graphs(QVector<double> FFTLwavelengths, QVector<double> 
     FFT_W->setSamples(FFTLwavelengths , FFTLfft_W);
     FFT_2W->setSamples(FFTLwavelengths , FFTLfft_2W);
 
-    /* Expected curve of prediction */
-    for(int j=0; j< 6; j++){
-        linearR.append(j*100);
-    }
-
-    /* Set expected curve of prediction */
-    predictionSignal->setSamples(linearR, linearR);
-    predictionSignal->setItemAttribute(QwtPlotItem::Legend, false);
-
     /* Assign values to plot */
     Compensation_Signal->setSamples(FFTLwavelengths , FFTLfft_Compensation_Signal);
     Compensation_Signal->setItemAttribute(QwtPlotItem::Legend, false);
@@ -176,6 +180,22 @@ void Pol_Plot::plotFFTatSelectedWave(QVector<double> FFTLfft_data, QVector<doubl
 
     /* Plot the FFT */
     FFT_oneWave->setSamples(FFTLfrequencies , FFTLfft_data);
+}
+
+/**
+ * @brief Plot the line of expected predicted concentration.
+ * @param[in] minimum and maximum concentration values
+ */
+void Pol_Plot::plotPredictionLine(double minConcentration, double maxConcentration){
+
+    /* Expected curve of prediction */
+    for(int j=0; j<= 20; j++){
+        linearR.append(minConcentration + j*(maxConcentration/20));
+    }
+
+    /* Set expected curve of prediction */
+    predictionSignal->setSamples(linearR, linearR);
+    predictionSignal->setItemAttribute(QwtPlotItem::Legend, false);
 }
 
 /**

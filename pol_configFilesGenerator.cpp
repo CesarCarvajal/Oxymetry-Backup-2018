@@ -429,15 +429,15 @@ void Pol_configFilesGenerator::writeFlushing(FILE *pFile, QString filetype){
         if(filetype.contains("Water")){
 
             /* 7 flushing cuvette fill */
-            fprintf(pFile, "%d\t%.4f\t%d\n", fillRefill, absoluteFlow, idle);
+            fprintf(pFile, "%d\t%.4f\t%d\n", fillRefill, absoluteFlow, 0);
         }else{
 
             /* 7 flushing cuvette fill */
-            fprintf(pFile, "%d\t%d\t%d\n", fillRefill, 0, idle);
+            fprintf(pFile, "%d\t%d\t%d\n", fillRefill, 0, 0);
         }
 
         /* 8 stop after filling valve refill */
-        fprintf(pFile, "%d\t%d\t%i\n", shortBreak, 0, idle);
+        fprintf(pFile, "%d\t%d\t%i\n", shortBreak, 0, 0);
 
         /* 9 stop after refilling valve fill */
         fprintf(pFile, "%d\t%d\t%d\n", shortBreak, 0, 1);
@@ -457,7 +457,7 @@ void Pol_configFilesGenerator::writeFlushing(FILE *pFile, QString filetype){
         fprintf(pFile, "%d\t%d\t%d\n", shortBreak, 0, 1);
 
         /* 12 stop after refilling valve refill */
-        fprintf(pFile, "%d\t%d\t%d\n", shortBreak, 0, idle);
+        fprintf(pFile, "%d\t%d\t%d\n", shortBreak, 0, 0);
     }
 }
 
@@ -475,10 +475,10 @@ void Pol_configFilesGenerator::writeFilling(FILE *pFile, QVector <double> FlowVe
 
         /* i-th FILLING */
         /* 1 Filling cuvette with solution valve fill */
-        fprintf(pFile, "%d\t%.4f\t%d\n", fillRefill, FlowVector.at(k), idle);
+        fprintf(pFile, "%d\t%.4f\t%d\n", fillRefill, FlowVector.at(k), 0);
 
         /* 2 Stop after filling valve fill */
-        fprintf(pFile, "%d\t%d\t%d\n", shortBreak, 0, idle);
+        fprintf(pFile, "%d\t%d\t%d\n", shortBreak, 0, 0);
 
         /* 3 Stop after filling valve refill */
         fprintf(pFile, "%d\t%d\t%d\n", shortBreak, 0, 1);
@@ -518,7 +518,7 @@ void Pol_configFilesGenerator::writeFilling(FILE *pFile, QVector <double> FlowVe
         }
 
         /* 6 Stop after measurement valve fill */
-        fprintf(pFile, "%d\t%d\t%d\n", shortBreak, 0, idle);
+        fprintf(pFile, "%d\t%d\t%d\n", shortBreak, 0, 0);
     }
 }
 

@@ -105,23 +105,28 @@ public:
     QVBoxLayout *verticalLayout_5;
     QGridLayout *gridLayout_4;
     QSpacerItem *horizontalSpacer_17;
-    QHBoxLayout *horizontalLayout_13;
-    QLabel *label_subs;
-    QComboBox *comboBox_Substance;
-    QSpacerItem *horizontalSpacer_16;
-    QHBoxLayout *horizontalLayout_12;
-    QLabel *label_detsignal;
-    QComboBox *comboBox_DetSignal;
-    QSpacerItem *horizontalSpacer_15;
     QHBoxLayout *horizontalLayout_15;
     QLabel *label_7;
     QDoubleSpinBox *doubleSpinBox_maxWavel;
     QSpacerItem *horizontalSpacer_18;
+    QHBoxLayout *horizontalLayout_12;
+    QLabel *label_detsignal;
+    QComboBox *comboBox_DetSignal;
+    QSpacerItem *horizontalSpacer_15;
+    QSpacerItem *horizontalSpacer_20;
     QHBoxLayout *horizontalLayout_16;
     QLabel *label_8;
     QDoubleSpinBox *doubleSpinBox_minWavel;
     QSpacerItem *horizontalSpacer_19;
-    QSpacerItem *horizontalSpacer_20;
+    QHBoxLayout *horizontalLayout_13;
+    QLabel *label_subs;
+    QComboBox *comboBox_Substance;
+    QSpacerItem *horizontalSpacer_16;
+    QHBoxLayout *horizontalLayout_14;
+    QLabel *label_applyLogarithm;
+    QCheckBox *checkBox_applyLogarithm;
+    QSpacerItem *horizontalSpacer_22;
+    QSpacerItem *horizontalSpacer_21;
     QSpacerItem *verticalSpacer_4;
     QHBoxLayout *horizontalLayout_9;
     QPushButton *pushButton_cancel;
@@ -135,7 +140,7 @@ public:
     {
         if (selectAnalizeData->objectName().isEmpty())
             selectAnalizeData->setObjectName(QStringLiteral("selectAnalizeData"));
-        selectAnalizeData->resize(782, 749);
+        selectAnalizeData->resize(782, 761);
         QSizePolicy sizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -224,6 +229,7 @@ public:
         checkBox_stepsSelec->setObjectName(QStringLiteral("checkBox_stepsSelec"));
         checkBox_stepsSelec->setMinimumSize(QSize(90, 0));
         checkBox_stepsSelec->setMaximumSize(QSize(90, 16777215));
+        checkBox_stepsSelec->setChecked(false);
 
         horizontalLayout_10->addWidget(checkBox_stepsSelec);
 
@@ -554,7 +560,7 @@ public:
 
         PLS = new QWidget(selectAnalizeData);
         PLS->setObjectName(QStringLiteral("PLS"));
-        PLS->setMinimumSize(QSize(0, 100));
+        PLS->setMinimumSize(QSize(0, 110));
         verticalLayout_5 = new QVBoxLayout(PLS);
         verticalLayout_5->setObjectName(QStringLiteral("verticalLayout_5"));
         gridLayout_4 = new QGridLayout();
@@ -563,64 +569,15 @@ public:
 
         gridLayout_4->addItem(horizontalSpacer_17, 0, 1, 1, 1);
 
-        horizontalLayout_13 = new QHBoxLayout();
-        horizontalLayout_13->setObjectName(QStringLiteral("horizontalLayout_13"));
-        label_subs = new QLabel(PLS);
-        label_subs->setObjectName(QStringLiteral("label_subs"));
-        label_subs->setMinimumSize(QSize(150, 0));
-
-        horizontalLayout_13->addWidget(label_subs);
-
-        comboBox_Substance = new QComboBox(PLS);
-        comboBox_Substance->setObjectName(QStringLiteral("comboBox_Substance"));
-        QSizePolicy sizePolicy2(QSizePolicy::Minimum, QSizePolicy::Fixed);
-        sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(0);
-        sizePolicy2.setHeightForWidth(comboBox_Substance->sizePolicy().hasHeightForWidth());
-        comboBox_Substance->setSizePolicy(sizePolicy2);
-        comboBox_Substance->setMinimumSize(QSize(150, 0));
-
-        horizontalLayout_13->addWidget(comboBox_Substance);
-
-        horizontalSpacer_16 = new QSpacerItem(40, 10, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_13->addItem(horizontalSpacer_16);
-
-
-        gridLayout_4->addLayout(horizontalLayout_13, 0, 2, 1, 1);
-
-        horizontalLayout_12 = new QHBoxLayout();
-        horizontalLayout_12->setObjectName(QStringLiteral("horizontalLayout_12"));
-        label_detsignal = new QLabel(PLS);
-        label_detsignal->setObjectName(QStringLiteral("label_detsignal"));
-        label_detsignal->setMinimumSize(QSize(150, 0));
-
-        horizontalLayout_12->addWidget(label_detsignal);
-
-        comboBox_DetSignal = new QComboBox(PLS);
-        comboBox_DetSignal->setObjectName(QStringLiteral("comboBox_DetSignal"));
-        sizePolicy2.setHeightForWidth(comboBox_DetSignal->sizePolicy().hasHeightForWidth());
-        comboBox_DetSignal->setSizePolicy(sizePolicy2);
-        comboBox_DetSignal->setMinimumSize(QSize(150, 0));
-
-        horizontalLayout_12->addWidget(comboBox_DetSignal);
-
-        horizontalSpacer_15 = new QSpacerItem(40, 10, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_12->addItem(horizontalSpacer_15);
-
-
-        gridLayout_4->addLayout(horizontalLayout_12, 0, 0, 1, 1);
-
         horizontalLayout_15 = new QHBoxLayout();
         horizontalLayout_15->setObjectName(QStringLiteral("horizontalLayout_15"));
         label_7 = new QLabel(PLS);
         label_7->setObjectName(QStringLiteral("label_7"));
-        QSizePolicy sizePolicy3(QSizePolicy::Preferred, QSizePolicy::Preferred);
-        sizePolicy3.setHorizontalStretch(0);
-        sizePolicy3.setVerticalStretch(0);
-        sizePolicy3.setHeightForWidth(label_7->sizePolicy().hasHeightForWidth());
-        label_7->setSizePolicy(sizePolicy3);
+        QSizePolicy sizePolicy2(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(label_7->sizePolicy().hasHeightForWidth());
+        label_7->setSizePolicy(sizePolicy2);
         label_7->setMinimumSize(QSize(150, 0));
 
         horizontalLayout_15->addWidget(label_7);
@@ -640,6 +597,36 @@ public:
 
 
         gridLayout_4->addLayout(horizontalLayout_15, 1, 2, 1, 1);
+
+        horizontalLayout_12 = new QHBoxLayout();
+        horizontalLayout_12->setObjectName(QStringLiteral("horizontalLayout_12"));
+        label_detsignal = new QLabel(PLS);
+        label_detsignal->setObjectName(QStringLiteral("label_detsignal"));
+        label_detsignal->setMinimumSize(QSize(150, 0));
+
+        horizontalLayout_12->addWidget(label_detsignal);
+
+        comboBox_DetSignal = new QComboBox(PLS);
+        comboBox_DetSignal->setObjectName(QStringLiteral("comboBox_DetSignal"));
+        QSizePolicy sizePolicy3(QSizePolicy::Minimum, QSizePolicy::Fixed);
+        sizePolicy3.setHorizontalStretch(0);
+        sizePolicy3.setVerticalStretch(0);
+        sizePolicy3.setHeightForWidth(comboBox_DetSignal->sizePolicy().hasHeightForWidth());
+        comboBox_DetSignal->setSizePolicy(sizePolicy3);
+        comboBox_DetSignal->setMinimumSize(QSize(150, 0));
+
+        horizontalLayout_12->addWidget(comboBox_DetSignal);
+
+        horizontalSpacer_15 = new QSpacerItem(40, 10, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_12->addItem(horizontalSpacer_15);
+
+
+        gridLayout_4->addLayout(horizontalLayout_12, 0, 0, 1, 1);
+
+        horizontalSpacer_20 = new QSpacerItem(5, 10, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        gridLayout_4->addItem(horizontalSpacer_20, 1, 1, 1, 1);
 
         horizontalLayout_16 = new QHBoxLayout();
         horizontalLayout_16->setObjectName(QStringLiteral("horizontalLayout_16"));
@@ -665,9 +652,54 @@ public:
 
         gridLayout_4->addLayout(horizontalLayout_16, 1, 0, 1, 1);
 
-        horizontalSpacer_20 = new QSpacerItem(5, 10, QSizePolicy::Fixed, QSizePolicy::Minimum);
+        horizontalLayout_13 = new QHBoxLayout();
+        horizontalLayout_13->setObjectName(QStringLiteral("horizontalLayout_13"));
+        label_subs = new QLabel(PLS);
+        label_subs->setObjectName(QStringLiteral("label_subs"));
+        label_subs->setMinimumSize(QSize(150, 0));
 
-        gridLayout_4->addItem(horizontalSpacer_20, 1, 1, 1, 1);
+        horizontalLayout_13->addWidget(label_subs);
+
+        comboBox_Substance = new QComboBox(PLS);
+        comboBox_Substance->setObjectName(QStringLiteral("comboBox_Substance"));
+        sizePolicy3.setHeightForWidth(comboBox_Substance->sizePolicy().hasHeightForWidth());
+        comboBox_Substance->setSizePolicy(sizePolicy3);
+        comboBox_Substance->setMinimumSize(QSize(150, 0));
+
+        horizontalLayout_13->addWidget(comboBox_Substance);
+
+        horizontalSpacer_16 = new QSpacerItem(40, 10, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_13->addItem(horizontalSpacer_16);
+
+
+        gridLayout_4->addLayout(horizontalLayout_13, 0, 2, 1, 1);
+
+        horizontalLayout_14 = new QHBoxLayout();
+        horizontalLayout_14->setObjectName(QStringLiteral("horizontalLayout_14"));
+        label_applyLogarithm = new QLabel(PLS);
+        label_applyLogarithm->setObjectName(QStringLiteral("label_applyLogarithm"));
+        label_applyLogarithm->setMinimumSize(QSize(150, 0));
+
+        horizontalLayout_14->addWidget(label_applyLogarithm);
+
+        checkBox_applyLogarithm = new QCheckBox(PLS);
+        checkBox_applyLogarithm->setObjectName(QStringLiteral("checkBox_applyLogarithm"));
+        checkBox_applyLogarithm->setMinimumSize(QSize(150, 0));
+        checkBox_applyLogarithm->setLayoutDirection(Qt::LeftToRight);
+
+        horizontalLayout_14->addWidget(checkBox_applyLogarithm);
+
+        horizontalSpacer_22 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_14->addItem(horizontalSpacer_22);
+
+
+        gridLayout_4->addLayout(horizontalLayout_14, 2, 0, 1, 1);
+
+        horizontalSpacer_21 = new QSpacerItem(5, 10, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        gridLayout_4->addItem(horizontalSpacer_21, 2, 1, 1, 1);
 
 
         verticalLayout_5->addLayout(gridLayout_4);
@@ -760,7 +792,7 @@ public:
         label_currentPath->setText(QApplication::translate("selectAnalizeData", "Current Data Path:", Q_NULLPTR));
         lineEdit_currentDataPath->setText(QApplication::translate("selectAnalizeData", "Please Select a FFT Data Files Path", Q_NULLPTR));
         label_6->setText(QApplication::translate("selectAnalizeData", "PLS Settings", Q_NULLPTR));
-        label_subs->setText(QApplication::translate("selectAnalizeData", "Substance:", Q_NULLPTR));
+        label_7->setText(QApplication::translate("selectAnalizeData", "Max. Wavelength:", Q_NULLPTR));
         label_detsignal->setText(QApplication::translate("selectAnalizeData", "Determination Signal:", Q_NULLPTR));
         comboBox_DetSignal->clear();
         comboBox_DetSignal->insertItems(0, QStringList()
@@ -769,8 +801,10 @@ public:
          << QApplication::translate("selectAnalizeData", "I(2\317\211)", Q_NULLPTR)
          << QApplication::translate("selectAnalizeData", "I(DC)", Q_NULLPTR)
         );
-        label_7->setText(QApplication::translate("selectAnalizeData", "Max. Wavelength:", Q_NULLPTR));
         label_8->setText(QApplication::translate("selectAnalizeData", "Min. Wavelength:", Q_NULLPTR));
+        label_subs->setText(QApplication::translate("selectAnalizeData", "Substance:", Q_NULLPTR));
+        label_applyLogarithm->setText(QApplication::translate("selectAnalizeData", "Logarithm of Signal:", Q_NULLPTR));
+        checkBox_applyLogarithm->setText(QString());
 #ifndef QT_NO_TOOLTIP
         pushButton_cancel->setToolTip(QApplication::translate("selectAnalizeData", "Cancel Data Analysis", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP

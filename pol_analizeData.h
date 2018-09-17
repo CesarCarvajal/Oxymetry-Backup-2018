@@ -57,7 +57,7 @@ public:
     QString pathDataM;
 
     /* Data for 3D plot */
-    QSurfaceDataArray *data3D;
+    QSurfaceDataArray *data3D, *data3DNormalized;
 
     /* Save the concentrations */
     QStringList concentrationsList;
@@ -113,9 +113,6 @@ private slots:
     /* Allow the user to load data manually */
     void allowSelectPath(void);
 
-    /* Create data for 3D plot */
-    void createData3D(void);
-
     /* Organize files per steps */
     void selectFileSteps(void);
 
@@ -136,6 +133,9 @@ private slots:
 
     /* left click menu */
     void showContextMenu(const QPoint &pos);
+
+    /* Activate the logarithm when I(2W) is selected */
+    void activateLogarithm(void);
 
     /* Select files path */
     void selectPath(void);

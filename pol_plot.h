@@ -53,10 +53,10 @@ public:
     double maxYValue;
 
     /* 3D Surface */
-    Q3DSurface *surface;
+    Q3DSurface *surface, *surface_norm;
     //Q3DScatter *scatter;
 
-    QSurface3DSeries *series;
+    QSurface3DSeries *series, *series_norm;
 
     /* Maximum value on X axis of average plot */
     double maxXtime;
@@ -66,8 +66,6 @@ public:
 
     /* Reference prediction */
     QVector<double> linearR;
-
-private:
 
     /* Averages Plot time */
     int counts_average_time;
@@ -89,6 +87,9 @@ public:
 
     /* Clean all the plots */
     void clean_AllPlots(void);
+
+    /* Plot the prediction line */
+    void plotPredictionLine(double minConcentration, double maxConcentration);
 
     /* Destructor */
     ~Pol_Plot(void);

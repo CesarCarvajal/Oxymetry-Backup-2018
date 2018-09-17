@@ -141,30 +141,56 @@ public:
     QHBoxLayout *horizontalLayout;
     QSpacerItem *horizontalSpacer_17;
     QHBoxLayout *horizontalLayout_16;
-    ClickableLabel *label_2;
-    QLabel *label_3;
+    ClickableLabel *label_hideSpectra;
+    QLabel *label_SP;
     QSpacerItem *horizontalSpacer_28;
     QFrame *line_7;
     QSpacerItem *horizontalSpacer_29;
     QHBoxLayout *horizontalLayout_18;
-    QLabel *label_4;
-    ClickableLabel *label_5;
+    QLabel *label_PSNS;
+    ClickableLabel *label_hidePrediction;
     QSpacerItem *horizontalSpacer_30;
     QFrame *line;
     QHBoxLayout *horizontalLayout_3;
     QSpacerItem *horizontalSpacer_32;
     QVBoxLayout *verticalLayout_6;
-    QLabel *label;
-    QWidget *widget;
+    QVBoxLayout *verticalLayout_12;
+    QLabel *label_spectra;
+    QWidget *widget_Spectra;
     QHBoxLayout *horizontalLayout_22;
     QHBoxLayout *VLP;
+    QFrame *line_SpeNormSpec;
+    QVBoxLayout *verticalLayout_15;
+    QLabel *label_Nspectra;
+    QWidget *widget_NormSpectra;
+    QHBoxLayout *horizontalLayout_23;
+    QHBoxLayout *VLP_norm;
     QSpacerItem *horizontalSpacer_14;
-    QFrame *line_comp;
+    QFrame *line_pred;
     QSpacerItem *horizontalSpacer_31;
     QVBoxLayout *verticalLayout_5;
     QLabel *label_prediction;
+    QWidget *widget_errorBar;
+    QHBoxLayout *horizontalLayout_27;
+    QHBoxLayout *horizontalLayout_26;
+    QLabel *label_PredictionError;
+    QLabel *label_PError;
+    QLabel *label_R2_1;
+    QLabel *label_R2;
     Plot *qwtPlot_Pol_Prediction;
     QSpacerItem *horizontalSpacer_7;
+    QHBoxLayout *horizontalLayout_21;
+    QSpacerItem *horizontalSpacer_34;
+    QHBoxLayout *horizontalLayout_24;
+    ClickableLabel *label_hideNSpectra;
+    QLabel *label_NSP;
+    QSpacerItem *horizontalSpacer_36;
+    QFrame *line_6;
+    QSpacerItem *horizontalSpacer_35;
+    QHBoxLayout *horizontalLayout_25;
+    QLabel *label_P1;
+    QLabel *label_P2;
+    QSpacerItem *horizontalSpacer_33;
     QWidget *MeasStadistics;
     QVBoxLayout *verticalLayout_9;
     QFrame *line_8;
@@ -1173,22 +1199,22 @@ public:
 
         horizontalLayout_16 = new QHBoxLayout();
         horizontalLayout_16->setObjectName(QStringLiteral("horizontalLayout_16"));
-        label_2 = new ClickableLabel(MeasResults);
-        label_2->setObjectName(QStringLiteral("label_2"));
-        label_2->setMinimumSize(QSize(100, 0));
+        label_hideSpectra = new ClickableLabel(MeasResults);
+        label_hideSpectra->setObjectName(QStringLiteral("label_hideSpectra"));
+        label_hideSpectra->setMinimumSize(QSize(100, 0));
         QFont font10;
         font10.setPointSize(7);
-        label_2->setFont(font10);
-        label_2->setCursor(QCursor(Qt::PointingHandCursor));
+        label_hideSpectra->setFont(font10);
+        label_hideSpectra->setCursor(QCursor(Qt::PointingHandCursor));
 
-        horizontalLayout_16->addWidget(label_2);
+        horizontalLayout_16->addWidget(label_hideSpectra);
 
-        label_3 = new QLabel(MeasResults);
-        label_3->setObjectName(QStringLiteral("label_3"));
-        sizePolicy6.setHeightForWidth(label_3->sizePolicy().hasHeightForWidth());
-        label_3->setSizePolicy(sizePolicy6);
+        label_SP = new QLabel(MeasResults);
+        label_SP->setObjectName(QStringLiteral("label_SP"));
+        sizePolicy6.setHeightForWidth(label_SP->sizePolicy().hasHeightForWidth());
+        label_SP->setSizePolicy(sizePolicy6);
 
-        horizontalLayout_16->addWidget(label_3);
+        horizontalLayout_16->addWidget(label_SP);
 
 
         horizontalLayout->addLayout(horizontalLayout_16);
@@ -1210,20 +1236,20 @@ public:
 
         horizontalLayout_18 = new QHBoxLayout();
         horizontalLayout_18->setObjectName(QStringLiteral("horizontalLayout_18"));
-        label_4 = new QLabel(MeasResults);
-        label_4->setObjectName(QStringLiteral("label_4"));
-        sizePolicy6.setHeightForWidth(label_4->sizePolicy().hasHeightForWidth());
-        label_4->setSizePolicy(sizePolicy6);
+        label_PSNS = new QLabel(MeasResults);
+        label_PSNS->setObjectName(QStringLiteral("label_PSNS"));
+        sizePolicy6.setHeightForWidth(label_PSNS->sizePolicy().hasHeightForWidth());
+        label_PSNS->setSizePolicy(sizePolicy6);
 
-        horizontalLayout_18->addWidget(label_4);
+        horizontalLayout_18->addWidget(label_PSNS);
 
-        label_5 = new ClickableLabel(MeasResults);
-        label_5->setObjectName(QStringLiteral("label_5"));
-        label_5->setMinimumSize(QSize(70, 0));
-        label_5->setFont(font10);
-        label_5->setCursor(QCursor(Qt::PointingHandCursor));
+        label_hidePrediction = new ClickableLabel(MeasResults);
+        label_hidePrediction->setObjectName(QStringLiteral("label_hidePrediction"));
+        label_hidePrediction->setMinimumSize(QSize(70, 0));
+        label_hidePrediction->setFont(font10);
+        label_hidePrediction->setCursor(QCursor(Qt::PointingHandCursor));
 
-        horizontalLayout_18->addWidget(label_5);
+        horizontalLayout_18->addWidget(label_hidePrediction);
 
 
         horizontalLayout->addLayout(horizontalLayout_18);
@@ -1250,30 +1276,32 @@ public:
 
         verticalLayout_6 = new QVBoxLayout();
         verticalLayout_6->setObjectName(QStringLiteral("verticalLayout_6"));
-        label = new QLabel(MeasResults);
-        label->setObjectName(QStringLiteral("label"));
-        label->setMinimumSize(QSize(0, 14));
+        verticalLayout_12 = new QVBoxLayout();
+        verticalLayout_12->setObjectName(QStringLiteral("verticalLayout_12"));
+        label_spectra = new QLabel(MeasResults);
+        label_spectra->setObjectName(QStringLiteral("label_spectra"));
+        label_spectra->setMinimumSize(QSize(0, 14));
         QPalette palette11;
         palette11.setBrush(QPalette::Active, QPalette::WindowText, brush4);
         palette11.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
         palette11.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        label->setPalette(palette11);
+        label_spectra->setPalette(palette11);
         QFont font11;
         font11.setPointSize(9);
         font11.setBold(true);
         font11.setUnderline(false);
         font11.setWeight(75);
-        label->setFont(font11);
-        label->setCursor(QCursor(Qt::ArrowCursor));
-        label->setAlignment(Qt::AlignCenter);
+        label_spectra->setFont(font11);
+        label_spectra->setCursor(QCursor(Qt::ArrowCursor));
+        label_spectra->setAlignment(Qt::AlignCenter);
 
-        verticalLayout_6->addWidget(label);
+        verticalLayout_12->addWidget(label_spectra);
 
-        widget = new QWidget(MeasResults);
-        widget->setObjectName(QStringLiteral("widget"));
-        sizePolicy7.setHeightForWidth(widget->sizePolicy().hasHeightForWidth());
-        widget->setSizePolicy(sizePolicy7);
-        horizontalLayout_22 = new QHBoxLayout(widget);
+        widget_Spectra = new QWidget(MeasResults);
+        widget_Spectra->setObjectName(QStringLiteral("widget_Spectra"));
+        sizePolicy7.setHeightForWidth(widget_Spectra->sizePolicy().hasHeightForWidth());
+        widget_Spectra->setSizePolicy(sizePolicy7);
+        horizontalLayout_22 = new QHBoxLayout(widget_Spectra);
         horizontalLayout_22->setObjectName(QStringLiteral("horizontalLayout_22"));
         VLP = new QHBoxLayout();
         VLP->setObjectName(QStringLiteral("VLP"));
@@ -1281,7 +1309,53 @@ public:
         horizontalLayout_22->addLayout(VLP);
 
 
-        verticalLayout_6->addWidget(widget);
+        verticalLayout_12->addWidget(widget_Spectra);
+
+
+        verticalLayout_6->addLayout(verticalLayout_12);
+
+        line_SpeNormSpec = new QFrame(MeasResults);
+        line_SpeNormSpec->setObjectName(QStringLiteral("line_SpeNormSpec"));
+        line_SpeNormSpec->setFrameShape(QFrame::HLine);
+        line_SpeNormSpec->setFrameShadow(QFrame::Sunken);
+
+        verticalLayout_6->addWidget(line_SpeNormSpec);
+
+        verticalLayout_15 = new QVBoxLayout();
+        verticalLayout_15->setObjectName(QStringLiteral("verticalLayout_15"));
+        label_Nspectra = new QLabel(MeasResults);
+        label_Nspectra->setObjectName(QStringLiteral("label_Nspectra"));
+        label_Nspectra->setMinimumSize(QSize(0, 14));
+        QPalette palette12;
+        palette12.setBrush(QPalette::Active, QPalette::WindowText, brush4);
+        palette12.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
+        palette12.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        label_Nspectra->setPalette(palette12);
+        QFont font12;
+        font12.setPointSize(9);
+        font12.setBold(true);
+        font12.setWeight(75);
+        label_Nspectra->setFont(font12);
+        label_Nspectra->setAlignment(Qt::AlignCenter);
+
+        verticalLayout_15->addWidget(label_Nspectra);
+
+        widget_NormSpectra = new QWidget(MeasResults);
+        widget_NormSpectra->setObjectName(QStringLiteral("widget_NormSpectra"));
+        sizePolicy7.setHeightForWidth(widget_NormSpectra->sizePolicy().hasHeightForWidth());
+        widget_NormSpectra->setSizePolicy(sizePolicy7);
+        horizontalLayout_23 = new QHBoxLayout(widget_NormSpectra);
+        horizontalLayout_23->setObjectName(QStringLiteral("horizontalLayout_23"));
+        VLP_norm = new QHBoxLayout();
+        VLP_norm->setObjectName(QStringLiteral("VLP_norm"));
+
+        horizontalLayout_23->addLayout(VLP_norm);
+
+
+        verticalLayout_15->addWidget(widget_NormSpectra);
+
+
+        verticalLayout_6->addLayout(verticalLayout_15);
 
 
         horizontalLayout_3->addLayout(verticalLayout_6);
@@ -1290,12 +1364,12 @@ public:
 
         horizontalLayout_3->addItem(horizontalSpacer_14);
 
-        line_comp = new QFrame(MeasResults);
-        line_comp->setObjectName(QStringLiteral("line_comp"));
-        line_comp->setFrameShape(QFrame::VLine);
-        line_comp->setFrameShadow(QFrame::Sunken);
+        line_pred = new QFrame(MeasResults);
+        line_pred->setObjectName(QStringLiteral("line_pred"));
+        line_pred->setFrameShape(QFrame::VLine);
+        line_pred->setFrameShadow(QFrame::Sunken);
 
-        horizontalLayout_3->addWidget(line_comp);
+        horizontalLayout_3->addWidget(line_pred);
 
         horizontalSpacer_31 = new QSpacerItem(2, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
 
@@ -1306,16 +1380,60 @@ public:
         label_prediction = new QLabel(MeasResults);
         label_prediction->setObjectName(QStringLiteral("label_prediction"));
         label_prediction->setMinimumSize(QSize(0, 14));
-        QPalette palette12;
-        palette12.setBrush(QPalette::Active, QPalette::WindowText, brush4);
-        palette12.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
-        palette12.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        label_prediction->setPalette(palette12);
+        QPalette palette13;
+        palette13.setBrush(QPalette::Active, QPalette::WindowText, brush4);
+        palette13.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
+        palette13.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        label_prediction->setPalette(palette13);
         label_prediction->setFont(font11);
         label_prediction->setCursor(QCursor(Qt::ArrowCursor));
         label_prediction->setAlignment(Qt::AlignCenter);
 
         verticalLayout_5->addWidget(label_prediction);
+
+        widget_errorBar = new QWidget(MeasResults);
+        widget_errorBar->setObjectName(QStringLiteral("widget_errorBar"));
+        sizePolicy.setHeightForWidth(widget_errorBar->sizePolicy().hasHeightForWidth());
+        widget_errorBar->setSizePolicy(sizePolicy);
+        horizontalLayout_27 = new QHBoxLayout(widget_errorBar);
+        horizontalLayout_27->setObjectName(QStringLiteral("horizontalLayout_27"));
+        horizontalLayout_26 = new QHBoxLayout();
+        horizontalLayout_26->setObjectName(QStringLiteral("horizontalLayout_26"));
+        label_PredictionError = new QLabel(widget_errorBar);
+        label_PredictionError->setObjectName(QStringLiteral("label_PredictionError"));
+        label_PredictionError->setMinimumSize(QSize(60, 0));
+        label_PredictionError->setFont(font6);
+
+        horizontalLayout_26->addWidget(label_PredictionError);
+
+        label_PError = new QLabel(widget_errorBar);
+        label_PError->setObjectName(QStringLiteral("label_PError"));
+        sizePolicy6.setHeightForWidth(label_PError->sizePolicy().hasHeightForWidth());
+        label_PError->setSizePolicy(sizePolicy6);
+        label_PError->setMinimumSize(QSize(100, 0));
+
+        horizontalLayout_26->addWidget(label_PError);
+
+        label_R2_1 = new QLabel(widget_errorBar);
+        label_R2_1->setObjectName(QStringLiteral("label_R2_1"));
+        label_R2_1->setMinimumSize(QSize(50, 0));
+        label_R2_1->setFont(font6);
+
+        horizontalLayout_26->addWidget(label_R2_1);
+
+        label_R2 = new QLabel(widget_errorBar);
+        label_R2->setObjectName(QStringLiteral("label_R2"));
+        sizePolicy6.setHeightForWidth(label_R2->sizePolicy().hasHeightForWidth());
+        label_R2->setSizePolicy(sizePolicy6);
+        label_R2->setMinimumSize(QSize(100, 0));
+
+        horizontalLayout_26->addWidget(label_R2);
+
+
+        horizontalLayout_27->addLayout(horizontalLayout_26);
+
+
+        verticalLayout_5->addWidget(widget_errorBar);
 
         qwtPlot_Pol_Prediction = new Plot(MeasResults);
         qwtPlot_Pol_Prediction->setObjectName(QStringLiteral("qwtPlot_Pol_Prediction"));
@@ -1337,6 +1455,72 @@ public:
 
 
         verticalLayout_4->addLayout(horizontalLayout_3);
+
+        horizontalLayout_21 = new QHBoxLayout();
+        horizontalLayout_21->setObjectName(QStringLiteral("horizontalLayout_21"));
+        horizontalSpacer_34 = new QSpacerItem(5, 7, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        horizontalLayout_21->addItem(horizontalSpacer_34);
+
+        horizontalLayout_24 = new QHBoxLayout();
+        horizontalLayout_24->setObjectName(QStringLiteral("horizontalLayout_24"));
+        label_hideNSpectra = new ClickableLabel(MeasResults);
+        label_hideNSpectra->setObjectName(QStringLiteral("label_hideNSpectra"));
+        label_hideNSpectra->setMinimumSize(QSize(100, 0));
+        label_hideNSpectra->setFont(font10);
+        label_hideNSpectra->setCursor(QCursor(Qt::PointingHandCursor));
+
+        horizontalLayout_24->addWidget(label_hideNSpectra);
+
+        label_NSP = new QLabel(MeasResults);
+        label_NSP->setObjectName(QStringLiteral("label_NSP"));
+        sizePolicy6.setHeightForWidth(label_NSP->sizePolicy().hasHeightForWidth());
+        label_NSP->setSizePolicy(sizePolicy6);
+
+        horizontalLayout_24->addWidget(label_NSP);
+
+
+        horizontalLayout_21->addLayout(horizontalLayout_24);
+
+        horizontalSpacer_36 = new QSpacerItem(2, 7, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        horizontalLayout_21->addItem(horizontalSpacer_36);
+
+        line_6 = new QFrame(MeasResults);
+        line_6->setObjectName(QStringLiteral("line_6"));
+        line_6->setFrameShape(QFrame::VLine);
+        line_6->setFrameShadow(QFrame::Sunken);
+
+        horizontalLayout_21->addWidget(line_6);
+
+        horizontalSpacer_35 = new QSpacerItem(2, 7, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        horizontalLayout_21->addItem(horizontalSpacer_35);
+
+        horizontalLayout_25 = new QHBoxLayout();
+        horizontalLayout_25->setObjectName(QStringLiteral("horizontalLayout_25"));
+        label_P1 = new QLabel(MeasResults);
+        label_P1->setObjectName(QStringLiteral("label_P1"));
+        label_P1->setMinimumSize(QSize(100, 0));
+
+        horizontalLayout_25->addWidget(label_P1);
+
+        label_P2 = new QLabel(MeasResults);
+        label_P2->setObjectName(QStringLiteral("label_P2"));
+        sizePolicy6.setHeightForWidth(label_P2->sizePolicy().hasHeightForWidth());
+        label_P2->setSizePolicy(sizePolicy6);
+
+        horizontalLayout_25->addWidget(label_P2);
+
+
+        horizontalLayout_21->addLayout(horizontalLayout_25);
+
+        horizontalSpacer_33 = new QSpacerItem(5, 7, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        horizontalLayout_21->addItem(horizontalSpacer_33);
+
+
+        verticalLayout_4->addLayout(horizontalLayout_21);
 
         QIcon icon4;
         icon4.addFile(QStringLiteral(":/polarimeter/Load.ico"), QSize(), QIcon::Normal, QIcon::Off);
@@ -1444,13 +1628,13 @@ public:
         info->setSizePolicy(sizePolicy4);
         info->setMinimumSize(QSize(200, 0));
         info->setMaximumSize(QSize(16777215, 12));
-        QFont font12;
-        font12.setPointSize(7);
-        font12.setBold(true);
-        font12.setItalic(false);
-        font12.setUnderline(false);
-        font12.setWeight(75);
-        info->setFont(font12);
+        QFont font13;
+        font13.setPointSize(7);
+        font13.setBold(true);
+        font13.setItalic(false);
+        font13.setUnderline(false);
+        font13.setWeight(75);
+        info->setFont(font13);
         info->setScaledContents(true);
 
         horizontalLayout_4->addWidget(info);
@@ -1464,11 +1648,11 @@ public:
         sizePolicy4.setHeightForWidth(label_totalM->sizePolicy().hasHeightForWidth());
         label_totalM->setSizePolicy(sizePolicy4);
         label_totalM->setMaximumSize(QSize(16777215, 15));
-        QFont font13;
-        font13.setPointSize(7);
-        font13.setBold(true);
-        font13.setWeight(75);
-        label_totalM->setFont(font13);
+        QFont font14;
+        font14.setPointSize(7);
+        font14.setBold(true);
+        font14.setWeight(75);
+        label_totalM->setFont(font14);
 
         horizontalLayout_4->addWidget(label_totalM);
 
@@ -1478,7 +1662,7 @@ public:
         TotalProgressBar_Pol->setSizePolicy(sizePolicy4);
         TotalProgressBar_Pol->setMinimumSize(QSize(140, 0));
         TotalProgressBar_Pol->setMaximumSize(QSize(240, 12));
-        TotalProgressBar_Pol->setFont(font13);
+        TotalProgressBar_Pol->setFont(font14);
         TotalProgressBar_Pol->setValue(0);
 
         horizontalLayout_4->addWidget(TotalProgressBar_Pol);
@@ -1491,7 +1675,7 @@ public:
         label_remaining->setObjectName(QStringLiteral("label_remaining"));
         label_remaining->setMinimumSize(QSize(82, 0));
         label_remaining->setMaximumSize(QSize(82, 16777215));
-        label_remaining->setFont(font13);
+        label_remaining->setFont(font14);
 
         horizontalLayout_4->addWidget(label_remaining);
 
@@ -1499,7 +1683,7 @@ public:
         label_RemainingTime->setObjectName(QStringLiteral("label_RemainingTime"));
         label_RemainingTime->setMaximumSize(QSize(100, 12));
         label_RemainingTime->setSizeIncrement(QSize(100, 0));
-        label_RemainingTime->setFont(font13);
+        label_RemainingTime->setFont(font14);
 
         horizontalLayout_4->addWidget(label_RemainingTime);
 
@@ -1513,10 +1697,10 @@ public:
         label_clearAll->setSizePolicy(sizePolicy4);
         label_clearAll->setMinimumSize(QSize(70, 18));
         label_clearAll->setMaximumSize(QSize(70, 18));
-        QFont font14;
-        font14.setPointSize(8);
-        font14.setUnderline(true);
-        label_clearAll->setFont(font14);
+        QFont font15;
+        font15.setPointSize(8);
+        font15.setUnderline(true);
+        label_clearAll->setFont(font15);
         label_clearAll->setCursor(QCursor(Qt::PointingHandCursor));
         label_clearAll->setLayoutDirection(Qt::LeftToRight);
         label_clearAll->setAlignment(Qt::AlignCenter);
@@ -1556,7 +1740,7 @@ public:
         retranslateUi(PanelPolarimeter);
 
         list_devices_Pol->setCurrentRow(-1);
-        Tabs_Plots->setCurrentIndex(1);
+        Tabs_Plots->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(PanelPolarimeter);
@@ -1701,18 +1885,27 @@ public:
 #endif // QT_NO_TOOLTIP
         label_HIdeLiveAverage->setText(QApplication::translate("PanelPolarimeter", ">> Hide Live Average", Q_NULLPTR));
         Tabs_Plots->setTabText(Tabs_Plots->indexOf(liveData), QApplication::translate("PanelPolarimeter", "Live Data", Q_NULLPTR));
-        label_2->setText(QApplication::translate("PanelPolarimeter", "<< Hide Spectra", Q_NULLPTR));
-        label_3->setText(QString());
-        label_4->setText(QString());
-        label_5->setText(QApplication::translate("PanelPolarimeter", ">> Hide Prediction", Q_NULLPTR));
-        label->setText(QApplication::translate("PanelPolarimeter", "Spectra", Q_NULLPTR));
+        label_hideSpectra->setText(QApplication::translate("PanelPolarimeter", "<< Hide Spectra", Q_NULLPTR));
+        label_SP->setText(QString());
+        label_PSNS->setText(QString());
+        label_hidePrediction->setText(QApplication::translate("PanelPolarimeter", ">> Hide Prediction", Q_NULLPTR));
+        label_spectra->setText(QApplication::translate("PanelPolarimeter", "Spectra", Q_NULLPTR));
+        label_Nspectra->setText(QApplication::translate("PanelPolarimeter", "Normalized Spectra", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         label_prediction->setToolTip(QApplication::translate("PanelPolarimeter", "Hide/Show Prediction Plot", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_prediction->setText(QApplication::translate("PanelPolarimeter", "Prediction", Q_NULLPTR));
+        label_PredictionError->setText(QApplication::translate("PanelPolarimeter", "Prediction Error:", Q_NULLPTR));
+        label_PError->setText(QString());
+        label_R2_1->setText(QApplication::translate("PanelPolarimeter", "R2:", Q_NULLPTR));
+        label_R2->setText(QString());
 #ifndef QT_NO_TOOLTIP
         qwtPlot_Pol_Prediction->setToolTip(QApplication::translate("PanelPolarimeter", "Prediction Plot", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
+        label_hideNSpectra->setText(QApplication::translate("PanelPolarimeter", "<< Hide Normalized Spectra", Q_NULLPTR));
+        label_NSP->setText(QString());
+        label_P1->setText(QString());
+        label_P2->setText(QString());
         Tabs_Plots->setTabText(Tabs_Plots->indexOf(MeasResults), QApplication::translate("PanelPolarimeter", "Measurement Results", Q_NULLPTR));
         Tabs_Plots->setTabText(Tabs_Plots->indexOf(MeasStadistics), QApplication::translate("PanelPolarimeter", "Measurement Stadistics", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
