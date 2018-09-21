@@ -219,7 +219,7 @@ public:
     QSpinBox *spinBox_Nrepet;
     QLabel *label_4;
     QHBoxLayout *horizontalLayout_41;
-    QSpacerItem *horizontalSpacer_23;
+    QCheckBox *checkBox_crossingMode;
     QSpacerItem *verticalSpacer_3;
     QGridLayout *gridLayout_9;
     QHBoxLayout *horizontalLayout_56;
@@ -1741,9 +1741,14 @@ public:
 
         horizontalLayout_41 = new QHBoxLayout();
         horizontalLayout_41->setObjectName(QStringLiteral("horizontalLayout_41"));
-        horizontalSpacer_23 = new QSpacerItem(210, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
+        checkBox_crossingMode = new QCheckBox(ConfigurationLayout);
+        checkBox_crossingMode->setObjectName(QStringLiteral("checkBox_crossingMode"));
+        sizePolicy2.setHeightForWidth(checkBox_crossingMode->sizePolicy().hasHeightForWidth());
+        checkBox_crossingMode->setSizePolicy(sizePolicy2);
+        checkBox_crossingMode->setMinimumSize(QSize(220, 0));
+        checkBox_crossingMode->setMaximumSize(QSize(16777215, 16777215));
 
-        horizontalLayout_41->addItem(horizontalSpacer_23);
+        horizontalLayout_41->addWidget(checkBox_crossingMode);
 
 
         gridLayout_5->addLayout(horizontalLayout_41, 2, 3, 1, 1);
@@ -2553,6 +2558,7 @@ public:
         spinBox_Nrepet->setToolTip(QApplication::translate("configurePolMeasure", "Set number of repetitions", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_4->setText(QString());
+        checkBox_crossingMode->setText(QApplication::translate("configurePolMeasure", "Concentration Crossing Mode", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         checkBox_IntervalMode->setToolTip(QApplication::translate("configurePolMeasure", "Activate Interval Mode", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP

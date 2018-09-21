@@ -219,146 +219,215 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
         activeSubs = activeSubs + ConfigurationFileGenerator->activeSubstances.at(g);
     }
 
-    /* Is there more than 1 substance available? */
-    if(activeSubs > 1){
+    /* Activate Crossing Mode */
+    if(ConfigurationFileGenerator->crossingMode && activeSubs > 1){
 
-        /* Check correlation factor, skip if the vector has 4 or less elements */
-        while( true && ConfigurationFileGenerator->NConcentrations > 4){
+        /* Get the new size of the measurements */
+        int size = ConfigurationFileGenerator->NConcentrations*ConfigurationFileGenerator->NConcentrations;
 
-            /* Random shuffle the vectors */
+        /* Create temporal vectors for the concentrations */
+        QVector <double> GlucoseTemp;
+        QVector <double> Impurity1Temp;
+        QVector <double> Indexes(size);
+
+        /* resize the vectors */
+        GlucoseTemp.resize(0);
+        Impurity1Temp.resize(0);
+
+        /* Fill the temporary vectors with the actual concentration information */
+        for(int in = 0; in < size; in++){
+
+            /* Get indexes */
+            Indexes.replace(in, in);
+
+            /* Save the concentrations */
+            if(in < ConfigurationFileGenerator->NConcentrations){
+                GlucoseTemp.append(GlucoseConcentration);
+                Impurity1Temp.append(Impurity1Concentration);
+            }
+        }
+
+        /* Sort the vector reference, by now only glucose */
+        qSort(GlucoseTemp.begin(), GlucoseTemp.end());
+
+        /* Shuffle randomly the indexes of the vector */
+        std::random_shuffle(Indexes.begin(), Indexes.end());
+
+        /* Clear all the vectors */
+        GlucoseConcentration.clear();
+        GlucoseConcentration.resize(size);
+        Impurity1Concentration.clear();
+        Impurity1Concentration.resize(size);
+        Impurity2Concentration.resize(size);
+        Impurity3Concentration.resize(size);
+        Impurity4Concentration.resize(size);
+        Impurity5Concentration.resize(size);
+        GlucoseFlow.clear();
+        GlucoseFlow.resize(size);
+        Impurity1Flow.clear();
+        Impurity1Flow.resize(size);
+        Impurity2Flow.resize(size);
+        Impurity3Flow.resize(size);
+        Impurity4Flow.resize(size);
+        Impurity5Flow.resize(size);
+        WaterFlow.resize(size);
+
+        /* Fill the vectors according to the randomly shuffled indexes */
+        for(int in = 0; in < size; in++){
+
+            /* Fill concentrations randomly */
+            GlucoseConcentration.replace(in, GlucoseTemp.at(Indexes.at(in)));
+            Impurity1Concentration.replace(in, Impurity1Temp.at(Indexes.at(in)));
+        }
+
+        /* The new measurment size */
+        ConfigurationFileGenerator->NConcentrations = size;
+
+    }
+    /* Continue normally if the crossing mode is not activated */
+    else{
+
+        /* Is there more than 1 substance available? */
+        if(activeSubs > 1){
+
+            /* Check correlation factor, skip if the vector has 4 or less elements */
+            while( true && ConfigurationFileGenerator->NConcentrations > 4){
+
+                /* Random shuffle the vectors */
+                std::random_shuffle(GlucoseConcentration.begin(), GlucoseConcentration.end());
+                std::random_shuffle(Impurity1Concentration.begin(), Impurity1Concentration.end());
+                std::random_shuffle(Impurity2Concentration.begin(), Impurity2Concentration.end());
+                std::random_shuffle(Impurity3Concentration.begin(), Impurity3Concentration.end());
+                std::random_shuffle(Impurity4Concentration.begin(), Impurity4Concentration.end());
+                std::random_shuffle(Impurity5Concentration.begin(), Impurity5Concentration.end());
+
+                float threshold = 0.05;
+
+                /* Correlation of glucose and number of measurements */
+                if(ConfigurationFileGenerator->activeSubstances.at(0)){
+
+                    /* Is the factor ok?, if not start again */
+                    if(ConfigurationFileGenerator->correlationCoefficient(Nmeasurements, GlucoseConcentration, ConfigurationFileGenerator->NConcentrations) > threshold){ continue;}
+                }
+
+                /* Correlation between Glucose and Impurity 1 */
+                if(ConfigurationFileGenerator->activeSubstances.at(0) && ConfigurationFileGenerator->activeSubstances.at(1)){
+
+                    /* Is the factor ok?, if not start again */
+                    if(ConfigurationFileGenerator->correlationCoefficient(GlucoseConcentration, Impurity1Concentration, ConfigurationFileGenerator->NConcentrations) > threshold){ continue;}
+                }
+
+                /* Correlation between Glucose and Impurity 2 */
+                if(ConfigurationFileGenerator->activeSubstances.at(0) && ConfigurationFileGenerator->activeSubstances.at(2)){
+
+                    /* Is the factor ok?, if not start again */
+                    if(ConfigurationFileGenerator->correlationCoefficient(GlucoseConcentration, Impurity2Concentration, ConfigurationFileGenerator->NConcentrations) > threshold){ continue;}
+                }
+
+                /* Correlation between Glucose and Impurity 3 */
+                if(ConfigurationFileGenerator->activeSubstances.at(0) && ConfigurationFileGenerator->activeSubstances.at(3)){
+
+                    /* Is the factor ok?, if not start again */
+                    if(ConfigurationFileGenerator->correlationCoefficient(GlucoseConcentration, Impurity3Concentration, ConfigurationFileGenerator->NConcentrations) > threshold){ continue;}
+                }
+
+                /* Correlation between Glucose and Impurity 4 */
+                if(ConfigurationFileGenerator->activeSubstances.at(0) && ConfigurationFileGenerator->activeSubstances.at(4)){
+
+                    /* Is the factor ok?, if not start again */
+                    if(ConfigurationFileGenerator->correlationCoefficient(GlucoseConcentration, Impurity4Concentration, ConfigurationFileGenerator->NConcentrations) > threshold){ continue;}
+                }
+
+                /* Correlation between Glucose and Impurity 4 */
+                if(ConfigurationFileGenerator->activeSubstances.at(0) && ConfigurationFileGenerator->activeSubstances.at(5)){
+
+                    /* Is the factor ok?, if not start again */
+                    if(ConfigurationFileGenerator->correlationCoefficient(GlucoseConcentration, Impurity5Concentration, ConfigurationFileGenerator->NConcentrations) > threshold){ continue;}
+                }
+
+                /* Correlation between Impurity 1 and Impurity 2 */
+                if(ConfigurationFileGenerator->activeSubstances.at(1) && ConfigurationFileGenerator->activeSubstances.at(2)){
+
+                    /* Is the factor ok?, if not start again */
+                    if(ConfigurationFileGenerator->correlationCoefficient(Impurity2Concentration, Impurity1Concentration, ConfigurationFileGenerator->NConcentrations) > threshold){ continue;}
+                }
+
+                /* Correlation between Impurity 1 and Impurity 3 */
+                if(ConfigurationFileGenerator->activeSubstances.at(1) && ConfigurationFileGenerator->activeSubstances.at(3)){
+
+                    /* Is the factor ok?, if not start again */
+                    if(ConfigurationFileGenerator->correlationCoefficient(Impurity3Concentration, Impurity1Concentration, ConfigurationFileGenerator->NConcentrations) > threshold){ continue;}
+                }
+
+                /* Correlation between Impurity 1 and Impurity 4 */
+                if(ConfigurationFileGenerator->activeSubstances.at(1) && ConfigurationFileGenerator->activeSubstances.at(4)){
+
+                    /* Is the factor ok?, if not start again */
+                    if(ConfigurationFileGenerator->correlationCoefficient(Impurity4Concentration, Impurity1Concentration, ConfigurationFileGenerator->NConcentrations) > threshold){ continue;}
+                }
+
+                /* Correlation between Impurity 1 and Impurity 5 */
+                if(ConfigurationFileGenerator->activeSubstances.at(1) && ConfigurationFileGenerator->activeSubstances.at(5)){
+
+                    /* Is the factor ok?, if not start again */
+                    if(ConfigurationFileGenerator->correlationCoefficient(Impurity5Concentration, Impurity1Concentration, ConfigurationFileGenerator->NConcentrations) > threshold){ continue;}
+                }
+
+                /* Correlation between Impurity 2 and Impurity 3 */
+                if(ConfigurationFileGenerator->activeSubstances.at(2) && ConfigurationFileGenerator->activeSubstances.at(3)){
+
+                    /* Is the factor ok?, if not start again */
+                    if(ConfigurationFileGenerator->correlationCoefficient(Impurity3Concentration, Impurity2Concentration, ConfigurationFileGenerator->NConcentrations) > threshold){ continue;}
+                }
+
+                /* Correlation between Impurity 2 and Impurity 4 */
+                if(ConfigurationFileGenerator->activeSubstances.at(2) && ConfigurationFileGenerator->activeSubstances.at(4)){
+
+                    /* Is the factor ok?, if not start again */
+                    if(ConfigurationFileGenerator->correlationCoefficient(Impurity4Concentration, Impurity2Concentration, ConfigurationFileGenerator->NConcentrations) > threshold){ continue;}
+                }
+
+                /* Correlation between Impurity 2 and Impurity 5 */
+                if(ConfigurationFileGenerator->activeSubstances.at(2) && ConfigurationFileGenerator->activeSubstances.at(5)){
+
+                    /* Is the factor ok?, if not start again */
+                    if(ConfigurationFileGenerator->correlationCoefficient(Impurity5Concentration, Impurity2Concentration, ConfigurationFileGenerator->NConcentrations) > threshold){ continue;}
+                }
+
+                /* Correlation between Impurity 3 and Impurity 4 */
+                if(ConfigurationFileGenerator->activeSubstances.at(3) && ConfigurationFileGenerator->activeSubstances.at(4)){
+
+                    /* Is the factor ok?, if not start again */
+                    if(ConfigurationFileGenerator->correlationCoefficient(Impurity4Concentration, Impurity3Concentration, ConfigurationFileGenerator->NConcentrations) > threshold){ continue;}
+                }
+
+                /* Correlation between Impurity 3 and Impurity 5 */
+                if(ConfigurationFileGenerator->activeSubstances.at(3) && ConfigurationFileGenerator->activeSubstances.at(5)){
+
+                    /* Is the factor ok?, if not start again */
+                    if(ConfigurationFileGenerator->correlationCoefficient(Impurity5Concentration, Impurity3Concentration, ConfigurationFileGenerator->NConcentrations) > threshold){ continue;}
+                }
+
+                /* Correlation between Impurity 4 and Impurity 5 */
+                if(ConfigurationFileGenerator->activeSubstances.at(4) && ConfigurationFileGenerator->activeSubstances.at(5)){
+
+                    /* Is the factor ok?, if not start again */
+                    if(ConfigurationFileGenerator->correlationCoefficient(Impurity5Concentration, Impurity4Concentration, ConfigurationFileGenerator->NConcentrations) > threshold){ continue;}
+                }
+
+                /* If no correlation or just a few elements, then stop doing random order */
+                break;
+            }
+        }else{
+
+            /* Random Indexes if there is only 1 substance or the vector has 4 or less elements */
             std::random_shuffle(GlucoseConcentration.begin(), GlucoseConcentration.end());
             std::random_shuffle(Impurity1Concentration.begin(), Impurity1Concentration.end());
             std::random_shuffle(Impurity2Concentration.begin(), Impurity2Concentration.end());
             std::random_shuffle(Impurity3Concentration.begin(), Impurity3Concentration.end());
             std::random_shuffle(Impurity4Concentration.begin(), Impurity4Concentration.end());
             std::random_shuffle(Impurity5Concentration.begin(), Impurity5Concentration.end());
-
-            float threshold = 0.05;
-
-            /* Correlation of glucose and number of measurements */
-            if(ConfigurationFileGenerator->activeSubstances.at(0)){
-
-                /* Is the factor ok?, if not start again */
-                if(ConfigurationFileGenerator->correlationCoefficient(Nmeasurements, GlucoseConcentration, ConfigurationFileGenerator->NConcentrations) > threshold){ continue;}
-            }
-
-            /* Correlation between Glucose and Impurity 1 */
-            if(ConfigurationFileGenerator->activeSubstances.at(0) && ConfigurationFileGenerator->activeSubstances.at(1)){
-
-                /* Is the factor ok?, if not start again */
-                if(ConfigurationFileGenerator->correlationCoefficient(GlucoseConcentration, Impurity1Concentration, ConfigurationFileGenerator->NConcentrations) > threshold){ continue;}
-            }
-
-            /* Correlation between Glucose and Impurity 2 */
-            if(ConfigurationFileGenerator->activeSubstances.at(0) && ConfigurationFileGenerator->activeSubstances.at(2)){
-
-                /* Is the factor ok?, if not start again */
-                if(ConfigurationFileGenerator->correlationCoefficient(GlucoseConcentration, Impurity2Concentration, ConfigurationFileGenerator->NConcentrations) > threshold){ continue;}
-            }
-
-            /* Correlation between Glucose and Impurity 3 */
-            if(ConfigurationFileGenerator->activeSubstances.at(0) && ConfigurationFileGenerator->activeSubstances.at(3)){
-
-                /* Is the factor ok?, if not start again */
-                if(ConfigurationFileGenerator->correlationCoefficient(GlucoseConcentration, Impurity3Concentration, ConfigurationFileGenerator->NConcentrations) > threshold){ continue;}
-            }
-
-            /* Correlation between Glucose and Impurity 4 */
-            if(ConfigurationFileGenerator->activeSubstances.at(0) && ConfigurationFileGenerator->activeSubstances.at(4)){
-
-                /* Is the factor ok?, if not start again */
-                if(ConfigurationFileGenerator->correlationCoefficient(GlucoseConcentration, Impurity4Concentration, ConfigurationFileGenerator->NConcentrations) > threshold){ continue;}
-            }
-
-            /* Correlation between Glucose and Impurity 4 */
-            if(ConfigurationFileGenerator->activeSubstances.at(0) && ConfigurationFileGenerator->activeSubstances.at(5)){
-
-                /* Is the factor ok?, if not start again */
-                if(ConfigurationFileGenerator->correlationCoefficient(GlucoseConcentration, Impurity5Concentration, ConfigurationFileGenerator->NConcentrations) > threshold){ continue;}
-            }
-
-            /* Correlation between Impurity 1 and Impurity 2 */
-            if(ConfigurationFileGenerator->activeSubstances.at(1) && ConfigurationFileGenerator->activeSubstances.at(2)){
-
-                /* Is the factor ok?, if not start again */
-                if(ConfigurationFileGenerator->correlationCoefficient(Impurity2Concentration, Impurity1Concentration, ConfigurationFileGenerator->NConcentrations) > threshold){ continue;}
-            }
-
-            /* Correlation between Impurity 1 and Impurity 3 */
-            if(ConfigurationFileGenerator->activeSubstances.at(1) && ConfigurationFileGenerator->activeSubstances.at(3)){
-
-                /* Is the factor ok?, if not start again */
-                if(ConfigurationFileGenerator->correlationCoefficient(Impurity3Concentration, Impurity1Concentration, ConfigurationFileGenerator->NConcentrations) > threshold){ continue;}
-            }
-
-            /* Correlation between Impurity 1 and Impurity 4 */
-            if(ConfigurationFileGenerator->activeSubstances.at(1) && ConfigurationFileGenerator->activeSubstances.at(4)){
-
-                /* Is the factor ok?, if not start again */
-                if(ConfigurationFileGenerator->correlationCoefficient(Impurity4Concentration, Impurity1Concentration, ConfigurationFileGenerator->NConcentrations) > threshold){ continue;}
-            }
-
-            /* Correlation between Impurity 1 and Impurity 5 */
-            if(ConfigurationFileGenerator->activeSubstances.at(1) && ConfigurationFileGenerator->activeSubstances.at(5)){
-
-                /* Is the factor ok?, if not start again */
-                if(ConfigurationFileGenerator->correlationCoefficient(Impurity5Concentration, Impurity1Concentration, ConfigurationFileGenerator->NConcentrations) > threshold){ continue;}
-            }
-
-            /* Correlation between Impurity 2 and Impurity 3 */
-            if(ConfigurationFileGenerator->activeSubstances.at(2) && ConfigurationFileGenerator->activeSubstances.at(3)){
-
-                /* Is the factor ok?, if not start again */
-                if(ConfigurationFileGenerator->correlationCoefficient(Impurity3Concentration, Impurity2Concentration, ConfigurationFileGenerator->NConcentrations) > threshold){ continue;}
-            }
-
-            /* Correlation between Impurity 2 and Impurity 4 */
-            if(ConfigurationFileGenerator->activeSubstances.at(2) && ConfigurationFileGenerator->activeSubstances.at(4)){
-
-                /* Is the factor ok?, if not start again */
-                if(ConfigurationFileGenerator->correlationCoefficient(Impurity4Concentration, Impurity2Concentration, ConfigurationFileGenerator->NConcentrations) > threshold){ continue;}
-            }
-
-            /* Correlation between Impurity 2 and Impurity 5 */
-            if(ConfigurationFileGenerator->activeSubstances.at(2) && ConfigurationFileGenerator->activeSubstances.at(5)){
-
-                /* Is the factor ok?, if not start again */
-                if(ConfigurationFileGenerator->correlationCoefficient(Impurity5Concentration, Impurity2Concentration, ConfigurationFileGenerator->NConcentrations) > threshold){ continue;}
-            }
-
-            /* Correlation between Impurity 3 and Impurity 4 */
-            if(ConfigurationFileGenerator->activeSubstances.at(3) && ConfigurationFileGenerator->activeSubstances.at(4)){
-
-                /* Is the factor ok?, if not start again */
-                if(ConfigurationFileGenerator->correlationCoefficient(Impurity4Concentration, Impurity3Concentration, ConfigurationFileGenerator->NConcentrations) > threshold){ continue;}
-            }
-
-            /* Correlation between Impurity 3 and Impurity 5 */
-            if(ConfigurationFileGenerator->activeSubstances.at(3) && ConfigurationFileGenerator->activeSubstances.at(5)){
-
-                /* Is the factor ok?, if not start again */
-                if(ConfigurationFileGenerator->correlationCoefficient(Impurity5Concentration, Impurity3Concentration, ConfigurationFileGenerator->NConcentrations) > threshold){ continue;}
-            }
-
-            /* Correlation between Impurity 4 and Impurity 5 */
-            if(ConfigurationFileGenerator->activeSubstances.at(4) && ConfigurationFileGenerator->activeSubstances.at(5)){
-
-                /* Is the factor ok?, if not start again */
-                if(ConfigurationFileGenerator->correlationCoefficient(Impurity5Concentration, Impurity4Concentration, ConfigurationFileGenerator->NConcentrations) > threshold){ continue;}
-            }
-
-            /* If no correlation or just a few elements, then stop doing random order */
-            break;
         }
-    }else{
-
-        /* Random Indexes if there is only 1 substance or the vector has 4 or less elements */
-        std::random_shuffle(GlucoseConcentration.begin(), GlucoseConcentration.end());
-        std::random_shuffle(Impurity1Concentration.begin(), Impurity1Concentration.end());
-        std::random_shuffle(Impurity2Concentration.begin(), Impurity2Concentration.end());
-        std::random_shuffle(Impurity3Concentration.begin(), Impurity3Concentration.end());
-        std::random_shuffle(Impurity4Concentration.begin(), Impurity4Concentration.end());
-        std::random_shuffle(Impurity5Concentration.begin(), Impurity5Concentration.end());
     }
 
     /* Flow Calculation */
@@ -496,6 +565,7 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
 
     /* Write all scripts */
     writeScripts();
+
 }
 
 /**

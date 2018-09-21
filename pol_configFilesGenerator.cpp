@@ -73,6 +73,7 @@ Pol_configFilesGenerator::Pol_configFilesGenerator()
 
     /* No interval mode active */
     intervalMode = false;
+    crossingMode = false;
 
     /* Delay on starting the measurements */
     startDelay = 0;
@@ -154,7 +155,7 @@ void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFil
     /* Write in file the meaning of the values */
     fprintf(file, "%s", "1Nr_M;2Nr_Sp;3Int_T;4Nr_Av;5Freq;6MinW;7MaxW;8Ab_F;9Ab_V;10N_Ste;11S_Break;12L_Break;13St_Del;14C1?;15C2?;16C3?;17C4?;18C5?;19C6?;"
                         "20mC1;21MC1;22StC1;23mC2;24MC2;25StC2;26mC3;27MC3;28StC3;29mC4;30MC4;31StC4;32mC5;33MC5;34StC5;35mC6;36MC6;37StC6;"
-                        "38Rep;39NormC;40IntMode;41IntModeTime;42Imp1Name;43Imp2Name;44Imp3Name;45Imp4Name;46Imp5Name\n");
+                        "38Rep;39NormC;40IntMode;41IntModeTime;42Imp1Name;43Imp2Name;44Imp3Name;45Imp4Name;46Imp5Name;47CrossMode,\n");
 
     /* Write all the configuration data */
     QString configurationData = "";
@@ -204,7 +205,8 @@ void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFil
     configurationData.append(substancesNames.at(1) + ";");
     configurationData.append(substancesNames.at(2) + ";");
     configurationData.append(substancesNames.at(3) + ";");
-    configurationData.append(substancesNames.at(4) + ",\n");
+    configurationData.append(substancesNames.at(4) + ";");
+    configurationData.append(QString::number(crossingMode) + "\n");
 
     /* Write in file the configuration values */
     fprintf(file, "%s", configurationData.toLatin1().data());

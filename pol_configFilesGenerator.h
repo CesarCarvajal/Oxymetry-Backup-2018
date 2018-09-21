@@ -77,7 +77,7 @@ public:
     bool normalizedCounts;
 
     /* Manually introduced intervals time? */
-    bool intervalMode;
+    bool intervalMode, crossingMode;
 
     /* Start delay */
     double startDelay;

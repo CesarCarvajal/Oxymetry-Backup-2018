@@ -125,6 +125,7 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
 
     /* Set manually mesurement intervals */
     connect(ui->checkBox_IntervalMode, SIGNAL(clicked()), signalMapperC, SLOT(map()));
+    connect(ui->checkBox_crossingMode, SIGNAL(clicked()), signalMapperC, SLOT(map()));
 
     /* Pump Flow */
     connect(ui->spinBox_ShortBreak, SIGNAL(valueChanged(int)), this, SLOT(updateConfigurationValues()));
@@ -142,6 +143,7 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
     signalMapperC->setMapping(ui->checkBox_Glucose, ui->checkBox_Glucose);
     signalMapperC->setMapping(ui->checkBox_NormalizeCountsConfig, ui->checkBox_NormalizeCountsConfig);
     signalMapperC->setMapping(ui->checkBox_IntervalMode, ui->checkBox_IntervalMode);
+    signalMapperC->setMapping(ui->checkBox_crossingMode, ui->checkBox_crossingMode);
     signalMapperC->setMapping(ui->checkBox_saveFFT, ui->checkBox_saveFFT);
     signalMapperC->setMapping(ui->checkBox_saveRaw, ui->checkBox_saveRaw);
 
@@ -243,6 +245,76 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
 {
     QCheckBox *checkBox = qobject_cast<QCheckBox *>(widget);
 
+    /* Check if the Crossing Mode is activated */
+    if(checkBox == ui->checkBox_crossingMode){
+
+        /* Is the crossing mode checked? */
+        if(ui->checkBox_crossingMode->isChecked()){
+
+            /* Do you want to set this mode? */
+            if (QMessageBox::Yes == QMessageBox::question(this, "Crossing Mode", "Are you sure that you want to set a mixture of fixed concentrations? \n \n "
+                                                          "This mode will create a measurement profile with one substance concentration fixed"
+                                                          " and one in random order. Be aware that many number of concentrations will lead to a very long measurement time.",
+                                                          QMessageBox::Yes | QMessageBox::No))
+            {
+                /* Show that this mode is active */
+                ui->label_intervalMode->setText("Crossing Mode is Active");
+                ui->label_intervalMode->setStyleSheet("QLabel { color: red; background: yellow;}");
+
+                /* Change labels colors and frames */
+                ui->checkBox_IntervalMode->setChecked(false);
+                ui->checkBox_IntervalMode->setEnabled(false);
+                ui->pushButton_addImpurity->setEnabled(false);
+
+                /* Disable all the substances, this mode is allowed just for two concentrations */
+                ui->checkBox_Imp1->setChecked(true);
+                ui->checkBox_Imp3->setChecked(false);
+                ui->checkBox_Imp4->setChecked(false);
+                ui->checkBox_Imp5->setChecked(false);
+                ui->checkBox_Imp2->setChecked(false);
+
+                /* Show/Hide Impurities values */
+                hideAdditionalSubstances((ui->checkBox_Imp1->isChecked() && ui->checkBox_Imp1->isVisible()), (ui->checkBox_Imp2->isChecked() && ui->checkBox_Imp2->isVisible()),
+                                         (ui->checkBox_Imp3->isChecked() && ui->checkBox_Imp3->isVisible()), (ui->checkBox_Imp4->isChecked() && ui->checkBox_Imp4->isVisible()),
+                                         (ui->checkBox_Imp5->isChecked() && ui->checkBox_Imp5->isVisible()));
+
+                /* Set them to checked again */
+                ui->checkBox_Imp2->setChecked(true);
+                ui->checkBox_Imp3->setChecked(true);
+                ui->checkBox_Imp4->setChecked(true);
+                ui->checkBox_Imp5->setChecked(true);
+
+                /* In crossing mode, too many measurement will lead to very long time measurements */
+                if(ui->spinBox_BNMeas->value() > 10 and ui->checkBox_crossingMode->isChecked()){
+
+                    /* Show message */
+                    showWarning(QString("Please consider that a great number of measurements will lead to a very long measurement time. The recommended number is %1!").arg(6), QString(""));
+                }
+
+            }else{
+
+                /* Deselect the option */
+                ui->checkBox_crossingMode->setChecked(false);
+                ui->checkBox_IntervalMode->setChecked(false);
+                ui->checkBox_IntervalMode->setEnabled(true);
+                ui->pushButton_addImpurity->setEnabled(true);
+            }
+
+        }else{
+
+            /* Restart notification of interval mode active */
+            ui->label_intervalMode->setText("");
+            ui->label_intervalMode->setStyleSheet("QLabel { color: red; background: white;}");
+            ui->checkBox_IntervalMode->setChecked(false);
+            ui->checkBox_IntervalMode->setEnabled(true);
+            ui->pushButton_addImpurity->setEnabled(true);
+        }
+
+        /* Save that the Interval Mode is active now */
+        externSoftware->ConfigurationFileGenerator->crossingMode = ui->checkBox_crossingMode->isChecked();
+
+    }
+
     /* Check box of impurities */
     if(checkBox == ui->checkBox_Imp1 || checkBox == ui->checkBox_Imp2 || checkBox == ui->checkBox_Imp3 || checkBox == ui->checkBox_Imp4 || checkBox == ui->checkBox_Imp5){
 
@@ -319,11 +391,15 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
                 ui->doubleSpinBox_timebetweenM->setButtonSymbols(QDoubleSpinBox::UpDownArrows);
                 ui->doubleSpinBox_timebetweenM->setFrame(true);
                 ui->label2_timebetweenM->setText("min");
+                ui->checkBox_crossingMode->setChecked(false);
+                ui->checkBox_crossingMode->setEnabled(false);
 
             }else{
 
                 /* Deselect the option */
                 ui->checkBox_IntervalMode->setChecked(false);
+                ui->checkBox_crossingMode->setChecked(false);
+                ui->checkBox_crossingMode->setEnabled(true);
             }
 
         }else{
@@ -337,6 +413,8 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
             ui->doubleSpinBox_timebetweenM->setReadOnly(true);
             ui->doubleSpinBox_timebetweenM->setButtonSymbols(QDoubleSpinBox::NoButtons);
             ui->doubleSpinBox_timebetweenM->setFrame(false);
+            ui->checkBox_crossingMode->setChecked(false);
+            ui->checkBox_crossingMode->setEnabled(true);
         }
 
         /* Save that the Interval Mode is active now */
@@ -444,11 +522,11 @@ void configurePolMeasure::loadConfiguration(void)
     /* Clear lists */
     cleanAll();
 
-    /* Check format of configuration file; we need at least 45 semicolons in this conf line */
-    if (wordList[0].count(QLatin1Char(';')) != 45)
+    /* Check format of configuration file; we need at least 46 semicolons in this conf line */
+    if (wordList[0].count(QLatin1Char(';')) != 46)
     {
         /* Show message */
-        showWarning("Malformed configuration file. Please check the file version. It should contain 46 configuration values and 45 semicolons", "");
+        showWarning("Malformed configuration file. Please check the file version. It should contain 47 configuration values and 46 semicolons", "");
         configured = false;
         return;
     }
@@ -643,6 +721,7 @@ void configurePolMeasure::getConfigurationFromFile(QString data)
         externSoftware->ConfigurationFileGenerator->substancesNames.replace(2, dataList.at(43));
         externSoftware->ConfigurationFileGenerator->substancesNames.replace(3, dataList.at(44));
         externSoftware->ConfigurationFileGenerator->substancesNames.replace(4, dataList.at(45));
+        externSoftware->ConfigurationFileGenerator->crossingMode = dataList.at(46).toInt();
 
         /* Calculate some parameters according to the loaded information */
         externSoftware->ConfigurationFileGenerator->fillRefill = (((externSoftware->ConfigurationFileGenerator->absVol
@@ -697,6 +776,9 @@ void configurePolMeasure::cancel(void)
  */
 void configurePolMeasure::GetConfigurationData(void)
 {
+    /* Get the crossing mode */
+    externSoftware->ConfigurationFileGenerator->crossingMode = ui->checkBox_crossingMode->isChecked();
+
     /* Get the interval mode */
     externSoftware->ConfigurationFileGenerator->intervalMode = ui->checkBox_IntervalMode->isChecked();
 
@@ -869,7 +951,7 @@ void configurePolMeasure::updateConfigurationValues(void)
     QStringList ConvertedTime;
 
     /* Was the time manually introduced? */
-    if(!ui->checkBox_IntervalMode->isChecked()){
+    if(!ui->checkBox_IntervalMode->isChecked() && !ui->checkBox_crossingMode->isChecked()){
 
         /* Convert the time to minutes, hours or days */
         ConvertedTime = externSoftware->TimeConverter(measurementTime/1000);
@@ -891,8 +973,29 @@ void configurePolMeasure::updateConfigurationValues(void)
         ui->doubleSpinBox_VolI3->setValue(volumeI3*(ui->spinBox_Nrepet->value()+1));
         ui->doubleSpinBox_VolI4->setValue(volumeI4*(ui->spinBox_Nrepet->value()+1));
         ui->doubleSpinBox_VolI5->setValue(volumeI5*(ui->spinBox_Nrepet->value()+1));
+    }
 
-    }else{
+    if(ui->checkBox_crossingMode->isChecked()){
+
+        /* Convert the time to minutes, hours or days */
+        ConvertedTime = externSoftware->TimeConverter(measurementTime/1000);
+
+        /* Display the Measurement Time preview */
+        ui->doubleSpinBox_timebetweenM->setValue(ConvertedTime.at(0).toDouble());
+        ui->label2_timebetweenM->setText(ConvertedTime.at(1));
+
+        /* Estimate the total measurement time */
+        totalMtimer = ((measurementTime + (cycleTime * ui->spinBox_BNMeas->value() * ui->spinBox_BNMeas->value()))/1000)*(ui->spinBox_Nrepet->value() + 1);
+
+        /* Convert the time to minutes, hours or days */
+        ConvertedTime = externSoftware->TimeConverter(totalMtimer);
+
+        /* Show the user how much is needed minimum when there are many combinations */
+        ui->doubleSpinBox_VolG->setValue((volumeG/ui->spinBox_BNMeas->value())*ui->spinBox_BNMeas->value()*ui->spinBox_BNMeas->value()*(ui->spinBox_Nrepet->value()+1));
+        ui->doubleSpinBox_VolI1->setValue((volumeI1/ui->spinBox_BNMeas->value())*ui->spinBox_BNMeas->value()*ui->spinBox_BNMeas->value()*(ui->spinBox_Nrepet->value()+1));
+    }
+
+    if(ui->checkBox_IntervalMode->isChecked()){
 
         /* Estimate the total measurement time */
         totalMtimer = ui->doubleSpinBox_timebetweenM->value()*ui->spinBox_BNMeas->value()*60*(ui->spinBox_Nrepet->value() + 1);
@@ -1067,7 +1170,6 @@ void configurePolMeasure::updateForm(void)
 {
     /* Update form values when changes during the calibration */
     ui->spinBox_AbsVol->setValue(externSoftware->ConfigurationFileGenerator->absVol);
-    ui->spinBox_BNMeas->setValue(externSoftware->ConfigurationFileGenerator->NConcentrations);
     ui->spinBox_NSteps->setValue(externSoftware->ConfigurationFileGenerator->NSteps);
     ui->spinBox_ShortBreak->setValue(externSoftware->ConfigurationFileGenerator->shortBreak/1000);
     ui->doubleSpinBox_AbsFlow->setValue(externSoftware->ConfigurationFileGenerator->absoluteFlow);
@@ -1108,6 +1210,18 @@ void configurePolMeasure::updateForm(void)
     /* Update normalized counts */
     ui->checkBox_NormalizeCountsConfig->setChecked(externSoftware->ConfigurationFileGenerator->normalizedCounts);
 
+    /* Update the crossing mode */
+    ui->checkBox_crossingMode->setChecked(externSoftware->ConfigurationFileGenerator->crossingMode);
+
+    if(externSoftware->ConfigurationFileGenerator->crossingMode){
+
+        ui->spinBox_BNMeas->setValue(int(sqrt(externSoftware->ConfigurationFileGenerator->NConcentrations)));
+
+    }else{
+        ui->spinBox_BNMeas->setValue(externSoftware->ConfigurationFileGenerator->NConcentrations);
+
+    }
+
     /* Update the interval mode */
     ui->checkBox_IntervalMode->setChecked(externSoftware->ConfigurationFileGenerator->intervalMode);
 
@@ -1119,7 +1233,7 @@ void configurePolMeasure::updateForm(void)
 
         /* Show that this mode is active */
         ui->label_intervalMode->setText("Interval Mode is Active");
-        ui->label_intervalMode->setStyleSheet("QLabel { color: red; }");
+        ui->label_intervalMode->setStyleSheet("QLabel { color: red; background: yellow;}");
 
         /* Change labels colors? */
         ui->label_timebetweenM->setStyleSheet("QLabel { color: black; }");
@@ -1128,6 +1242,8 @@ void configurePolMeasure::updateForm(void)
         ui->doubleSpinBox_timebetweenM->setReadOnly(false);
         ui->doubleSpinBox_timebetweenM->setButtonSymbols(QDoubleSpinBox::UpDownArrows);
         ui->doubleSpinBox_timebetweenM->setFrame(true);
+        ui->checkBox_crossingMode->setChecked(false);
+        ui->checkBox_crossingMode->setEnabled(false);
 
         /* Disable changes on pumps scripts */
         ui->doubleSpinBox_MinGluc->setEnabled(!ui->checkBox_IntervalMode->isChecked());
@@ -1140,6 +1256,18 @@ void configurePolMeasure::updateForm(void)
         /* Disable breaks */
         ui->spinBox_ShortBreak->setEnabled(!ui->checkBox_IntervalMode->isChecked());
         ui->spinBox_LongBreak->setEnabled(!ui->checkBox_IntervalMode->isChecked());
+    }
+
+    /* Is the Crossing Mode checked? Then the available options change */
+    if(ui->checkBox_crossingMode->isChecked()){
+
+        /* Show that this mode is active */
+        ui->label_intervalMode->setText("Crossing Mode is Active");
+        ui->label_intervalMode->setStyleSheet("QLabel { color: red; background: yellow;}");
+
+        /* Change labels colors? */
+        ui->checkBox_IntervalMode->setChecked(false);
+        ui->checkBox_IntervalMode->setEnabled(false);
     }
 
     /* Show/Hide Impurities values if they were shown */
