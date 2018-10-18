@@ -41,7 +41,7 @@ public:
         spinbox_timeValue->setGeometry(QRect(10, 10, 80, 22));
         spinbox_timeValue->setDecimals(2);
         spinbox_timeValue->setMinimum(1);
-        spinbox_timeValue->setMaximum(10000);
+        spinbox_timeValue->setMaximum(20000);
         spinbox_timeValue->setSingleStep(0.1);
         combobox_timeBase = new QComboBox(PanelChangeTime);
         combobox_timeBase->setObjectName(QStringLiteral("combobox_timeBase"));

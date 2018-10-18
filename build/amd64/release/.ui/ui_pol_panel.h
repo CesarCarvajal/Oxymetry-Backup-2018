@@ -28,6 +28,7 @@
 #include <QtWidgets/QWidget>
 #include <plot.h>
 #include "clickablelabel.h"
+#include "qwt_thermo.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -41,17 +42,15 @@ public:
     QLabel *label_Set_Spec_Pol;
     QSpacerItem *verticalSpacer_2;
     QListWidget *list_devices_Pol;
-    QSpacerItem *verticalSpacer;
     QFrame *line_c1;
     QHBoxLayout *horizontalLayout_2;
-    ClickableLabel *FFT_label_Pol;
-    ClickableLabel *waveToPlotFFT;
-    QLabel *label_n;
-    QSpacerItem *HSpaceX;
+    QLabel *label;
+    QLabel *label_2;
+    QSpacerItem *verticalSpacer;
+    QwtThermo *Pol_Thermo;
     QSpacerItem *verticalSpacer_6;
-    Plot *qwtPlot_Pol_FFT;
-    QFrame *line_c2;
-    ClickableLabel *label_Measurements_Pol;
+    QFrame *line_10;
+    QLabel *label_Measurements_Pol;
     QSpacerItem *verticalSpacer_3;
     QTableWidget *Table_Measurements_Pol;
     QSpacerItem *verticalSpacer_5;
@@ -136,6 +135,21 @@ public:
     QLabel *label_HAver;
     ClickableLabel *label_HIdeLiveAverage;
     QSpacerItem *horizontalSpacer_25;
+    QWidget *tab;
+    QVBoxLayout *verticalLayout_16;
+    QHBoxLayout *horizontalLayout_29;
+    QSpacerItem *horizontalSpacer_37;
+    QVBoxLayout *verticalLayout_17;
+    QLabel *label_TemperaturePlot;
+    Plot *qwtPlot_Pol_Temperature;
+    QSpacerItem *horizontalSpacer_38;
+    QFrame *line_5;
+    QHBoxLayout *horizontalLayout_28;
+    QSpacerItem *horizontalSpacer_39;
+    QVBoxLayout *verticalLayout_18;
+    ClickableLabel *waveToPlotFFT;
+    Plot *qwtPlot_Pol_FFT;
+    QSpacerItem *horizontalSpacer_40;
     QWidget *MeasResults;
     QVBoxLayout *verticalLayout_4;
     QHBoxLayout *horizontalLayout;
@@ -295,10 +309,6 @@ public:
 
         verticalLayout_8->addWidget(list_devices_Pol);
 
-        verticalSpacer = new QSpacerItem(5, 5, QSizePolicy::Minimum, QSizePolicy::Fixed);
-
-        verticalLayout_8->addItem(verticalSpacer);
-
         line_c1 = new QFrame(PanelPolarimeter);
         line_c1->setObjectName(QStringLiteral("line_c1"));
         QSizePolicy sizePolicy3(QSizePolicy::Minimum, QSizePolicy::Fixed);
@@ -312,98 +322,66 @@ public:
         verticalLayout_8->addWidget(line_c1);
 
         horizontalLayout_2 = new QHBoxLayout();
-        horizontalLayout_2->setSpacing(2);
         horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
-        horizontalLayout_2->setSizeConstraint(QLayout::SetMinimumSize);
-        FFT_label_Pol = new ClickableLabel(PanelPolarimeter);
-        FFT_label_Pol->setObjectName(QStringLiteral("FFT_label_Pol"));
-        QSizePolicy sizePolicy4(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        sizePolicy4.setHorizontalStretch(0);
-        sizePolicy4.setVerticalStretch(0);
-        sizePolicy4.setHeightForWidth(FFT_label_Pol->sizePolicy().hasHeightForWidth());
-        FFT_label_Pol->setSizePolicy(sizePolicy4);
-        FFT_label_Pol->setMinimumSize(QSize(160, 0));
-        FFT_label_Pol->setMaximumSize(QSize(95, 100));
+        label = new QLabel(PanelPolarimeter);
+        label->setObjectName(QStringLiteral("label"));
+        label->setFont(font1);
+
+        horizontalLayout_2->addWidget(label);
+
+        label_2 = new QLabel(PanelPolarimeter);
+        label_2->setObjectName(QStringLiteral("label_2"));
         QFont font2;
-        font2.setPointSize(8);
         font2.setBold(true);
-        font2.setUnderline(true);
         font2.setWeight(75);
-        font2.setKerning(true);
-        FFT_label_Pol->setFont(font2);
-        FFT_label_Pol->setCursor(QCursor(Qt::PointingHandCursor));
-        FFT_label_Pol->setLayoutDirection(Qt::LeftToRight);
-        FFT_label_Pol->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
+        label_2->setFont(font2);
 
-        horizontalLayout_2->addWidget(FFT_label_Pol);
-
-        waveToPlotFFT = new ClickableLabel(PanelPolarimeter);
-        waveToPlotFFT->setObjectName(QStringLiteral("waveToPlotFFT"));
-        sizePolicy4.setHeightForWidth(waveToPlotFFT->sizePolicy().hasHeightForWidth());
-        waveToPlotFFT->setSizePolicy(sizePolicy4);
-        waveToPlotFFT->setMinimumSize(QSize(50, 0));
-        waveToPlotFFT->setMaximumSize(QSize(50, 100));
-        QFont font3;
-        font3.setPointSize(10);
-        font3.setUnderline(true);
-        waveToPlotFFT->setFont(font3);
-        waveToPlotFFT->setCursor(QCursor(Qt::PointingHandCursor));
-
-        horizontalLayout_2->addWidget(waveToPlotFFT);
-
-        label_n = new QLabel(PanelPolarimeter);
-        label_n->setObjectName(QStringLiteral("label_n"));
-        sizePolicy1.setHeightForWidth(label_n->sizePolicy().hasHeightForWidth());
-        label_n->setSizePolicy(sizePolicy1);
-        label_n->setMinimumSize(QSize(20, 0));
-        label_n->setMaximumSize(QSize(25, 16777215));
-        QFont font4;
-        font4.setPointSize(10);
-        font4.setBold(true);
-        font4.setWeight(75);
-        label_n->setFont(font4);
-
-        horizontalLayout_2->addWidget(label_n);
-
-        HSpaceX = new QSpacerItem(60, 5, QSizePolicy::Fixed, QSizePolicy::Minimum);
-
-        horizontalLayout_2->addItem(HSpaceX);
+        horizontalLayout_2->addWidget(label_2);
 
 
         verticalLayout_8->addLayout(horizontalLayout_2);
 
-        verticalSpacer_6 = new QSpacerItem(5, 5, QSizePolicy::Minimum, QSizePolicy::Fixed);
+        verticalSpacer = new QSpacerItem(20, 5, QSizePolicy::Minimum, QSizePolicy::Fixed);
+
+        verticalLayout_8->addItem(verticalSpacer);
+
+        Pol_Thermo = new QwtThermo(PanelPolarimeter);
+        Pol_Thermo->setObjectName(QStringLiteral("Pol_Thermo"));
+        sizePolicy3.setHeightForWidth(Pol_Thermo->sizePolicy().hasHeightForWidth());
+        Pol_Thermo->setSizePolicy(sizePolicy3);
+        Pol_Thermo->setMinimumSize(QSize(300, 0));
+        Pol_Thermo->setMaximumSize(QSize(300, 16777215));
+        QFont font3;
+        font3.setPointSize(8);
+        Pol_Thermo->setFont(font3);
+        Pol_Thermo->setLowerBound(27);
+        Pol_Thermo->setUpperBound(37);
+        Pol_Thermo->setScaleMaxMajor(5);
+        Pol_Thermo->setScaleMaxMinor(5);
+        Pol_Thermo->setScaleStepSize(1);
+        Pol_Thermo->setOrientation(Qt::Horizontal);
+
+        verticalLayout_8->addWidget(Pol_Thermo);
+
+        verticalSpacer_6 = new QSpacerItem(20, 5, QSizePolicy::Minimum, QSizePolicy::Fixed);
 
         verticalLayout_8->addItem(verticalSpacer_6);
 
-        qwtPlot_Pol_FFT = new Plot(PanelPolarimeter);
-        qwtPlot_Pol_FFT->setObjectName(QStringLiteral("qwtPlot_Pol_FFT"));
-        sizePolicy1.setHeightForWidth(qwtPlot_Pol_FFT->sizePolicy().hasHeightForWidth());
-        qwtPlot_Pol_FFT->setSizePolicy(sizePolicy1);
-        qwtPlot_Pol_FFT->setMinimumSize(QSize(300, 130));
-        qwtPlot_Pol_FFT->setMaximumSize(QSize(300, 130));
-        qwtPlot_Pol_FFT->setFrameShape(QFrame::StyledPanel);
-        qwtPlot_Pol_FFT->setFrameShadow(QFrame::Raised);
+        line_10 = new QFrame(PanelPolarimeter);
+        line_10->setObjectName(QStringLiteral("line_10"));
+        line_10->setFrameShape(QFrame::HLine);
+        line_10->setFrameShadow(QFrame::Sunken);
 
-        verticalLayout_8->addWidget(qwtPlot_Pol_FFT);
+        verticalLayout_8->addWidget(line_10);
 
-        line_c2 = new QFrame(PanelPolarimeter);
-        line_c2->setObjectName(QStringLiteral("line_c2"));
-        sizePolicy3.setHeightForWidth(line_c2->sizePolicy().hasHeightForWidth());
-        line_c2->setSizePolicy(sizePolicy3);
-        line_c2->setFrameShape(QFrame::HLine);
-        line_c2->setFrameShadow(QFrame::Sunken);
-
-        verticalLayout_8->addWidget(line_c2);
-
-        label_Measurements_Pol = new ClickableLabel(PanelPolarimeter);
+        label_Measurements_Pol = new QLabel(PanelPolarimeter);
         label_Measurements_Pol->setObjectName(QStringLiteral("label_Measurements_Pol"));
         sizePolicy1.setHeightForWidth(label_Measurements_Pol->sizePolicy().hasHeightForWidth());
         label_Measurements_Pol->setSizePolicy(sizePolicy1);
         label_Measurements_Pol->setMinimumSize(QSize(0, 0));
         label_Measurements_Pol->setMaximumSize(QSize(16777215, 15));
         label_Measurements_Pol->setFont(font1);
-        label_Measurements_Pol->setCursor(QCursor(Qt::PointingHandCursor));
+        label_Measurements_Pol->setCursor(QCursor(Qt::ArrowCursor));
 
         verticalLayout_8->addWidget(label_Measurements_Pol);
 
@@ -433,13 +411,13 @@ public:
         QTableWidgetItem *__qtablewidgetitem7 = new QTableWidgetItem();
         Table_Measurements_Pol->setHorizontalHeaderItem(7, __qtablewidgetitem7);
         Table_Measurements_Pol->setObjectName(QStringLiteral("Table_Measurements_Pol"));
-        QSizePolicy sizePolicy5(QSizePolicy::Fixed, QSizePolicy::Preferred);
-        sizePolicy5.setHorizontalStretch(0);
-        sizePolicy5.setVerticalStretch(0);
-        sizePolicy5.setHeightForWidth(Table_Measurements_Pol->sizePolicy().hasHeightForWidth());
-        Table_Measurements_Pol->setSizePolicy(sizePolicy5);
+        QSizePolicy sizePolicy4(QSizePolicy::Fixed, QSizePolicy::Preferred);
+        sizePolicy4.setHorizontalStretch(0);
+        sizePolicy4.setVerticalStretch(0);
+        sizePolicy4.setHeightForWidth(Table_Measurements_Pol->sizePolicy().hasHeightForWidth());
+        Table_Measurements_Pol->setSizePolicy(sizePolicy4);
         Table_Measurements_Pol->setMinimumSize(QSize(300, 50));
-        Table_Measurements_Pol->setMaximumSize(QSize(300, 350));
+        Table_Measurements_Pol->setMaximumSize(QSize(300, 500));
         Table_Measurements_Pol->setLineWidth(1);
         Table_Measurements_Pol->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
         Table_Measurements_Pol->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
@@ -477,8 +455,11 @@ public:
         horizontalLayout_17->setObjectName(QStringLiteral("horizontalLayout_17"));
         label_S1 = new QLabel(PanelPolarimeter);
         label_S1->setObjectName(QStringLiteral("label_S1"));
-        sizePolicy4.setHeightForWidth(label_S1->sizePolicy().hasHeightForWidth());
-        label_S1->setSizePolicy(sizePolicy4);
+        QSizePolicy sizePolicy5(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy5.setHorizontalStretch(0);
+        sizePolicy5.setVerticalStretch(0);
+        sizePolicy5.setHeightForWidth(label_S1->sizePolicy().hasHeightForWidth());
+        label_S1->setSizePolicy(sizePolicy5);
         label_S1->setMinimumSize(QSize(95, 0));
         label_S1->setMaximumSize(QSize(95, 16777215));
         label_S1->setSizeIncrement(QSize(150, 0));
@@ -504,19 +485,19 @@ public:
         brush3.setStyle(Qt::SolidPattern);
         palette.setBrush(QPalette::Disabled, QPalette::Base, brush3);
         label_S1->setPalette(palette);
-        QFont font5;
-        font5.setPointSize(8);
-        font5.setBold(true);
-        font5.setWeight(75);
-        label_S1->setFont(font5);
+        QFont font4;
+        font4.setPointSize(8);
+        font4.setBold(true);
+        font4.setWeight(75);
+        label_S1->setFont(font4);
         label_S1->setAlignment(Qt::AlignJustify|Qt::AlignVCenter);
 
         horizontalLayout_17->addWidget(label_S1);
 
         label_S2 = new QLabel(PanelPolarimeter);
         label_S2->setObjectName(QStringLiteral("label_S2"));
-        sizePolicy4.setHeightForWidth(label_S2->sizePolicy().hasHeightForWidth());
-        label_S2->setSizePolicy(sizePolicy4);
+        sizePolicy5.setHeightForWidth(label_S2->sizePolicy().hasHeightForWidth());
+        label_S2->setSizePolicy(sizePolicy5);
         label_S2->setMinimumSize(QSize(95, 0));
         label_S2->setMaximumSize(QSize(95, 16777215));
         QPalette palette1;
@@ -533,7 +514,7 @@ public:
         palette1.setBrush(QPalette::Disabled, QPalette::Text, brush2);
         palette1.setBrush(QPalette::Disabled, QPalette::Base, brush3);
         label_S2->setPalette(palette1);
-        label_S2->setFont(font5);
+        label_S2->setFont(font4);
         label_S2->setAlignment(Qt::AlignJustify|Qt::AlignVCenter);
 
         horizontalLayout_17->addWidget(label_S2);
@@ -545,8 +526,8 @@ public:
         horizontalLayout_19->setObjectName(QStringLiteral("horizontalLayout_19"));
         label_S3 = new QLabel(PanelPolarimeter);
         label_S3->setObjectName(QStringLiteral("label_S3"));
-        sizePolicy4.setHeightForWidth(label_S3->sizePolicy().hasHeightForWidth());
-        label_S3->setSizePolicy(sizePolicy4);
+        sizePolicy5.setHeightForWidth(label_S3->sizePolicy().hasHeightForWidth());
+        label_S3->setSizePolicy(sizePolicy5);
         label_S3->setMinimumSize(QSize(95, 0));
         label_S3->setMaximumSize(QSize(95, 16777215));
         QPalette palette2;
@@ -563,15 +544,15 @@ public:
         palette2.setBrush(QPalette::Disabled, QPalette::Text, brush2);
         palette2.setBrush(QPalette::Disabled, QPalette::Base, brush3);
         label_S3->setPalette(palette2);
-        label_S3->setFont(font5);
+        label_S3->setFont(font4);
         label_S3->setAlignment(Qt::AlignJustify|Qt::AlignVCenter);
 
         horizontalLayout_19->addWidget(label_S3);
 
         label_S4 = new QLabel(PanelPolarimeter);
         label_S4->setObjectName(QStringLiteral("label_S4"));
-        sizePolicy4.setHeightForWidth(label_S4->sizePolicy().hasHeightForWidth());
-        label_S4->setSizePolicy(sizePolicy4);
+        sizePolicy5.setHeightForWidth(label_S4->sizePolicy().hasHeightForWidth());
+        label_S4->setSizePolicy(sizePolicy5);
         label_S4->setMinimumSize(QSize(95, 0));
         label_S4->setMaximumSize(QSize(95, 16777215));
         QPalette palette3;
@@ -588,7 +569,7 @@ public:
         palette3.setBrush(QPalette::Disabled, QPalette::Text, brush2);
         palette3.setBrush(QPalette::Disabled, QPalette::Base, brush3);
         label_S4->setPalette(palette3);
-        label_S4->setFont(font5);
+        label_S4->setFont(font4);
         label_S4->setAlignment(Qt::AlignJustify|Qt::AlignVCenter);
 
         horizontalLayout_19->addWidget(label_S4);
@@ -600,8 +581,8 @@ public:
         horizontalLayout_20->setObjectName(QStringLiteral("horizontalLayout_20"));
         label_S5 = new QLabel(PanelPolarimeter);
         label_S5->setObjectName(QStringLiteral("label_S5"));
-        sizePolicy4.setHeightForWidth(label_S5->sizePolicy().hasHeightForWidth());
-        label_S5->setSizePolicy(sizePolicy4);
+        sizePolicy5.setHeightForWidth(label_S5->sizePolicy().hasHeightForWidth());
+        label_S5->setSizePolicy(sizePolicy5);
         label_S5->setMinimumSize(QSize(95, 0));
         label_S5->setMaximumSize(QSize(95, 16777215));
         QPalette palette4;
@@ -618,15 +599,15 @@ public:
         palette4.setBrush(QPalette::Disabled, QPalette::Text, brush2);
         palette4.setBrush(QPalette::Disabled, QPalette::Base, brush3);
         label_S5->setPalette(palette4);
-        label_S5->setFont(font5);
+        label_S5->setFont(font4);
         label_S5->setAlignment(Qt::AlignJustify|Qt::AlignVCenter);
 
         horizontalLayout_20->addWidget(label_S5);
 
         label_S6 = new QLabel(PanelPolarimeter);
         label_S6->setObjectName(QStringLiteral("label_S6"));
-        sizePolicy4.setHeightForWidth(label_S6->sizePolicy().hasHeightForWidth());
-        label_S6->setSizePolicy(sizePolicy4);
+        sizePolicy5.setHeightForWidth(label_S6->sizePolicy().hasHeightForWidth());
+        label_S6->setSizePolicy(sizePolicy5);
         label_S6->setMinimumSize(QSize(95, 0));
         label_S6->setMaximumSize(QSize(95, 16777215));
         QPalette palette5;
@@ -643,7 +624,7 @@ public:
         palette5.setBrush(QPalette::Disabled, QPalette::Text, brush2);
         palette5.setBrush(QPalette::Disabled, QPalette::Base, brush3);
         label_S6->setPalette(palette5);
-        label_S6->setFont(font5);
+        label_S6->setFont(font4);
         label_S6->setAlignment(Qt::AlignJustify|Qt::AlignVCenter);
 
         horizontalLayout_20->addWidget(label_S6);
@@ -651,7 +632,7 @@ public:
 
         verticalLayout_8->addLayout(horizontalLayout_20);
 
-        verticalSpacerX = new QSpacerItem(10, 1, QSizePolicy::Minimum, QSizePolicy::Expanding);
+        verticalSpacerX = new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         verticalLayout_8->addItem(verticalSpacerX);
 
@@ -724,10 +705,7 @@ public:
         button_Start_Meas_Pol->setSizePolicy(sizePolicy1);
         button_Start_Meas_Pol->setMinimumSize(QSize(260, 50));
         button_Start_Meas_Pol->setMaximumSize(QSize(260, 50));
-        QFont font6;
-        font6.setBold(true);
-        font6.setWeight(75);
-        button_Start_Meas_Pol->setFont(font6);
+        button_Start_Meas_Pol->setFont(font2);
         QIcon icon2;
         icon2.addFile(QStringLiteral(":/polarimeter/Run.ico"), QSize(), QIcon::Normal, QIcon::Off);
         icon2.addFile(QStringLiteral(":/Run.ico"), QSize(), QIcon::Normal, QIcon::On);
@@ -889,12 +867,12 @@ public:
         palette6.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
         palette6.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
         label_raw->setPalette(palette6);
-        QFont font7;
-        font7.setPointSize(10);
-        font7.setBold(true);
-        font7.setUnderline(false);
-        font7.setWeight(75);
-        label_raw->setFont(font7);
+        QFont font5;
+        font5.setPointSize(10);
+        font5.setBold(true);
+        font5.setUnderline(false);
+        font5.setWeight(75);
+        label_raw->setFont(font5);
         label_raw->setCursor(QCursor(Qt::ArrowCursor));
         label_raw->setAlignment(Qt::AlignCenter);
 
@@ -911,14 +889,14 @@ public:
         palette7.setBrush(QPalette::Inactive, QPalette::WindowText, brush5);
         palette7.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
         label_PlotSaturated->setPalette(palette7);
-        QFont font8;
-        font8.setPointSize(12);
-        font8.setBold(true);
-        font8.setItalic(false);
-        font8.setUnderline(false);
-        font8.setWeight(75);
-        font8.setStrikeOut(false);
-        label_PlotSaturated->setFont(font8);
+        QFont font6;
+        font6.setPointSize(12);
+        font6.setBold(true);
+        font6.setItalic(false);
+        font6.setUnderline(false);
+        font6.setWeight(75);
+        font6.setStrikeOut(false);
+        label_PlotSaturated->setFont(font6);
         label_PlotSaturated->setLayoutDirection(Qt::LeftToRight);
         label_PlotSaturated->setFrameShape(QFrame::NoFrame);
         label_PlotSaturated->setFrameShadow(QFrame::Plain);
@@ -973,7 +951,7 @@ public:
         palette8.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
         palette8.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
         label_compensation->setPalette(palette8);
-        label_compensation->setFont(font7);
+        label_compensation->setFont(font5);
         label_compensation->setCursor(QCursor(Qt::ArrowCursor));
         label_compensation->setAlignment(Qt::AlignCenter);
 
@@ -1026,7 +1004,7 @@ public:
         palette9.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
         palette9.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
         label_fftprofile->setPalette(palette9);
-        label_fftprofile->setFont(font7);
+        label_fftprofile->setFont(font5);
         label_fftprofile->setCursor(QCursor(Qt::ArrowCursor));
         label_fftprofile->setAlignment(Qt::AlignCenter);
 
@@ -1073,7 +1051,7 @@ public:
         palette10.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
         palette10.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
         label_average->setPalette(palette10);
-        label_average->setFont(font7);
+        label_average->setFont(font5);
         label_average->setCursor(QCursor(Qt::ArrowCursor));
         label_average->setAlignment(Qt::AlignCenter);
         label_average->setWordWrap(false);
@@ -1121,11 +1099,11 @@ public:
         label_HideFFTProfile = new ClickableLabel(liveData);
         label_HideFFTProfile->setObjectName(QStringLiteral("label_HideFFTProfile"));
         label_HideFFTProfile->setMinimumSize(QSize(100, 0));
-        QFont font9;
-        font9.setPointSize(7);
-        font9.setItalic(false);
-        font9.setUnderline(false);
-        label_HideFFTProfile->setFont(font9);
+        QFont font7;
+        font7.setPointSize(7);
+        font7.setItalic(false);
+        font7.setUnderline(false);
+        label_HideFFTProfile->setFont(font7);
         label_HideFFTProfile->setCursor(QCursor(Qt::PointingHandCursor));
 
         horizontalLayout_15->addWidget(label_HideFFTProfile);
@@ -1187,6 +1165,109 @@ public:
         QIcon icon3;
         icon3.addFile(QStringLiteral(":/polarimeter/Run.ico"), QSize(), QIcon::Normal, QIcon::Off);
         Tabs_Plots->addTab(liveData, icon3, QString());
+        tab = new QWidget();
+        tab->setObjectName(QStringLiteral("tab"));
+        verticalLayout_16 = new QVBoxLayout(tab);
+        verticalLayout_16->setObjectName(QStringLiteral("verticalLayout_16"));
+        horizontalLayout_29 = new QHBoxLayout();
+        horizontalLayout_29->setObjectName(QStringLiteral("horizontalLayout_29"));
+        horizontalSpacer_37 = new QSpacerItem(5, 10, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        horizontalLayout_29->addItem(horizontalSpacer_37);
+
+        verticalLayout_17 = new QVBoxLayout();
+        verticalLayout_17->setObjectName(QStringLiteral("verticalLayout_17"));
+        label_TemperaturePlot = new QLabel(tab);
+        label_TemperaturePlot->setObjectName(QStringLiteral("label_TemperaturePlot"));
+        sizePolicy1.setHeightForWidth(label_TemperaturePlot->sizePolicy().hasHeightForWidth());
+        label_TemperaturePlot->setSizePolicy(sizePolicy1);
+        label_TemperaturePlot->setMinimumSize(QSize(0, 14));
+        label_TemperaturePlot->setMaximumSize(QSize(16777215, 14));
+        QPalette palette11;
+        palette11.setBrush(QPalette::Active, QPalette::WindowText, brush4);
+        palette11.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
+        palette11.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        label_TemperaturePlot->setPalette(palette11);
+        QFont font8;
+        font8.setPointSize(10);
+        font8.setBold(true);
+        font8.setWeight(75);
+        label_TemperaturePlot->setFont(font8);
+        label_TemperaturePlot->setAlignment(Qt::AlignCenter);
+
+        verticalLayout_17->addWidget(label_TemperaturePlot);
+
+        qwtPlot_Pol_Temperature = new Plot(tab);
+        qwtPlot_Pol_Temperature->setObjectName(QStringLiteral("qwtPlot_Pol_Temperature"));
+        sizePolicy7.setHeightForWidth(qwtPlot_Pol_Temperature->sizePolicy().hasHeightForWidth());
+        qwtPlot_Pol_Temperature->setSizePolicy(sizePolicy7);
+
+        verticalLayout_17->addWidget(qwtPlot_Pol_Temperature);
+
+
+        horizontalLayout_29->addLayout(verticalLayout_17);
+
+        horizontalSpacer_38 = new QSpacerItem(5, 10, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        horizontalLayout_29->addItem(horizontalSpacer_38);
+
+
+        verticalLayout_16->addLayout(horizontalLayout_29);
+
+        line_5 = new QFrame(tab);
+        line_5->setObjectName(QStringLiteral("line_5"));
+        line_5->setFrameShape(QFrame::HLine);
+        line_5->setFrameShadow(QFrame::Sunken);
+
+        verticalLayout_16->addWidget(line_5);
+
+        horizontalLayout_28 = new QHBoxLayout();
+        horizontalLayout_28->setObjectName(QStringLiteral("horizontalLayout_28"));
+        horizontalSpacer_39 = new QSpacerItem(5, 10, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        horizontalLayout_28->addItem(horizontalSpacer_39);
+
+        verticalLayout_18 = new QVBoxLayout();
+        verticalLayout_18->setObjectName(QStringLiteral("verticalLayout_18"));
+        waveToPlotFFT = new ClickableLabel(tab);
+        waveToPlotFFT->setObjectName(QStringLiteral("waveToPlotFFT"));
+        sizePolicy1.setHeightForWidth(waveToPlotFFT->sizePolicy().hasHeightForWidth());
+        waveToPlotFFT->setSizePolicy(sizePolicy1);
+        waveToPlotFFT->setMinimumSize(QSize(0, 14));
+        waveToPlotFFT->setMaximumSize(QSize(16777215, 14));
+        QPalette palette12;
+        palette12.setBrush(QPalette::Active, QPalette::WindowText, brush4);
+        palette12.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
+        palette12.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        waveToPlotFFT->setPalette(palette12);
+        waveToPlotFFT->setFont(font8);
+        waveToPlotFFT->setCursor(QCursor(Qt::PointingHandCursor));
+        waveToPlotFFT->setAlignment(Qt::AlignCenter);
+
+        verticalLayout_18->addWidget(waveToPlotFFT);
+
+        qwtPlot_Pol_FFT = new Plot(tab);
+        qwtPlot_Pol_FFT->setObjectName(QStringLiteral("qwtPlot_Pol_FFT"));
+        sizePolicy7.setHeightForWidth(qwtPlot_Pol_FFT->sizePolicy().hasHeightForWidth());
+        qwtPlot_Pol_FFT->setSizePolicy(sizePolicy7);
+        qwtPlot_Pol_FFT->setMinimumSize(QSize(0, 0));
+        qwtPlot_Pol_FFT->setMaximumSize(QSize(16777215, 16777215));
+        qwtPlot_Pol_FFT->setFrameShape(QFrame::StyledPanel);
+        qwtPlot_Pol_FFT->setFrameShadow(QFrame::Raised);
+
+        verticalLayout_18->addWidget(qwtPlot_Pol_FFT);
+
+
+        horizontalLayout_28->addLayout(verticalLayout_18);
+
+        horizontalSpacer_40 = new QSpacerItem(5, 10, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        horizontalLayout_28->addItem(horizontalSpacer_40);
+
+
+        verticalLayout_16->addLayout(horizontalLayout_28);
+
+        Tabs_Plots->addTab(tab, icon1, QString());
         MeasResults = new QWidget();
         MeasResults->setObjectName(QStringLiteral("MeasResults"));
         verticalLayout_4 = new QVBoxLayout(MeasResults);
@@ -1202,9 +1283,9 @@ public:
         label_hideSpectra = new ClickableLabel(MeasResults);
         label_hideSpectra->setObjectName(QStringLiteral("label_hideSpectra"));
         label_hideSpectra->setMinimumSize(QSize(100, 0));
-        QFont font10;
-        font10.setPointSize(7);
-        label_hideSpectra->setFont(font10);
+        QFont font9;
+        font9.setPointSize(7);
+        label_hideSpectra->setFont(font9);
         label_hideSpectra->setCursor(QCursor(Qt::PointingHandCursor));
 
         horizontalLayout_16->addWidget(label_hideSpectra);
@@ -1246,7 +1327,7 @@ public:
         label_hidePrediction = new ClickableLabel(MeasResults);
         label_hidePrediction->setObjectName(QStringLiteral("label_hidePrediction"));
         label_hidePrediction->setMinimumSize(QSize(70, 0));
-        label_hidePrediction->setFont(font10);
+        label_hidePrediction->setFont(font9);
         label_hidePrediction->setCursor(QCursor(Qt::PointingHandCursor));
 
         horizontalLayout_18->addWidget(label_hidePrediction);
@@ -1281,17 +1362,17 @@ public:
         label_spectra = new QLabel(MeasResults);
         label_spectra->setObjectName(QStringLiteral("label_spectra"));
         label_spectra->setMinimumSize(QSize(0, 14));
-        QPalette palette11;
-        palette11.setBrush(QPalette::Active, QPalette::WindowText, brush4);
-        palette11.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
-        palette11.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        label_spectra->setPalette(palette11);
-        QFont font11;
-        font11.setPointSize(9);
-        font11.setBold(true);
-        font11.setUnderline(false);
-        font11.setWeight(75);
-        label_spectra->setFont(font11);
+        QPalette palette13;
+        palette13.setBrush(QPalette::Active, QPalette::WindowText, brush4);
+        palette13.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
+        palette13.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        label_spectra->setPalette(palette13);
+        QFont font10;
+        font10.setPointSize(9);
+        font10.setBold(true);
+        font10.setUnderline(false);
+        font10.setWeight(75);
+        label_spectra->setFont(font10);
         label_spectra->setCursor(QCursor(Qt::ArrowCursor));
         label_spectra->setAlignment(Qt::AlignCenter);
 
@@ -1326,16 +1407,16 @@ public:
         label_Nspectra = new QLabel(MeasResults);
         label_Nspectra->setObjectName(QStringLiteral("label_Nspectra"));
         label_Nspectra->setMinimumSize(QSize(0, 14));
-        QPalette palette12;
-        palette12.setBrush(QPalette::Active, QPalette::WindowText, brush4);
-        palette12.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
-        palette12.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        label_Nspectra->setPalette(palette12);
-        QFont font12;
-        font12.setPointSize(9);
-        font12.setBold(true);
-        font12.setWeight(75);
-        label_Nspectra->setFont(font12);
+        QPalette palette14;
+        palette14.setBrush(QPalette::Active, QPalette::WindowText, brush4);
+        palette14.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
+        palette14.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        label_Nspectra->setPalette(palette14);
+        QFont font11;
+        font11.setPointSize(9);
+        font11.setBold(true);
+        font11.setWeight(75);
+        label_Nspectra->setFont(font11);
         label_Nspectra->setAlignment(Qt::AlignCenter);
 
         verticalLayout_15->addWidget(label_Nspectra);
@@ -1380,12 +1461,12 @@ public:
         label_prediction = new QLabel(MeasResults);
         label_prediction->setObjectName(QStringLiteral("label_prediction"));
         label_prediction->setMinimumSize(QSize(0, 14));
-        QPalette palette13;
-        palette13.setBrush(QPalette::Active, QPalette::WindowText, brush4);
-        palette13.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
-        palette13.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        label_prediction->setPalette(palette13);
-        label_prediction->setFont(font11);
+        QPalette palette15;
+        palette15.setBrush(QPalette::Active, QPalette::WindowText, brush4);
+        palette15.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
+        palette15.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        label_prediction->setPalette(palette15);
+        label_prediction->setFont(font10);
         label_prediction->setCursor(QCursor(Qt::ArrowCursor));
         label_prediction->setAlignment(Qt::AlignCenter);
 
@@ -1402,7 +1483,7 @@ public:
         label_PredictionError = new QLabel(widget_errorBar);
         label_PredictionError->setObjectName(QStringLiteral("label_PredictionError"));
         label_PredictionError->setMinimumSize(QSize(60, 0));
-        label_PredictionError->setFont(font6);
+        label_PredictionError->setFont(font2);
 
         horizontalLayout_26->addWidget(label_PredictionError);
 
@@ -1417,7 +1498,7 @@ public:
         label_R2_1 = new QLabel(widget_errorBar);
         label_R2_1->setObjectName(QStringLiteral("label_R2_1"));
         label_R2_1->setMinimumSize(QSize(50, 0));
-        label_R2_1->setFont(font6);
+        label_R2_1->setFont(font2);
 
         horizontalLayout_26->addWidget(label_R2_1);
 
@@ -1467,7 +1548,7 @@ public:
         label_hideNSpectra = new ClickableLabel(MeasResults);
         label_hideNSpectra->setObjectName(QStringLiteral("label_hideNSpectra"));
         label_hideNSpectra->setMinimumSize(QSize(100, 0));
-        label_hideNSpectra->setFont(font10);
+        label_hideNSpectra->setFont(font9);
         label_hideNSpectra->setCursor(QCursor(Qt::PointingHandCursor));
 
         horizontalLayout_24->addWidget(label_hideNSpectra);
@@ -1611,8 +1692,8 @@ public:
         horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
         currentProgressBar_Pol = new QProgressBar(PanelPolarimeter);
         currentProgressBar_Pol->setObjectName(QStringLiteral("currentProgressBar_Pol"));
-        sizePolicy4.setHeightForWidth(currentProgressBar_Pol->sizePolicy().hasHeightForWidth());
-        currentProgressBar_Pol->setSizePolicy(sizePolicy4);
+        sizePolicy5.setHeightForWidth(currentProgressBar_Pol->sizePolicy().hasHeightForWidth());
+        currentProgressBar_Pol->setSizePolicy(sizePolicy5);
         currentProgressBar_Pol->setMaximumSize(QSize(50, 12));
         currentProgressBar_Pol->setAutoFillBackground(false);
         currentProgressBar_Pol->setValue(0);
@@ -1624,17 +1705,17 @@ public:
 
         info = new QLabel(PanelPolarimeter);
         info->setObjectName(QStringLiteral("info"));
-        sizePolicy4.setHeightForWidth(info->sizePolicy().hasHeightForWidth());
-        info->setSizePolicy(sizePolicy4);
+        sizePolicy5.setHeightForWidth(info->sizePolicy().hasHeightForWidth());
+        info->setSizePolicy(sizePolicy5);
         info->setMinimumSize(QSize(200, 0));
         info->setMaximumSize(QSize(16777215, 12));
-        QFont font13;
-        font13.setPointSize(7);
-        font13.setBold(true);
-        font13.setItalic(false);
-        font13.setUnderline(false);
-        font13.setWeight(75);
-        info->setFont(font13);
+        QFont font12;
+        font12.setPointSize(7);
+        font12.setBold(true);
+        font12.setItalic(false);
+        font12.setUnderline(false);
+        font12.setWeight(75);
+        info->setFont(font12);
         info->setScaledContents(true);
 
         horizontalLayout_4->addWidget(info);
@@ -1645,24 +1726,24 @@ public:
 
         label_totalM = new QLabel(PanelPolarimeter);
         label_totalM->setObjectName(QStringLiteral("label_totalM"));
-        sizePolicy4.setHeightForWidth(label_totalM->sizePolicy().hasHeightForWidth());
-        label_totalM->setSizePolicy(sizePolicy4);
+        sizePolicy5.setHeightForWidth(label_totalM->sizePolicy().hasHeightForWidth());
+        label_totalM->setSizePolicy(sizePolicy5);
         label_totalM->setMaximumSize(QSize(16777215, 15));
-        QFont font14;
-        font14.setPointSize(7);
-        font14.setBold(true);
-        font14.setWeight(75);
-        label_totalM->setFont(font14);
+        QFont font13;
+        font13.setPointSize(7);
+        font13.setBold(true);
+        font13.setWeight(75);
+        label_totalM->setFont(font13);
 
         horizontalLayout_4->addWidget(label_totalM);
 
         TotalProgressBar_Pol = new QProgressBar(PanelPolarimeter);
         TotalProgressBar_Pol->setObjectName(QStringLiteral("TotalProgressBar_Pol"));
-        sizePolicy4.setHeightForWidth(TotalProgressBar_Pol->sizePolicy().hasHeightForWidth());
-        TotalProgressBar_Pol->setSizePolicy(sizePolicy4);
+        sizePolicy5.setHeightForWidth(TotalProgressBar_Pol->sizePolicy().hasHeightForWidth());
+        TotalProgressBar_Pol->setSizePolicy(sizePolicy5);
         TotalProgressBar_Pol->setMinimumSize(QSize(140, 0));
         TotalProgressBar_Pol->setMaximumSize(QSize(240, 12));
-        TotalProgressBar_Pol->setFont(font14);
+        TotalProgressBar_Pol->setFont(font13);
         TotalProgressBar_Pol->setValue(0);
 
         horizontalLayout_4->addWidget(TotalProgressBar_Pol);
@@ -1675,7 +1756,7 @@ public:
         label_remaining->setObjectName(QStringLiteral("label_remaining"));
         label_remaining->setMinimumSize(QSize(82, 0));
         label_remaining->setMaximumSize(QSize(82, 16777215));
-        label_remaining->setFont(font14);
+        label_remaining->setFont(font13);
 
         horizontalLayout_4->addWidget(label_remaining);
 
@@ -1683,7 +1764,7 @@ public:
         label_RemainingTime->setObjectName(QStringLiteral("label_RemainingTime"));
         label_RemainingTime->setMaximumSize(QSize(100, 12));
         label_RemainingTime->setSizeIncrement(QSize(100, 0));
-        label_RemainingTime->setFont(font14);
+        label_RemainingTime->setFont(font13);
 
         horizontalLayout_4->addWidget(label_RemainingTime);
 
@@ -1693,14 +1774,14 @@ public:
 
         label_clearAll = new ClickableLabel(PanelPolarimeter);
         label_clearAll->setObjectName(QStringLiteral("label_clearAll"));
-        sizePolicy4.setHeightForWidth(label_clearAll->sizePolicy().hasHeightForWidth());
-        label_clearAll->setSizePolicy(sizePolicy4);
+        sizePolicy5.setHeightForWidth(label_clearAll->sizePolicy().hasHeightForWidth());
+        label_clearAll->setSizePolicy(sizePolicy5);
         label_clearAll->setMinimumSize(QSize(70, 18));
         label_clearAll->setMaximumSize(QSize(70, 18));
-        QFont font15;
-        font15.setPointSize(8);
-        font15.setUnderline(true);
-        label_clearAll->setFont(font15);
+        QFont font14;
+        font14.setPointSize(8);
+        font14.setUnderline(true);
+        label_clearAll->setFont(font14);
         label_clearAll->setCursor(QCursor(Qt::PointingHandCursor));
         label_clearAll->setLayoutDirection(Qt::LeftToRight);
         label_clearAll->setAlignment(Qt::AlignCenter);
@@ -1709,8 +1790,8 @@ public:
 
         help = new QPushButton(PanelPolarimeter);
         help->setObjectName(QStringLiteral("help"));
-        sizePolicy4.setHeightForWidth(help->sizePolicy().hasHeightForWidth());
-        help->setSizePolicy(sizePolicy4);
+        sizePolicy5.setHeightForWidth(help->sizePolicy().hasHeightForWidth());
+        help->setSizePolicy(sizePolicy5);
         help->setMinimumSize(QSize(18, 16));
         help->setMaximumSize(QSize(18, 16));
         QIcon icon7;
@@ -1757,22 +1838,12 @@ public:
 #ifndef QT_NO_TOOLTIP
         list_devices_Pol->setToolTip(QApplication::translate("PanelPolarimeter", "Spectrometer Settings", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
+        label->setText(QApplication::translate("PanelPolarimeter", "Actual Setup Temperature:", Q_NULLPTR));
+        label_2->setText(QApplication::translate("PanelPolarimeter", "- \302\260C", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        FFT_label_Pol->setToolTip(QApplication::translate("PanelPolarimeter", "Hide FFT Plot", Q_NULLPTR));
+        label_Measurements_Pol->setToolTip(QApplication::translate("PanelPolarimeter", "Measurement Profile", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        FFT_label_Pol->setText(QApplication::translate("PanelPolarimeter", "< Maximum DC Intensity at", Q_NULLPTR));
-#ifndef QT_NO_TOOLTIP
-        waveToPlotFFT->setToolTip(QApplication::translate("PanelPolarimeter", "Change Wavelength", Q_NULLPTR));
-#endif // QT_NO_TOOLTIP
-        waveToPlotFFT->setText(QString());
-        label_n->setText(QApplication::translate("PanelPolarimeter", "nm:", Q_NULLPTR));
-#ifndef QT_NO_TOOLTIP
-        qwtPlot_Pol_FFT->setToolTip(QApplication::translate("PanelPolarimeter", "FFT Plot", Q_NULLPTR));
-#endif // QT_NO_TOOLTIP
-#ifndef QT_NO_TOOLTIP
-        label_Measurements_Pol->setToolTip(QApplication::translate("PanelPolarimeter", "Hide Measurement Profile", Q_NULLPTR));
-#endif // QT_NO_TOOLTIP
-        label_Measurements_Pol->setText(QApplication::translate("PanelPolarimeter", "< Measurement Information:", Q_NULLPTR));
+        label_Measurements_Pol->setText(QApplication::translate("PanelPolarimeter", "Measurement Information:", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem = Table_Measurements_Pol->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QApplication::translate("PanelPolarimeter", "Nr.", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
@@ -1822,7 +1893,7 @@ public:
         label_S4->setText(QApplication::translate("PanelPolarimeter", "C4 - Impurity 3", Q_NULLPTR));
         label_S5->setText(QApplication::translate("PanelPolarimeter", "C5 - Impurity 4", Q_NULLPTR));
         label_S6->setText(QApplication::translate("PanelPolarimeter", "C6 - Impurity 5", Q_NULLPTR));
-        label_5_Pol_settings->setText(QApplication::translate("PanelPolarimeter", "Settings:", Q_NULLPTR));
+        label_5_Pol_settings->setText(QApplication::translate("PanelPolarimeter", "Measurement Settings:", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         button_Pol_ConfigureMeasurement->setToolTip(QApplication::translate("PanelPolarimeter", "Configure Measurements", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
@@ -1885,6 +1956,15 @@ public:
 #endif // QT_NO_TOOLTIP
         label_HIdeLiveAverage->setText(QApplication::translate("PanelPolarimeter", ">> Hide Live Average", Q_NULLPTR));
         Tabs_Plots->setTabText(Tabs_Plots->indexOf(liveData), QApplication::translate("PanelPolarimeter", "Live Data", Q_NULLPTR));
+        label_TemperaturePlot->setText(QApplication::translate("PanelPolarimeter", "Temperature \302\260C", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        waveToPlotFFT->setToolTip(QApplication::translate("PanelPolarimeter", "Change FFT wavelength", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        waveToPlotFFT->setText(QApplication::translate("PanelPolarimeter", "FFT Intensity at - nm", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        qwtPlot_Pol_FFT->setToolTip(QApplication::translate("PanelPolarimeter", "FFT Plot", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        Tabs_Plots->setTabText(Tabs_Plots->indexOf(tab), QApplication::translate("PanelPolarimeter", "Setup Status", Q_NULLPTR));
         label_hideSpectra->setText(QApplication::translate("PanelPolarimeter", "<< Hide Spectra", Q_NULLPTR));
         label_SP->setText(QString());
         label_PSNS->setText(QString());

@@ -141,7 +141,7 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     ui->label_remaining->setVisible(false);
     ui->horizontalSpacer_Y->changeSize(20,12,QSizePolicy::Expanding,QSizePolicy::Fixed);
     ui->currentProgressBar_Pol->setVisible(false);
-    ui->Tabs_Plots->setTabEnabled(2,false);
+    ui->Tabs_Plots->setTabEnabled(3,false);
     ui->label_PlotSaturated->setStyleSheet(QString("color: red; font: bold;"));
     ui->label_PlotSaturated->setVisible(false);
 
@@ -236,8 +236,6 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
         signalMapper->setMapping(ui->label_HideRatio, ui->label_HideRatio);
         signalMapper->setMapping(ui->label_HideFFTProfile, ui->label_HideFFTProfile);
         signalMapper->setMapping(ui->label_HIdeLiveAverage, ui->label_HIdeLiveAverage);
-        signalMapper->setMapping(ui->FFT_label_Pol, ui->FFT_label_Pol);
-        signalMapper->setMapping(ui->label_Measurements_Pol, ui->label_Measurements_Pol);
         signalMapper->setMapping(ui->label_hideConf, ui->label_hideConf);
         signalMapper->setMapping(ui->label_hideSpectra, ui->label_hideSpectra);
         signalMapper->setMapping(ui->label_hidePrediction, ui->label_hidePrediction);
@@ -268,8 +266,6 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     connect(ui->button_AnalizeData, SIGNAL(clicked()), this, SLOT(select_Analize_Pol_Measurement()));
     connect(ui->label_HideFFTProfile, SIGNAL(clicked()), signalMapper, SLOT(map()));
     connect(ui->label_HIdeLiveAverage, SIGNAL(clicked()), signalMapper, SLOT(map()));
-    connect(ui->FFT_label_Pol, SIGNAL(clicked()), signalMapper, SLOT(map()));
-    connect(ui->label_Measurements_Pol, SIGNAL(clicked()), signalMapper, SLOT(map()));
     connect(ui->label_hideConf, SIGNAL(clicked()), signalMapper, SLOT(map()));
     connect(ui->label_hideSpectra, SIGNAL(clicked()), signalMapper, SLOT(map()));
     connect(ui->label_hideNSpectra, SIGNAL(clicked()), signalMapper, SLOT(map()));
@@ -323,12 +319,12 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     ui->qwtPlot_Pol_FFT->setXAxis(0.0, 21);
     ui->qwtPlot_Pol_FFT->setYAxis(0.0, 3000);
     QwtText bottomTitle = QString("Frequency ƒ (Hz)");
-    ui->qwtPlot_Pol_FFT->axisFont.setPointSize(8);
+    ui->qwtPlot_Pol_FFT->axisFont.setPointSize(10);
     bottomTitle.setFont(ui->qwtPlot_Pol_FFT->axisFont);
     ui->qwtPlot_Pol_FFT->setAxisTitle(QwtPlot::xBottom, bottomTitle);
-    ui->qwtPlot_Pol_FFT->grid->enableX(false);
     ui->qwtPlot_Pol_FFT->setAxisScale(QwtPlot::xBottom, 0, 21, 7);
-    ui->qwtPlot_Pol_FFT->setAxisScale(QwtPlot::yLeft, 0, 3000, 1000);
+    ui->qwtPlot_Pol_FFT->setAxisScale(QwtPlot::yLeft, 0, 3000, 600);
+    ui->qwtPlot_Pol_FFT->setYAxisTitle("FFT Intensity (Counts)");
     ui->qwtPlot_Pol_FFT->updateAxes();
 
     /* Prediction Curve, available during the measurements */
@@ -799,7 +795,7 @@ void PanelPolarimeter::adjust_Run_Start(short int typeRun){
         ui->TotalProgressBar_Pol->setValue(0);
 
         /* Hide tabs */
-        ui->Tabs_Plots->setTabEnabled(2,false);
+        ui->Tabs_Plots->setTabEnabled(3,false);
 
         /* Show the remaining label */
         ui->label_remaining->setVisible(true);
@@ -1506,7 +1502,7 @@ void PanelPolarimeter::change_Wavelength_FFT_Pol(void){
             FFTL.fft_data.replace(2*FFTL.f_w, FFTL.fft_2W.at(FFTL.SelectedWaveL));
 
             /* Show the selected wavelength of FFT */
-            ui->waveToPlotFFT->setText(QString::number(FFTL.wavelengths.at(FFTL.SelectedWaveL)));
+            ui->waveToPlotFFT->setText("FFT Intensities at " + QString::number(FFTL.wavelengths.at(FFTL.SelectedWaveL)) + " nm");
 
             /* Plot the FFT Signals */
             PolPlotter->plotFFTatSelectedWave(FFTL.fft_data, FFTL.time);
@@ -1517,7 +1513,7 @@ void PanelPolarimeter::change_Wavelength_FFT_Pol(void){
             ui->qwtPlot_Pol_FFT->setAxisScale(ui->qwtPlot_Pol_FFT->xBottom,0, 3*FFTL.FrequencyF, FFTL.FrequencyF);
             int maximum = *std::max_element(FFTL.fft_data.begin(), FFTL.fft_data.end());
             ui->qwtPlot_Pol_FFT->setYAxis(0.0,maximum);
-            ui->qwtPlot_Pol_FFT->setAxisScale(ui->qwtPlot_Pol_FFT->yLeft, 0, maximum, maximum/3);
+            ui->qwtPlot_Pol_FFT->setAxisScale(ui->qwtPlot_Pol_FFT->yLeft, 0, maximum, maximum/5);
             ui->qwtPlot_Pol_FFT->updateAxes();
 
             /* Plot the Selected Wavelength */
@@ -1576,7 +1572,7 @@ void PanelPolarimeter::clean_All_Pol(void){
     ui->label_RemainingTime->setVisible(false);
 
     /* Enable tabs with the calculate information */
-    ui->Tabs_Plots->setTabEnabled(2,false);
+    ui->Tabs_Plots->setTabEnabled(3,false);
 
     /* Show current progress bar*/
     ui->currentProgressBar_Pol->setVisible(false);
@@ -1584,7 +1580,7 @@ void PanelPolarimeter::clean_All_Pol(void){
 
     /* Restart FFT intensities plot */
     ui->qwtPlot_Pol_FFT->setAxisScale(QwtPlot::xBottom, 0, 21, 7);
-    ui->qwtPlot_Pol_FFT->setAxisScale(QwtPlot::yLeft, 0, 3000, 1000);
+    ui->qwtPlot_Pol_FFT->setAxisScale(QwtPlot::yLeft, 0, 3000, 600);
     ui->qwtPlot_Pol_FFT->updateAxes();
 
     /* Clear the configuration files profile table */
@@ -1711,7 +1707,7 @@ void PanelPolarimeter::clear_Plot(void) {
     ui->qwtPlot_Pol_Compensation->update();
     ui->qwtPlot_Pol_FFT->update();
     ui->qwtPlot_Pol_FFT->updateLayout();
-    ui->waveToPlotFFT->setText("");
+    ui->waveToPlotFFT->setText("FFT Intensities at - nm");
 
 }
 
@@ -2090,63 +2086,13 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
         ui->qwtPlot_Pol_Average->setVisible(!ui->qwtPlot_Pol_Average->isVisible());
 
     }
-    /* Show/Hide the FFT Plot */
-    else if(label == ui->FFT_label_Pol){
-
-        /* Is the FFT Plot visible? */
-        if(ui->qwtPlot_Pol_FFT->isVisible()){
-
-            /* Hide FFT Plot if clicked */
-            ui->FFT_label_Pol->setText("> Maximum DC Intensity at");
-            ui->FFT_label_Pol->setToolTip("Show FFT Plot");
-        }else{
-
-            /* Show FFT Plot again */
-            ui->FFT_label_Pol->setText("< Maximum DC Intensity at");
-            ui->FFT_label_Pol->setToolTip("Hide FFT Plot");
-        }
-
-        /* Hide or Show plot */
-        ui->qwtPlot_Pol_FFT->setVisible(!ui->qwtPlot_Pol_FFT->isVisible());
-
-    }
-    /* Show/Hide the Measurement profile Table */
-    else if(label == ui->label_Measurements_Pol){
-
-        /* Is the the Measurement profile Table visible? */
-        if(ui->Table_Measurements_Pol->isVisible()){
-
-            /* Hide the Measurement profile Table if clicked */
-            ui->label_Measurements_Pol->setText("> Measurement List");
-            ui->label_Measurements_Pol->setToolTip("Show Measurement Profile");
-        }else{
-
-            /* Show the Measurement profile Table again */
-            ui->label_Measurements_Pol->setText("< Measurement List");
-            ui->label_Measurements_Pol->setToolTip("Hide Measurement Profile");
-        }
-
-        /* Hide or Show plot */
-        ui->Table_Measurements_Pol->setVisible(!ui->Table_Measurements_Pol->isVisible());
-        ui->label_S1->setVisible(!ui->label_S1->isVisible());
-        ui->label_S2->setVisible(!ui->label_S2->isVisible());
-        ui->label_S3->setVisible(!ui->label_S3->isVisible());
-        ui->label_S4->setVisible(!ui->label_S4->isVisible());
-        ui->label_S5->setVisible(!ui->label_S5->isVisible());
-        ui->label_S6->setVisible(!ui->label_S6->isVisible());
-    }
     /* Show/Hide the lateral panel */
     else if(label == ui->label_hideConf){
 
         /* Hide or Show the lateral panel items if clicked */
         ui->label_Set_Spec_Pol->setVisible(!ui->list_devices_Pol->isVisible());
-        ui->FFT_label_Pol->setVisible(!ui->list_devices_Pol->isVisible());
-        ui->waveToPlotFFT->setVisible(!ui->list_devices_Pol->isVisible());
-        ui->qwtPlot_Pol_FFT->setVisible(!ui->list_devices_Pol->isVisible());
         ui->line_c1->setVisible(!ui->list_devices_Pol->isVisible());
-        ui->line_c2->setVisible(!ui->list_devices_Pol->isVisible());
         ui->line_m->setVisible(!ui->list_devices_Pol->isVisible());
-        ui->label_n->setVisible(!ui->list_devices_Pol->isVisible());
         ui->label_5_Pol_settings->setVisible(!ui->list_devices_Pol->isVisible());
         ui->button_calibrate->setVisible(!ui->list_devices_Pol->isVisible());
         ui->button_Pol_ConfigureMeasurement->setVisible(!ui->list_devices_Pol->isVisible());
@@ -2173,7 +2119,6 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
             ui->label_hideConf->setMinimumWidth(80);
             ui->label_hideConf->setStyleSheet("QLabel { color: red; }");
             ui->label_hideConf->setToolTip("Show Lateral Panel");
-            ui->HSpaceX->changeSize(20,5,QSizePolicy::Fixed,QSizePolicy::Fixed);
 
         }else{
 
@@ -2183,7 +2128,6 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
             ui->label_hideConf->setStyleSheet("QLabel { color: blue; }");
             ui->label_hideConf->setFrameShape(QFrame::NoFrame);
             ui->label_hideConf->setToolTip("Hide Lateral Panel");
-            ui->HSpaceX->changeSize(60,5,QSizePolicy::Fixed,QSizePolicy::Fixed);
         }
 
         /* Show or Hide list */
@@ -2306,7 +2250,7 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
     }
 
     /* This is another condition to change the spacing so it looks nice */
-    if((ui->Table_Measurements_Pol->isVisible() && ui->qwtPlot_Pol_FFT->isVisible())
+    if((ui->Table_Measurements_Pol->isVisible())
             && Runner->PolConfigured){
         ui->verticalSpacerX->changeSize(20,13,QSizePolicy::Fixed,QSizePolicy::Fixed);
     }else{
@@ -2704,7 +2648,7 @@ void PanelPolarimeter::Load_From_FFT(void) {
     dataloaded = true;
 
     /* By default show the wavelength 516,41 nm */
-    ui->waveToPlotFFT->setText(QString::number(FFTL.wavelengths.at(FFTL.SelectedWaveL)));
+    ui->waveToPlotFFT->setText("FFT Intensities at " + QString::number(FFTL.wavelengths.at(FFTL.SelectedWaveL)) + " nm");
 
     /* Update information bar */
     ui->info->setText("");
@@ -2758,7 +2702,7 @@ void PanelPolarimeter::Load_From_Raw_Data(void) {
     dataloaded = true;
 
     /* By default show the wavelength 516,41 nm */
-    ui->waveToPlotFFT->setText(QString::number(FFTL.wavelengths.at(FFTL.SelectedWaveL)));
+    ui->waveToPlotFFT->setText("FFT Intensities at " + QString::number(FFTL.wavelengths.at(FFTL.SelectedWaveL)) + " nm");
 
     /* Update information bar */
     ui->info->setText("");
@@ -3116,7 +3060,7 @@ void PanelPolarimeter::plot_FFT(void){
     ui->qwtPlot_Pol_FFT->setAxisScale(ui->qwtPlot_Pol_FFT->xBottom,0, 3*FFTL.FrequencyF, FFTL.FrequencyF);
     int maximum = *std::max_element(FFTL.fft_data.begin(), FFTL.fft_data.end());
     ui->qwtPlot_Pol_FFT->setYAxis(0.0,maximum);
-    ui->qwtPlot_Pol_FFT->setAxisScale(QwtPlot::yLeft, 0, maximum, maximum/3);
+    ui->qwtPlot_Pol_FFT->setAxisScale(QwtPlot::yLeft, 0, maximum, maximum/5);
     ui->qwtPlot_Pol_FFT->updateAxes();
 
     /* Plot Selected Wavelength */
@@ -3192,7 +3136,7 @@ void PanelPolarimeter::process_Received_Data_Pol(QString Path)
 
         /* Plot the FFT Signals */
         plot_FFT();
-        ui->waveToPlotFFT->setText(QString::number(FFTL.wavelengths.at(FFTL.SelectedWaveL)));
+        ui->waveToPlotFFT->setText("FFT Intensities at " + QString::number(FFTL.wavelengths.at(FFTL.SelectedWaveL)) + " nm");
 
         /* Don't combine loaded data with calibrated data regarding the averages */
         dataloaded = false;
@@ -4662,7 +4606,7 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
         ui->Button_Save_Graphs_Pol->setVisible(true);
 
         /* Enable tabs with the calculate information */
-        ui->Tabs_Plots->setTabEnabled(2,false);
+        ui->Tabs_Plots->setTabEnabled(3,false);
 
         /* Get the data from the dialog */
         PolPlotter->series->dataProxy()->resetArray(DataSelector->data3D);
