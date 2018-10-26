@@ -72,7 +72,8 @@ SOURCES += \
     pol_set_wavelength_ranges.cpp \
     pol_changeWaveOrFreq.cpp \
     pol_waitingDialog.cpp \
-    pol_analizeData.cpp
+    pol_analizeData.cpp \
+    pol_temp_connect.cpp
 
 HEADERS += \
     application.h \
@@ -119,7 +120,8 @@ HEADERS += \
     pol_set_wavelength_ranges.h \
     pol_changeWaveOrFreq.h \
     pol_waitingDialog.h \
-    pol_analizeData.h
+    pol_analizeData.h \
+    pol_temp_connect.h
 
 FORMS += \
     initial_setup.ui \

@@ -31,6 +31,9 @@
 #include <QCloseEvent>
 #include <QSizePolicy>
 #include <QTime>
+#include <QSerialPort>
+#include <QSerialPortInfo>
+#include <QBitArray>
 #include <QDate>
 
 /*
@@ -65,6 +68,7 @@
 #include "pol_analizeData.h"
 #include "ui_pol_AnalizeData.h"
 #include "Q3DTheme"
+#include "pol_temp_connect.h"
 
 /* Panel stuff */
 #include "panel_change_averages.h"
@@ -73,6 +77,9 @@
 
 /* Spectrometer control */
 #include "spectrometer.h"
+
+/* Global variables */
+extern QSerialPort serials;
 
 /*
  * Global variables
@@ -116,6 +123,23 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
 
     /* Object pointing to all functions related with plots */
     PolPlotter = new Pol_Plot();
+
+    /* Connect to Teensy */
+    teensyTemperature = new ConnectTemperature(this);
+
+    /* Show no connection with teensy */
+    if(!teensyTemperature->TeensyConnected){
+
+        /* Teensy isn't connected */
+        ui->label_Temperature->setText("No COM");
+        ui->label_Temperature->setStyleSheet("color:red");
+        ui->label_NoComTeensy->setVisible(true);
+    }else{
+        ui->label_NoComTeensy->setVisible(false);
+    }
+
+    /* Initialize temperature in 0 */
+    Temperature = 0;
 
     /* Create signal mapper for panel */
     signalMapper = new QSignalMapper(this);
@@ -240,6 +264,7 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
         signalMapper->setMapping(ui->label_hideSpectra, ui->label_hideSpectra);
         signalMapper->setMapping(ui->label_hidePrediction, ui->label_hidePrediction);
         signalMapper->setMapping(ui->label_hideNSpectra, ui->label_hideNSpectra);
+        signalMapper->setMapping(ui->label_temp1, ui->label_temp1);
 
         /* Connect event handler */
         connect(qApp, SIGNAL(DataPolIsHere(int, int)), this, SLOT(receive_Data_Pol(int, int)));
@@ -270,6 +295,7 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     connect(ui->label_hideSpectra, SIGNAL(clicked()), signalMapper, SLOT(map()));
     connect(ui->label_hideNSpectra, SIGNAL(clicked()), signalMapper, SLOT(map()));
     connect(ui->label_hidePrediction, SIGNAL(clicked()), signalMapper, SLOT(map()));
+    connect(ui->label_temp1, SIGNAL(clicked()), signalMapper, SLOT(map()));
 
     /* Set button styles */
     ui->button_Start_Meas_Pol->setStyleSheet(greenButton);
@@ -314,6 +340,14 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     /* Set top axis with Measurement number for averages */
     ui->qwtPlot_Pol_Average->enableAxis(QwtPlot::xTop);
     ui->qwtPlot_Pol_Average->setXAxisTop(-0.8 , 40.3, 2);
+
+    /* Temperature plot */
+    maxYTemperature = 33;
+    minYTemperature = 31;
+    ui->qwtPlot_Pol_Temperature->setXAxisTitle("Time (s)");
+    ui->qwtPlot_Pol_Temperature->setYAxisTitle("Temperature (°C)");
+    ui->qwtPlot_Pol_Temperature->setYAxis(minYTemperature, maxYTemperature);
+    ui->qwtPlot_Pol_Temperature->setXAxis(minXAverage, maxXAverage);
 
     /* FFT Curve at a certain Wavelength */
     ui->qwtPlot_Pol_FFT->setXAxis(0.0, 21);
@@ -391,6 +425,7 @@ void PanelPolarimeter::adjust_Average_Plot_Time(void){
     minXAverage = PolPlotter->averaged_Signal_time.at(0);
     maxXAverage = PolPlotter->averaged_Signal_time.at(0)+ PolPlotter->time_plot;
     ui->qwtPlot_Pol_Average->setXAxis(minXAverage,maxXAverage);
+    ui->qwtPlot_Pol_Temperature->setXAxis(minXAverage,maxXAverage);
 }
 
 /**
@@ -826,6 +861,7 @@ void PanelPolarimeter::adjust_Run_Start(short int typeRun){
         minXAverage = 0;
         maxXAverage = measurementLength + measurementLength*0.1;
         ui->qwtPlot_Pol_Average->setXAxis(minXAverage, maxXAverage);
+        ui->qwtPlot_Pol_Temperature->setXAxis(minXAverage, maxXAverage);
 
         /* Adjust the measurement number plot in the averages */
         double lengthMeasNumber = 0;
@@ -895,6 +931,13 @@ void PanelPolarimeter::adjust_Run_Start(short int typeRun){
 
     /* Restart timers */
     Runner->RestartTimers();
+
+    /* Serial connection established? */
+    if (!serials.isOpen())
+    {
+        /* Close connection */
+        serials.open(QIODevice::ReadWrite);
+    }
 }
 
 /**
@@ -1555,6 +1598,10 @@ void PanelPolarimeter::clean_All_Pol(void){
     /* Clear all other plots too */
     PolPlotter->clean_AllPlots();
 
+    ui->label_Temperature->setText("- °C");
+    ui->Pol_Thermo->setValue(32);
+    ui->label_hum->setText("- %");
+
     /* Clean the configuration */
     ConfigureMeasurement->cleanAll();
 
@@ -1618,6 +1665,7 @@ void PanelPolarimeter::clean_All_Pol(void){
     maxYAverage = 0;
     ui->qwtPlot_Pol_Average->setXAxis(minXAverage, maxXAverage);
     ui->qwtPlot_Pol_Average->setXAxisTop(-0.8 , 40.3, 2);
+    ui->qwtPlot_Pol_Temperature->setXAxis(minXAverage, maxXAverage);
 
     /* Nothing is running, so restart the object */
     Runner = new Pol_Measurements();
@@ -1629,6 +1677,7 @@ void PanelPolarimeter::clean_All_Pol(void){
     /* Update plots */
     ui->qwtPlot_Pol_Average->update();
     ui->qwtPlot_Pol_Average->updateLayout();
+    ui->qwtPlot_Pol_Temperature->update();
     ui->qwtPlot_Pol->update();
 
     /* Time busy with FFT */
@@ -1939,6 +1988,13 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
         change_Frequency_Pol();
     }
 
+    /* Temperature label clicked */
+    if(label== ui->label_temp1){
+
+        /* Show the tab with the temperature */
+        ui->Tabs_Plots->setCurrentIndex(1);
+    }
+
     /* The change the wavelength in the plot was clicked */
     if(label == ui->waveToPlotFFT){
         /* Change the Wavelength to plot */
@@ -2094,6 +2150,11 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
         ui->line_c1->setVisible(!ui->list_devices_Pol->isVisible());
         ui->line_m->setVisible(!ui->list_devices_Pol->isVisible());
         ui->label_5_Pol_settings->setVisible(!ui->list_devices_Pol->isVisible());
+        ui->label_temp1->setVisible(!ui->list_devices_Pol->isVisible());
+        ui->label_Temperature->setVisible(!ui->list_devices_Pol->isVisible());
+        ui->Pol_Thermo->setVisible(!ui->list_devices_Pol->isVisible());
+        ui->label_hum->setVisible(!ui->list_devices_Pol->isVisible());
+        ui->label_hum1->setVisible(!ui->list_devices_Pol->isVisible());
         ui->button_calibrate->setVisible(!ui->list_devices_Pol->isVisible());
         ui->button_Pol_ConfigureMeasurement->setVisible(!ui->list_devices_Pol->isVisible());
         ui->button_Start_Meas_Pol->setVisible(!ui->list_devices_Pol->isVisible());
@@ -2344,6 +2405,7 @@ void PanelPolarimeter::initialize_Calibration(void){
     maxYAverage = 0;
     PolPlotter->maxXtime = 0;
     ui->qwtPlot_Pol_Average->setXAxis(0.0, PolPlotter->time_plot);
+    ui->qwtPlot_Pol_Temperature->setXAxis(0.0, PolPlotter->time_plot);
 
     /* Update plots */
     ui->qwtPlot_Pol_Average->updateLayout();
@@ -2378,6 +2440,7 @@ void PanelPolarimeter::initialize_Default_Calibration(void){
     /* Restart Y axis */
     ui->qwtPlot_Pol_Average->setYAxis(0.0, ceil(2000*1.1));
     ui->qwtPlot_Pol_Average->setXAxis(0.0, PolPlotter->time_plot);
+    ui->qwtPlot_Pol_Temperature->setXAxis(0.0, PolPlotter->time_plot);
 
     /* If there is a value in the spectrometer, then adjust the frequency according to the resolution */
     double Freqresolution = 1000/ptrSpectrometers[SpectrometerNumber]->getIntegrationTime();
@@ -2837,13 +2900,26 @@ void PanelPolarimeter::pol_Calibrate(void){
 void PanelPolarimeter::plot_Average(void){
 
     /* Plot Averages */
-    PolPlotter->plotAverages(dataloaded, FFTL.fft_DC, FFTL.fft_W, FFTL.fft_2W, FFTL.wavelengths, Runner->PolMeasuring, Runner->measurementPlotTimeInterval);
+    PolPlotter->plotAverages(dataloaded, FFTL.fft_DC, FFTL.fft_W, FFTL.fft_2W, FFTL.wavelengths, Runner->PolMeasuring, Runner->measurementPlotTimeInterval, Temperature);
 
     /* Attach graphs */
     PolPlotter->Average_DC_Signal->attach(ui->qwtPlot_Pol_Average);
     PolPlotter->Average_W_Signal->attach(ui->qwtPlot_Pol_Average);
     PolPlotter->Average_2W_Signal->attach(ui->qwtPlot_Pol_Average);
     PolPlotter->Average_Ratio_Signal->attach(ui->qwtPlot_Pol_Average);
+
+    /* Plot the measured temperatures */
+    PolPlotter->Temperature_Plot->attach(ui->qwtPlot_Pol_Temperature);
+
+    /* Adjust the plots */
+    if(maxYTemperature < *std::max_element(PolPlotter->Temperature_Values.begin(), PolPlotter->Temperature_Values.end()) + 1 ||
+        minYTemperature > *std::min_element(PolPlotter->Temperature_Values.begin(), PolPlotter->Temperature_Values.end()) - 1){
+        maxYTemperature = *std::max_element(PolPlotter->Temperature_Values.begin(), PolPlotter->Temperature_Values.end()) + 1;
+        minYTemperature = *std::min_element(PolPlotter->Temperature_Values.begin(), PolPlotter->Temperature_Values.end()) - 1;
+        ui->qwtPlot_Pol_Temperature->setYAxis(minYTemperature, maxYTemperature);
+        ui->qwtPlot_Pol_Temperature->setXAxis(minXAverage, maxXAverage);
+    }
+
 
     /* Is there a new maximum value for the Y axis to resize it? Usually DC is the largest of all three */
     if(maxYAverage < ceil((PolPlotter->maxYValue)*1.1)){
@@ -2852,10 +2928,12 @@ void PanelPolarimeter::plot_Average(void){
         maxYAverage = ceil((PolPlotter->maxYValue)*1.1);
         ui->qwtPlot_Pol_Average->setYAxis(0.0, maxYAverage);
         ui->qwtPlot_Pol_Average->setXAxis(minXAverage, maxXAverage);
+        ui->qwtPlot_Pol_Temperature->setXAxis(minXAverage, maxXAverage);
     }
 
     /* Update plots */
     ui->qwtPlot_Pol_Average->update();
+    ui->qwtPlot_Pol_Temperature->update();
 
     /* If we have more than certain amount of values in the plot, change the X axis */
     if(PolPlotter->averaged_Signal_time.length() > PolPlotter->time_plot){
@@ -2869,6 +2947,7 @@ void PanelPolarimeter::plot_Average(void){
 
             /* Just add a certain time to the plot */
             ui->qwtPlot_Pol_Average->setXAxis(minXAverage, maxXAverage);
+            ui->qwtPlot_Pol_Temperature->setXAxis(minXAverage, maxXAverage);
 
             /* Get the actual maximum average value */
             PolPlotter->maxYValue = PolPlotter->AverageDC.at(PolPlotter->AverageDC.length()-1);
@@ -3326,6 +3405,7 @@ void PanelPolarimeter::receive_Data_Pol(int WParam, int LParam)
             /* Update the graph */
             ui->qwtPlot_Pol->update();
             ui->qwtPlot_Pol_Average->update();
+            ui->qwtPlot_Pol_Temperature->update();
         }
     }
 
@@ -3354,6 +3434,60 @@ void PanelPolarimeter::run_Polarimetry(short int runType) {
 
             /* Break the loop */
             break;
+        }
+
+        /* Show no connection with teensy */
+        if(!teensyTemperature->TeensyConnected){
+
+            /* Teensy isn't connected */
+            ui->label_Temperature->setText("No COM");
+            ui->label_Temperature->setStyleSheet("color:red");
+            ui->label_NoComTeensy->setVisible(true);
+        }
+
+        /* Process serial buffer until empty */
+        if(serials.bytesAvailable() > 7 && teensyTemperature->TeensyConnected)
+        {
+            ui->label_Temperature->setStyleSheet("color:black");
+            ui->label_NoComTeensy->setVisible(false);
+
+            /* Receive the serial data */
+            QByteArray data1 = serials.read(4);
+            QByteArray data2 = serials.read(4);
+
+            /* Interpret the received value to temperature (float) */
+            Temperature = *(reinterpret_cast<const float*>(data1.constData()));
+            Humidity = *(reinterpret_cast<const float*>(data2.constData()));
+
+            /* Show in UI the current measured temperature */
+            ui->Pol_Thermo->setValue(Temperature);
+            ui->Pol_Thermo->setLowerBound(Temperature - 5);
+            ui->Pol_Thermo->setUpperBound(Temperature + 5);
+            ui->label_Temperature->setText(QString::number(Temperature) + " °C");
+            ui->label_hum->setText(QString::number(Humidity) + " %");
+
+            /* Is the setup too hot or too cold? */
+            QPalette pal= ui->Pol_Thermo->palette();
+
+            /* Change color if its too cold or too hot inside there */
+            if(Temperature > 35){
+
+                //change some color roles
+                pal.setColor(QPalette::ButtonText, QColor(Qt::red));
+
+            }else if(Temperature < 31){
+
+                //change some color roles
+                pal.setColor(QPalette::ButtonText, QColor(Qt::blue));
+            }else{
+
+                //change some color roles
+                pal.setColor(QPalette::ButtonText, QColor(Qt::green));
+            }
+
+            /* Change button colors */
+            ui->Pol_Thermo->setPalette(pal);
+
         }
 
         /* Calibration */
@@ -3936,6 +4070,14 @@ void PanelPolarimeter::stop_Run_Polarimetry(void) {
 
     /* Emit signal to enable the preview buttons */
     DisEnablePreview(true);
+
+    /* Serial connection established? */
+    if (serials.isOpen())
+    {
+        /* Close connection */
+        serials.close();
+    }
+
 }
 
 /**
@@ -4655,7 +4797,7 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
     Runner->automaticData = false;
 
     /* Jump to tab */
-    ui->Tabs_Plots->setCurrentIndex(1);
+    ui->Tabs_Plots->setCurrentIndex(2);
 }
 
 /**
@@ -4727,17 +4869,26 @@ PanelPolarimeter::~PanelPolarimeter(void)
     delete PolPlotter;
     PolPlotter = nullptr;
 
+    /* Delete the configuration object */
     delete ConfigureMeasurement;
     ConfigureMeasurement = nullptr;
 
+    /* Delete the runner object */
     delete Runner;
     Runner = nullptr;
 
+    /* Delete the 3D plots containers */
     delete container;
     container = nullptr;
-
     delete container_norm;
     container_norm = nullptr;
+
+    /* Serial connection established? */
+    if (serials.isOpen())
+    {
+        /* Close connection */
+        serials.close();
+    }
 
     /* Delete user interface */
     delete ui;

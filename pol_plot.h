@@ -43,11 +43,11 @@ public:
     QwtPlotCurve *FFT_oneWave, *predictionSignal;
     QwtPlotCurve *FFT_DC, *FFT_W, *FFT_2W;
     QwtPlotCurve *Compensation_Signal, *Average_Ratio_Signal;
-    QwtPlotCurve *Average_DC_Signal, *Average_W_Signal, *Average_2W_Signal;
+    QwtPlotCurve *Average_DC_Signal, *Average_W_Signal, *Average_2W_Signal, *Temperature_Plot;
 
     /* Vectors for live Plotting */
     QVector<double> averaged_Signal_time;
-    QVector<double> AverageDC, AverageW, Average2W, AverageRatio;
+    QVector<double> AverageDC, AverageW, Average2W, AverageRatio, Temperature_Values;
 
     /* Maximum value on Y axis */
     double maxYValue;
@@ -73,7 +73,7 @@ public:
 public:
 
     /* Plot the real time averages of the frequency components DC, W, and 2W */
-    void plotAverages(bool dataloaded, QVector<double> FFTLfft_DC, QVector<double> FFTLfft_W, QVector<double> FFTLfft_2W, QVector<double> FFTLwavelengths, bool measuring, int time);
+    void plotAverages(bool dataloaded, QVector<double> FFTLfft_DC, QVector<double> FFTLfft_W, QVector<double> FFTLfft_2W, QVector<double> FFTLwavelengths, bool measuring, int time, double temperature);
 
     /* Adjust 3D plots */
     void adjust3DPlot(void);

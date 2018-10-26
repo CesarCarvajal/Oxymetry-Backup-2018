@@ -46,6 +46,7 @@ INPUT(
 ./release\.obj\pol_changeWaveOrFreq.o
 ./release\.obj\pol_waitingDialog.o
 ./release\.obj\pol_analizeData.o
+./release\.obj\pol_temp_connect.o
 ./release\.obj\qrc_icons.o
 ./release\.obj\moc_application.o
 ./release\.obj\moc_spectrometer_config.o
@@ -83,4 +84,5 @@ INPUT(
 ./release\.obj\moc_pol_changeWaveOrFreq.o
 ./release\.obj\moc_pol_waitingDialog.o
 ./release\.obj\moc_pol_analizeData.o
+./release\.obj\moc_pol_temp_connect.o
 );

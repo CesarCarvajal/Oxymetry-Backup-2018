@@ -58,6 +58,11 @@ Pol_Plot::Pol_Plot()
     Average_Ratio_Signal = new QwtPlotCurve("I(ω)/I(2ω)");
     Average_Ratio_Signal->setPen(QPen(QColor( 0,0,0 )));
 
+    /* Temperature plot */
+    Temperature_Plot = new QwtPlotCurve("");
+    Temperature_Plot->setPen(QPen("red"));
+    Temperature_Plot->setItemAttribute(QwtPlotItem::Legend, false);
+
     /* Create the DC, W and 2W plots */
     FFT_DC = new QwtPlotCurve("I(DC)");
     FFT_W = new QwtPlotCurve("I(ω)");
@@ -203,7 +208,7 @@ void Pol_Plot::plotPredictionLine(double minConcentration, double maxConcentrati
  * @param[in] Vectors with the DC, W, 2W and ratio W/2W components, also the wavelengths. The parameter dataloaded prevents mixing of data.
  */
 void Pol_Plot::plotAverages(bool dataloaded, QVector<double> FFTLfft_DC, QVector<double> FFTLfft_W, QVector<double> FFTLfft_2W, QVector<double> FFTLwavelengths,
-                            bool measuring, int time){
+                            bool measuring, int time, double temperature){
 
     /* Initialize the average variables */
     double average_DC=0, average_W=0, average_2W = 0;
@@ -262,6 +267,11 @@ void Pol_Plot::plotAverages(bool dataloaded, QVector<double> FFTLfft_DC, QVector
     Average_2W_Signal->setTitle(" Ī(2ω) = " + QString().setNum(Average2W.last(), 'f', 2) + " ");
     Average_Ratio_Signal->setSamples(averaged_Signal_time, AverageRatio);
     Average_Ratio_Signal->setTitle(" Ī(ω)/Ī(2ω) = " + QString().setNum(AverageRatio.last(), 'f', 2) + " ");
+
+    Temperature_Values.append(temperature);
+
+    /* Add temperature plot */
+    Temperature_Plot->setSamples(averaged_Signal_time, Temperature_Values);
 
     /* Whats the maximum time reached on the vector until now? */
     maxXtime = *std::max_element(averaged_Signal_time.begin(), averaged_Signal_time.end());

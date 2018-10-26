@@ -53,6 +53,7 @@
 #include "pol_fft.h"
 #include "pol_panelHelp.h"
 #include "pol_measurements.h"
+#include "pol_temp_connect.h"
 
 /*
  * Other stuff
@@ -91,6 +92,9 @@ private:
     /* Connected devices */
     PanelItem_Pol * PolarimetrySpectrometer;
     QwtPlotCurve * curve_Pol;
+
+    /* Teensy variable */
+    ConnectTemperature *teensyTemperature;
 
     /* Signal mapper */
     QSignalMapper *signalMapper;
@@ -138,6 +142,9 @@ private:
 
     /* File loading information */
     QFileInfo fileInfoLoad;
+
+    /* Temperature */
+    float Temperature, Humidity, minYTemperature, maxYTemperature;
 
     /* Path given by the user to load files */
     QString UserLoadDataPath;
