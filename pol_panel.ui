@@ -205,6 +205,12 @@
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
           <widget class="ClickableLabel" name="label_temp1">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="maximumSize">
             <size>
              <width>120</width>
@@ -231,6 +237,12 @@
          </item>
          <item>
           <widget class="QLabel" name="label_Temperature">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="font">
             <font>
              <weight>75</weight>
@@ -387,7 +399,7 @@
          <item>
           <widget class="QLabel" name="label_hum1">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -415,6 +427,12 @@
          </item>
          <item>
           <widget class="QLabel" name="label_hum">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="font">
             <font>
              <weight>75</weight>
@@ -522,7 +540,7 @@
          <property name="maximumSize">
           <size>
            <width>300</width>
-           <height>550</height>
+           <height>530</height>
           </size>
          </property>
          <property name="toolTip">
@@ -1960,7 +1978,7 @@
             <enum>QTabWidget::Rounded</enum>
            </property>
            <property name="currentIndex">
-            <number>0</number>
+            <number>2</number>
            </property>
            <property name="iconSize">
             <size>
@@ -3880,7 +3898,7 @@
                          </font>
                         </property>
                         <property name="text">
-                         <string>Prediction Error:</string>
+                         <string>SEP:</string>
                         </property>
                        </widget>
                       </item>
@@ -3907,7 +3925,7 @@
                        <widget class="QLabel" name="label_R2_1">
                         <property name="minimumSize">
                          <size>
-                          <width>50</width>
+                          <width>60</width>
                           <height>0</height>
                          </size>
                         </property>
@@ -3918,7 +3936,7 @@
                          </font>
                         </property>
                         <property name="text">
-                         <string>R2:</string>
+                         <string>R^2:</string>
                         </property>
                        </widget>
                       </item>

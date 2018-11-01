@@ -70,6 +70,8 @@ public:
     double ConcentrationC5=-1;
     double ConcentrationC6=-1;
 
+    double TemperatureSetup = 0;
+
     /* Where are we going to extract the components of the FFT */
     int f_w;
 
@@ -103,7 +105,7 @@ public:
     void InitializeFFTArrays();
 
     /* Save FFT to a file */
-    void saveFFTtoFile(QFileInfo FileDetails, bool userSaving, QStringList substancesNames);
+    void saveFFTtoFile(QFileInfo FileDetails, bool userSaving, QStringList substancesNames, double Temperature);
 
     /* Destructor */
     ~fft(void);

@@ -116,9 +116,15 @@ With this option, any loaded information or configuration will be removed from t
 
 1.4 -&gt; Interface elements by demand:
 
-The user interface will provide some GUI elements when they are required according to the user selection. For example, the plot &quot;Prediction&quot; will be displayed only during the &quot;Measurements&quot; phase of the software. Also, the &quot;Configuration&quot; phase has some additional tables and option shown when required.
+The user interface will provide some GUI elements when they are required according to the user selection. For example, the table &quot;Measurement Profile&quot; will be displayed only after the &quot;Configuration&quot; phase, which also has some additional tables and option shown when required.
 
+1.5-&gt; Overall:
 
++ The box Spectrometer contains all the settings and information of the selected spectrometer from the tab preview. This options become modifiable during the Calibration phase.
++ The tube Temperature will display the actual setup temperature measured with the Teensy card. When doing click on the label, the interface will show the temperature plot along the time.
++ The table &quot;Measurement Profile&quot; will show the measured concentrations and their measurement time. Also, the corresponding substances are displayed at the bottom.
++ The 4 plots in the tab Live Data shows the current measured data of raw signal, the ratio, the FFt profile and the live signals average. 
++ 
 
 -&gt;  2. CONFIGURATION
 

@@ -330,6 +330,8 @@ public:
         horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
         label_temp1 = new ClickableLabel(PanelPolarimeter);
         label_temp1->setObjectName(QStringLiteral("label_temp1"));
+        sizePolicy1.setHeightForWidth(label_temp1->sizePolicy().hasHeightForWidth());
+        label_temp1->setSizePolicy(sizePolicy1);
         label_temp1->setMaximumSize(QSize(120, 16777215));
         label_temp1->setFont(font1);
         label_temp1->setCursor(QCursor(Qt::PointingHandCursor));
@@ -338,6 +340,8 @@ public:
 
         label_Temperature = new QLabel(PanelPolarimeter);
         label_Temperature->setObjectName(QStringLiteral("label_Temperature"));
+        sizePolicy1.setHeightForWidth(label_Temperature->sizePolicy().hasHeightForWidth());
+        label_Temperature->setSizePolicy(sizePolicy1);
         QFont font2;
         font2.setBold(true);
         font2.setWeight(75);
@@ -394,8 +398,8 @@ public:
         horizontalLayout_30->setObjectName(QStringLiteral("horizontalLayout_30"));
         label_hum1 = new QLabel(PanelPolarimeter);
         label_hum1->setObjectName(QStringLiteral("label_hum1"));
-        sizePolicy.setHeightForWidth(label_hum1->sizePolicy().hasHeightForWidth());
-        label_hum1->setSizePolicy(sizePolicy);
+        sizePolicy1.setHeightForWidth(label_hum1->sizePolicy().hasHeightForWidth());
+        label_hum1->setSizePolicy(sizePolicy1);
         label_hum1->setMaximumSize(QSize(100, 16777215));
         label_hum1->setFont(font1);
 
@@ -403,6 +407,8 @@ public:
 
         label_hum = new QLabel(PanelPolarimeter);
         label_hum->setObjectName(QStringLiteral("label_hum"));
+        sizePolicy1.setHeightForWidth(label_hum->sizePolicy().hasHeightForWidth());
+        label_hum->setSizePolicy(sizePolicy1);
         label_hum->setFont(font2);
 
         horizontalLayout_30->addWidget(label_hum);
@@ -464,7 +470,7 @@ public:
         sizePolicy4.setHeightForWidth(Table_Measurements_Pol->sizePolicy().hasHeightForWidth());
         Table_Measurements_Pol->setSizePolicy(sizePolicy4);
         Table_Measurements_Pol->setMinimumSize(QSize(300, 50));
-        Table_Measurements_Pol->setMaximumSize(QSize(300, 550));
+        Table_Measurements_Pol->setMaximumSize(QSize(300, 530));
         Table_Measurements_Pol->setLineWidth(1);
         Table_Measurements_Pol->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
         Table_Measurements_Pol->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
@@ -1560,7 +1566,7 @@ public:
 
         label_R2_1 = new QLabel(widget_errorBar);
         label_R2_1->setObjectName(QStringLiteral("label_R2_1"));
-        label_R2_1->setMinimumSize(QSize(50, 0));
+        label_R2_1->setMinimumSize(QSize(60, 0));
         label_R2_1->setFont(font2);
 
         horizontalLayout_26->addWidget(label_R2_1);
@@ -1884,7 +1890,7 @@ public:
         retranslateUi(PanelPolarimeter);
 
         list_devices_Pol->setCurrentRow(-1);
-        Tabs_Plots->setCurrentIndex(0);
+        Tabs_Plots->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(PanelPolarimeter);
@@ -2062,9 +2068,9 @@ public:
         label_prediction->setToolTip(QApplication::translate("PanelPolarimeter", "Hide/Show Prediction Plot", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_prediction->setText(QApplication::translate("PanelPolarimeter", "Prediction", Q_NULLPTR));
-        label_PredictionError->setText(QApplication::translate("PanelPolarimeter", "Prediction Error:", Q_NULLPTR));
+        label_PredictionError->setText(QApplication::translate("PanelPolarimeter", "SEP:", Q_NULLPTR));
         label_PError->setText(QString());
-        label_R2_1->setText(QApplication::translate("PanelPolarimeter", "R2:", Q_NULLPTR));
+        label_R2_1->setText(QApplication::translate("PanelPolarimeter", "R^2:", Q_NULLPTR));
         label_R2->setText(QString());
 #ifndef QT_NO_TOOLTIP
         qwtPlot_Pol_Prediction->setToolTip(QApplication::translate("PanelPolarimeter", "Prediction Plot", Q_NULLPTR));

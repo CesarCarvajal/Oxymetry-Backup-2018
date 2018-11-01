@@ -30,6 +30,7 @@
 #include <QFile>
 #include <QDebug>
 #include <QMessageBox>
+#include <QStorageInfo>
 
 /* Internal includes */
 #include "application.h"
@@ -273,8 +274,20 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
                 ui->checkBox_Imp5->setChecked(false);
                 ui->checkBox_Imp2->setChecked(false);
 
+                /* If glucose isnßt shown show it */
+                if(!ui->checkBox_Glucose->isChecked()){
+
+                    ui->checkBox_Glucose->setChecked(true);
+                    /* Show/Hide Glucose values */
+                    ui->doubleSpinBox_StockGlucose->setVisible(ui->checkBox_Glucose->isChecked());
+                    ui->doubleSpinBox_MaxGluc->setVisible(ui->checkBox_Glucose->isChecked());
+                    ui->doubleSpinBox_MinGluc->setVisible(ui->checkBox_Glucose->isChecked());
+                    ui->doubleSpinBox_VolG->setVisible(ui->checkBox_Glucose->isChecked());
+
+                }
+
                 /* Show/Hide Impurities values */
-                hideAdditionalSubstances((ui->checkBox_Imp1->isChecked() && ui->checkBox_Imp1->isVisible()), (ui->checkBox_Imp2->isChecked() && ui->checkBox_Imp2->isVisible()),
+                hideAdditionalSubstances(true, (ui->checkBox_Imp2->isChecked() && ui->checkBox_Imp2->isVisible()),
                                          (ui->checkBox_Imp3->isChecked() && ui->checkBox_Imp3->isVisible()), (ui->checkBox_Imp4->isChecked() && ui->checkBox_Imp4->isVisible()),
                                          (ui->checkBox_Imp5->isChecked() && ui->checkBox_Imp5->isVisible()));
 
@@ -283,6 +296,9 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
                 ui->checkBox_Imp3->setChecked(true);
                 ui->checkBox_Imp4->setChecked(true);
                 ui->checkBox_Imp5->setChecked(true);
+
+                ui->checkBox_Imp1->setEnabled(false);
+                ui->checkBox_Glucose->setEnabled(false);
 
                 /* In crossing mode, too many measurement will lead to very long time measurements */
                 if(ui->spinBox_BNMeas->value() > 10 and ui->checkBox_crossingMode->isChecked()){
@@ -298,6 +314,9 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
                 ui->checkBox_IntervalMode->setChecked(false);
                 ui->checkBox_IntervalMode->setEnabled(true);
                 ui->pushButton_addImpurity->setEnabled(true);
+
+                ui->checkBox_Imp1->setEnabled(true);
+                ui->checkBox_Glucose->setEnabled(true);
             }
 
         }else{
@@ -308,6 +327,9 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
             ui->checkBox_IntervalMode->setChecked(false);
             ui->checkBox_IntervalMode->setEnabled(true);
             ui->pushButton_addImpurity->setEnabled(true);
+
+            ui->checkBox_Imp1->setEnabled(true);
+            ui->checkBox_Glucose->setEnabled(true);
         }
 
         /* Save that the Interval Mode is active now */
@@ -478,6 +500,36 @@ void configurePolMeasure::configurePolarimeter(void)
 
         /* Save that a configuration file was loaded */
         configured = true;
+
+        /* Get the storage information at the data location */
+        QStorageInfo storage(externSoftware->pathForScripts);
+
+        /* Save the memory space */
+        double memoryspace = 0;
+
+        /* how much space do we need */
+        if(ui->label_MSpace2->text() == "KB"){
+
+            memoryspace = ui->doubleSpinBox_MSpace->value()/1000;
+
+        }else if(ui->label_MSpace2->text() == "GB"){
+
+            memoryspace = ui->doubleSpinBox_MSpace->value()*1000;
+        }else{
+
+            memoryspace = ui->doubleSpinBox_MSpace->value();
+        }
+
+        /* Show warning */
+        if((storage.bytesAvailable()/1000/1000) < memoryspace + 10){
+
+            showCritical("The location where you are trying to save the measurement data doesn't contain enough memory space. "
+                        "Please free some memory space or use another location for saving the measurement data.", "\nAvailable Memory Space: "
+                        + QString::number(storage.bytesAvailable()/1000/1000)
+                        + " MB \n\nTotal Required Memory Space: " + QString::number(ui->doubleSpinBox_MSpace->value()) + " " + ui->label_MSpace2->text()
+                        + "\n\nNeeded Additional Free Space: " + QString::number(memoryspace - storage.bytesAvailable()/1000/1000) +
+                        + " MB \n\nLocation: " + externSoftware->pathForScripts);
+        }
 
         /* Finish the window */
         accept();

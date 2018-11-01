@@ -169,6 +169,9 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     ui->label_PlotSaturated->setStyleSheet(QString("color: red; font: bold;"));
     ui->label_PlotSaturated->setVisible(false);
 
+    ui->line_pred->setVisible(true);
+    ui->line_SpeNormSpec->setVisible(true);
+
     /* Set window flags to this window */
     this->setWindowFlags(Qt::Window);
 
@@ -938,6 +941,7 @@ void PanelPolarimeter::adjust_Run_Start(short int typeRun){
         /* Close connection */
         serials.open(QIODevice::ReadWrite);
     }
+
 }
 
 /**
@@ -2311,14 +2315,14 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
     }
 
     /* This is another condition to change the spacing so it looks nice */
-    if((ui->Table_Measurements_Pol->isVisible())
-            && Runner->PolConfigured){
-        ui->verticalSpacerX->changeSize(20,13,QSizePolicy::Fixed,QSizePolicy::Fixed);
-    }else{
+    //if((ui->Table_Measurements_Pol->isVisible())
+          //  && Runner->PolConfigured){
+        //ui->verticalSpacerX->changeSize(20,13,QSizePolicy::Fixed,QSizePolicy::Fixed);
+   // }else{
 
         /* In case some elements from the lateral panel are hidden or shown again, change the spacing so they look good */
         ui->verticalSpacerX->changeSize(20,13,QSizePolicy::Fixed,QSizePolicy::Expanding);
-    }
+  //  }
 
     /* Catch check box event */
     if(Checkbox == PolarimetrySpectrometer->ui->checkBox_normalize && !Runner->doingLiveFFT && Runner->PolCalibrating){
@@ -2524,6 +2528,7 @@ void PanelPolarimeter::Load_Summary(void) {
     PolPlotter->AverageW.resize(0);
     PolPlotter->Average2W.resize(0);
     PolPlotter->AverageRatio.resize(0);
+    PolPlotter->Temperature_Values.resize(0);
 
     /* Enroute File */
     QFile file(DataPath);
@@ -2588,6 +2593,9 @@ void PanelPolarimeter::Load_Summary(void) {
                 /* Save 2W - Position 3 */
                 PolPlotter->Average2W.append(Readed_Row.at(3).toDouble());
 
+                /* Save Temperature - Position 4 */
+                PolPlotter->Temperature_Values.append(Readed_Row.at(4).toDouble());
+
                 /* Get the actual value */
                 value = Readed_Row.at(1).toDouble();
             }
@@ -2599,6 +2607,10 @@ void PanelPolarimeter::Load_Summary(void) {
 
     int maxiYAverage = ceil((ceil(*std::max_element(PolPlotter->AverageDC.begin(), PolPlotter->AverageDC.end())))*1.1);
     ui->qwtPlot_Pol_Average->setYAxis(0.0, maxiYAverage);
+
+    double maxiYTemp = ceil((ceil(*std::max_element(PolPlotter->Temperature_Values.begin(), PolPlotter->Temperature_Values.end())))+1);
+    double minYTemp = ceil((ceil(*std::min_element(PolPlotter->Temperature_Values.begin(), PolPlotter->Temperature_Values.end())))-1);
+    ui->qwtPlot_Pol_Temperature->setYAxis(minYTemp, maxiYTemp);
 
     /* Add signals to the plots */
     PolPlotter->Average_DC_Signal->setSamples(PolPlotter->averaged_Signal_time, PolPlotter->AverageDC);
@@ -2628,15 +2640,20 @@ void PanelPolarimeter::Load_Summary(void) {
     PolPlotter->Average_Ratio_Signal->setSamples(PolPlotter->averaged_Signal_time, AverageRatio);
     PolPlotter->Average_Ratio_Signal->setTitle(" Ī(DC)/Ī(2ω)");
 
+    /* Add temperature plot */
+    PolPlotter->Temperature_Plot->setSamples(PolPlotter->averaged_Signal_time, PolPlotter->Temperature_Values);
+
     /* Attach graphs */
     PolPlotter->Average_DC_Signal->attach(ui->qwtPlot_Pol_Average);
     PolPlotter->Average_W_Signal->attach(ui->qwtPlot_Pol_Average);
     PolPlotter->Average_2W_Signal->attach(ui->qwtPlot_Pol_Average);
     PolPlotter->Average_Ratio_Signal->attach(ui->qwtPlot_Pol_Average);
+    PolPlotter->Temperature_Plot->attach(ui->qwtPlot_Pol_Temperature);
 
     /* Just add a certain time to the plot */
     int maximal = *std::max_element(PolPlotter->averaged_Signal_time.begin(), PolPlotter->averaged_Signal_time.end());
     ui->qwtPlot_Pol_Average->setXAxis(0.0, maximal + maximal*0.1);
+    ui->qwtPlot_Pol_Temperature->setXAxis(0.0, maximal + maximal*0.1);
 
     /* Adjust the measurement number plot in the averages */
     double lengthMeasNumber = NrMeas + NrMeas*0.1;
@@ -2660,6 +2677,7 @@ void PanelPolarimeter::Load_Summary(void) {
 
     /* Update plots */
     ui->qwtPlot_Pol_Average->update();
+    ui->qwtPlot_Pol_Temperature->update();
 
     /* Resize vectors */
     PolPlotter->averaged_Signal_time.resize(0);
@@ -2667,6 +2685,7 @@ void PanelPolarimeter::Load_Summary(void) {
     PolPlotter->AverageW.resize(0);
     PolPlotter->Average2W.resize(0);
     PolPlotter->AverageRatio.resize(0);
+    PolPlotter->Temperature_Values.resize(0);
 
     /* Update information bar */
     ui->info->setText("");
@@ -2706,6 +2725,13 @@ void PanelPolarimeter::Load_From_FFT(void) {
 
     /* Plot the FFT Signals */
     plot_FFT();
+
+    /* Contains a temperature value to show? */
+    if(FFTL.TemperatureSetup > 0){
+       ui->label_Temperature->setText(QString::number(FFTL.TemperatureSetup) + " °C");
+       ui->Pol_Thermo->setValue(FFTL.TemperatureSetup);
+       ui->label_hum->setText("- %");
+    }
 
     /* Remember that there was data loaded */
     dataloaded = true;
@@ -2760,6 +2786,13 @@ void PanelPolarimeter::Load_From_Raw_Data(void) {
 
     /* Plot the FFT Signals */
     plot_FFT();
+
+    /* Contains a temperature value to show? */
+    if(FFTL.TemperatureSetup > 0){
+       ui->label_Temperature->setText(QString::number(FFTL.TemperatureSetup) + " °C");
+       ui->Pol_Thermo->setValue(FFTL.TemperatureSetup);
+       ui->label_hum->setText("- %");
+    }
 
     /* Remember that there was data loaded */
     dataloaded = true;
@@ -3227,7 +3260,7 @@ void PanelPolarimeter::process_Received_Data_Pol(QString Path)
     /* Is there an automatic saving of FFT Data selected by the user? */
     if(ConfigureMeasurement->ui->checkBox_saveFFT->isChecked() && Runner->PolMeasuring && !Runner->PolCalibrating){
         /* Save FFT value to file */
-        FFTL.saveFFTtoFile(fileInfoSaving, false, ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->substancesNames);
+        FFTL.saveFFTtoFile(fileInfoSaving, false, ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->substancesNames, Temperature);
     }
 
     /* Is there an automatic saving of Raw Data?, if not just remove the file with the Raw Data */
@@ -4101,7 +4134,7 @@ void PanelPolarimeter::toggle_Load_Data(void)
             }
 
             /* Button 'yes' pressed; Save the FFT data where the user decides */
-            FFTL.saveFFTtoFile(fileInfoLoad, true, substancesNames);
+            FFTL.saveFFTtoFile(fileInfoLoad, true, substancesNames, Temperature);
         }
     }
 
@@ -4422,6 +4455,7 @@ void PanelPolarimeter::write_To_File(FILE *file, double *a_pSpectrum, int WParam
         fprintf(file, "Nr. of Spectra: %i\n", ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->NrSpectra);
         fprintf(file, "Nr. of Averages: %i\n", ptrSpectrometers[SpectrometerNumber]->getNumberOfAverages());
         fprintf(file, "Frequency: %.2f Hz\n", FFTL.FrequencyF);
+        fprintf(file, "Temperature: %.2f °C\n", Temperature);
 
         /* Include the concentrations in the file */
         QString concentrations, conc = "";
@@ -4635,7 +4669,8 @@ void PanelPolarimeter::write_Summary() {
             fprintf(file, "Time \t \t");
             fprintf(file, "Average DC Amplitude \t \t");
             fprintf(file, "Average W Amplitude \t");
-            fprintf(file, "Average 2W Amplitude \n");
+            fprintf(file, "Average 2W Amplitude \t");
+            fprintf(file, "Temperature \n");
         }
 
         /* Write wavelengths and amplitudes */
@@ -4643,6 +4678,7 @@ void PanelPolarimeter::write_Summary() {
         fprintf(file, "%.4f\t\t", PolPlotter->AverageDC.at(z));
         fprintf(file, "%.4f\t\t", PolPlotter->AverageW.at(z));
         fprintf(file, "%.4f\t\t", PolPlotter->Average2W.at(z));
+        fprintf(file, "%.4f\t\t", PolPlotter->Temperature_Values.at(z));
 
         fprintf(file, "\n");
     }
@@ -4815,7 +4851,7 @@ void PanelPolarimeter::saveFFTcalibration(){
         if(ConfigureMeasurement->configured){
 
             /* Then save the FFT with the actual information */
-            FFTL.saveFFTtoFile(text, true, ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->substancesNames);
+            FFTL.saveFFTtoFile(text, true, ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->substancesNames, Temperature);
 
         }else{
 
@@ -4843,7 +4879,7 @@ void PanelPolarimeter::saveFFTcalibration(){
             FFTL.normalizeCounts = PolarimetrySpectrometer->ui->checkBox_normalize->isChecked();
 
             /* Save the actual FFT shown in the calibration */
-            FFTL.saveFFTtoFile(text, true, substancesNames);
+            FFTL.saveFFTtoFile(text, true, substancesNames, Temperature);
 
         }
     }

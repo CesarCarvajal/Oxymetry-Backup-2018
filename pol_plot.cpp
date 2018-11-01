@@ -268,6 +268,7 @@ void Pol_Plot::plotAverages(bool dataloaded, QVector<double> FFTLfft_DC, QVector
     Average_Ratio_Signal->setSamples(averaged_Signal_time, AverageRatio);
     Average_Ratio_Signal->setTitle(" Ī(ω)/Ī(2ω) = " + QString().setNum(AverageRatio.last(), 'f', 2) + " ");
 
+    /* Temperature plot */
     Temperature_Values.append(temperature);
 
     /* Add temperature plot */
@@ -296,6 +297,7 @@ void Pol_Plot::clean_AllPlots(void){
         FFT_W->detach();
         FFT_2W->detach();
         predictionSignal->detach();
+        Temperature_Plot->detach();
     }
 
     /* Set all vectors to zero */
@@ -304,6 +306,7 @@ void Pol_Plot::clean_AllPlots(void){
     AverageW.resize(0);
     Average2W.resize(0);
     AverageRatio.resize(0);
+    Temperature_Values.resize(0);
     counts_average_time = 0;
 }
 
@@ -329,6 +332,10 @@ Pol_Plot::~Pol_Plot(void)
         Average_2W_Signal->detach();
         delete Average_2W_Signal;
         Average_2W_Signal= nullptr;
+
+        Temperature_Plot->detach();
+        delete Temperature_Plot;
+        Temperature_Plot = nullptr;
     }
 
     /* Delete all the existing data ploted on the interface */
@@ -349,4 +356,5 @@ Pol_Plot::~Pol_Plot(void)
 
     delete predictionSignal;
     predictionSignal = nullptr;
+
 }

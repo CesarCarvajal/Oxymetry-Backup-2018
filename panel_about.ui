@@ -58,7 +58,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Oxymetry 0.7.1</string>
+    <string>Oxymetry 0.8</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_compiler">
@@ -163,7 +163,14 @@
       <bool>true</bool>
      </property>
      <property name="plainText">
-      <string>Version 0.7.1: (30.07.2018)
+      <string>Version 0.8: (01.11.2018)
++ The box Spectrometer contains all the settings and information of the selected spectrometer from the tab preview. This options become modifiable during the Calibration phase.
++ The tube Temperature will display the actual setup temperature measured with the Teensy card. When doing click on the label, the interface will show the temperature plot along the time.
++ The table &quot;Measurement Profile&quot; will show the measured concentrations and their measurement time. Also, the corresponding substances are displayed at the bottom.
++ The 4 plots in the tab Live Data shows the current measured data of raw signal, the ratio, the FFt profile and the live signals average. 
++ 
+
+Version 0.7.1: (30.07.2018)
 + Configuration Files with exclusive extension .csar
 + More substances can be added (up to 7 substances)
 + Measurement Summary (.sum) file to load the average signals DC, W and 2W
