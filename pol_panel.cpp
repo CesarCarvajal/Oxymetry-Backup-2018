@@ -738,6 +738,12 @@ void PanelPolarimeter::adjust_Run_End(){
     /* If the Measurement is done by no more entries, then just stop the measurement */
     stop_Run_Polarimetry();
 
+    /* Create the folders for old analisys with matlab */
+    QDir(fileInfoSaving.absolutePath() + "/FFT Data/").mkdir("matlab");
+    QDir(fileInfoSaving.absolutePath() + "/FFT Data/matlab/").mkdir("all");
+    QDir(fileInfoSaving.absolutePath() + "/FFT Data/matlab/").mkdir("cal");
+    QDir(fileInfoSaving.absolutePath() + "/FFT Data/matlab/").mkdir("val");
+
     /* If the measurement stopped by itself */
     if(!Runner->Stopped && !ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->intervalMode){
 

@@ -82,8 +82,14 @@ private:
     /* Size of Nr Waves */
     QVector<double> wavelengths;
 
-    /* Size of Nr Waves */
+    /* Signal vector */
     QVector<double> signal;
+
+    /* Calibration concentrations */
+    QVector<double> CalConcentrations;
+
+    /* Validation concentrations */
+    QVector<double> ValConcentrations;
 
     /* How many repetitions are there?  */
     int repetitions;
@@ -148,6 +154,9 @@ private slots:
 
     /* Analize data */
     void analizeData(void);
+
+    /* Create the files with the calibration and validation data */
+    void writeCalValFiles(void);
 
 public slots:
 

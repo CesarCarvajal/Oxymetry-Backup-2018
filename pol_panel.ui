@@ -540,7 +540,7 @@
          <property name="maximumSize">
           <size>
            <width>300</width>
-           <height>530</height>
+           <height>510</height>
           </size>
          </property>
          <property name="toolTip">
@@ -1978,7 +1978,7 @@
             <enum>QTabWidget::Rounded</enum>
            </property>
            <property name="currentIndex">
-            <number>2</number>
+            <number>0</number>
            </property>
            <property name="iconSize">
             <size>

@@ -796,9 +796,9 @@ public:
         label_detsignal->setText(QApplication::translate("selectAnalizeData", "Determination Signal:", Q_NULLPTR));
         comboBox_DetSignal->clear();
         comboBox_DetSignal->insertItems(0, QStringList()
-         << QApplication::translate("selectAnalizeData", "Ratio I(\317\211)/I(2\317\211)", Q_NULLPTR)
-         << QApplication::translate("selectAnalizeData", "I(\317\211)", Q_NULLPTR)
-         << QApplication::translate("selectAnalizeData", "I(2\317\211)", Q_NULLPTR)
+         << QApplication::translate("selectAnalizeData", "Ratio I(w)/I(2w)", Q_NULLPTR)
+         << QApplication::translate("selectAnalizeData", "I(w)", Q_NULLPTR)
+         << QApplication::translate("selectAnalizeData", "I(2w)", Q_NULLPTR)
          << QApplication::translate("selectAnalizeData", "I(DC)", Q_NULLPTR)
         );
         label_8->setText(QApplication::translate("selectAnalizeData", "Min. Wavelength:", Q_NULLPTR));

@@ -297,9 +297,6 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
                 ui->checkBox_Imp4->setChecked(true);
                 ui->checkBox_Imp5->setChecked(true);
 
-                ui->checkBox_Imp1->setEnabled(false);
-                ui->checkBox_Glucose->setEnabled(false);
-
                 /* In crossing mode, too many measurement will lead to very long time measurements */
                 if(ui->spinBox_BNMeas->value() > 10 and ui->checkBox_crossingMode->isChecked()){
 
@@ -314,9 +311,6 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
                 ui->checkBox_IntervalMode->setChecked(false);
                 ui->checkBox_IntervalMode->setEnabled(true);
                 ui->pushButton_addImpurity->setEnabled(true);
-
-                ui->checkBox_Imp1->setEnabled(true);
-                ui->checkBox_Glucose->setEnabled(true);
             }
 
         }else{
@@ -327,9 +321,6 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
             ui->checkBox_IntervalMode->setChecked(false);
             ui->checkBox_IntervalMode->setEnabled(true);
             ui->pushButton_addImpurity->setEnabled(true);
-
-            ui->checkBox_Imp1->setEnabled(true);
-            ui->checkBox_Glucose->setEnabled(true);
         }
 
         /* Save that the Interval Mode is active now */
@@ -338,7 +329,8 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
     }
 
     /* Check box of impurities */
-    if(checkBox == ui->checkBox_Imp1 || checkBox == ui->checkBox_Imp2 || checkBox == ui->checkBox_Imp3 || checkBox == ui->checkBox_Imp4 || checkBox == ui->checkBox_Imp5){
+    if((checkBox == ui->checkBox_Imp1 || checkBox == ui->checkBox_Imp2 || checkBox == ui->checkBox_Imp3 || checkBox == ui->checkBox_Imp4 || checkBox == ui->checkBox_Imp5)
+            && !ui->checkBox_crossingMode->isChecked()){
 
         /* Show/Hide Impurities values */
         hideAdditionalSubstances((ui->checkBox_Imp1->isChecked() && ui->checkBox_Imp1->isVisible()), (ui->checkBox_Imp2->isChecked() && ui->checkBox_Imp2->isVisible()),
@@ -356,8 +348,16 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
         ui->pushButton_addImpurity->setEnabled(true);
     }
 
+    /* Keep always them active */
+    if(ui->checkBox_crossingMode->isChecked()){
+        ui->checkBox_Glucose->setChecked(true);
+        ui->checkBox_Imp1->setChecked(true);
+        ui->checkBox_Imp1->setEnabled(true);
+        ui->checkBox_Glucose->setEnabled(true);
+    }
+
     /* Check the substances */
-    if(checkBox == ui->checkBox_Glucose){
+    if(checkBox == ui->checkBox_Glucose && !ui->checkBox_crossingMode->isChecked()){
 
         /* Show/Hide Glucose values */
         ui->doubleSpinBox_StockGlucose->setVisible(ui->checkBox_Glucose->isChecked());

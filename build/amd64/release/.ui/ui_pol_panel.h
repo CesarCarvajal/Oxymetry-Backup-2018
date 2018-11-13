@@ -470,7 +470,7 @@ public:
         sizePolicy4.setHeightForWidth(Table_Measurements_Pol->sizePolicy().hasHeightForWidth());
         Table_Measurements_Pol->setSizePolicy(sizePolicy4);
         Table_Measurements_Pol->setMinimumSize(QSize(300, 50));
-        Table_Measurements_Pol->setMaximumSize(QSize(300, 530));
+        Table_Measurements_Pol->setMaximumSize(QSize(300, 510));
         Table_Measurements_Pol->setLineWidth(1);
         Table_Measurements_Pol->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
         Table_Measurements_Pol->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
@@ -1890,7 +1890,7 @@ public:
         retranslateUi(PanelPolarimeter);
 
         list_devices_Pol->setCurrentRow(-1);
-        Tabs_Plots->setCurrentIndex(2);
+        Tabs_Plots->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(PanelPolarimeter);

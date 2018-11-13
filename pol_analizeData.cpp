@@ -60,7 +60,7 @@ selectAnalizeData::selectAnalizeData(QWidget *parent) :
     /* Create signal mapper for configuration window */
     signalMapperC = new QSignalMapper(this);
 
-    /* Connect Button of cancel */
+    /* Connect Buttons */
     connect(ui->pushButton_select, SIGNAL(clicked()), this, SLOT(allowSelectPath()));
     connect(ui->pushButton_cancel, SIGNAL(clicked()), this, SLOT(cancel()));
     connect(ui->pushButton_Analize, SIGNAL(clicked()), this, SLOT(analizeData()));
@@ -388,152 +388,153 @@ void selectAnalizeData::readInitialFile(bool list, QString path)
 }
 
 /**
- * @brief Read files to analize
+ * @brief Read files to fill the plot arrays and to create the analize data files
  */
 void selectAnalizeData::readFiles(void)
 {
-    /* Get the data from files */
-    if(!FFTFilesCalibration.isEmpty()){
+    /* Save all the file names in one variable */
+    QStringList allFiles;
+    allFiles.append(FFTFilesCalibration);
+    allFiles.append(FFTFilesValidation);
 
-        /* resize vectors */
-        wavelengths.resize(0);
+    /* Create vectors with the concentrations for validation and calibration */
+    CalConcentrations.resize(0);
+    ValConcentrations.resize(0);
+
+    /* Sort files appropriatelly, if the first concentration should be taken */
+    if(ui->comboBox_Substance->currentIndex() == 0){
+        allFiles = sortFiles(allFiles);
+
+    }else{
+
+        /* Different substance sort */
+        allFiles = sortFiles2(allFiles);
+    }
+
+    /* Create the data arrays for the plots */
+    QSurfaceDataArray *dataArray = new QSurfaceDataArray;
+    QSurfaceDataArray *dataArray_norm = new QSurfaceDataArray;
+    dataArray->reserve(allFiles.length());
+    dataArray_norm->reserve(allFiles.length());
+
+    /* Iterate through the file names */
+    for(int index = 0; index < allFiles.length(); index++){
+
+        /* Read the concentration from the files */
+        readInitialFile(true, pathDataM + "/" + allFiles.at(index));
+
+        /* This vector saves the information per file or per concentration */
         signal.resize(0);
-        data3D = new QSurfaceDataArray;
-        data3DNormalized = new QSurfaceDataArray;
 
-        /* Save all the file names in one variable */
-        QStringList allFiles;
-        allFiles.append(FFTFilesCalibration);
-        allFiles.append(FFTFilesValidation);
+        /* Open the file to get the Nr of Spectra and Average Nr. */
+        QFile file(pathDataM + "/" + allFiles.at(index));
 
-        /* Sort files appropriatelly, if the first concentration should be taken */
-        if(ui->comboBox_Substance->currentIndex() == 0){
-            allFiles = sortFiles(allFiles);
+        /* Row of the file */
+        QString ReadRow;
 
-        }else{
-
-            /* Different substance sort */
-            allFiles = sortFiles2(allFiles);
+        /* Does the File exists? */
+        if(!file.exists()){
+            /* If not, tell the user that it coulnd't be found */
+            showWarning("File not Found!", "");
+            return;
         }
 
-        /* Create Folder to store the data analysis results */
-        QDir(pathDataM).mkdir("Data_Analysis");
+        /* Open the file */
+        if(file.open(QIODevice::ReadOnly)) {
 
-        QSurfaceDataArray *dataArray = new QSurfaceDataArray;
-        QSurfaceDataArray *dataArray_norm = new QSurfaceDataArray;
-        dataArray->reserve(allFiles.length());
-        dataArray_norm->reserve(allFiles.length());
+            QTextStream stream(&file);
 
-        for(int index = 0; index < allFiles.length(); index++){
+            /* Read lines */
+            while(!stream.atEnd()){
 
-            /* Read the concentration from the files */
-            readInitialFile(true, pathDataM + "/" + allFiles.at(index));
+                /* When should it start reading the FFT data? */
+                bool read = false;
 
-            /* This vector saves the information per file or per concentration */
-            signal.resize(0);
+                /* Read a line from the file */
+                ReadRow = stream.readLine();
 
-            /* Open the file to get the Nr of Spectra and Average Nr. */
-            QFile file(pathDataM + "/" + allFiles.at(index));
+                /* Indicates where to start reading the numerical information from file */
+                QString in = ReadRow.at(1);
 
-            /* Row of the file */
-            QString ReadRow;
+                /* If a number was found at the first position, then start reading */
+                in.toInt(&read);
 
-            /* Does the File exists? */
-            if(!file.exists()){
-                /* If not, tell the user that it coulnd't be found */
-                showWarning("File not Found!", "");
-                return;
-            }
+                /* start reading numbers */
+                if(read){
 
-            /* Open the file */
-            if(file.open(QIODevice::ReadOnly)) {
+                    /* Get the values from the line separated by 2 tabulars and replace (,) by (.) to read numbers */
+                    QStringList Readed_Row = ReadRow.split("\t\t");
+                    Readed_Row.replaceInStrings(",",".");
 
-                QTextStream stream(&file);
+                    /* We don't need all the saved values */
+                    if(Readed_Row.at(0).toDouble() > ui->doubleSpinBox_maxWavel->value()){break;}
+                    if(Readed_Row.at(0).toDouble() < ui->doubleSpinBox_minWavel->value()){continue;}
 
-                /* Read lines */
-                while(!stream.atEnd()){
+                    /* Save the wavelengths in Position 0 */
+                    if(index < 1){
+                        wavelengths.append(Readed_Row.at(0).toDouble());
+                    }
 
-                    /* When should it start reading the FFT data? */
-                    bool read = false;
+                    /* 4th column is the ratio */
+                    if(ui->comboBox_DetSignal->currentIndex() == 0){
+                        signal.append(Readed_Row.at(4).toDouble());
+                    }
 
-                    /* Read a line from the file */
-                    ReadRow = stream.readLine();
+                    /* 2nd column is I(w) */
+                    if(ui->comboBox_DetSignal->currentIndex() == 1){
+                        signal.append(Readed_Row.at(2).toDouble());
+                    }
 
-                    /* Indicates where to start reading the numerical information from file */
-                    QString in = ReadRow.at(1);
+                    /* 3rd column is I(2w) */
+                    if(ui->comboBox_DetSignal->currentIndex() == 2){
+                        double data2W = Readed_Row.at(3).toDouble();
 
-                    /* If a number was found at the first position, then start reading */
-                    in.toInt(&read);
-
-                    /* start reading numbers */
-                    if(read){
-
-                        /* Get the values from the line separated by 2 tabulars and replace (,) by (.) to read numbers */
-                        QStringList Readed_Row = ReadRow.split("\t\t");
-                        Readed_Row.replaceInStrings(",",".");
-
-                        /* We don't need all the saved values */
-                        if(Readed_Row.at(0).toDouble() > ui->doubleSpinBox_maxWavel->value()){break;}
-                        if(Readed_Row.at(0).toDouble() < ui->doubleSpinBox_minWavel->value()){continue;}
-
-                        /* Save the wavelengths in Position 0 */
-                        if(index < 1){
-                            wavelengths.append(Readed_Row.at(0).toDouble());
+                        /* use the logarithm with I(2W) */
+                        if(ui->checkBox_applyLogarithm->isChecked()){
+                            data2W = log10(data2W);
                         }
+                        /* Add the signal to the plot */
+                        signal.append(data2W);
+                    }
 
-                        /* 4th column is the ratio */
-                        if(ui->comboBox_DetSignal->currentIndex() == 0){
-                            signal.append(Readed_Row.at(4).toDouble());
-                        }
-
-                        /* 2nd column is I(w) */
-                        if(ui->comboBox_DetSignal->currentIndex() == 1){
-                            signal.append(Readed_Row.at(2).toDouble());
-                        }
-
-                        /* 3rd column is I(2w) */
-                        if(ui->comboBox_DetSignal->currentIndex() == 2){
-                            double data2W = Readed_Row.at(3).toDouble();
-
-                            /* use the logarithm with I(2W) */
-                            if(ui->checkBox_applyLogarithm->isChecked()){
-                                data2W = log10(data2W);
-                            }
-                            /* Add the signal to the plot */
-                            signal.append(data2W);
-                        }
-
-                        /* 1st column is I(DC) */
-                        if(ui->comboBox_DetSignal->currentIndex() == 3){
-                            signal.append(Readed_Row.at(1).toDouble());
-                        }
+                    /* 1st column is I(DC) */
+                    if(ui->comboBox_DetSignal->currentIndex() == 3){
+                        signal.append(Readed_Row.at(1).toDouble());
                     }
                 }
             }
-
-            /* Rows of 3D plot */
-            QSurfaceDataRow *newRow = new QSurfaceDataRow(wavelengths.length());
-            QSurfaceDataRow *newRow_norm = new QSurfaceDataRow(wavelengths.length());
-
-            /* get the data for the 3D plot */
-            for (int j = 0; j < wavelengths.length(); j++)
-                (*newRow)[j].setPosition(QVector3D(wavelengths.at(j), signal.at(j),
-                                                   QString(concentrationsList.at(ui->comboBox_Substance->currentIndex())).toDouble()));
-
-            /* All information for the 3D plot */
-            *data3D << newRow;
-
-            /* get the data for the 3D plot */
-            for (int j = 0; j < wavelengths.length(); j++)
-                (*newRow_norm)[j].setPosition(QVector3D(wavelengths.at(j), signal.at(j)/(data3D->at(0)->at(j).y()),
-                                                   QString(concentrationsList.at(ui->comboBox_Substance->currentIndex())).toDouble()));
-
-            /* All information for the 3D plot */
-            *data3DNormalized << newRow_norm;
-
-            /* Restart the vector */
-            concentrationsList.clear();
         }
+
+        /* Rows of 3D plot */
+        QSurfaceDataRow *newRow = new QSurfaceDataRow(wavelengths.length());
+        QSurfaceDataRow *newRow_norm = new QSurfaceDataRow(wavelengths.length());
+
+        /* get the data for the 3D plot */
+        for (int j = 0; j < wavelengths.length(); j++)
+            (*newRow)[j].setPosition(QVector3D(wavelengths.at(j), signal.at(j),
+                                               QString(concentrationsList.at(ui->comboBox_Substance->currentIndex())).toDouble()));
+
+        /* All information for the 3D plot */
+        *data3D << newRow;
+
+        /* get the data for the 3D plot */
+        for (int j = 0; j < wavelengths.length(); j++)
+            (*newRow_norm)[j].setPosition(QVector3D(wavelengths.at(j), signal.at(j)/(data3D->at(0)->at(j).y()),
+                                                    QString(concentrationsList.at(ui->comboBox_Substance->currentIndex())).toDouble()));
+
+        /* All information for the 3D plot */
+        *data3DNormalized << newRow_norm;
+
+        /* Fill the lists of calibration or validation data */
+        if(FFTFilesCalibration.indexOf(allFiles.at(index))!=-1){
+            CalConcentrations.append(QString(concentrationsList.at(ui->comboBox_Substance->currentIndex())).toDouble());
+        }
+        else if(FFTFilesValidation.indexOf(allFiles.at(index))!=-1){
+            ValConcentrations.append(QString(concentrationsList.at(ui->comboBox_Substance->currentIndex())).toDouble());
+        } //else, the file was removed
+
+        /* Restart the vector */
+        concentrationsList.clear();
     }
 }
 
@@ -996,7 +997,7 @@ void selectAnalizeData::showContextMenu(const QPoint &pos)
 void selectAnalizeData::activateLogarithm(void){
 
     /* Select or deselect the option automatically */
-   ui->comboBox_DetSignal->currentIndex() == 2 ? ui->checkBox_applyLogarithm->setChecked(true) : ui->checkBox_applyLogarithm->setChecked(false);
+    ui->comboBox_DetSignal->currentIndex() == 2 ? ui->checkBox_applyLogarithm->setChecked(true) : ui->checkBox_applyLogarithm->setChecked(false);
 
 }
 
@@ -1005,10 +1006,119 @@ void selectAnalizeData::activateLogarithm(void){
  */
 void selectAnalizeData::analizeData(void){
 
-    readFiles();
+    /* Get the data from files */
+    if(!FFTFilesCalibration.isEmpty()){
 
+        /* resize vectors */
+        wavelengths.resize(0);
+        signal.resize(0);
+        data3D = new QSurfaceDataArray;
+        data3DNormalized = new QSurfaceDataArray;
+
+        /* Create Folder to store the data analysis results */
+        QDir(pathDataM).mkdir("Data_Analysis");
+
+        /* Read File data */
+        readFiles();
+    }
+
+    /* Write calibration and validation files */
+    writeCalValFiles();
+
+    /* Close the dialog */
     accept();
 
+}
+
+/**
+ * @brief Create the files with the calibration and validation data
+ */
+void selectAnalizeData::writeCalValFiles(void){
+
+    /* Create the path for the files */
+    QString pathCal(pathDataM + "/Data_Analysis/" + "/Cal_Data.cal");
+    QString pathVal(pathDataM + "/Data_Analysis/" + "/Val_Data.val");
+
+    /* Save the calibration data to files */
+    FILE *Calfile = fopen(pathCal.toLatin1().data(), "wt");
+    FILE *Valfile = fopen(pathVal.toLatin1().data(), "wt");
+
+    /* Check file handle */
+    if (nullptr == Calfile || nullptr == Valfile){
+        return;
+    }
+
+    /* Write some useful data on file */
+    fprintf(Calfile, "CALIBRATION DATA \n");
+    fprintf(Calfile, "Substance: %s \n", ui->comboBox_Substance->currentText().toLatin1().data());
+    fprintf(Calfile, "Determination Signal: %s \n", ui->comboBox_DetSignal->currentText().toLatin1().data());
+    fprintf(Calfile, "Minimum Wavelength: %.2f \n", ui->doubleSpinBox_minWavel->value());
+    fprintf(Calfile, "Maximum Wavelength: %.2f \n", ui->doubleSpinBox_maxWavel->value());
+    fprintf(Calfile, "Logarithm: %i \n\n", ui->checkBox_applyLogarithm->isChecked());
+
+    /* Write some useful data on file */
+    fprintf(Valfile, "VALIDATION DATA \n");
+    fprintf(Valfile, "Substance: %s \n", ui->comboBox_Substance->currentText().toLatin1().data());
+    fprintf(Valfile, "Determination Signal: %s \n", ui->comboBox_DetSignal->currentText().toLatin1().data());
+    fprintf(Valfile, "Minimum Wavelength: %.2f \n", ui->doubleSpinBox_minWavel->value());
+    fprintf(Valfile, "Maximum Wavelength: %.2f \n", ui->doubleSpinBox_maxWavel->value());
+    fprintf(Valfile, "Logarithm: %i \n\n", ui->checkBox_applyLogarithm->isChecked());
+
+    /* Iterate through the data */
+    fprintf(Calfile, "Concentrations:\t");
+    for(int j = 0; j < CalConcentrations.length(); j++){
+        fprintf(Calfile, "%.2f\t", CalConcentrations.at(j));
+    }
+
+    fprintf(Calfile, "\n");
+    if(ui->checkBox_applyLogarithm->isChecked()){
+        fprintf(Calfile, "\nWavelength:\tIntensity ln(%s): \n\n", ui->comboBox_DetSignal->currentText().toLatin1().data());
+    }else{
+        fprintf(Calfile, "\nWavelength:\tIntensity %s: \n\n", ui->comboBox_DetSignal->currentText().toLatin1().data());
+    }
+
+    fprintf(Valfile, "Concentrations: \t ");
+    for(int j = 0; j < ValConcentrations.length(); j++){
+        fprintf(Valfile, "%.2f\t", ValConcentrations.at(j));
+    }
+
+    fprintf(Calfile, "\n");
+    if(ui->checkBox_applyLogarithm->isChecked()){
+        fprintf(Valfile, "\nWavelength:\tIntensity ln(%s): \n\n", ui->comboBox_DetSignal->currentText().toLatin1().data());
+    }else{
+        fprintf(Valfile, "\nWavelength:\tIntensity %s: \n\n", ui->comboBox_DetSignal->currentText().toLatin1().data());
+    }
+
+    for(int m = 0; m < wavelengths.length(); m++){
+
+        fprintf(Calfile, "%.4f\t", wavelengths.at(m));
+        fprintf(Valfile, "%.4f\t", wavelengths.at(m));
+
+        for(int k = 0; k < (FFTFilesCalibration.length() + FFTFilesValidation.length()); k++){
+
+            if(CalConcentrations.indexOf(data3D->at(k)->at(m).z()) != -1){
+                fprintf(Calfile, "%.4f\t", data3D->at(k)->at(m).y());
+            }
+
+            if(ValConcentrations.indexOf(data3D->at(k)->at(m).z()) != -1){
+
+                fprintf(Valfile, "%.4f\t", data3D->at(k)->at(m).y());
+            }
+        }
+
+        fprintf(Calfile, "\n");
+        fprintf(Valfile, "\n");
+
+    }
+
+
+    /* Close the file */
+    fclose(Calfile);
+    fclose(Valfile);
+
+    /* Free pointer */
+    Calfile = nullptr;
+    Valfile = nullptr;
 }
 
 /**

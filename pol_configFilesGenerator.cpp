@@ -296,44 +296,96 @@ void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFil
                 /* If glucose is active call it Concentration 1 or C1 */
                 if(activeSubstances.at(0)){
 
-                    /* Add C1 to the file name */
-                    line.append(QString::number(GlucoseConcentration.at(j)) + "C1_");
+                    /* is there a float presicion? */
+                    double num = (*std::max_element(GlucoseConcentration.begin(), GlucoseConcentration.end()))/(NConcentrations-1);
+                    int num2 = (int)num;
 
+                    if(num - num2 == 0){
+                        /* Add C1 to the file name */
+                        line.append(QString::number(GlucoseConcentration.at(j)) + "C1_");
+                    }else{
+                        line.append(QString::number(GlucoseConcentration.at(j), 'f', 3) + "C1_");
+                    }
                 }
 
                 /* If Impurity 1 is active call it Concentration 2 or C2 */
                 if(activeSubstances.at(1)){
 
-                    /* Add C2 to the file name */
-                    line.append(QString::number(Impurity1Concentration.at(j)) + "C2_");
+                    /* is there a float presicion? */
+                    double num = (*std::max_element(Impurity1Concentration.begin(), Impurity1Concentration.end()))/(NConcentrations-1);
+                    int num2 = (int)num;
+
+                    if(num - num2 == 0){
+                        /* Add C2 to the file name */
+                        line.append(QString::number(Impurity1Concentration.at(j)) + "C2_");
+                    }else{
+                        /* Add C2 to the file name */
+                        line.append(QString::number(Impurity1Concentration.at(j), 'f', 3) + "C2_");
+                    }
                 }
 
                 /* If Impurity 2 is active call it Concentration 3 or C3 */
                 if(activeSubstances.at(2)){
 
-                    /* Add C3 to the file name */
-                    line.append(QString::number(Impurity2Concentration.at(j)) + "C3_");
+                    /* is there a float presicion? */
+                    double num = (*std::max_element(Impurity2Concentration.begin(), Impurity2Concentration.end()))/(NConcentrations-1);
+                    int num2 = (int)num;
+
+                    if(num - num2 == 0){
+                        /* Add C3 to the file name */
+                        line.append(QString::number(Impurity2Concentration.at(j)) + "C3_");
+                    }else{
+                        /* Add C3 to the file name */
+                        line.append(QString::number(Impurity2Concentration.at(j), 'f', 3) + "C3_");
+                    }
                 }
 
                 /* If Impurity 3 is active call it Concentration 4 or C4 */
                 if(activeSubstances.at(3)){
 
-                    /* Add C3 to the file name */
-                    line.append(QString::number(Impurity3Concentration.at(j)) + "C4_");
+                    /* is there a float presicion? */
+                    double num = (*std::max_element(Impurity3Concentration.begin(), Impurity3Concentration.end()))/(NConcentrations-1);
+                    int num2 = (int)num;
+
+                    if(num - num2 == 0){
+                        /* Add C4 to the file name */
+                        line.append(QString::number(Impurity3Concentration.at(j)) + "C4_");
+                    }else{
+                        /* Add C4 to the file name */
+                        line.append(QString::number(Impurity3Concentration.at(j), 'f', 3) + "C4_");
+                    }
                 }
 
                 /* If Impurity 4 is active call it Concentration 5 or C5 */
                 if(activeSubstances.at(4)){
 
-                    /* Add C3 to the file name */
-                    line.append(QString::number(Impurity4Concentration.at(j)) + "C5_");
+                    /* is there a float presicion? */
+                    double num = (*std::max_element(Impurity4Concentration.begin(), Impurity4Concentration.end()))/(NConcentrations-1);
+                    int num2 = (int)num;
+
+                    if(num - num2 == 0){
+                        /* Add C5 to the file name */
+                        line.append(QString::number(Impurity4Concentration.at(j)) + "C5_");
+                    }else{
+                        /* Add C5 to the file name */
+                        line.append(QString::number(Impurity4Concentration.at(j), 'f', 3) + "C5_");
+                    }
                 }
 
                 /* If Impurity 5 is active call it Concentration 6 or C6 */
                 if(activeSubstances.at(5)){
 
-                    /* Add C3 to the file name */
-                    line.append(QString::number(Impurity5Concentration.at(j)) + "C6_");
+                    /* is there a float presicion? */
+                    double num = (*std::max_element(Impurity5Concentration.begin(), Impurity5Concentration.end()))/(NConcentrations-1);
+                    int num2 = (int)num;
+
+                    if(num - num2 == 0){
+                        /* Add C6 to the file name */
+                        line.append(QString::number(Impurity5Concentration.at(j)) + "C6_");
+                    }else{
+                        /* Add C6 to the file name */
+                        line.append(QString::number(Impurity5Concentration.at(j), 'f', 3) + "C6_");
+                    }
                 }
             }
 

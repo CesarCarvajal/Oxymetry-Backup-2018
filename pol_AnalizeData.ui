@@ -1027,17 +1027,17 @@
               </property>
               <item>
                <property name="text">
-                <string>Ratio I(ω)/I(2ω)</string>
+                <string>Ratio I(w)/I(2w)</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>I(ω)</string>
+                <string>I(w)</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>I(2ω)</string>
+                <string>I(2w)</string>
                </property>
               </item>
               <item>
