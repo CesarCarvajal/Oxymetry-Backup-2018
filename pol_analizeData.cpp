@@ -131,6 +131,9 @@ selectAnalizeData::selectAnalizeData(QWidget *parent) :
     data3D = new QSurfaceDataArray;
     data3DNormalized = new QSurfaceDataArray;
 
+    /* overall factor for plotting purposes */
+    factorConcentration = 1;
+
 }
 
 /**
@@ -397,6 +400,8 @@ void selectAnalizeData::readFiles(void)
     allFiles.append(FFTFilesCalibration);
     allFiles.append(FFTFilesValidation);
 
+    factorConcentration = 1;
+
     /* Create vectors with the concentrations for validation and calibration */
     CalConcentrations.resize(0);
     ValConcentrations.resize(0);
@@ -511,9 +516,9 @@ void selectAnalizeData::readFiles(void)
 
         /* get the data for the 3D plot */
         for (int j = 0; j < wavelengths.length(); j++)
+
             (*newRow)[j].setPosition(QVector3D(wavelengths.at(j), signal.at(j),
                                                QString(concentrationsList.at(ui->comboBox_Substance->currentIndex())).toDouble()));
-
         /* All information for the 3D plot */
         *data3D << newRow;
 
@@ -524,6 +529,7 @@ void selectAnalizeData::readFiles(void)
 
         /* All information for the 3D plot */
         *data3DNormalized << newRow_norm;
+
 
         /* Fill the lists of calibration or validation data */
         if(FFTFilesCalibration.indexOf(allFiles.at(index))!=-1){
@@ -536,6 +542,48 @@ void selectAnalizeData::readFiles(void)
         /* Restart the vector */
         concentrationsList.clear();
     }
+
+    /* Get the maximum concentration and check if its not aorund 100 to 1000, problems with Qt */
+    if(data3D->last()->at(0).z() <= 1){
+
+        /* If the added impurity concentration is less than 1, then multiply by 1000, units of x10^-3 */
+        factorConcentration = 1000;
+
+    }else if(data3D->last()->at(0).z() > 1 && data3D->last()->at(0).z() < 10){
+
+        /* If the added impurity concentration is less than 1, then multiply by 100, units of x10^-2 */
+        factorConcentration = 100;
+
+    }else if(data3D->last()->at(0).z() > 10 && data3D->last()->at(0).z() < 100){
+
+        /* If the added impurity concentration is less than 100, then multiply by 100, units of x10^-1 */
+        factorConcentration = 10;
+    }
+
+    /* Was it necessary to adjust the plot units? */
+    if(factorConcentration > 1){
+
+        /* Then replace the very small concentrations for the same multiplied by the plot factor */
+        for(int k = 0; k < (FFTFilesCalibration.length() + FFTFilesValidation.length()); k++){
+
+            /* Create new rows */
+            QSurfaceDataRow *newRow = new QSurfaceDataRow(wavelengths.length());
+            QSurfaceDataRow *newRow_norm = new QSurfaceDataRow(wavelengths.length());
+
+            /* replace the rows in the data */
+            for(int m = 0; m < wavelengths.length(); m++){
+                (*newRow)[m].setPosition(QVector3D(data3D->at(k)->at(m).x(), data3D->at(k)->at(m).y(), data3D->at(k)->at(m).z()*factorConcentration));
+            }
+            data3D->replace(k, newRow);
+
+            /* replace the rows in the data */
+            for(int m = 0; m < wavelengths.length(); m++){
+                (*newRow_norm)[m].setPosition(QVector3D(data3DNormalized ->at(k)->at(m).x(), data3DNormalized ->at(k)->at(m).y(), data3DNormalized->at(k)->at(m).z()*factorConcentration));
+            }
+            data3DNormalized ->replace(k, newRow_norm);
+        }
+    }
+
 }
 
 /**
@@ -1064,12 +1112,13 @@ void selectAnalizeData::writeCalValFiles(void){
     fprintf(Valfile, "Maximum Wavelength: %.2f \n", ui->doubleSpinBox_maxWavel->value());
     fprintf(Valfile, "Logarithm: %i \n\n", ui->checkBox_applyLogarithm->isChecked());
 
-    /* Iterate through the data */
+    /* Write concentrations for the data for Cal File */
     fprintf(Calfile, "Concentrations:\t");
     for(int j = 0; j < CalConcentrations.length(); j++){
         fprintf(Calfile, "%.2f\t", CalConcentrations.at(j));
     }
 
+    /* Write space and wavelength titles for Cal File */
     fprintf(Calfile, "\n");
     if(ui->checkBox_applyLogarithm->isChecked()){
         fprintf(Calfile, "\nWavelength:\tIntensity ln(%s): \n\n", ui->comboBox_DetSignal->currentText().toLatin1().data());
@@ -1077,11 +1126,12 @@ void selectAnalizeData::writeCalValFiles(void){
         fprintf(Calfile, "\nWavelength:\tIntensity %s: \n\n", ui->comboBox_DetSignal->currentText().toLatin1().data());
     }
 
-    fprintf(Valfile, "Concentrations: \t ");
+    /* Write concentrations for the data for Val File */
+    fprintf(Valfile, "Concentrations:\t");
     for(int j = 0; j < ValConcentrations.length(); j++){
         fprintf(Valfile, "%.2f\t", ValConcentrations.at(j));
     }
-
+    /* Write space and wavelength titles for Cal File */
     fprintf(Calfile, "\n");
     if(ui->checkBox_applyLogarithm->isChecked()){
         fprintf(Valfile, "\nWavelength:\tIntensity ln(%s): \n\n", ui->comboBox_DetSignal->currentText().toLatin1().data());
@@ -1089,20 +1139,39 @@ void selectAnalizeData::writeCalValFiles(void){
         fprintf(Valfile, "\nWavelength:\tIntensity %s: \n\n", ui->comboBox_DetSignal->currentText().toLatin1().data());
     }
 
+    /* Iterate through the rows of the data */
     for(int m = 0; m < wavelengths.length(); m++){
 
         fprintf(Calfile, "%.4f\t", wavelengths.at(m));
         fprintf(Valfile, "%.4f\t", wavelengths.at(m));
 
+        /* Iterate through the (x, y, z) positions to get the information */
         for(int k = 0; k < (FFTFilesCalibration.length() + FFTFilesValidation.length()); k++){
 
-            if(CalConcentrations.indexOf(data3D->at(k)->at(m).z()) != -1){
-                fprintf(Calfile, "%.4f\t", data3D->at(k)->at(m).y());
+            /* Get the actual concentration and intensity for each wavelength */
+            double concentration =data3D->at(k)->at(0).z()/factorConcentration;
+            double intensity =  data3D->at(k)->at(m).y();
+
+            /* Because QT can not handle comparisson between double, then this long process should be done */
+            for(int in = 0; in < CalConcentrations.length(); in++){
+                /* Is the actual concentration in the calibration concentrations vector? */
+                double compare = (CalConcentrations.at(in) - concentration) < 0 ? (CalConcentrations.at(in) - concentration)*(-1):(CalConcentrations.at(in) - concentration);
+                if(compare < 0.0001){
+                    /* Added to the calibration file */
+                    fprintf(Calfile, "%.4f\t", intensity);
+                    break;
+                }
             }
 
-            if(ValConcentrations.indexOf(data3D->at(k)->at(m).z()) != -1){
-
-                fprintf(Valfile, "%.4f\t", data3D->at(k)->at(m).y());
+            /* Because QT can not handle comparisson between double, then this long process should be done */
+            for(int in = 0; in < ValConcentrations.length(); in++){
+                /* Is the actual concentration in the validation concentrations vector? */
+                double compare = (ValConcentrations.at(in) - concentration) < 0 ? (ValConcentrations.at(in) - concentration)*(-1):(ValConcentrations.at(in) - concentration);
+                if(compare < 0.0001){
+                    /* Added to the validation file */
+                    fprintf(Valfile, "%.4f\t", intensity);
+                    break;
+                }
             }
         }
 
@@ -1111,12 +1180,11 @@ void selectAnalizeData::writeCalValFiles(void){
 
     }
 
-
-    /* Close the file */
+    /* Close the files */
     fclose(Calfile);
     fclose(Valfile);
 
-    /* Free pointer */
+    /* Free pointers */
     Calfile = nullptr;
     Valfile = nullptr;
 }

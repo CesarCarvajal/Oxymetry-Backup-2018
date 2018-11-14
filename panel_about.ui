@@ -163,12 +163,23 @@
       <bool>true</bool>
      </property>
      <property name="plainText">
-      <string>Version 0.8: (01.11.2018)
+      <string>Version 0.8: (14.11.2018)
 + The box Spectrometer contains all the settings and information of the selected spectrometer from the tab preview. This options become modifiable during the Calibration phase.
 + The tube Temperature will display the actual setup temperature measured with the Teensy card. When doing click on the label, the interface will show the temperature plot along the time.
 + The table &quot;Measurement Profile&quot; will show the measured concentrations and their measurement time. Also, the corresponding substances are displayed at the bottom.
-+ The 4 plots in the tab Live Data shows the current measured data of raw signal, the ratio, the FFt profile and the live signals average. 
-+ 
++ The 4 plots in the tab Live Data show the current measured data of raw signal, the ratio, the FFt profile and the live signals average. 
++ The 2 Plots in the tab Setup Status show the current temperature fo the setup and the measured FFT peaks.
++  The 3 plots in the tab Measurement Results show the 3D plot of the spectra, the normalized spectra and the prediction curve.
++ Load the folder containing the .FFT files measured with the setup.
++ Choose a repetition or a set of calibration or validation data manually with the mouse by clickling on the items, or by using the fast options in the check boxes.
++ Select the substance and other options as it will be for the predictions.
++ Check the 3D plots for the loaded information
++ Check the folder Analyze Data in the folder FFT Data of the measurements for the files Cal_Data.cal and Val_Data.val. 
++ The interval mode allows the user to select a specific time for the measurents, independent of the pumps.
++ The crossing mode allows the measurements of matrix of concentrations, for example 6 concentrations repeated 6 times and mixed randomly for a total of 36 combined measurements.
++ This file measurement summary is saved at the end of the measurements and contains a summary of the averaged signals during the measurements, as well as the temperature recorded.
+- FFT Plot was removed from the main interface and added to another tab.
++ Automatic adjustement of axis for 3D plots.
 
 Version 0.7.1: (30.07.2018)
 + Configuration Files with exclusive extension .csar

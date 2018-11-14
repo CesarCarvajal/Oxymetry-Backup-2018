@@ -123,8 +123,19 @@ The user interface will provide some GUI elements when they are required accordi
 + The box Spectrometer contains all the settings and information of the selected spectrometer from the tab preview. This options become modifiable during the Calibration phase.
 + The tube Temperature will display the actual setup temperature measured with the Teensy card. When doing click on the label, the interface will show the temperature plot along the time.
 + The table &quot;Measurement Profile&quot; will show the measured concentrations and their measurement time. Also, the corresponding substances are displayed at the bottom.
-+ The 4 plots in the tab Live Data shows the current measured data of raw signal, the ratio, the FFt profile and the live signals average. 
-+ 
++ The 4 plots in the tab Live Data show the current measured data of raw signal, the ratio, the FFt profile and the live signals average. 
++ The 2 Plots in the tab Setup Status show the current temperature fo the setup and the measured FFT peaks.
++  The 3 plots in the tab Measurement Results show the 3D plot of the spectra, the normalized spectra and the prediction curve.
+
+1.6-&gt; The button Analize Data:
+
++ Load the folder containing the .FFT files measured with the setup.
++ Choose a repetition or a set of calibration or validation data manually with the mouse by clickling on the items, or by using the fast options in the check boxes.
++ Select the substance and other options as it will be for the predictions.
+
++ Check the 3D plots for the loaded information
++ Check the folder Analyze Data in the folder FFT Data of the measurements for the files Cal_Data.cal and Val_Data.val. 
+
 
 -&gt;  2. CONFIGURATION
 
@@ -172,7 +183,18 @@ You could save the Raw Data, which means the file that is generated directly fro
 
 The amplitudes of the components DC, W, 2W and the ratio W/2W.Also their corresponding wavelengths.
 
+2.9 -&gt; Overall
 
++ The GUI now shows the available space in disk.
++ Now the created files for the pumps include the name of the used substances, as well as the configuration file.
+
+2.10 -&gt; Interval Mode:
+
++ This mode allows the user to select a specific time for the measurents, independent of the pumps.
+
+2.11 -&gt; Crossing Mode:
+
++ This mode allows the measurements of matrix of cocnentrations, for example 6 concentrations repeated 6 times and mixed randomly for a total of 36 combined measurements.
 
 -&gt;  3. CALIBRATION
 
@@ -230,7 +252,9 @@ It can be seen for approximatelly 7 seconds. This time is short in order to also
 
 There is an information bar, which will inform about the current process of the interface. Also there is a progress bar which will show on which plot the interface is working during the cycles.
 
+3.11 -&gt; How can i normalize the counts?
 
+Simply check the box for normalize counts.
 
 -&gt;  4. MEASUREMENTS
 
@@ -258,6 +282,10 @@ No. This changes are only allowed during the calibration phase. This is to preve
 4.5 -&gt; What can I see during the measurements?
 
 During this phase, the raw signal is shown for a longer period of time. Then the FFT is performed when the time interval is complete. This is to avoid overloading of the system during the long term measurements. A history of the average signals can be seen in the plot &quot;Average Signal&quot;. Also the plot of &quot;Prediction&quot; will be loaded by demand, which will show after each time interval the correspoding result for the linear regression algorithm.
+
+4.6 -&gt; What is the measurement summary?
+
+This files is saved at the end of the measurements and contains a summary of the averaged signals during the measurements, as well as the temperature recorded.
 
 
 

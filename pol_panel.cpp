@@ -4809,8 +4809,18 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
 
         PolPlotter->surface_norm->axisY()->setTitle("Normalized " + DataSelector->ui->comboBox_DetSignal->currentText());
 
-        PolPlotter->surface->axisZ()->setTitle(DataSelector->ui->comboBox_Substance->currentText().remove(0,3) + QStringLiteral(" Concentration (mg/dl)"));
-        PolPlotter->surface_norm->axisZ()->setTitle(DataSelector->ui->comboBox_Substance->currentText().remove(0,3) + QStringLiteral(" Concentration (mg/dl)"));
+        QString concentrationAxis = " Concentration (mg/dl)";
+
+        if(DataSelector->factorConcentration == 1000){
+            concentrationAxis = " Concentration x10^-3 (mg/dl)";
+        }else if(DataSelector->factorConcentration == 100){
+            concentrationAxis = " Concentration x10^-2 (mg/dl)";
+        } if(DataSelector->factorConcentration == 10){
+            concentrationAxis = " Concentration x10^-1 (mg/dl)";
+        }
+
+        PolPlotter->surface->axisZ()->setTitle(DataSelector->ui->comboBox_Substance->currentText().remove(0,3) + concentrationAxis);
+        PolPlotter->surface_norm->axisZ()->setTitle(DataSelector->ui->comboBox_Substance->currentText().remove(0,3) + concentrationAxis);
 
         /* Configure the 3D plot */
         PolPlotter->adjust3DPlot();

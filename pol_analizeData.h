@@ -65,6 +65,9 @@ public:
     /* window canceled */
     bool canceled;
 
+    /* Overall factor for plotting purposes */
+    int factorConcentration;
+
 private:
 
     /* Own signal mapper for buttons and labels in configuration window */

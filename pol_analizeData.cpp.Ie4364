@@ -1,0 +1,1135 @@
+/*
+ * Hemoxymetrie in non-hemolyzed human whole blood
+ * Copyright (C) 2016-2017 Benjamin Redmer
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/* External includes */
+#include <QApplication>
+#include <QDialog>
+#include <QWidget>
+#include <QFileDialog>
+#include <QDir>
+#include <QLineEdit>
+#include <QList>
+#include <QTimer>
+#include <QDateTime>
+#include <QElapsedTimer>
+#include <QFile>
+#include <QMessageBox>
+#include <QCollator>
+#include <QMenu>
+
+/* Internal includes */
+#include "application.h"
+#include "messages.h"
+#include "spectrometer.h"
+#include "timer.h"
+#include "pol_analizeData.h"
+#include "ui_pol_AnalizeData.h"
+
+/*
+ * Global variables
+ */
+extern Spectrometer** ptrSpectrometers;
+extern unsigned int m_NrDevices;
+
+/**
+ * @brief Constructor of 'Select Analize Data' class
+ * @param[in] parent Parent widget
+ */
+selectAnalizeData::selectAnalizeData(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::selectAnalizeData)
+{
+    /* Set up user interface */
+    ui->setupUi(this);
+
+    /* Create signal mapper for configuration window */
+    signalMapperC = new QSignalMapper(this);
+
+    /* Connect Buttons */
+    connect(ui->pushButton_select, SIGNAL(clicked()), this, SLOT(allowSelectPath()));
+    connect(ui->pushButton_cancel, SIGNAL(clicked()), this, SLOT(cancel()));
+    connect(ui->pushButton_Analize, SIGNAL(clicked()), this, SLOT(analizeData()));
+    connect(ui->spinBox_repselec, SIGNAL(valueChanged(int)), this, SLOT(updateSelectionList()));
+    connect(ui->spinBox_calSet, SIGNAL(valueChanged(int)), this, SLOT(setDataSets()));
+    connect(ui->spinBox_ValSet, SIGNAL(valueChanged(int)), this, SLOT(setDataSets()));
+    connect(ui->spinBox_stepsSelec, SIGNAL(valueChanged(int)), this, SLOT(selectFileSteps()));
+    connect(ui->comboBox_DetSignal, SIGNAL(currentIndexChanged(int)), this, SLOT(activateLogarithm()));
+
+    /* Connect signals */
+    connect(ui->radiobutton_selectData, SIGNAL(clicked()), signalMapperC, SLOT(map()));
+    connect(ui->radiobutton_selectSet, SIGNAL(clicked()), signalMapperC, SLOT(map()));
+    connect(ui->listWidget_Calibration, SIGNAL(itemClicked(QListWidgetItem*)), signalMapperC, SLOT(map()));
+    connect(ui->listWidget_Calibration, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
+    connect(ui->listWidget_Validation, SIGNAL(itemClicked(QListWidgetItem*)), signalMapperC, SLOT(map()));
+    connect(ui->label_restart, SIGNAL(clicked()), signalMapperC, SLOT(map()));
+    connect(ui->label_switch, SIGNAL(clicked()), signalMapperC, SLOT(map()));
+    connect(ui->checkBox_RandomSort, SIGNAL(clicked()), signalMapperC, SLOT(map()));
+    connect(ui->checkBox_stepsSelec, SIGNAL(clicked()), signalMapperC, SLOT(map()));
+    connect(ui->checkBox_SelecManual, SIGNAL(clicked()), signalMapperC, SLOT(map()));
+    connect(ui->checkBox_applyLogarithm, SIGNAL(clicked()), signalMapperC, SLOT(map()));
+
+    /* Signal mapper */
+    signalMapperC->setMapping(ui->radiobutton_selectData, ui->radiobutton_selectData);
+    signalMapperC->setMapping(ui->radiobutton_selectSet, ui->radiobutton_selectSet);
+    signalMapperC->setMapping(ui->listWidget_Calibration, ui->listWidget_Calibration);
+    signalMapperC->setMapping(ui->listWidget_Validation, ui->listWidget_Validation);
+    signalMapperC->setMapping(ui->label_restart, ui->label_restart);
+    signalMapperC->setMapping(ui->label_switch, ui->label_switch);
+    signalMapperC->setMapping(ui->checkBox_RandomSort, ui->checkBox_RandomSort);
+    signalMapperC->setMapping(ui->checkBox_stepsSelec, ui->checkBox_stepsSelec);
+    signalMapperC->setMapping(ui->checkBox_SelecManual, ui->checkBox_SelecManual);
+    signalMapperC->setMapping(ui->checkBox_applyLogarithm, ui->checkBox_applyLogarithm);
+
+    /* Connect signal mapper action */
+    connect(signalMapperC, SIGNAL(mapped(QWidget *)), this, SLOT(handleClickEvent(QWidget *)));
+
+    /* Set window flags */
+    this->setWindowFlags(Qt::Window | Qt::WindowMaximizeButtonHint | Qt::WindowCloseButtonHint);
+
+    /* Set restart label color */
+    ui->label_restart->setStyleSheet("QLabel { color: blue; }");
+    ui->label_switch->setStyleSheet("QLabel { color: blue; }");
+
+    /* Set repetitions in 0 */
+    repetitions = 0;
+
+    /* set maximum repetitions */
+    ui->spinBox_repselec->setMaximum(1);
+    ui->spinBox_calSet->setMaximum(1);
+    ui->spinBox_ValSet->setMaximum(1);
+
+    /* Assume no automatic load of data */
+    automaticLoading = false;
+
+    /* Hide items */
+    ui->label_repselec->hide();
+    ui->spinBox_repselec->hide();
+    ui->checkBox_RandomSort->hide();
+    ui->checkBox_stepsSelec->hide();
+    ui->spinBox_stepsSelec->hide();
+    ui->checkBox_SelecManual->hide();
+
+    /* not canceled */
+    canceled = false;
+
+    /* Create the data array for the 3D spectra plot */
+    data3D = new QSurfaceDataArray;
+    data3DNormalized = new QSurfaceDataArray;
+
+}
+
+/**
+ * @brief Adjust the automatic loading of the data
+ */
+void selectAnalizeData::automaticAnalize(QString PathAuto){
+
+    /* Set the automatic loading on */
+    automaticLoading = true;
+
+    /* Give the path for the files */
+    pathDataM = PathAuto;
+
+    /* Select the path from the measured data */
+    selectPath();
+}
+
+/**
+ * @brief Organize files in steps
+ */
+void selectAnalizeData::selectFileSteps(void){
+
+    /*Set all as calibration */
+    FFTFilesCalibration.append(FFTFilesValidation);
+    FFTFilesValidation.clear();
+
+    /* Sort file names */
+    FFTFilesCalibration = sortFiles(FFTFilesCalibration);
+
+    /* Create temporal lists */
+    QStringList FFTFilesCalibration_Temp, FFTFilesValidation_Temp;
+
+    /* For each position, randomly shuffle the vector and get the first position */
+    for(int i = 0; i < FFTFilesCalibration.size(); i++){
+
+        /* select the right positions */
+        if(i % ui->spinBox_stepsSelec->value() == 0){
+
+            /* Get the validation values */
+            FFTFilesValidation_Temp.append(FFTFilesCalibration.at(i));
+        }else{
+
+            /* Get the calibration values */
+            FFTFilesCalibration_Temp.append(FFTFilesCalibration.at(i));
+        }
+    }
+
+    /* Save the shuffle values */
+    FFTFilesValidation.append(FFTFilesValidation_Temp);
+    FFTFilesCalibration.clear();
+    FFTFilesCalibration.append(FFTFilesCalibration_Temp);
+
+    /* Clean Lists */
+    cleanList();
+}
+
+/**
+ * @brief Update selection list of files according to the selected repetition if there are some
+ */
+void selectAnalizeData::updateSelectionList(void){
+
+    /* Empty vector */
+    FFTFilesCalibration.clear();
+    FFTFilesValidation.clear();
+
+    /* Clean Lists */
+    cleanList();
+
+    /* Add the FFT files to the list */
+    FFTFilesCalibration = Dir.entryList(QStringList() << "*R"+QString::number(ui->spinBox_repselec->value())
+                                        +".FFT",QDir::Files | QDir::NoSymLinks, QDir::Time | QDir::Reversed);
+
+    /* Add files to the list */
+    addFilesToList();
+
+    /* Set manual change */
+    ui->checkBox_SelecManual->setChecked(true);
+    ui->checkBox_stepsSelec->setChecked(false);
+    ui->checkBox_RandomSort->setChecked(false);
+    ui->spinBox_stepsSelec->setEnabled(false);
+}
+
+/**
+ * @brief Allow to the user to select path for files
+ */
+void selectAnalizeData::allowSelectPath(void)
+{
+    /* Allow the loading by hand */
+    automaticLoading = false;
+
+    /* Allow to select a path */
+    selectPath();
+}
+
+/**
+ * @brief Select path for files
+ */
+void selectAnalizeData::selectPath(void)
+{
+    /* The user wants to analize data */
+    if(!automaticLoading){
+
+        /* Get path of configuration file */
+        pathDataM = QFileDialog::getExistingDirectory(this, tr("Open FFT Files Directory"), "", QFileDialog::ShowDirsOnly
+                                                      | QFileDialog::DontResolveSymlinks);
+    }
+
+    /* Is there a path? */
+    if(!pathDataM.isEmpty()){
+
+        /* Open the Folder */
+        Dir = QDir(pathDataM);
+
+        /* Check that it's not an empty folder */
+        if(Dir.isEmpty()){
+
+            /* Show message if its empty */
+            showCritical("The folder is empty or doesn't exist anymore, please select a folder with FFT data", "");
+            return;
+        }
+
+        /* Get the path */
+        dataPath = QFileInfo(pathDataM);
+
+        /* restart repetitions */
+        repetitions = 0;
+
+        /* Empty vector */
+        FFTFilesCalibration.clear();
+        FFTFilesValidation.clear();
+
+        /* Disable button to analyze */
+        ui->pushButton_Analize->setEnabled(false);
+
+        /* Clean Lists */
+        cleanList();
+
+        /* Find if there are repetitions */
+        findRepetitions();
+
+        /* If there are repetitions */
+        if(repetitions > 0){
+            /* Add the FFT files to the list */
+            FFTFilesCalibration = Dir.entryList(QStringList() << "*R1.FFT",QDir::Files | QDir::NoSymLinks, QDir::Time | QDir::Reversed);
+        }else{
+            /* Add the FFT files to the list */
+            FFTFilesCalibration = Dir.entryList(QStringList() << "*.FFT",QDir::Files | QDir::NoSymLinks, QDir::Time | QDir::Reversed);
+        }
+
+        /* If there aren't calibration files */
+        if(FFTFilesCalibration.isEmpty()){
+
+            /* Show message if its empty */
+            showCritical("No FFT data files found in this directory, please select a folder with FFT data", "");
+            return;
+        }
+
+        /* Add initial files to the list */
+        addFilesToList();
+
+        /* Read information from files */
+        readInitialFile(false, pathDataM + "/" + FFTFilesCalibration.at(0));
+
+        /* Show Ui Items */
+        ui->checkBox_RandomSort->show();
+        ui->checkBox_stepsSelec->show();
+        ui->spinBox_stepsSelec->show();
+        ui->checkBox_SelecManual->show();
+
+        /* Set the maximum value to organize the values */
+        ui->spinBox_stepsSelec->setMaximum(FFTFilesCalibration.size());
+
+        /* If the selection of data is enabled */
+        if(ui->radiobutton_selectSet->isChecked()){
+
+            /* Add the FFT files to the list */
+            setDataSets();
+
+            /* Disable button to analyze */
+            ui->pushButton_Analize->setEnabled(true);
+        }
+    }
+}
+
+/**
+ * @brief Read Initial file to analize
+ */
+void selectAnalizeData::readInitialFile(bool list, QString path)
+{
+    /* Just get the header information */
+    if(!FFTFilesCalibration.isEmpty()){
+
+        if(!list){
+            /* Clear combo box of substances */
+            ui->comboBox_Substance->clear();
+        }
+
+        /* Open the file to get the Nr of Spectra and Average Nr. */
+        QFile file(path);
+
+        /* Row of the file */
+        QString ReadRow;
+
+        /* Does the File exists? */
+        if(!file.exists()){
+            /* If not, tell the user that it coulnd't be found */
+            showWarning("File not Found!", "");
+            return;
+        }
+
+        /* Open the file */
+        if(file.open(QIODevice::ReadOnly)) {
+
+            QTextStream stream(&file);
+
+            /* Read lines */
+            while(!stream.atEnd()){
+
+                /* Read a line from the file */
+                ReadRow = stream.readLine();
+
+                /* Read the text and get the values */
+                QStringList Readed_Row = ReadRow.split(": ");
+
+                /* Concentrations found */
+                if(ReadRow.contains("Concentrations")){
+
+                    if(!list){
+                        /* Get substances names */
+                        QString Substances = Readed_Row.at(1);
+                        QStringList ListS = Substances.split("/");
+                        ListS.removeLast();
+
+                        /* Add substances names */
+                        ui->comboBox_Substance->addItems(ListS);
+
+                    }else{
+
+                        /* Get subtances concentrations */
+                        QString Substances = Readed_Row.at(2);
+                        concentrationsList = Substances.split(",");
+                    }
+
+                    /* From here ahead just counts and other data, not needed yet */
+                }else if(ReadRow.contains("Wavelength")){
+
+                    break;
+                }
+            }
+        }
+
+        /* Close files */
+        file.close();
+    }
+}
+
+/**
+ * @brief Read files to fill the plot arrays and to create the analize data files
+ */
+void selectAnalizeData::readFiles(void)
+{
+    /* Save all the file names in one variable */
+    QStringList allFiles;
+    allFiles.append(FFTFilesCalibration);
+    allFiles.append(FFTFilesValidation);
+
+    /* Create vectors with the concentrations for validation and calibration */
+    CalConcentrations.resize(0);
+    ValConcentrations.resize(0);
+
+    /* Sort files appropriatelly, if the first concentration should be taken */
+    if(ui->comboBox_Substance->currentIndex() == 0){
+        allFiles = sortFiles(allFiles);
+
+    }else{
+
+        /* Different substance sort */
+        allFiles = sortFiles2(allFiles);
+    }
+
+    /* Create the data arrays for the plots */
+    QSurfaceDataArray *dataArray = new QSurfaceDataArray;
+    QSurfaceDataArray *dataArray_norm = new QSurfaceDataArray;
+    dataArray->reserve(allFiles.length());
+    dataArray_norm->reserve(allFiles.length());
+
+    /* Iterate through the file names */
+    for(int index = 0; index < allFiles.length(); index++){
+
+        /* Read the concentration from the files */
+        readInitialFile(true, pathDataM + "/" + allFiles.at(index));
+
+        /* This vector saves the information per file or per concentration */
+        signal.resize(0);
+
+        /* Open the file to get the Nr of Spectra and Average Nr. */
+        QFile file(pathDataM + "/" + allFiles.at(index));
+
+        /* Row of the file */
+        QString ReadRow;
+
+        /* Does the File exists? */
+        if(!file.exists()){
+            /* If not, tell the user that it coulnd't be found */
+            showWarning("File not Found!", "");
+            return;
+        }
+
+        /* Open the file */
+        if(file.open(QIODevice::ReadOnly)) {
+
+            QTextStream stream(&file);
+
+            /* Read lines */
+            while(!stream.atEnd()){
+
+                /* When should it start reading the FFT data? */
+                bool read = false;
+
+                /* Read a line from the file */
+                ReadRow = stream.readLine();
+
+                /* Indicates where to start reading the numerical information from file */
+                QString in = ReadRow.at(1);
+
+                /* If a number was found at the first position, then start reading */
+                in.toInt(&read);
+
+                /* start reading numbers */
+                if(read){
+
+                    /* Get the values from the line separated by 2 tabulars and replace (,) by (.) to read numbers */
+                    QStringList Readed_Row = ReadRow.split("\t\t");
+                    Readed_Row.replaceInStrings(",",".");
+
+                    /* We don't need all the saved values */
+                    if(Readed_Row.at(0).toDouble() > ui->doubleSpinBox_maxWavel->value()){break;}
+                    if(Readed_Row.at(0).toDouble() < ui->doubleSpinBox_minWavel->value()){continue;}
+
+                    /* Save the wavelengths in Position 0 */
+                    if(index < 1){
+                        wavelengths.append(Readed_Row.at(0).toDouble());
+                    }
+
+                    /* 4th column is the ratio */
+                    if(ui->comboBox_DetSignal->currentIndex() == 0){
+                        signal.append(Readed_Row.at(4).toDouble());
+                    }
+
+                    /* 2nd column is I(w) */
+                    if(ui->comboBox_DetSignal->currentIndex() == 1){
+                        signal.append(Readed_Row.at(2).toDouble());
+                    }
+
+                    /* 3rd column is I(2w) */
+                    if(ui->comboBox_DetSignal->currentIndex() == 2){
+                        double data2W = Readed_Row.at(3).toDouble();
+
+                        /* use the logarithm with I(2W) */
+                        if(ui->checkBox_applyLogarithm->isChecked()){
+                            data2W = log10(data2W);
+                        }
+                        /* Add the signal to the plot */
+                        signal.append(data2W);
+                    }
+
+                    /* 1st column is I(DC) */
+                    if(ui->comboBox_DetSignal->currentIndex() == 3){
+                        signal.append(Readed_Row.at(1).toDouble());
+                    }
+                }
+            }
+        }
+
+        /* Rows of 3D plot */
+        QSurfaceDataRow *newRow = new QSurfaceDataRow(wavelengths.length());
+        QSurfaceDataRow *newRow_norm = new QSurfaceDataRow(wavelengths.length());
+
+        /* get the data for the 3D plot */
+        for (int j = 0; j < wavelengths.length(); j++)
+
+            (*newRow)[j].setPosition(QVector3D(wavelengths.at(j), signal.at(j),
+                                               QString(concentrationsList.at(ui->comboBox_Substance->currentIndex())).toDouble()));
+        /* All information for the 3D plot */
+        *data3D << newRow;
+
+        /* get the data for the 3D plot */
+        for (int j = 0; j < wavelengths.length(); j++)
+            (*newRow_norm)[j].setPosition(QVector3D(wavelengths.at(j), signal.at(j)/(data3D->at(0)->at(j).y()),
+                                                    QString(concentrationsList.at(ui->comboBox_Substance->currentIndex())).toDouble()));
+
+        /* All information for the 3D plot */
+        *data3DNormalized << newRow_norm;
+
+
+        /* Fill the lists of calibration or validation data */
+        if(FFTFilesCalibration.indexOf(allFiles.at(index))!=-1){
+            CalConcentrations.append(QString(concentrationsList.at(ui->comboBox_Substance->currentIndex())).toDouble());
+        }
+        else if(FFTFilesValidation.indexOf(allFiles.at(index))!=-1){
+            ValConcentrations.append(QString(concentrationsList.at(ui->comboBox_Substance->currentIndex())).toDouble());
+        } //else, the file was removed
+
+        /* Restart the vector */
+        concentrationsList.clear();
+    }
+}
+
+/**
+ * @brief Add the files to the list
+ */
+void selectAnalizeData::addFilesToList()
+{
+    /* Sort Files */
+    FFTFilesCalibration = sortFiles(FFTFilesCalibration);
+
+    /* Add items to the list */
+    ui->listWidget_Calibration->addItems(FFTFilesCalibration);
+
+    /* Show current working path */
+    ui->lineEdit_currentDataPath->setText(dataPath.absoluteFilePath());
+}
+
+/**
+ * @brief Called if a widget option was clicked,
+ *        e.g. Integration time label.
+ * @param widget Widget which has been clicked
+ */
+void selectAnalizeData::handleClickEvent(QWidget *widget)
+{
+
+    /* Cast the events */
+    QRadioButton *radioBox = qobject_cast<QRadioButton *>(widget);
+    QCheckBox *checkBox = qobject_cast<QCheckBox *>(widget);
+    QListWidget *listItem = qobject_cast<QListWidget *>(widget);
+    QLabel *label = qobject_cast<QLabel *>(widget);
+
+    /* Enable the type of data selection */
+    ui->SelectFiles->setEnabled(ui->radiobutton_selectData->isChecked());
+    ui->SelectSet->setEnabled(ui->radiobutton_selectSet->isChecked());
+
+    /* Check which option is active */
+    if(radioBox == ui->radiobutton_selectData){
+
+        /* Set manual change */
+        ui->checkBox_SelecManual->setChecked(true);
+        ui->checkBox_stepsSelec->setChecked(false);
+        ui->checkBox_RandomSort->setChecked(false);
+        ui->spinBox_stepsSelec->setEnabled(false);
+
+        /* If there is an existing data path then add the data to the lists */
+        if(dataPath.exists()){
+
+            /* Empty vector */
+            FFTFilesCalibration.clear();
+            FFTFilesValidation.clear();
+
+            /* Disable button to analyze */
+            ui->pushButton_Analize->setEnabled(false);
+
+            /* Clean Lists */
+            cleanList();
+
+            /* Are there repetitions */
+            if(repetitions > 0){
+                /* Add the FFT files to the list */
+                FFTFilesCalibration = Dir.entryList(QStringList() << "*R"+QString::number(ui->spinBox_repselec->value())
+                                                    +".FFT",QDir::Files | QDir::NoSymLinks, QDir::Time | QDir::Reversed);
+            }else{
+                /* Add the FFT files to the list */
+                FFTFilesCalibration = Dir.entryList(QStringList() << "*.FFT",QDir::Files | QDir::NoSymLinks, QDir::Time | QDir::Reversed);
+            }
+
+            /* Add initial files to the list */
+            addFilesToList();
+        }
+    }
+
+    /* Check which option is active */
+    if(radioBox == ui->radiobutton_selectSet){
+
+        /* Empty vector */
+        FFTFilesCalibration.clear();
+        FFTFilesValidation.clear();
+
+        /* Choose data sets for the calibration and validation */
+        setDataSets();
+
+        /* Enable the button to analyze data */
+        ui->pushButton_Analize->setEnabled(!FFTFilesCalibration.isEmpty() && !FFTFilesValidation.isEmpty());
+    }
+
+    /* Click in the calibration or validation list */
+    if(listItem == ui->listWidget_Calibration || listItem == ui->listWidget_Validation || label == ui->label_restart || label == ui->label_switch){
+
+        /* User clicks one file in the calibration list */
+        if(listItem == ui->listWidget_Calibration && ui->checkBox_SelecManual->isChecked()){
+
+            /* Add to the other list the selected files */
+            FFTFilesValidation.append(ui->listWidget_Calibration->selectedItems().at(0)->text());
+            FFTFilesCalibration.removeAt(FFTFilesCalibration.indexOf(ui->listWidget_Calibration->selectedItems().at(0)->text()));
+        }
+
+        /* User clicks one file in the validation list */
+        else if(listItem == ui->listWidget_Validation && ui->checkBox_SelecManual->isChecked()){
+            /* Add to the other list the selected files */
+            FFTFilesCalibration.append(ui->listWidget_Validation->selectedItems().at(0)->text());
+            FFTFilesValidation.removeAt(FFTFilesValidation.indexOf(ui->listWidget_Validation->selectedItems().at(0)->text()));
+        }
+
+        /* Set all files as calibration */
+        if(label == ui->label_restart){
+
+            /*Set all as calibration */
+            automaticLoading = true;
+
+            /* Load data with the known path */
+            selectPath();
+
+            /* If there is more than 1 data set */
+            if(repetitions > 1){
+
+                /* Update the selection list */
+                updateSelectionList();
+            }
+
+            /* Set falg to false again */
+            automaticLoading = false;
+
+            /* Restart the automatic selection options */
+            ui->checkBox_RandomSort->setChecked(false);
+            ui->checkBox_stepsSelec->setChecked(false);
+        }
+
+        /* Switch files from calibration to validation */
+        if(label == ui->label_switch){
+
+            /* Save vectors temporarly */
+            QStringList FFTFilesCalibration_Temp, FFTFilesValidation_Temp;
+
+            /* Get actual values */
+            FFTFilesCalibration_Temp = FFTFilesValidation;
+            FFTFilesValidation_Temp = FFTFilesCalibration;
+
+            /*Set all as calibration */
+            FFTFilesCalibration.clear();
+            FFTFilesValidation.clear();
+
+            /* Switch vectors */
+            FFTFilesCalibration.append(FFTFilesCalibration_Temp);
+            FFTFilesValidation.append(FFTFilesValidation_Temp);
+
+        }
+
+        /* Clean Lists */
+        cleanList();
+    }
+
+    /* The user wants to select random files */
+    if(checkBox == ui->checkBox_RandomSort){
+
+        /* Disable spin roll */
+        ui->spinBox_stepsSelec->setEnabled(false);
+        ui->checkBox_stepsSelec->setChecked(false);
+        ui->checkBox_SelecManual->setChecked(false);
+
+        /* The random selection option was checked */
+        if(ui->checkBox_RandomSort->isChecked()){
+
+            /*Set all as calibration */
+            FFTFilesCalibration.append(FFTFilesValidation);
+            FFTFilesValidation.clear();
+
+            /* Get the total amount of files */
+            int size = floor(FFTFilesCalibration.size()/2);
+
+            /* For each position, randomly shuffle the vector and get the first position */
+            for(int i = 0; i < size; i++){
+
+                /* Shuffle the vector */
+                std::random_shuffle(FFTFilesCalibration.begin(), FFTFilesCalibration.end());
+
+                /* Get the first value each time it shuffles */
+                FFTFilesValidation.append(FFTFilesCalibration.at(0));
+                FFTFilesCalibration.removeAt(0);
+            }
+
+            /* Clean Lists */
+            cleanList();
+        }
+    }
+
+    /* The user wants to select random files */
+    if(checkBox == ui->checkBox_stepsSelec){
+
+        /* Disable spin roll */
+        ui->spinBox_stepsSelec->setEnabled(ui->checkBox_stepsSelec->isChecked());
+        ui->checkBox_RandomSort->setChecked(false);
+        ui->checkBox_SelecManual->setChecked(false);
+
+        /* Add files */
+        selectFileSteps();
+    }
+
+    /* Always choose manual selection if there is no option selected by the user */
+    if(!ui->checkBox_RandomSort->isChecked() && !ui->checkBox_stepsSelec->isChecked()){
+
+        /* Check the manual selection on */
+        ui->checkBox_SelecManual->setChecked(true);
+    }
+
+    /* The user wants to select random files */
+    if(checkBox == ui->checkBox_SelecManual){
+
+        /* Disable spin roll */
+        ui->spinBox_stepsSelec->setEnabled(false);
+        ui->checkBox_RandomSort->setChecked(false);
+        ui->checkBox_stepsSelec->setChecked(false);
+    }
+}
+
+/**
+ * @brief Sort the list with the files names
+ * in: Qstring List to be sorted
+ * out: Sorted list
+ */
+QStringList selectAnalizeData::sortFiles(QStringList List)
+{
+    /* Sort the vector */
+    QCollator collator;
+    collator.setNumericMode(true);
+
+    /* Sort the vector */
+    std::sort(
+                List.begin(),
+                List.end(),
+                [&collator](const QString &file1, const QString &file2)
+    {
+        return collator.compare(file1, file2) < 0;
+    });
+
+    return List;
+
+}
+
+/**
+ * @brief Sort the list with the files names acording to the substance
+ * in: Qstring List to be sorted
+ * out: Sorted list
+ */
+QStringList selectAnalizeData::sortFiles2(QStringList List)
+{
+    /* Create a temporal list */
+    QStringList temp;
+
+    /* Needed to organize the data according to the files */
+    for(int remover = 0; remover < List.length(); remover++){
+
+        /* Get the file name */
+        QString name = List.at(remover);
+
+        /* Iterate in the substances to find the right one */
+        for(int k =0; k < ui->comboBox_Substance->currentIndex(); k++){
+
+            /* Remove other substances from the name */
+            name.remove(0,name.indexOf("C")+3);
+        }
+
+        /* Save the names of the substances */
+        temp.append(name);
+    }
+
+    /* Sort the temporal file list of substances */
+    temp = sortFiles(temp);
+
+    /* Save the sorted names in a new list */
+    QStringList sorted;
+
+    /* Iterate to find them */
+    for(int i = 0; i < temp.length(); i++){
+        for(int sorter = 0; sorter < List.length(); sorter++){
+
+            /* When the original list finds a match with the sort criteria then add it to the sorted list */
+            if(QString(List.at(sorter)).contains(temp.at(i))){
+
+                /* Add the right order according to the substances */
+                sorted.append(List.at(sorter));
+            }
+        }
+    }
+
+    /* return the files sorted according to the selected susbtance */
+    return sorted;
+}
+
+/**
+ * @brief Set sets of data as calibration or validation
+ */
+void selectAnalizeData::setDataSets(void)
+{
+    /* If there is an existing data path then add the data to the lists */
+    if(dataPath.exists()){
+
+        /* Are there more repetitions */
+        if(repetitions > 0){
+            /* Add the FFT files to the list */
+            FFTFilesCalibration = Dir.entryList(QStringList() << "*R"+QString::number(ui->spinBox_calSet->value())+".FFT",QDir::Files | QDir::NoSymLinks, QDir::Time | QDir::Reversed);
+
+            /* Sort file names */
+            FFTFilesCalibration = sortFiles(FFTFilesCalibration);
+
+            /* Add the FFT files to the list */
+            FFTFilesValidation = Dir.entryList(QStringList() << "*R"+QString::number(ui->spinBox_ValSet->value())+".FFT",QDir::Files | QDir::NoSymLinks, QDir::Time | QDir::Reversed);
+
+            /* Sort file names */
+            FFTFilesValidation = sortFiles(FFTFilesValidation);
+
+        }else{
+
+            /* Add the FFT files to the list */
+            FFTFilesCalibration = Dir.entryList(QStringList() << "*.FFT",QDir::Files | QDir::NoSymLinks, QDir::Time | QDir::Reversed);
+
+            /* Sort file names */
+            FFTFilesCalibration = sortFiles(FFTFilesCalibration);
+
+            /* Add the FFT files to the list */
+            FFTFilesValidation = FFTFilesCalibration;
+        }
+    }
+}
+
+/**
+ * @brief Find Repetitions
+ */
+void selectAnalizeData::findRepetitions(void)
+{
+    /* How many repetitions are there? */
+    for(int i = 1; i < 1000; i++){
+
+        /* Are there R1? */
+        QStringList R1 = Dir.entryList(QStringList() << "*R"+QString::number(i)+".FFT",QDir::Files | QDir::NoSymLinks);
+
+        /* Count how many repetitions are in the folder */
+        if(R1.isEmpty()){break;}else{ repetitions = repetitions + 1;}
+
+    }
+
+    /* No repetitions found */
+    if(repetitions == 0){
+
+        /* Set repetitions */
+        repetitions = 0;
+
+        /* set maximum repetitions */
+        ui->spinBox_repselec->setMaximum(1);
+        ui->spinBox_repselec->setValue(1);
+        ui->spinBox_calSet->setMaximum(1);
+        ui->spinBox_calSet->setValue(1);
+        ui->spinBox_ValSet->setMaximum(1);
+        ui->spinBox_ValSet->setValue(1);
+
+        /* Hide items */
+        ui->label_repselec->hide();
+        ui->spinBox_repselec->hide();
+
+    }else{
+
+        /* Show items */
+        ui->label_repselec->show();
+        ui->spinBox_repselec->show();
+
+        /* set maximum repetitions */
+        ui->spinBox_repselec->setMaximum(repetitions);
+        ui->spinBox_calSet->setMaximum(repetitions);
+        ui->spinBox_ValSet->setMaximum(repetitions);
+    }
+}
+
+/**
+ * @brief Loading a configuration has been canceled
+ */
+void selectAnalizeData::cancel(void)
+{
+
+    /* Save it was canceled */
+    canceled = true;
+
+    /* Close dialog */
+    reject();
+}
+
+/**
+ * @brief Clean the lists
+ */
+void selectAnalizeData::cleanList(void){
+
+    /* Disconnect the signal temporarly to refresh the list */
+    disconnect(ui->listWidget_Calibration, SIGNAL(itemClicked(QListWidgetItem*)), signalMapperC, SLOT(map()));
+    disconnect(ui->listWidget_Validation, SIGNAL(itemClicked(QListWidgetItem*)), signalMapperC, SLOT(map()));
+    disconnect(ui->listWidget_Calibration, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
+
+    /* Clear the list */
+    ui->listWidget_Calibration->clear();
+    ui->listWidget_Validation->clear();
+
+    /* Sort lists */
+    if(!FFTFilesCalibration.isEmpty()){
+        FFTFilesCalibration = sortFiles(FFTFilesCalibration);
+        FFTFilesValidation = sortFiles(FFTFilesValidation);
+    }
+
+    /* Add the new items for calibration */
+    ui->listWidget_Calibration->addItems(FFTFilesCalibration);
+
+    /* Add the new items for validation */
+    ui->listWidget_Validation->addItems(FFTFilesValidation);
+
+    /* Connecta again the signal */
+    connect(ui->listWidget_Calibration, SIGNAL(itemClicked(QListWidgetItem*)), signalMapperC, SLOT(map()));
+    connect(ui->listWidget_Validation, SIGNAL(itemClicked(QListWidgetItem*)), signalMapperC, SLOT(map()));
+    connect(ui->listWidget_Calibration, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
+
+    /* Enable the button to analyze data */
+    ui->pushButton_Analize->setEnabled(!FFTFilesCalibration.isEmpty() && !FFTFilesValidation.isEmpty());
+
+}
+
+/**
+ * @brief Remove the item
+ */
+void selectAnalizeData::removeItem(void){
+
+    /* If it has data */
+    if(!FFTFilesCalibration.isEmpty()){
+
+        /* Add to the other list the selected files */
+        FFTFilesCalibration.removeAt(FFTFilesCalibration.indexOf(ui->listWidget_Calibration->selectedItems().at(0)->text()));
+
+        /* Clean Lists */
+        cleanList();
+    }
+
+}
+
+/**
+ * @brief Left Click Menu
+ */
+void selectAnalizeData::showContextMenu(const QPoint &pos)
+{
+    // Handle global position
+    QPoint globalPos = ui->listWidget_Calibration->mapToGlobal(pos);
+
+    // Create menu and insert some actions
+    QMenu LMenu;
+    LMenu.addAction("Remove File",  this, SLOT(removeItem()));
+
+    // Show context menu at handling position
+    LMenu.exec(globalPos);
+
+}
+
+/**
+ * @brief Automatically activate logarithm when the selected signal is I(2W)
+ */
+void selectAnalizeData::activateLogarithm(void){
+
+    /* Select or deselect the option automatically */
+    ui->comboBox_DetSignal->currentIndex() == 2 ? ui->checkBox_applyLogarithm->setChecked(true) : ui->checkBox_applyLogarithm->setChecked(false);
+
+}
+
+/**
+ * @brief Analize data from the files
+ */
+void selectAnalizeData::analizeData(void){
+
+    /* Get the data from files */
+    if(!FFTFilesCalibration.isEmpty()){
+
+        /* resize vectors */
+        wavelengths.resize(0);
+        signal.resize(0);
+        data3D = new QSurfaceDataArray;
+        data3DNormalized = new QSurfaceDataArray;
+
+        /* Create Folder to store the data analysis results */
+        QDir(pathDataM).mkdir("Data_Analysis");
+
+        /* Read File data */
+        readFiles();
+    }
+
+    /* Write calibration and validation files */
+    writeCalValFiles();
+
+    /* Close the dialog */
+    accept();
+
+}
+
+/**
+ * @brief Create the files with the calibration and validation data
+ */
+void selectAnalizeData::writeCalValFiles(void){
+
+    /* Create the path for the files */
+    QString pathCal(pathDataM + "/Data_Analysis/" + "/Cal_Data.cal");
+    QString pathVal(pathDataM + "/Data_Analysis/" + "/Val_Data.val");
+
+    /* Save the calibration data to files */
+    FILE *Calfile = fopen(pathCal.toLatin1().data(), "wt");
+    FILE *Valfile = fopen(pathVal.toLatin1().data(), "wt");
+
+    /* Check file handle */
+    if (nullptr == Calfile || nullptr == Valfile){
+        return;
+    }
+
+    /* Write some useful data on file */
+    fprintf(Calfile, "CALIBRATION DATA \n");
+    fprintf(Calfile, "Substance: %s \n", ui->comboBox_Substance->currentText().toLatin1().data());
+    fprintf(Calfile, "Determination Signal: %s \n", ui->comboBox_DetSignal->currentText().toLatin1().data());
+    fprintf(Calfile, "Minimum Wavelength: %.2f \n", ui->doubleSpinBox_minWavel->value());
+    fprintf(Calfile, "Maximum Wavelength: %.2f \n", ui->doubleSpinBox_maxWavel->value());
+    fprintf(Calfile, "Logarithm: %i \n\n", ui->checkBox_applyLogarithm->isChecked());
+
+    /* Write some useful data on file */
+    fprintf(Valfile, "VALIDATION DATA \n");
+    fprintf(Valfile, "Substance: %s \n", ui->comboBox_Substance->currentText().toLatin1().data());
+    fprintf(Valfile, "Determination Signal: %s \n", ui->comboBox_DetSignal->currentText().toLatin1().data());
+    fprintf(Valfile, "Minimum Wavelength: %.2f \n", ui->doubleSpinBox_minWavel->value());
+    fprintf(Valfile, "Maximum Wavelength: %.2f \n", ui->doubleSpinBox_maxWavel->value());
+    fprintf(Valfile, "Logarithm: %i \n\n", ui->checkBox_applyLogarithm->isChecked());
+
+    /* Iterate through the data */
+    fprintf(Calfile, "Concentrations:\t");
+    for(int j = 0; j < CalConcentrations.length(); j++){
+        fprintf(Calfile, "%.2f\t", CalConcentrations.at(j));
+    }
+
+    fprintf(Calfile, "\n");
+    if(ui->checkBox_applyLogarithm->isChecked()){
+        fprintf(Calfile, "\nWavelength:\tIntensity ln(%s): \n\n", ui->comboBox_DetSignal->currentText().toLatin1().data());
+    }else{
+        fprintf(Calfile, "\nWavelength:\tIntensity %s: \n\n", ui->comboBox_DetSignal->currentText().toLatin1().data());
+    }
+
+    fprintf(Valfile, "Concentrations: \t ");
+    for(int j = 0; j < ValConcentrations.length(); j++){
+        fprintf(Valfile, "%.2f\t", ValConcentrations.at(j));
+    }
+
+    fprintf(Calfile, "\n");
+    if(ui->checkBox_applyLogarithm->isChecked()){
+        fprintf(Valfile, "\nWavelength:\tIntensity ln(%s): \n\n", ui->comboBox_DetSignal->currentText().toLatin1().data());
+    }else{
+        fprintf(Valfile, "\nWavelength:\tIntensity %s: \n\n", ui->comboBox_DetSignal->currentText().toLatin1().data());
+    }
+
+    for(int m = 0; m < wavelengths.length(); m++){
+
+        fprintf(Calfile, "%.4f\t", wavelengths.at(m));
+        fprintf(Valfile, "%.4f\t", wavelengths.at(m));
+
+        for(int k = 0; k < (FFTFilesCalibration.length() + FFTFilesValidation.length()); k++){
+
+            qDebug() << data3D->at(k)->at(m).x() << " ratio: ";
+            qDebug() << data3D->at(k)->at(m).y()<< " C: ";
+            qDebug() << data3D->at(k)->at(m).z();
+
+            if(CalConcentrations.indexOf(data3D->at(k)->at(m).z()) != -1){
+                fprintf(Calfile, "%.4f\t", data3D->at(k)->at(m).y());
+            }
+
+            if(ValConcentrations.indexOf(data3D->at(k)->at(m).z()) != -1){
+
+                fprintf(Valfile, "%.4f\t", data3D->at(k)->at(m).y());
+            }
+        }
+
+        fprintf(Calfile, "\n");
+        fprintf(Valfile, "\n");
+
+    }
+
+    /* Close the file */
+    fclose(Calfile);
+    fclose(Valfile);
+
+    /* Free pointer */
+    Calfile = nullptr;
+    Valfile = nullptr;
+}
+
+/**
+ * @brief Destructor of 'analize data' class
+ */
+selectAnalizeData::~selectAnalizeData(void)
+{
+    delete ui;
+
+}
