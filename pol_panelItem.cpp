@@ -29,6 +29,11 @@
  * @param parent
  * @param name
  * @param color
+ *
+ * In this class:   - Spectrometer settings of the selected spectrometer for the polarimtery tab.
+ *                  - The settings are for the first selected spectrometer of the list available in Preview.
+ *                  - The number of spectra, averages, integration time and freqeuncy can be modified in this item.
+ *
  */
 PanelItem_Pol::PanelItem_Pol(QWidget *parent, QString name) :
     QWidget(parent),

@@ -29,6 +29,9 @@
 /**
  * @brief Contructor of the 'PanelPolHelp' class
  * @param parent Parent widget
+ *
+ * In this class:   - The help window is created as non modal: Can remain open with other windows.
+ *
  */
 PanelPolHelp::PanelPolHelp(QWidget *parent) :
     QDialog(parent),
@@ -98,6 +101,7 @@ PanelPolHelp::~PanelPolHelp(void)
         /* Free memory */
         delete logoOxymetry;
         logoOxymetry = nullptr;
+
         delete helpIcon;
         helpIcon = nullptr;
     }

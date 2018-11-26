@@ -28,6 +28,10 @@
 /**
  * @brief Constructor of 'PanelChangeWaveOrFreq' class
  * @param parent
+ *
+ * In this class:   - The user can set or get the modulation frequency.
+ *                  - The user can set or get the wavelength for the visualization of the extracted FFT.
+ *
  */
 PanelChangeWaveOrFreq::PanelChangeWaveOrFreq(QWidget *parent) :
     QDialog(parent),

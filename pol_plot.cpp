@@ -27,6 +27,13 @@ using namespace QtDataVisualization;
 /**
  * @brief Constructor of 'Pol_Plot' class
  *
+ * In this class:   - The calculated FFT plot is displayed in the tab "Setup Status".
+ *                  - The plots of raw data, Ratio, FFT profiles and live averages are created here.
+ *                  - The 3D plots settings are also adjusted here.
+ *                  - The live FFT averages and the temperature plots are created here.
+ *                  - The prediction plot is built here.
+ *                  - Further plot related functions can be included in this class.
+ *
  */
 Pol_Plot::Pol_Plot()
 {
@@ -48,7 +55,7 @@ Pol_Plot::Pol_Plot()
     /* Max value for plotting X axis in Averages */
     maxXtime = 150;
 
-    /* Dc, W and 2w Averages */
+    /* Dc, W and 2w Averages plot curves */
     Average_DC_Signal = new QwtPlotCurve("I(DC)");
     Average_DC_Signal->setPen(QPen("magenta"));
     Average_W_Signal = new QwtPlotCurve("I(ω)");
@@ -58,7 +65,7 @@ Pol_Plot::Pol_Plot()
     Average_Ratio_Signal = new QwtPlotCurve("I(ω)/I(2ω)");
     Average_Ratio_Signal->setPen(QPen(QColor( 0,0,0 )));
 
-    /* Temperature plot */
+    /* Temperature plot curve  */
     Temperature_Plot = new QwtPlotCurve("");
     Temperature_Plot->setPen(QPen("red"));
     Temperature_Plot->setItemAttribute(QwtPlotItem::Legend, false);
@@ -193,7 +200,7 @@ void Pol_Plot::plotFFTatSelectedWave(QVector<double> FFTLfft_data, QVector<doubl
  */
 void Pol_Plot::plotPredictionLine(double minConcentration, double maxConcentration){
 
-    /* Expected curve of prediction */
+    /* Expected curve of prediction with 20 points */
     for(int j=0; j<= 20; j++){
         linearR.append(minConcentration + j*(maxConcentration/20));
     }
@@ -227,6 +234,7 @@ void Pol_Plot::plotAverages(bool dataloaded, QVector<double> FFTLfft_DC, QVector
 
     /* Save the Average values in a vector to be ploted */
     if(FFTLwavelengths.isEmpty()){
+
         /* If there still no signals, just plot zero */
         AverageDC.append(0);
         AverageW.append(0);
@@ -234,12 +242,14 @@ void Pol_Plot::plotAverages(bool dataloaded, QVector<double> FFTLfft_DC, QVector
         AverageRatio.append(0);
 
     }else{
+
         /* Now there is data to plot, so add the averages to the queue to plot */
         AverageDC.append(average_DC/FFTLwavelengths.length());
         AverageW.append(average_W/FFTLwavelengths.length());
         Average2W.append(average_2W/FFTLwavelengths.length());
         maxYValue =  ceil(*std::max_element(AverageDC.begin(), AverageDC.end()));
 
+        /* If 2W is 0, then the ratio can't be calculated, add zeros instead */
         if(average_2W == 0){
             AverageRatio.append(0);
         }else{
@@ -247,7 +257,7 @@ void Pol_Plot::plotAverages(bool dataloaded, QVector<double> FFTLfft_DC, QVector
         }
     }
 
-    /* Is there a long measurement */
+    /* Is there a long measurement? */
     if(!measuring){
         /* The signal is plotted every defined time, so run it's own timer for plotting */
         counts_average_time = counts_average_time + 1;

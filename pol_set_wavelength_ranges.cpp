@@ -28,6 +28,11 @@
 /**
  * @brief Constructor of 'PanelSetWavelengthRanges' class
  * @param parent
+ *
+ * In this class:   - The minimum and maximum measurement wavelengths can be set.
+ *                  - A dialog is opened when the corresponding setting is clicked.
+ *                  - The minimum and maximum wavelengths for the measurements are also returned.
+ *
  */
 PanelSetWavelengthRanges::PanelSetWavelengthRanges(QWidget *parent) :
     QDialog(parent),

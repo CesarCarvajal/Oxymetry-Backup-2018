@@ -29,23 +29,32 @@
 
 /**
  * @brief Constructor of 'Pol_configFilesGenerator' class
+ *
+ * In this class:   - The pump files are created and filled.
+ *                  - The Spectrometer File is created and filled.
+ *                  - The Correlation coefficient function.
+ *
  */
 Pol_configFilesGenerator::Pol_configFilesGenerator()
 {
-    /* Initialize variables */
-    NConcentrations = 0;
-    NrSpectra = 1000;
-    Frequency = 7;
-    IntegrationTime = 8;
-    NrAverages = 1;
-    fillRefill = 0;
-    absVol = 0;
-    NSteps = 5;
-    absoluteFlow = 0;
-    shortBreak = 0;
-    longBreak = 0;
-    repetition = 0;
-    PumpsCycle = 0;
+    /* Initialize spectrometer variables */
+    NConcentrations = 0;    /* Number of measurements */
+    NrSpectra = 1000;       /* Number of spectra */
+    Frequency = 7;          /* Frequency of the measurements */
+    IntegrationTime = 8;    /* Integration time */
+    NrAverages = 1;         /* Number of averages */
+
+    /* Initialize scripts variables */
+    fillRefill = 0;     /* Fill and Re-Fill time */
+    absVol = 0;         /* Absolute volume of cuvette */
+    NSteps = 5;         /* Number of steps for Fill-ReFill */
+    absoluteFlow = 0;   /* Absolute Flow given for the pumps */
+    shortBreak = 0;     /* Short break of the measurements */
+    longBreak = 0;      /* Long break of the measurements */
+
+    /* Repetitions and cycles of the pump */
+    repetition = 0;      /* How many repetitions should be performed? */
+    PumpsCycle = 0;      /* A complete cycle of the pumps to build a concentration */
 
     /* Active substances flags */
     activeSubstances.resize(6);
@@ -57,11 +66,11 @@ Pol_configFilesGenerator::Pol_configFilesGenerator()
     substancesNames.append(".");
     substancesNames.append(".");
 
-    /* Glucose and Impurity 1 are always at the beggining active */
+    /* Glucose and Impurity 1 are always at the beginning active */
     activeSubstances.replace(0, true);
     activeSubstances.replace(1, true);
 
-    /* Initialize the vector */
+    /* Initialize the active substances vector to false */
     for(int g=2; g < activeSubstances.length() ; g++){
 
         /* No substances active */
@@ -71,36 +80,37 @@ Pol_configFilesGenerator::Pol_configFilesGenerator()
     /* Normalizd counts? */
     normalizedCounts = false;
 
-    /* No interval mode active */
+    /* No interval or crossing mode active */
     intervalMode = false;
     crossingMode = false;
 
-    /* Delay on starting the measurements */
+    /* Delay on starting the measurements? */
     startDelay = 0;
 
-    /* Number of Sustances active */
+    /* Number of Sustances active, initially only glucose and impurity 1 */
     NumberOfSubstances = 2;
 }
 
 /**
  * @brief Generate Pump Scripts
- * @param[in] The type of file to be generated "Water", "Glucose" or "Impurity", the vector containing the necessary flow.
+ * @param[in] The type of file to be generated "Water", "Glucose" or "Impurity",
+ * the vector containing the necessary flow.
  */
 void Pol_configFilesGenerator::GeneratePumpScripts(QString pathFile, QString filetype, QVector <double> FlowVector){
 
     /* Get folder to store the pump scripts */
     QFileInfo folder(pathFile);
 
-    /* Defines the type of pump script */
+    /* Defines the type of pump script, Water? Glucose? Impurity 1? etc... */
     QString ScriptPath = folder.absolutePath() + filetype;
 
-    /* Open the file */
+    /* Open the corresponding file */
     FILE *Sfile = fopen(ScriptPath.toLatin1().data(), "wt");
 
-    /* Write in file */
+    /* Write in the file */
     fprintf(Sfile, "%s", "ml/min ");
 
-    /* Write which substance belong to which concentration Cx */
+    /* Write which substance name belongs to which type of file */
     if(filetype.contains("C2")){
         fprintf(Sfile, "%s", substancesNames.at(0).toLatin1().data());
     }
@@ -130,7 +140,7 @@ void Pol_configFilesGenerator::GeneratePumpScripts(QString pathFile, QString fil
         fprintf(Sfile, "%.0f\t%d\t%i\n", startDelay*1000, 0, 0);
     }
 
-    /* Write in file */
+    /* Write the pump sequence in the file */
     writePumpFile(Sfile, filetype, FlowVector);
 
     /* Close file */
@@ -141,7 +151,7 @@ void Pol_configFilesGenerator::GeneratePumpScripts(QString pathFile, QString fil
 }
 
 /**
- * @brief Generate Spectrometer configuration
+ * @brief Generate Spectrometer configuration file
  * @param[in] Vectors with Glucose and Impurities concentrations
  */
 void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFile, QVector <double> GlucoseConcentration, QVector <double> Impurity1Concentration,
@@ -149,15 +159,15 @@ void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFil
                                                                  QVector <double> Impurity3Concentration, QVector <double> Impurity4Concentration,
                                                                  QVector <double> Impurity5Concentration,
                                                                  QVector <double> StockSolutions, double minW, double maxW, double UserTimeInterval){
-    /* Open the file */
+    /* Open the configuration file */
     FILE *file = fopen(pathFile.toLatin1().data(), "wt");
 
-    /* Write in file the meaning of the values */
+    /* Write in the spectrometer configuration file the meaning of the values */
     fprintf(file, "%s", "1Nr_M;2Nr_Sp;3Int_T;4Nr_Av;5Freq;6MinW;7MaxW;8Ab_F;9Ab_V;10N_Ste;11S_Break;12L_Break;13St_Del;14C1?;15C2?;16C3?;17C4?;18C5?;19C6?;"
                         "20mC1;21MC1;22StC1;23mC2;24MC2;25StC2;26mC3;27MC3;28StC3;29mC4;30MC4;31StC4;32mC5;33MC5;34StC5;35mC6;36MC6;37StC6;"
                         "38Rep;39NormC;40IntMode;41IntModeTime;42Imp1Name;43Imp2Name;44Imp3Name;45Imp4Name;46Imp5Name;47CrossMode,\n");
 
-    /* Write all the configuration data */
+    /* Write all the configuration data consecutively */
     QString configurationData = "";
 
     configurationData.append(QString::number(NConcentrations) + ";");
@@ -214,7 +224,7 @@ void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFil
     /* Write in file the time titles */
     fprintf(file, "%s", "Time_Interval;File_Name;\n");
 
-    /* Cycle of a concentration */
+    /* Cycle of building a certain concentration */
     PumpsCycle = (2 * fillRefill + 4*shortBreak)*(NSteps + (NSteps-1)) +  (2 * fillRefill + 3*shortBreak + longBreak );
 
     /* Time intervals between measurements */
@@ -389,7 +399,7 @@ void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFil
                 }
             }
 
-            /* If there are repetitions then change the name */
+            /* If there are repetitions then change the file names */
             if(repetition > 1){
                 /* Complete the file name with an R */
                 line = line.append(QString::number(IntegrationTime) + "ms_" + QString::number(Frequency) + "Hz_" + QString::number(j+1+((rep-1)*NConcentrations)) + "_R" + QString::number(rep));
@@ -423,7 +433,7 @@ void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFil
 }
 
 /**
- * @brief Write Pump File
+ * @brief Write Pump Sequence File
  * @param[in] The file where the configuration is going to be written. The type of file to be written and the vector containing the flows.
  */
 void Pol_configFilesGenerator::writePumpFile(FILE *pumpFile, QString filetype, QVector <double> FlowVector){
@@ -460,6 +470,7 @@ void Pol_configFilesGenerator::writePumpFile(FILE *pumpFile, QString filetype, Q
             writeFilling(pumpFile, FlowVector, k);
         }
 
+        /* If there was the last repetition, add the flushing only at the end */
         if(rep == repetition - 1){
             /* Write flushing pattern for cleaning the cuvette at the end */
             writeFlushing(pumpFile, filetype);
@@ -482,35 +493,31 @@ void Pol_configFilesGenerator::writeFlushing(FILE *pFile, QString filetype){
         /* Is it water? */
         if(filetype.contains("Water")){
 
-            /* 7 flushing cuvette fill */
+            /* 1 Flushing cuvette fill */
             fprintf(pFile, "%d\t%.4f\t%d\n", fillRefill, absoluteFlow, 0);
         }else{
-
-            /* 7 flushing cuvette fill */
             fprintf(pFile, "%d\t%d\t%d\n", fillRefill, 0, 0);
         }
 
-        /* 8 stop after filling valve refill */
+        /* 2 Stop after filling valve refill */
         fprintf(pFile, "%d\t%d\t%i\n", shortBreak, 0, 0);
 
-        /* 9 stop after refilling valve fill */
+        /* 3 Stop after refilling valve fill */
         fprintf(pFile, "%d\t%d\t%d\n", shortBreak, 0, 1);
 
         /* Is it water? */
         if(filetype.contains("Water")){
 
-            /* 10 flushing cuvette fill */
+            /* 4 Flushing cuvette fill */
             fprintf(pFile, "%d\t%.4f\t%d\n", fillRefill, -absoluteFlow, 1);
         }else{
-
-            /* 10 flushing cuvette fill */
             fprintf(pFile, "%d\t%d\t%d\n", fillRefill, 0, 1);
         }
 
-        /* 11 stop after refilling valve fill */
+        /* 5 Stop after refilling valve fill */
         fprintf(pFile, "%d\t%d\t%d\n", shortBreak, 0, 1);
 
-        /* 12 stop after refilling valve refill */
+        /* 6 Stop after refilling valve refill */
         fprintf(pFile, "%d\t%d\t%d\n", shortBreak, 0, 0);
     }
 }

@@ -24,6 +24,8 @@
 #include <QWidget>
 #include <QElapsedTimer>
 
+/* Header of waiting dialog before starting the measurements */
+
 namespace Ui {
     class WaitingDialog;
 }

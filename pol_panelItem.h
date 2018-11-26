@@ -23,6 +23,8 @@
 #include <QWidget>
 #include <QString>
 
+/* Header of the Spectrometer settings */
+
 namespace Ui {
     class PanelItem_Pol;
 }
@@ -95,10 +97,10 @@ private:
     int numberOfAverages;   /* Number of averages */
     bool isSaturated;       /* Has saturated pixels? */
     bool isEnabled;         /* Spectrometer enabled? */
-    int numberOfSpectra;
-    int frequency;
-    double minimumWavelength;
-    double maximumWavelength;
+    int numberOfSpectra;    /* Number of spectra */
+    int frequency;          /* Frequency of modulation */
+    double minimumWavelength;   /* Minimum measurement wavelength */
+    double maximumWavelength;   /* Maximum measurement wavelength */
 };
 
 #endif // POL_PANELITEM_H

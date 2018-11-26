@@ -32,6 +32,9 @@
 /* Internal includes */
 #include "pol_panelItem.h"
 
+/* Header of the Configuration Object */
+/* Uses ExternConf class */
+
 namespace Ui {
 class configurePolMeasure;
 }

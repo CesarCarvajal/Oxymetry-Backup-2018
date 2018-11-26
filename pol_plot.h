@@ -27,6 +27,7 @@
 
 using namespace QtDataVisualization;
 
+/* Header of Plot Object */
 
 /**
  * @brief The 'Pol_Plot' class
@@ -52,10 +53,8 @@ public:
     /* Maximum value on Y axis */
     double maxYValue;
 
-    /* 3D Surface */
+    /* 3D Surfaces */
     Q3DSurface *surface, *surface_norm;
-    //Q3DScatter *scatter;
-
     QSurface3DSeries *series, *series_norm;
 
     /* Maximum value on X axis of average plot */

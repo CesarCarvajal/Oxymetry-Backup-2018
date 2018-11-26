@@ -56,7 +56,19 @@
 #include "pol_temp_connect.h"
 
 /*
- * Other stuff
+ * Master Header for Polarimeter Tab
+ * Uses:
+ * Configure Measurement Class
+ * Analize Data Class
+ * Change Wavelength or Freqeuncy Class
+ * FFT Calculator Class
+ * Measurements Class
+ * Panel Help Class
+ * Panel Item Class
+ * Plot Class
+ * Set Wavelength Ranges Class
+ * Temperature Connect Class
+ * Waiting Dialog Class
  */
 
 namespace Ui {
@@ -80,43 +92,43 @@ public:
 
 private:
 
-    /* Load configuration class */
+    /* Configuration Object */
     configurePolMeasure *ConfigureMeasurement;
 
-    /* Help Dialog object */
+    /* Help Dialog Object */
     PanelPolHelp* helpDialog;
 
     /* Measurements Object */
     Pol_Measurements *Runner = nullptr;
 
-    /* Connected devices */
+    /* Spectrometer Settings and Plots Objects */
     PanelItem_Pol * PolarimetrySpectrometer;
     QwtPlotCurve * curve_Pol;
 
-    /* Teensy variable */
+    /* Teensy Temperature Object */
     ConnectTemperature *teensyTemperature;
 
     /* Signal mapper */
     QSignalMapper *signalMapper;
 
-    /* FFT Object */
+    /* FFT Calculation Object */
     fft FFTL;
 
     /* Plot Objetct */
     Pol_Plot *PolPlotter = nullptr;
 
-    /* Widget container for 3D plot */
+    /* Widget containers for 3D plots */
     QWidget *container, *container_norm;
 
     /* Start measurement button color */
     QString greenButton = "color: rgb(0,128,0)", RedButton = "color: rgb(250,0,0)", grayButton = "color: rgb(211,211,211)";
 
-    /* The configuration was edited during the calibration?*/
+    /* The configuration was edited during the calibration? */
     bool editedConf;
 
 private:
 
-    /* Get current path to executable */
+    /* Get current working path to executable */
     QString currentWorkingPath;
 
     /* If this changes, then quit everything */
@@ -143,7 +155,7 @@ private:
     /* File loading information */
     QFileInfo fileInfoLoad;
 
-    /* Temperature */
+    /* Temperature values measured from Teensy */
     float Temperature, Humidity, minYTemperature, maxYTemperature;
 
     /* Path given by the user to load files */
@@ -152,7 +164,7 @@ private:
     /* Folder where the data will be saved */
     QString folderForData;
 
-    /* Fix the X axis zoom problem */
+    /* Fix the X and Y axis zoom problem */
     double minXAverage, maxXAverage, maxYRaw, maxYAverage;
 
 public:
@@ -228,7 +240,7 @@ private slots:
     /* Adjust the Integration Time */
     void adjust_Integration_Time_Pol(void);
 
-    /* Functions for spectrometer items */
+    /* Functions for click labels */
     void handle_Click_Event(QWidget *widget);
 
     /* Called if new data signal arrived */

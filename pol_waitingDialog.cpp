@@ -29,6 +29,10 @@
 /**
  * @brief Constructor of 'Waiting Dialog' class
  * @param parent
+ *
+ * In this class    - Shows a dialog with a count down before the measurement starts.
+ *                  - The dialog has the option to skip the count down or cancel the measurements.
+ *
  */
 WaitingDialog::WaitingDialog(QWidget *parent) :
     QDialog(parent),

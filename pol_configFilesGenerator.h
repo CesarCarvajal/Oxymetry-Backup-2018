@@ -24,6 +24,8 @@
 #include "qprocess.h"
 #include "QVector"
 
+/* Header of The Files Generator after configuration */
+
 /**
  * @brief The 'Pol_configFilesGenerator' class
  */

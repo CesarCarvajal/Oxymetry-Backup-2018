@@ -24,6 +24,8 @@
 #include <QWidget>
 #include <QTimer>
 
+/* Header of the set Wavelength range class */
+
 namespace Ui {
     class PanelSetWavelengthRanges;
 }

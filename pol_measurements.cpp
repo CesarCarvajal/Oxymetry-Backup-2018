@@ -23,6 +23,12 @@
 
 /**
  * @brief Constructor of 'Pol_Measurements' class
+ *
+ * In this class:   - The flags of running measurement or calbiration are set and displayed.
+ *                  - The status of the measurements can be changed.
+ *                  - Timers of measurement and calibration are adjusted.
+ *                  - Changes and configuration are set.
+ *
  */
 Pol_Measurements::Pol_Measurements()
 {
@@ -86,6 +92,8 @@ void Pol_Measurements::restart_CalibrationPol(void){
 
     /* Restart the routine of calibration counters */
     liveFFT_Time = 0;
+
+    /* Restart the progress */
     Calibration_Progress = 0;
 
     /* Start timers */

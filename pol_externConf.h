@@ -25,6 +25,9 @@
 #include "qprocess.h"
 #include "QVector"
 
+/* Header of the Extern Config Object */
+/* Uses the Config Files Generator Class */
+
 /**
  * @brief The 'Pol_ExternConf' class
  */
@@ -39,7 +42,7 @@ public:
     /* Create configuration file generator object */
     Pol_configFilesGenerator *ConfigurationFileGenerator;
 
-    /* Concentrations */
+    /* Concentration vectors */
     QVector <double> GlucoseConcentration;
     QVector <double> Impurity1Concentration;
     QVector <double> Impurity2Concentration;
@@ -47,7 +50,7 @@ public:
     QVector <double> Impurity4Concentration;
     QVector <double> Impurity5Concentration;
 
-    /* Stock Solutions */
+    /* Stock Solution vectors */
     QVector<double> stockSolutions;
     QVector<double> minConcentrations;
     QVector<double> maxConcentrations;
@@ -64,7 +67,7 @@ public:
     QVector <double> Impurity4Flow;
     QVector <double> Impurity5Flow;
 
-    /* Wavelengh range */
+    /* Wavelengh ranges */
     double minWavelength, maxWavelength;
 
     /* Interval mode user time for the measurements */

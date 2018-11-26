@@ -29,6 +29,8 @@
 #include <QList>
 #include <QSerialPortInfo>
 
+/* Header of Connect Teensy Class */
+
 namespace Ui {
     class ConnectFluidic;
 }

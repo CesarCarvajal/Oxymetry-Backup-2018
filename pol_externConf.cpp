@@ -31,18 +31,27 @@
 
 /**
  * @brief Constructor of 'Pol_ExternConf' class
+ *
+ * In this class:   - The Nemesys Pumps Software is opened when needed.
+ *                  - Concentration Mixtures, Flows and Stock solutions are calculated.
+ *                  - The scripts and configuration files writing functions are called from ("pol_configFilesGenerator").
+ *                  - Old Pumps and configuration files are removed.
+ *                  - The time is converted to units of minutes, hours, days.
+ *
+ * Uses:    - "pol_configFilesGenerator" class
+ *
  */
 Pol_ExternConf::Pol_ExternConf()
 {
-    /* Set size of vectors: there are 3 substances + 1 water */
+    /* Set size of stock and max, min concentrations vectors: there are 5 substances + 1 water */
     stockSolutions.reserve(6);
     maxConcentrations.reserve(6);
     minConcentrations.reserve(6);
 
-    /* Configuration File generator object */
+    /* Configuration File generator Object */
     ConfigurationFileGenerator = new Pol_configFilesGenerator();
 
-    /* Set size of the concentrations vectors */
+    /* Set size of the mixed concentrations vectors */
     GlucoseConcentration.resize(0);
     Impurity1Concentration.resize(0);
     Impurity2Concentration.resize(0);
@@ -62,7 +71,7 @@ Pol_ExternConf::Pol_ExternConf()
     /* Restart paths */
     pathForScripts = "";
 
-    /* Restart limits */
+    /* Restart wavelength limits */
     minWavelength = 200;
     maxWavelength = 1200;
 
@@ -71,7 +80,7 @@ Pol_ExternConf::Pol_ExternConf()
 }
 
 /**
- * @brief Open the Nemesys Pump Software
+ * @brief Open the Nemesys Pump Software when needed.
  */
 void Pol_ExternConf::openPumpSoftware(void){
 
@@ -121,47 +130,71 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
 
     /* Is Glucose active? */
     if(ConfigurationFileGenerator->activeSubstances.at(0)){
+
+        /* Resize its concentrations and flows to the number of measurements */
         GlucoseConcentration.resize(ConfigurationFileGenerator->NConcentrations);
         GlucoseFlow.resize(ConfigurationFileGenerator->NConcentrations);
+
+        /* Calculate the gap between the maximum and minimum concentrations */
         gapGlucose = (maxConcentrations.at(0) - minConcentrations.at(0))/(ConfigurationFileGenerator->NConcentrations-1);
     }
 
     /* Is Impurity 1 active? */
     if(ConfigurationFileGenerator->activeSubstances.at(1)){
+
+        /* Resize its concentrations and flows to the number of measurements */
         Impurity1Concentration.resize(ConfigurationFileGenerator->NConcentrations);
         Impurity1Flow.resize(ConfigurationFileGenerator->NConcentrations);
+
+        /* Calculate the gap between the maximum and minimum concentrations */
         gapImpurity1 = (maxConcentrations.at(1) - minConcentrations.at(1))/(ConfigurationFileGenerator->NConcentrations-1);
     }
 
     /* Is Impurity 2 active? */
     if(ConfigurationFileGenerator->activeSubstances.at(2)){
+
+        /* Resize its concentrations and flows to the number of measurements */
         Impurity2Concentration.resize(ConfigurationFileGenerator->NConcentrations);
         Impurity2Flow.resize(ConfigurationFileGenerator->NConcentrations);
+
+        /* Calculate the gap between the maximum and minimum concentrations */
         gapImpurity2 = (maxConcentrations.at(2) - minConcentrations.at(2))/(ConfigurationFileGenerator->NConcentrations-1);
     }
 
     /* Is Impurity 3 active? */
     if(ConfigurationFileGenerator->activeSubstances.at(3)){
+
+        /* Resize its concentrations and flows to the number of measurements */
         Impurity3Concentration.resize(ConfigurationFileGenerator->NConcentrations);
         Impurity3Flow.resize(ConfigurationFileGenerator->NConcentrations);
+
+        /* Calculate the gap between the maximum and minimum concentrations */
         gapImpurity3 = (maxConcentrations.at(3) - minConcentrations.at(3))/(ConfigurationFileGenerator->NConcentrations-1);
     }
 
     /* Is Impurity 4 active? */
     if(ConfigurationFileGenerator->activeSubstances.at(4)){
+
+        /* Resize its concentrations and flows to the number of measurements */
         Impurity4Concentration.resize(ConfigurationFileGenerator->NConcentrations);
         Impurity4Flow.resize(ConfigurationFileGenerator->NConcentrations);
+
+        /* Calculate the gap between the maximum and minimum concentrations */
         gapImpurity4 = (maxConcentrations.at(4) - minConcentrations.at(4))/(ConfigurationFileGenerator->NConcentrations-1);
     }
 
     /* Is Impurity 5 active? */
     if(ConfigurationFileGenerator->activeSubstances.at(5)){
+
+        /* Resize its concentrations and flows to the number of measurements */
         Impurity5Concentration.resize(ConfigurationFileGenerator->NConcentrations);
         Impurity5Flow.resize(ConfigurationFileGenerator->NConcentrations);
+
+        /* Calculate the gap between the maximum and minimum concentrations */
         gapImpurity5 = (maxConcentrations.at(5) - minConcentrations.at(5))/(ConfigurationFileGenerator->NConcentrations-1);
     }
 
-    /* Create vectors of Flows */
+    /* Create the flow vector for water */
     WaterFlow.resize(ConfigurationFileGenerator->NConcentrations);
 
     /* Measurements vector */
@@ -178,38 +211,51 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
 
         /* Is Glucose active? */
         if(ConfigurationFileGenerator->activeSubstances.at(0)){
+
+            /* Create the concentrations vector according to the calculated gap */
             GlucoseConcentration.replace(k,(minConcentrations.at(0)) + (k*gapGlucose));
         }
 
         /* Is Impurity 1 active? */
         if(ConfigurationFileGenerator->activeSubstances.at(1)){
+
+            /* Create the concentrations vector according to the calculated gap */
             Impurity1Concentration.replace(k,minConcentrations.at(1) + k*gapImpurity1);
         }
 
         /* Is Impurity 2 active? */
         if(ConfigurationFileGenerator->activeSubstances.at(2)){
+
+            /* Create the concentrations vector according to the calculated gap */
             Impurity2Concentration.replace(k,minConcentrations.at(2) + k*gapImpurity2);
         }
 
         /* Is Impurity 3 active? */
         if(ConfigurationFileGenerator->activeSubstances.at(3)){
+
+            /* Create the concentrations vector according to the calculated gap */
             Impurity3Concentration.replace(k,minConcentrations.at(3) + k*gapImpurity3);
         }
 
         /* Is Impurity 4 active? */
         if(ConfigurationFileGenerator->activeSubstances.at(4)){
+
+            /* Create the concentrations vector according to the calculated gap */
             Impurity4Concentration.replace(k,minConcentrations.at(4) + k*gapImpurity4);
         }
 
         /* Is Impurity 5 active? */
         if(ConfigurationFileGenerator->activeSubstances.at(5)){
+
+            /* Create the concentrations vector according to the calculated gap */
             Impurity5Concentration.replace(k,minConcentrations.at(5) + k*gapImpurity5);
         }
 
+        /* Create a vector with only the measurement numbers for further calculations */
         Nmeasurements.replace(k, k);
     }
 
-    /* Count active substances */
+    /* Count the number of active substances */
     int activeSubs = 0;
 
     /* Active substances? */
@@ -219,7 +265,7 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
         activeSubs = activeSubs + ConfigurationFileGenerator->activeSubstances.at(g);
     }
 
-    /* Activate Crossing Mode */
+    /* Activate the Crossing Mode */
     if(ConfigurationFileGenerator->crossingMode && activeSubs > 1){
 
         /* Get the new size of the measurements */
@@ -230,7 +276,7 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
         QVector <double> Impurity1Temp;
         QVector <double> Indexes(size);
 
-        /* resize the vectors */
+        /* Resize the temporal vectors */
         GlucoseTemp.resize(0);
         Impurity1Temp.resize(0);
 
@@ -240,7 +286,7 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
             /* Get indexes */
             Indexes.replace(in, in);
 
-            /* Save the concentrations */
+            /* Save the concentrations in a temporal vector */
             if(in < ConfigurationFileGenerator->NConcentrations){
                 GlucoseTemp.append(GlucoseConcentration);
                 Impurity1Temp.append(Impurity1Concentration);
@@ -280,7 +326,7 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
             Impurity1Concentration.replace(in, Impurity1Temp.at(Indexes.at(in)));
         }
 
-        /* The new measurment size */
+        /* The new measurement size */
         ConfigurationFileGenerator->NConcentrations = size;
 
     }
@@ -301,6 +347,7 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
                 std::random_shuffle(Impurity4Concentration.begin(), Impurity4Concentration.end());
                 std::random_shuffle(Impurity5Concentration.begin(), Impurity5Concentration.end());
 
+                /* Threshold for the correlation coefficient */
                 float threshold = 0.05;
 
                 /* Correlation of glucose and number of measurements */
@@ -437,26 +484,43 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
 
         /* Get the flows for each substance */
         if(ConfigurationFileGenerator->activeSubstances.at(0)){
+
+            /* Calculate the flow according to the concentrations and other parameters */
             GlucoseFlow.replace(0,maxConcentrations.at(0)*((ConfigurationFileGenerator->absoluteFlow)/(stockSolutions.at(0))));
         }
 
+        /* Is the impurity 1 active? */
         if(ConfigurationFileGenerator->activeSubstances.at(1)){
+
+            /* Calculate the flow according to the concentrations and other parameters */
             Impurity1Flow.replace(0,maxConcentrations.at(1)*((ConfigurationFileGenerator->absoluteFlow)/(stockSolutions.at(1))));
         }
 
+        /* Is the impurity 2 active? */
         if(ConfigurationFileGenerator->activeSubstances.at(2)){
+
+            /* Calculate the flow according to the concentrations and other parameters */
             Impurity2Flow.replace(0,maxConcentrations.at(2)*((ConfigurationFileGenerator->absoluteFlow)/(stockSolutions.at(2))));
         }
 
+        /* Is the impurity 3 acive? */
         if(ConfigurationFileGenerator->activeSubstances.at(3)){
+
+            /* Calculate the flow according to the concentrations and other parameters */
             Impurity3Flow.replace(0,maxConcentrations.at(3)*((ConfigurationFileGenerator->absoluteFlow)/(stockSolutions.at(3))));
         }
 
+        /* Is the impurity 4 acive? */
         if(ConfigurationFileGenerator->activeSubstances.at(4)){
+
+            /* Calculate the flow according to the concentrations and other parameters */
             Impurity4Flow.replace(0,maxConcentrations.at(4)*((ConfigurationFileGenerator->absoluteFlow)/(stockSolutions.at(4))));
         }
 
+        /* Is the impurity 5 acive? */
         if(ConfigurationFileGenerator->activeSubstances.at(5)){
+
+            /* Calculate the flow according to the concentrations and other parameters */
             Impurity5Flow.replace(0,maxConcentrations.at(5)*((ConfigurationFileGenerator->absoluteFlow)/(stockSolutions.at(5))));
         }
 
@@ -465,63 +529,93 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
 
         /* If glucose is active consider its flow */
         if(ConfigurationFileGenerator->activeSubstances.at(0)){
+
+            /* Add the needed flow for this substance to the overall flow */
             Flow = Flow + GlucoseFlow.at(0);
         }
 
         /* If Impurity 1 is active consider its flow */
         if(ConfigurationFileGenerator->activeSubstances.at(1)){
+
+            /* Add the needed flow for this substance to the overall flow */
             Flow = Flow + Impurity1Flow.at(0);
         }
 
         /* If Impurity 2 is active consider its flow */
         if(ConfigurationFileGenerator->activeSubstances.at(2)){
+
+            /* Add the needed flow for this substance to the overall flow */
             Flow = Flow + Impurity2Flow.at(0);
         }
 
         /* If Impurity 3 is active consider its flow */
         if(ConfigurationFileGenerator->activeSubstances.at(3)){
+
+            /* Add the needed flow for this substance to the overall flow */
             Flow = Flow + Impurity3Flow.at(0);
         }
 
         /* If Impurity 4 is active consider its flow */
         if(ConfigurationFileGenerator->activeSubstances.at(4)){
+
+            /* Add the needed flow for this substance to the overall flow */
             Flow = Flow + Impurity4Flow.at(0);
         }
 
         /* If Impurity 5 is active consider its flow */
         if(ConfigurationFileGenerator->activeSubstances.at(5)){
+
+            /* Add the needed flow for this substance to the overall flow */
             Flow = Flow + Impurity5Flow.at(0);
         }
 
-        /* Water Flow */
+        /* The left Flow is for Water */
         WaterFlow.replace(0,ConfigurationFileGenerator->absoluteFlow - Flow);
 
     }else{
 
+        /* For each of the mixed concentrations: */
         for(int i =0; i < ConfigurationFileGenerator->NConcentrations; i++){
 
             /* Get the flows for each substance */
             if(ConfigurationFileGenerator->activeSubstances.at(0)){
+
+                /* Calculate the flow according to the concentrations and other parameters */
                 GlucoseFlow.replace(i,GlucoseConcentration.at(i)*((ConfigurationFileGenerator->absoluteFlow)/(stockSolutions.at(0))));
             }
 
+            /* Is the impurity 1 active? */
             if(ConfigurationFileGenerator->activeSubstances.at(1)){
+
+                /* Calculate the flow according to the concentrations and other parameters */
                 Impurity1Flow.replace(i,Impurity1Concentration.at(i)*((ConfigurationFileGenerator->absoluteFlow)/(stockSolutions.at(1))));
             }
 
+            /* Is the impurity 2 active? */
             if(ConfigurationFileGenerator->activeSubstances.at(2)){
+
+                /* Calculate the flow according to the concentrations and other parameters */
                 Impurity2Flow.replace(i,Impurity2Concentration.at(i)*((ConfigurationFileGenerator->absoluteFlow)/(stockSolutions.at(2))));
             }
 
+            /* Is the impurity 3 active? */
             if(ConfigurationFileGenerator->activeSubstances.at(3)){
+
+                /* Calculate the flow according to the concentrations and other parameters */
                 Impurity3Flow.replace(i,Impurity3Concentration.at(i)*((ConfigurationFileGenerator->absoluteFlow)/(stockSolutions.at(3))));
             }
 
+            /* Is the impurity 4 active? */
             if(ConfigurationFileGenerator->activeSubstances.at(4)){
+
+                /* Calculate the flow according to the concentrations and other parameters */
                 Impurity4Flow.replace(i,Impurity4Concentration.at(i)*((ConfigurationFileGenerator->absoluteFlow)/(stockSolutions.at(4))));
             }
 
+            /* Is the impurity 5 active? */
             if(ConfigurationFileGenerator->activeSubstances.at(5)){
+
+                /* Calculate the flow according to the concentrations and other parameters */
                 Impurity5Flow.replace(i,Impurity5Concentration.at(i)*((ConfigurationFileGenerator->absoluteFlow)/(stockSolutions.at(5))));
             }
 
@@ -530,40 +624,52 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
 
             /* If glucose is active consider its flow */
             if(ConfigurationFileGenerator->activeSubstances.at(0)){
+
+                /* Add the needed flow for this substance to the overall flow */
                 Flow = Flow + GlucoseFlow.at(i);
             }
 
             /* If Impurity 1 is active consider its flow */
             if(ConfigurationFileGenerator->activeSubstances.at(1)){
+
+                /* Add the needed flow for this substance to the overall flow */
                 Flow = Flow + Impurity1Flow.at(i);
             }
 
             /* If Impurity 2 is active consider its flow */
             if(ConfigurationFileGenerator->activeSubstances.at(2)){
+
+                /* Add the needed flow for this substance to the overall flow */
                 Flow = Flow + Impurity2Flow.at(i);
             }
 
             /* If Impurity 3 is active consider its flow */
             if(ConfigurationFileGenerator->activeSubstances.at(3)){
+
+                /* Add the needed flow for this substance to the overall flow */
                 Flow = Flow + Impurity3Flow.at(i);
             }
 
             /* If Impurity 4 is active consider its flow */
             if(ConfigurationFileGenerator->activeSubstances.at(4)){
+
+                /* Add the needed flow for this substance to the overall flow */
                 Flow = Flow + Impurity4Flow.at(i);
             }
 
             /* If Impurity 5 is active consider its flow */
             if(ConfigurationFileGenerator->activeSubstances.at(5)){
+
+                /* Add the needed flow for this substance to the overall flow */
                 Flow = Flow + Impurity5Flow.at(i);
             }
 
-            /* Water Flow */
+            /* The left flow is for Water */
             WaterFlow.replace(i,ConfigurationFileGenerator->absoluteFlow - Flow);
         }
     }
 
-    /* Write all scripts */
+    /* After calculation, go and write all the pump scripts and configuration files */
     writeScripts();
 
 }
@@ -573,11 +679,11 @@ void Pol_ExternConf::pumpsPatternCalculator(void){
  */
 void Pol_ExternConf::writeScripts(void){
 
-    /* Create the Spectrometer Script */
+    /* Create the Spectrometer configuration file */
     ConfigurationFileGenerator->GenerateSpectrometerConfiguration(pathForScripts, GlucoseConcentration, Impurity1Concentration, Impurity2Concentration,  Impurity3Concentration,
                                                                   Impurity4Concentration,  Impurity5Concentration, stockSolutions, minWavelength,
                                                                   maxWavelength, UserTimeInterval);
-    /* Remove the existing pump files */
+    /* Remove the existing old pump files */
     removeExistingFiles();
 
     /* If glucose is active, then generate its pump script */
@@ -631,6 +737,7 @@ void Pol_ExternConf::writeScripts(void){
  */
 void Pol_ExternConf::removeExistingFiles(void){
 
+    /* Get the path where the new files are going to be written */
     QFileInfo folderP(pathForScripts);
 
     /* Get folder information */
@@ -646,7 +753,7 @@ void Pol_ExternConf::removeExistingFiles(void){
     /* Get all pump files */
     QStringList Files = folder.entryList(QStringList() << "*.nfp",QDir::Files | QDir::NoSymLinks, QDir::Time | QDir::Reversed);
 
-    /* Remove the files */
+    /* Remove the old files */
     for(int erase=0; erase < Files.length(); erase++){
 
         /* If there are some pump scripts already, remove them */
@@ -684,21 +791,18 @@ QStringList Pol_ExternConf::TimeConverter(double mTime){
     }
     /* minutes */
     else if(mTime >= 60 && mTime < 3600){
-
         mTime = mTime/60;
         unit = "min";
         precision = 2;
 
         /* Hours */
     }else if(mTime >= 3600 && mTime < 86400){
-
         mTime = mTime/3600;
         unit = "hours";
         precision = 3;
 
         /* Days */
     }else if(mTime >= 86400){
-
         mTime = mTime/86400;
         unit = "days";
         precision = 4;

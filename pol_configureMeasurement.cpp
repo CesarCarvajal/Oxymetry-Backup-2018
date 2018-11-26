@@ -51,6 +51,22 @@ extern unsigned int m_NrDevices;
 /**
  * @brief Constructor of 'configure Pol Measure' class
  * @param[in] parent Parent widget
+ *
+ * In this class:   - The overall configuration of the measurements is performed.
+ *                  - The configuration dialog that opens with the button "Configure" of the Polarimeter Tab.
+ *                  - The spectrometer settings for the measurements.
+ *                  - Addition of ranges of mixed concentrations and stock solutions dynamically.
+ *                  - Pumps settings.
+ *                  - Measurement time adjustement and delays.
+ *                  - Paths for the pump scripts, configuration file and further measurement data.
+ *                  - Activation of Crossing or Interval modes.
+ *                  - User interface for the configuration of the measurements (Filling Form).
+ *                  - Important information for the execution of a measurement profile.
+ *                  - The configuration file is created, filled and then loaded.
+ *
+ * Uses:    - "pol_externConf" class (inherits "pol_configFilesGenerator" class)
+ *          - "pol_panelItem" class
+ *
  */
 configurePolMeasure::configurePolMeasure(QWidget *parent) :
     QDialog(parent),
@@ -175,7 +191,7 @@ configurePolMeasure::configurePolMeasure(QWidget *parent) :
 }
 
 /**
- * @brief Select path for StoreToRAM files
+ * @brief The user selects the path to save the pump scripts, configuration files and measurement data.
  */
 void configurePolMeasure::selectPath(void)
 {
@@ -210,12 +226,213 @@ void configurePolMeasure::selectPath(void)
         /* Get path to create the configuration file */
         externSoftware->pathForScripts = pathDataMeasurements.absoluteFilePath();
 
-        /* Loading from file */
+        /* Loading from the created configuration file */
         loadingConfigurationFromFile = true;
 
-        /* Load Configuration */
+        /* Load Configuration from file */
         loadConfiguration();
     }
+}
+
+/**
+ * @brief Load configuration from file .csar
+ */
+void configurePolMeasure::loadConfiguration(void)
+{
+    /* Save rows in file */
+    QStringList wordList;
+
+    /* File Path */
+    QFile file(pathDataMeasurements.absoluteFilePath());
+
+    /* Open configuration file */
+    if (!file.open(QIODevice::ReadOnly))
+    {
+        /* Show message */
+        showCritical("Unable to open the configuration file!", "");
+        return;
+    }
+
+    /* Save that a configuration file was loaded */
+    configured = true;
+
+    /* Loop through lines in file */
+    while (!file.atEnd())
+    {
+        /* Get row in file */
+        wordList.append(file.readLine().split(',').first());
+    }
+
+    /* Remove the first row since it only has a description of the file */
+    wordList.removeAt(0);
+
+    /* Close file */
+    file.close();
+
+    /* Clear lists */
+    cleanAll();
+
+    /* Check format of configuration file; we need at least 46 semicolons in this conf line */
+    if (wordList[0].count(QLatin1Char(';')) != 46)
+    {
+        /* Show message */
+        showWarning("Malformed configuration file. Please check the file version. It should contain 47 configuration values and 46 semicolons", "");
+        configured = false;
+        return;
+    }
+
+    /* Loading configuration from file? */
+    getConfigurationFromFile(wordList.at(0));
+
+    /* Remove the first row since it as the configuration data already obtained from the file */
+    wordList.removeAt(0);
+
+    /* Remove the first row since it as the configuration data already obtained from the file */
+    wordList.removeAt(0);
+
+    unsigned int i = 0;
+
+    /* Loop through elements */
+    for (i = 0; i < (unsigned int)wordList.length(); i++)
+    {
+        /* Divide by the semicolon ";" */
+        QStringList list = wordList[i].split(';');
+
+        /* Copy entries to the lists */
+        timePoint.append(list[0].toInt());
+        savingFilesNames.append(list[1]);
+
+        /* Get the concentration vectors from the loaded file names */
+        if(loadingConfigurationFromFile){
+
+            /* Save the actual file name */
+            QString name = savingFilesNames.at(i);
+
+            /* Get the glucose concentration */
+            if(externSoftware->ConfigurationFileGenerator->activeSubstances.at(0)){
+
+                /* Get the glucose concentrations in file */
+                externSoftware->GlucoseConcentration.replace(i, name.left(name.indexOf("C1")).toDouble());
+
+                /* Remove it from the file name */
+                name.remove(0, name.indexOf("C1")+3);
+            }
+
+            /* Get the impurity 1 concentration */
+            if(externSoftware->ConfigurationFileGenerator->activeSubstances.at(1)){
+
+                /* Get the impurity 1 concentrations in file, and then remove it from the file name */
+                externSoftware->Impurity1Concentration.replace(i, name.left(name.indexOf("C2")).toDouble());
+
+                /* Remove it from the file name */
+                name.remove(0, name.indexOf("C2")+3);
+            }
+
+            /* Get the impurity 2 concentration */
+            if(externSoftware->ConfigurationFileGenerator->activeSubstances.at(2)){
+
+                /* Get the impurity 2 concentrations in file, and then remove it from the file name */
+                externSoftware->Impurity2Concentration.replace(i, name.left(name.indexOf("C3")).toDouble());
+
+                /* Remove it from the file name */
+                name.remove(0, name.indexOf("C3")+3);
+            }
+
+            /* Get the impurity 3 concentration */
+            if(externSoftware->ConfigurationFileGenerator->activeSubstances.at(3)){
+
+                /* Get the impurity 3 concentrations in file, and then remove it from the file name */
+                externSoftware->Impurity3Concentration.replace(i, name.left(name.indexOf("C4")).toDouble());
+
+                /* Remove it from the file name */
+                name.remove(0, name.indexOf("C4")+3);
+            }
+
+            /* Get the impurity 4 concentration */
+            if(externSoftware->ConfigurationFileGenerator->activeSubstances.at(4)){
+
+                /* Get the impurity 4 concentrations in file, and then remove it from the file name */
+                externSoftware->Impurity4Concentration.replace(i, name.left(name.indexOf("C5")).toDouble());
+
+                /* Remove it from the file name */
+                name.remove(0, name.indexOf("C5")+3);
+            }
+
+            /* Get the impurity 5 concentration */
+            if(externSoftware->ConfigurationFileGenerator->activeSubstances.at(5)){
+
+                /* Get the impurity 5 concentrations in file, and then remove it from the file name */
+                externSoftware->Impurity5Concentration.replace(i, name.left(name.indexOf("C6")).toDouble());
+
+                /* Remove it from the file name */
+                name.remove(0, name.indexOf("C6")+3);
+            }
+        }
+
+        /* At least second entry? */
+        if (i > 0)
+        {
+            /* Calculate duration of entry before current entry */
+            double duration = externSoftware->ConfigurationFileGenerator->NrSpectra * externSoftware->ConfigurationFileGenerator->IntegrationTime
+                    * externSoftware->ConfigurationFileGenerator->NrAverages;
+
+            /* Check if there's a time overlap between last and current entry */
+            if ((timePoint[i - 1] + duration) > timePoint[i])
+            {
+                /* Clear lists */
+                cleanAll();
+
+                /* Create message */
+                QString message;
+                message = QString("Error in configuration file! Time overlap between entries %1 and %2.").arg(QString::number(i - 1),
+                                                                                                              QString::number(i));
+                /* Show message */
+                showCritical(message, "");
+                return;
+            }
+        }
+    }
+
+    /* If the interval mode is active, then recalculate the total time */
+    if(externSoftware->ConfigurationFileGenerator->intervalMode){
+
+        /* Total time for the interval mode */
+        totalMtime = (externSoftware->ConfigurationFileGenerator->NConcentrations+1) * (externSoftware->UserTimeInterval/1000);
+
+    }else{
+        /* How long last a measurement? */
+        double Mduration = (externSoftware->ConfigurationFileGenerator->NrSpectra * externSoftware->ConfigurationFileGenerator->IntegrationTime
+                            * externSoftware->ConfigurationFileGenerator->NrAverages);
+
+        /* Save the total time */
+        totalMtime = ((timePoint.at(timePoint.length()-1))/1000) + externSoftware->ConfigurationFileGenerator->PumpsCycle/1000 + Mduration/1000;
+    }
+    /* Copy path into line edit */
+    ui->lineEdit_path->setText(pathDataMeasurements.absoluteFilePath());
+
+    /* Enable directory field and 'start' button */
+    ui->lineEdit_path->setEnabled(true);
+
+    /* The process for the pumps is named as: */
+    const QString &process = "neMESYS_UserInterface.exe";
+
+    /* Get the tasklist of windows and look for that process */
+    QProcess tasklist;
+    tasklist.start(
+                "tasklist",
+                QStringList() << "/NH"
+                << "/FO" << "CSV"
+                << "/FI" << QString("IMAGENAME eq %1").arg(process));
+    tasklist.waitForFinished();
+    QString output = tasklist.readAllStandardOutput();
+
+    /* Run pumps software if it wasn't running already */
+    if(!output.startsWith(QString("\"%1").arg(process))){
+        externSoftware->openPumpSoftware();
+    }
+
+    /* Finish the window */
+    accept();
 }
 
 /**
@@ -223,7 +440,7 @@ void configurePolMeasure::selectPath(void)
  */
 void configurePolMeasure::cleanAll(void)
 {
-    /* Clear lists */
+    /* Clear configuration lists */
     timePoint.clear();
     savingFilesNames.clear();
 
@@ -244,9 +461,10 @@ void configurePolMeasure::cleanAll(void)
  */
 void configurePolMeasure::handleClickEvent(QWidget *widget)
 {
+    /* Clicked object */
     QCheckBox *checkBox = qobject_cast<QCheckBox *>(widget);
 
-    /* Check if the Crossing Mode is activated */
+    /* Check if the Crossing Mode is activated? */
     if(checkBox == ui->checkBox_crossingMode){
 
         /* Is the crossing mode checked? */
@@ -274,16 +492,16 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
                 ui->checkBox_Imp5->setChecked(false);
                 ui->checkBox_Imp2->setChecked(false);
 
-                /* If glucose isnßt shown show it */
+                /* If glucose isn't shown, then show it */
                 if(!ui->checkBox_Glucose->isChecked()){
 
                     ui->checkBox_Glucose->setChecked(true);
+
                     /* Show/Hide Glucose values */
                     ui->doubleSpinBox_StockGlucose->setVisible(ui->checkBox_Glucose->isChecked());
                     ui->doubleSpinBox_MaxGluc->setVisible(ui->checkBox_Glucose->isChecked());
                     ui->doubleSpinBox_MinGluc->setVisible(ui->checkBox_Glucose->isChecked());
                     ui->doubleSpinBox_VolG->setVisible(ui->checkBox_Glucose->isChecked());
-
                 }
 
                 /* Show/Hide Impurities values */
@@ -337,7 +555,7 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
                                  (ui->checkBox_Imp3->isChecked() && ui->checkBox_Imp3->isVisible()), (ui->checkBox_Imp4->isChecked() && ui->checkBox_Imp4->isVisible()),
                                  (ui->checkBox_Imp5->isChecked() && ui->checkBox_Imp5->isVisible()));
 
-        /* Set them to checked again */
+        /* Set them to checked again, that is needed for further dynaic addition or removal */
         ui->checkBox_Imp1->setChecked(true);
         ui->checkBox_Imp2->setChecked(true);
         ui->checkBox_Imp3->setChecked(true);
@@ -370,7 +588,7 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
     int NumberOfSubstances = ui->checkBox_Glucose->isChecked() + ui->checkBox_Imp1->isEnabled() + ui->checkBox_Imp2->isEnabled() + ui->checkBox_Imp3->isEnabled()
             + ui->checkBox_Imp4->isEnabled()+ ui->checkBox_Imp5->isEnabled();
 
-    /* Adjust stock */
+    /* Adjust stock solutions dynamically */
     if(NumberOfSubstances > 0){
 
         /* Adjust the Stock solutions or maximum concentration accordingly */
@@ -474,7 +692,7 @@ void configurePolMeasure::handleClickEvent(QWidget *widget)
  */
 void configurePolMeasure::configurePolarimeter(void)
 {
-    /* If the user never pressed enter or similar */
+    /* If the user never pressed enter or similar, then get the actual form information */
     GetConfigurationData();
 
     /* Get path to save configuration file */
@@ -492,7 +710,7 @@ void configurePolMeasure::configurePolarimeter(void)
         /* Create the needed scripts for the measurements */
         externSoftware->pumpsPatternCalculator();
 
-        /* Creating a configuration */
+        /* Creating a configuration file */
         loadingConfigurationFromFile = false;
 
         /* Load saved file */
@@ -504,23 +722,26 @@ void configurePolMeasure::configurePolarimeter(void)
         /* Get the storage information at the data location */
         QStorageInfo storage(externSoftware->pathForScripts);
 
-        /* Save the memory space */
+        /* Save the actual memory space */
         double memoryspace = 0;
 
-        /* how much space do we need */
+        /* How much space do we need for the complete measurement? */
         if(ui->label_MSpace2->text() == "KB"){
 
+            /* Get the value in KB */
             memoryspace = ui->doubleSpinBox_MSpace->value()/1000;
 
         }else if(ui->label_MSpace2->text() == "GB"){
 
+            /* Get the value in GB */
             memoryspace = ui->doubleSpinBox_MSpace->value()*1000;
         }else{
 
+            /* Get the value in MB */
             memoryspace = ui->doubleSpinBox_MSpace->value();
         }
 
-        /* Show warning */
+        /* Show warning if the computer is running out of memory */
         if((storage.bytesAvailable()/1000/1000) < memoryspace + 10){
 
             showCritical("The location where you are trying to save the measurement data doesn't contain enough memory space. "
@@ -537,184 +758,7 @@ void configurePolMeasure::configurePolarimeter(void)
 }
 
 /**
- * @brief Load configuration from file .csar
- */
-void configurePolMeasure::loadConfiguration(void)
-{
-    /* Save rows in file */
-    QStringList wordList;
-
-    /* File Path */
-    QFile file(pathDataMeasurements.absoluteFilePath());
-
-    /* Open configuration file */
-    if (!file.open(QIODevice::ReadOnly))
-    {
-        /* Show message */
-        showCritical("Unable to open the configuration file!", "");
-        return;
-    }
-
-    /* Save that a configuration file was loaded */
-    configured = true;
-
-    /* Loop through lines in file */
-    while (!file.atEnd())
-    {
-        /* Get row in file */
-        wordList.append(file.readLine().split(',').first());
-    }
-
-    /* Remove the first row since it only has a description of the file */
-    wordList.removeAt(0);
-
-    /* Close file */
-    file.close();
-
-    /* Clear lists */
-    cleanAll();
-
-    /* Check format of configuration file; we need at least 46 semicolons in this conf line */
-    if (wordList[0].count(QLatin1Char(';')) != 46)
-    {
-        /* Show message */
-        showWarning("Malformed configuration file. Please check the file version. It should contain 47 configuration values and 46 semicolons", "");
-        configured = false;
-        return;
-    }
-
-    /* Loading configuration from file? */
-    getConfigurationFromFile(wordList.at(0));
-
-    /* Remove the first row since it as the configuration data already obtained from the file */
-    wordList.removeAt(0);
-
-    /* Remove the first row since it as the configuration data already obtained from the file */
-    wordList.removeAt(0);
-
-    unsigned int i = 0;
-
-    /* Loop through elements */
-    for (i = 0; i < (unsigned int)wordList.length(); i++)
-    {
-        /* Divide by the semicolon ";" */
-        QStringList list = wordList[i].split(';');
-
-        /* Copy entries to the lists */
-        timePoint.append(list[0].toInt());
-        savingFilesNames.append(list[1]);
-
-        /* Get the concentration vectors from the loaded file names */
-        if(loadingConfigurationFromFile){
-
-            /* Save the name */
-            QString name = savingFilesNames.at(i);
-
-            /* Get the glucose concentration */
-            if(externSoftware->ConfigurationFileGenerator->activeSubstances.at(0)){
-                externSoftware->GlucoseConcentration.replace(i, name.left(name.indexOf("C1")).toDouble());
-                name.remove(0, name.indexOf("C1")+3);
-            }
-
-            /* Get the impurity 1 concentration */
-            if(externSoftware->ConfigurationFileGenerator->activeSubstances.at(1)){
-                externSoftware->Impurity1Concentration.replace(i, name.left(name.indexOf("C2")).toDouble());
-                name.remove(0, name.indexOf("C2")+3);
-            }
-
-            /* Get the impurity 2 concentration */
-            if(externSoftware->ConfigurationFileGenerator->activeSubstances.at(2)){
-                externSoftware->Impurity2Concentration.replace(i, name.left(name.indexOf("C3")).toDouble());
-                name.remove(0, name.indexOf("C3")+3);
-            }
-
-            /* Get the impurity 3 concentration */
-            if(externSoftware->ConfigurationFileGenerator->activeSubstances.at(3)){
-                externSoftware->Impurity3Concentration.replace(i, name.left(name.indexOf("C4")).toDouble());
-                name.remove(0, name.indexOf("C4")+3);
-            }
-
-            /* Get the impurity 4 concentration */
-            if(externSoftware->ConfigurationFileGenerator->activeSubstances.at(4)){
-                externSoftware->Impurity4Concentration.replace(i, name.left(name.indexOf("C5")).toDouble());
-                name.remove(0, name.indexOf("C5")+3);
-            }
-
-            /* Get the impurity 5 concentration */
-            if(externSoftware->ConfigurationFileGenerator->activeSubstances.at(5)){
-                externSoftware->Impurity5Concentration.replace(i, name.left(name.indexOf("C6")).toDouble());
-                name.remove(0, name.indexOf("C6")+3);
-            }
-        }
-
-        /* At least second entry? */
-        if (i > 0)
-        {
-            /* Calculate duration of entry before current entry */
-            double duration = externSoftware->ConfigurationFileGenerator->NrSpectra * externSoftware->ConfigurationFileGenerator->IntegrationTime
-                    * externSoftware->ConfigurationFileGenerator->NrAverages;
-
-            /* Check if there's a time overlap between last and current entry */
-            if ((timePoint[i - 1] + duration) > timePoint[i])
-            {
-                /* Clear lists */
-                cleanAll();
-
-                /* Create message */
-                QString message;
-                message = QString("Error in configuration file! Time overlap between entries %1 and %2.").arg(QString::number(i - 1),
-                                                                                                              QString::number(i));
-                /* Show message */
-                showCritical(message, "");
-                return;
-            }
-        }
-    }
-
-    /* If the interval mode is active, then recalculate the total time */
-    if(externSoftware->ConfigurationFileGenerator->intervalMode){
-
-        /* Total time for the interval mode */
-        totalMtime = (externSoftware->ConfigurationFileGenerator->NConcentrations+1) * (externSoftware->UserTimeInterval/1000);
-
-    }else{
-        /* How long last a measurement? */
-        double Mduration = (externSoftware->ConfigurationFileGenerator->NrSpectra * externSoftware->ConfigurationFileGenerator->IntegrationTime
-                            * externSoftware->ConfigurationFileGenerator->NrAverages);
-
-        /* Save the total time */
-        totalMtime = ((timePoint.at(timePoint.length()-1))/1000) + externSoftware->ConfigurationFileGenerator->PumpsCycle/1000 + Mduration/1000;
-    }
-    /* Copy path into line edit */
-    ui->lineEdit_path->setText(pathDataMeasurements.absoluteFilePath());
-
-    /* Enable directory field and 'start' button */
-    ui->lineEdit_path->setEnabled(true);
-
-    /* The process for the pumps is named as: */
-    const QString &process = "neMESYS_UserInterface.exe";
-
-    /* Get the tasklist of windows and look for that process */
-    QProcess tasklist;
-    tasklist.start(
-                "tasklist",
-                QStringList() << "/NH"
-                << "/FO" << "CSV"
-                << "/FI" << QString("IMAGENAME eq %1").arg(process));
-    tasklist.waitForFinished();
-    QString output = tasklist.readAllStandardOutput();
-
-    /* Run pumps software if it wasn't running already */
-    if(!output.startsWith(QString("\"%1").arg(process))){
-        externSoftware->openPumpSoftware();
-    }
-
-    /* Finish the window */
-    accept();
-}
-
-/**
- * @brief Get the configuration data from file
+ * @brief Get the configuration data from the configuration file
  */
 void configurePolMeasure::getConfigurationFromFile(QString data)
 {
@@ -802,7 +846,7 @@ void configurePolMeasure::getConfigurationFromFile(QString data)
             externSoftware->Impurity5Concentration.resize(externSoftware->ConfigurationFileGenerator->NConcentrations* externSoftware->ConfigurationFileGenerator->repetition);
         }
 
-        /* How long is a cycle? */
+        /* How long is a cycle? Recalculate it */
         externSoftware->ConfigurationFileGenerator->PumpsCycle = (2 * externSoftware->ConfigurationFileGenerator->fillRefill +
                                                                   4 * externSoftware->ConfigurationFileGenerator->shortBreak) *
                 (externSoftware->ConfigurationFileGenerator->NSteps + (externSoftware->ConfigurationFileGenerator->NSteps-1)) +
@@ -824,7 +868,7 @@ void configurePolMeasure::cancel(void)
 }
 
 /**
- * @brief Get data from the form
+ * @brief Get data from the actual form
  */
 void configurePolMeasure::GetConfigurationData(void)
 {
@@ -1027,6 +1071,7 @@ void configurePolMeasure::updateConfigurationValues(void)
         ui->doubleSpinBox_VolI5->setValue(volumeI5*(ui->spinBox_Nrepet->value()+1));
     }
 
+    /* Is the crossing mode active? */
     if(ui->checkBox_crossingMode->isChecked()){
 
         /* Convert the time to minutes, hours or days */
@@ -1047,6 +1092,7 @@ void configurePolMeasure::updateConfigurationValues(void)
         ui->doubleSpinBox_VolI1->setValue((volumeI1/ui->spinBox_BNMeas->value())*ui->spinBox_BNMeas->value()*ui->spinBox_BNMeas->value()*(ui->spinBox_Nrepet->value()+1));
     }
 
+    /* Is the Interval mode active? */
     if(ui->checkBox_IntervalMode->isChecked()){
 
         /* Estimate the total measurement time */
@@ -1118,7 +1164,7 @@ void configurePolMeasure::updateConfigurationValues(void)
         ui->spinBox_BNSpec->setValue(externSoftware->ConfigurationFileGenerator->NrSpectra);
     }
 
-    /* Check intriduced stock solutions amounts */
+    /* Check introduced stock solutions amounts */
     checkStockValues();
 
     /* Update approximate memory space */
@@ -1157,6 +1203,7 @@ void configurePolMeasure::updateConfigurationValues(void)
         ui->doubleSpinBox_MSpace->setValue(space/1000);
         ui->label_MSpace2->setText("MB");
 
+        /* If there are quite a lot of MB then it becomes orange */
         if(space > 500000 ){
             ui->doubleSpinBox_MSpace->setStyleSheet("QDoubleSpinBox { color: orange; background: white;}");
             ui->label_MSpace2->setStyleSheet("QLabel { color: orange; background: white;}");
@@ -1177,6 +1224,7 @@ void configurePolMeasure::updateConfigurationValues(void)
         ui->label_MSpace2->setStyleSheet("QLabel { color: red;  background: white;}");
         ui->label_MSpace->setStyleSheet("QLabel { color: rgb(153, 0, 0);  background: white;}");
 
+        /* If there are quite a lot of GB then it becomes red with yellow background, that's a lot */
         if(space > 5000000){
 
             ui->doubleSpinBox_MSpace->setStyleSheet("QDoubleSpinBox { color: red;  background: yellow;}");
@@ -1187,7 +1235,6 @@ void configurePolMeasure::updateConfigurationValues(void)
             showWarning("The required memory space is greater than 5 GB, please consider performing less number of measurements, save only the FFT or avoid "
                         "several repetitions.","");
         }
-
     }
 
     /* Update file name preview */
@@ -1199,7 +1246,7 @@ void configurePolMeasure::updateConfigurationValues(void)
  */
 void configurePolMeasure::updateStockValues(void)
 {
-    /* Number of substances */
+    /* Number of actual active substances */
     int NumberOfSubstances = ui->checkBox_Glucose->isChecked() + ui->checkBox_Imp1->isEnabled() + ui->checkBox_Imp2->isEnabled() + ui->checkBox_Imp3->isEnabled()
             + ui->checkBox_Imp4->isEnabled()+ ui->checkBox_Imp5->isEnabled();
 
@@ -1265,13 +1312,13 @@ void configurePolMeasure::updateForm(void)
     /* Update the crossing mode */
     ui->checkBox_crossingMode->setChecked(externSoftware->ConfigurationFileGenerator->crossingMode);
 
+    /* Is the crossing mode active? */
     if(externSoftware->ConfigurationFileGenerator->crossingMode){
 
+        /* Change the number of measurements */
         ui->spinBox_BNMeas->setValue(int(sqrt(externSoftware->ConfigurationFileGenerator->NConcentrations)));
-
     }else{
         ui->spinBox_BNMeas->setValue(externSoftware->ConfigurationFileGenerator->NConcentrations);
-
     }
 
     /* Update the interval mode */

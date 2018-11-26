@@ -35,6 +35,8 @@
 /* FFT Library */
 #include <fftw3.h>
 
+/* Header of FFT Calculator Object */
+
 /**
  * @brief The 'FFT' class
  */
@@ -43,7 +45,7 @@ class fft : public QObject
 
 public:
 
-    /* Vector with time frequency */
+    /* Vector with time frequencies */
     QVector<double> time;
 
     /* FFT raw data */
@@ -56,7 +58,7 @@ public:
     QVector<double> fft_DC, fft_W, fft_2W;
     QVector<double> fft_Compensation_Signal;
 
-    /* Parameters from File */
+    /* Parameters from Files, initialization: */
     int NrSpectra = 1000;
     double IntTime = 8;
     double FrequencyF = 7;

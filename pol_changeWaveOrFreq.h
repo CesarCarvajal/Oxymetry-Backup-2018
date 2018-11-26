@@ -24,6 +24,8 @@
 #include <QWidget>
 #include <QTimer>
 
+/* Header for Change the FFT Wavelength or Measurement Frequency */
+
 namespace Ui {
     class PanelChangeWaveOrFreq;
 }

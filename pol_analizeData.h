@@ -29,15 +29,14 @@
 
 using namespace QtDataVisualization;
 
-/* Internal includes */
-
+/* Header of Analize Data Object */
 
 namespace Ui {
 class selectAnalizeData;
 }
 
 /**
- * @brief The 'AnaliZe data' class
+ * @brief The 'Analize data' class
  */
 class selectAnalizeData : public QDialog
 {
@@ -56,13 +55,13 @@ public:
     /* Data path */
     QString pathDataM;
 
-    /* Data for 3D plot */
+    /* Data for 3D plots */
     QSurfaceDataArray *data3D, *data3DNormalized;
 
-    /* Save the concentrations */
+    /* Save the current concentrations readed from file (temporal) */
     QStringList concentrationsList;
 
-    /* window canceled */
+    /* Window canceled */
     bool canceled;
 
     /* Overall factor for plotting purposes */

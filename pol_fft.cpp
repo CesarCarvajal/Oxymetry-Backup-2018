@@ -59,6 +59,16 @@ extern Spectrometer** ptrSpectrometers;
 extern unsigned int m_NrDevices;
 
 /**
+ * @brief The FFT Class
+ *
+ * In this class:   - The FFT from the raw data counts is calculated.
+ *                  - The FFT is calculated from raw data loaded from a file.
+ *                  - The FFT data is obtained from FFT files.
+ *                  - THe FFT files are created with the corresponding data results.
+ *
+ */
+
+/**
  * @brief Get the Data from a FFT File type.
  * @param[in] Information of the file where the FFT data will be read.
  */
@@ -155,6 +165,7 @@ void fft::getFFTfromFFTData(QFileInfo fileInformation)
                 /* Show the intensities for the maximum DC value */
                 if (SelectedWaveL == wavelengths.length()-1 && wavelengths.length()> 0){
 
+                    /* For half of the spectra */
                     for ( int  i = 0; i < NrSpectra/2; i++ )
                     {
                         /* Amplitude at all other frequencies are set to zero */
@@ -312,7 +323,9 @@ void fft::getFFTfromRawData(QFileInfo fileInformation, bool Calibrating, double 
 
                 /* By default show the FFT values for the wavelength 537,57 nm */
                 if (SelectedWaveL == wavelengths.length()-1 && wavelengths.length()> 0){
-                    for ( int  i = 0; i < NrSpectra/2; i++ )
+
+                    /* For half of the spectra */
+                    for(int  i = 0; i < NrSpectra/2; i++)
                     {
                         /* Amplitude at all frequencies */
                         fft_data.append(sqrt(fabs((outputFFT[i][0]*outputFFT[i][0])) + fabs((outputFFT[i][1]*outputFFT[i][1]))));
@@ -368,6 +381,7 @@ void fft::ReadFile(QString FilePath)
     /* Open the file */
     if(file.open(QIODevice::ReadOnly)) {
 
+        /* Read file */
         QTextStream stream(&file);
 
         /* Read lines */
@@ -677,7 +691,6 @@ void fft::saveFFTtoFile(QFileInfo FileDetails, bool userSaving, QStringList subs
         fprintf(fileFFT, "%.6f\t\t", fft_W.at(z));
         fprintf(fileFFT, "%.5f\t\t", fft_2W.at(z));
         fprintf(fileFFT, "%.5f\t\t", fft_Compensation_Signal.at(z));
-
         fprintf(fileFFT, "\n");
     }
 

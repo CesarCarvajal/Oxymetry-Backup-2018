@@ -35,6 +35,10 @@ QSerialPort serials;
 /**
  * @brief Constructor 'ConnectTemperature' class
  * @param parent
+ *
+ * In this class:   - The connection with the Teensy is stablished.
+ *                  - The settings of the teensy should fit here with thosein the board.
+ *
  */
 ConnectTemperature::ConnectTemperature(QWidget *parent) :
     QDialog(parent)
@@ -61,6 +65,7 @@ ConnectTemperature::ConnectTemperature(QWidget *parent) :
             /* Try to establish serial connection */
             if (serials.open(QIODevice::ReadWrite))
             {
+                /* Connected */
                TeensyConnected = true;
             }else{
 

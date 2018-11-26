@@ -25,6 +25,8 @@
 #include <QLabel>
 #include <QMainWindow>
 
+/* Header of the Help Dialog */
+
 namespace Ui {
     class PanelPolHelp;
 }

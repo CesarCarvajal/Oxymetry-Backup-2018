@@ -45,7 +45,7 @@ PanelChangeAverages::PanelChangeAverages(QWidget *parent) :
     /* Get keyboard focus */
     QTimer::singleShot(0, this, SLOT(activateWindow()));
 
-    /* Connect button signal handles */
+    /* Connect button of apply changes */
     connect(ui->button_apply, SIGNAL(clicked(bool)), this, SLOT(applyButton()));
 }
 

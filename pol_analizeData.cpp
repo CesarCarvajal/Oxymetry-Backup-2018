@@ -49,6 +49,21 @@ extern unsigned int m_NrDevices;
 /**
  * @brief Constructor of 'Select Analize Data' class
  * @param[in] parent Parent widget
+ *
+ * In this class:   - The files for calibration and validation are selected, sorted and displayed.
+ *                  - This window is loaded at the end of a measurement profile for further data analysis.
+ *                  - The user selects the path folder where the FFT files are located.
+ *                  - The window can be opened by the button "Analize Data" in the polarimeter tab.
+ *                  - The window opens automatically after finishing a measurement profile.
+ *                  - The calibration and validation files are sorted according to the selected substance.
+ *                  - The 3D plots of spectra and normalized spectra are created.
+ *                  - The plot of prediction and further statistics could be added further this class.
+ *                  - The folder "Data_Analysis" is created and contains two files.
+ *                  - The file calibration "Cal_Data.cal" contains the information for the PLSR calibration.
+ *                  - The file validation "Val_Data.val" contains the information for the PLSR validation.
+ *                  - A block of data as repetitions, can be used for calibration and validation too.
+ *                  - Calibration and validation files can be sorted automatically or manually.
+ *
  */
 selectAnalizeData::selectAnalizeData(QWidget *parent) :
     QDialog(parent),
@@ -60,7 +75,7 @@ selectAnalizeData::selectAnalizeData(QWidget *parent) :
     /* Create signal mapper for configuration window */
     signalMapperC = new QSignalMapper(this);
 
-    /* Connect Buttons */
+    /* Connect UI Buttons */
     connect(ui->pushButton_select, SIGNAL(clicked()), this, SLOT(allowSelectPath()));
     connect(ui->pushButton_cancel, SIGNAL(clicked()), this, SLOT(cancel()));
     connect(ui->pushButton_Analize, SIGNAL(clicked()), this, SLOT(analizeData()));
@@ -124,20 +139,20 @@ selectAnalizeData::selectAnalizeData(QWidget *parent) :
     ui->spinBox_stepsSelec->hide();
     ui->checkBox_SelecManual->hide();
 
-    /* not canceled */
+    /* Not canceled the window, initialize */
     canceled = false;
 
     /* Create the data array for the 3D spectra plot */
     data3D = new QSurfaceDataArray;
     data3DNormalized = new QSurfaceDataArray;
 
-    /* overall factor for plotting purposes */
+    /* Overall factor for plotting purposes */
     factorConcentration = 1;
 
 }
 
 /**
- * @brief Adjust the automatic loading of the data
+ * @brief Adjust the automatic loading of the data at the end of the measurements
  */
 void selectAnalizeData::automaticAnalize(QString PathAuto){
 
@@ -152,11 +167,11 @@ void selectAnalizeData::automaticAnalize(QString PathAuto){
 }
 
 /**
- * @brief Organize files in steps
+ * @brief Organize files in steps when selected the option
  */
 void selectAnalizeData::selectFileSteps(void){
 
-    /*Set all as calibration */
+    /* Set all as calibration */
     FFTFilesCalibration.append(FFTFilesValidation);
     FFTFilesValidation.clear();
 
@@ -258,7 +273,7 @@ void selectAnalizeData::selectPath(void)
         /* Get the path */
         dataPath = QFileInfo(pathDataM);
 
-        /* restart repetitions */
+        /* Restart repetitions */
         repetitions = 0;
 
         /* Empty vector */
@@ -276,9 +291,11 @@ void selectAnalizeData::selectPath(void)
 
         /* If there are repetitions */
         if(repetitions > 0){
+
             /* Add the FFT files to the list */
             FFTFilesCalibration = Dir.entryList(QStringList() << "*R1.FFT",QDir::Files | QDir::NoSymLinks, QDir::Time | QDir::Reversed);
         }else{
+
             /* Add the FFT files to the list */
             FFTFilesCalibration = Dir.entryList(QStringList() << "*.FFT",QDir::Files | QDir::NoSymLinks, QDir::Time | QDir::Reversed);
         }
@@ -319,7 +336,7 @@ void selectAnalizeData::selectPath(void)
 }
 
 /**
- * @brief Read Initial file to analize
+ * @brief Read Initial file to analize, just to get some header information.
  */
 void selectAnalizeData::readInitialFile(bool list, QString path)
 {
@@ -400,6 +417,7 @@ void selectAnalizeData::readFiles(void)
     allFiles.append(FFTFilesCalibration);
     allFiles.append(FFTFilesValidation);
 
+    /* Overall factor for plotting purposes */
     factorConcentration = 1;
 
     /* Create vectors with the concentrations for validation and calibration */
@@ -416,7 +434,7 @@ void selectAnalizeData::readFiles(void)
         allFiles = sortFiles2(allFiles);
     }
 
-    /* Create the data arrays for the plots */
+    /* Create the data arrays for the 3D plots */
     QSurfaceDataArray *dataArray = new QSurfaceDataArray;
     QSurfaceDataArray *dataArray_norm = new QSurfaceDataArray;
     dataArray->reserve(allFiles.length());
@@ -447,6 +465,7 @@ void selectAnalizeData::readFiles(void)
         /* Open the file */
         if(file.open(QIODevice::ReadOnly)) {
 
+            /* Read file */
             QTextStream stream(&file);
 
             /* Read lines */
@@ -494,7 +513,7 @@ void selectAnalizeData::readFiles(void)
                     if(ui->comboBox_DetSignal->currentIndex() == 2){
                         double data2W = Readed_Row.at(3).toDouble();
 
-                        /* use the logarithm with I(2W) */
+                        /* Use the logarithm with I(2W) */
                         if(ui->checkBox_applyLogarithm->isChecked()){
                             data2W = log10(data2W);
                         }
@@ -510,11 +529,11 @@ void selectAnalizeData::readFiles(void)
             }
         }
 
-        /* Rows of 3D plot */
+        /* Rows of 3D plots */
         QSurfaceDataRow *newRow = new QSurfaceDataRow(wavelengths.length());
         QSurfaceDataRow *newRow_norm = new QSurfaceDataRow(wavelengths.length());
 
-        /* get the data for the 3D plot */
+        /* Get the data for the 3D plot - Spectra */
         for (int j = 0; j < wavelengths.length(); j++)
 
             (*newRow)[j].setPosition(QVector3D(wavelengths.at(j), signal.at(j),
@@ -522,7 +541,7 @@ void selectAnalizeData::readFiles(void)
         /* All information for the 3D plot */
         *data3D << newRow;
 
-        /* get the data for the 3D plot */
+        /* Get the data for the 3D plot - Normalized spectra */
         for (int j = 0; j < wavelengths.length(); j++)
             (*newRow_norm)[j].setPosition(QVector3D(wavelengths.at(j), signal.at(j)/(data3D->at(0)->at(j).y()),
                                                     QString(concentrationsList.at(ui->comboBox_Substance->currentIndex())).toDouble()));
@@ -530,14 +549,13 @@ void selectAnalizeData::readFiles(void)
         /* All information for the 3D plot */
         *data3DNormalized << newRow_norm;
 
-
         /* Fill the lists of calibration or validation data */
         if(FFTFilesCalibration.indexOf(allFiles.at(index))!=-1){
             CalConcentrations.append(QString(concentrationsList.at(ui->comboBox_Substance->currentIndex())).toDouble());
         }
         else if(FFTFilesValidation.indexOf(allFiles.at(index))!=-1){
             ValConcentrations.append(QString(concentrationsList.at(ui->comboBox_Substance->currentIndex())).toDouble());
-        } //else, the file was removed
+        } /*else (the file was removed by the user) */
 
         /* Restart the vector */
         concentrationsList.clear();
@@ -560,7 +578,7 @@ void selectAnalizeData::readFiles(void)
         factorConcentration = 10;
     }
 
-    /* Was it necessary to adjust the plot units? */
+    /* Was it necessary to adjust the plot units? For plotting purposes */
     if(factorConcentration > 1){
 
         /* Then replace the very small concentrations for the same multiplied by the plot factor */
@@ -570,13 +588,13 @@ void selectAnalizeData::readFiles(void)
             QSurfaceDataRow *newRow = new QSurfaceDataRow(wavelengths.length());
             QSurfaceDataRow *newRow_norm = new QSurfaceDataRow(wavelengths.length());
 
-            /* replace the rows in the data */
+            /* Replace the rows in the data Spectra */
             for(int m = 0; m < wavelengths.length(); m++){
                 (*newRow)[m].setPosition(QVector3D(data3D->at(k)->at(m).x(), data3D->at(k)->at(m).y(), data3D->at(k)->at(m).z()*factorConcentration));
             }
             data3D->replace(k, newRow);
 
-            /* replace the rows in the data */
+            /* Replace the rows in the data Normalized Spectra */
             for(int m = 0; m < wavelengths.length(); m++){
                 (*newRow_norm)[m].setPosition(QVector3D(data3DNormalized ->at(k)->at(m).x(), data3DNormalized ->at(k)->at(m).y(), data3DNormalized->at(k)->at(m).z()*factorConcentration));
             }
@@ -589,7 +607,7 @@ void selectAnalizeData::readFiles(void)
 /**
  * @brief Add the files to the list
  */
-void selectAnalizeData::addFilesToList()
+void selectAnalizeData::addFilesToList(void)
 {
     /* Sort Files */
     FFTFilesCalibration = sortFiles(FFTFilesCalibration);
@@ -608,7 +626,6 @@ void selectAnalizeData::addFilesToList()
  */
 void selectAnalizeData::handleClickEvent(QWidget *widget)
 {
-
     /* Cast the events */
     QRadioButton *radioBox = qobject_cast<QRadioButton *>(widget);
     QCheckBox *checkBox = qobject_cast<QCheckBox *>(widget);
@@ -683,6 +700,7 @@ void selectAnalizeData::handleClickEvent(QWidget *widget)
 
         /* User clicks one file in the validation list */
         else if(listItem == ui->listWidget_Validation && ui->checkBox_SelecManual->isChecked()){
+
             /* Add to the other list the selected files */
             FFTFilesCalibration.append(ui->listWidget_Validation->selectedItems().at(0)->text());
             FFTFilesValidation.removeAt(FFTFilesValidation.indexOf(ui->listWidget_Validation->selectedItems().at(0)->text()));
@@ -806,7 +824,7 @@ void selectAnalizeData::handleClickEvent(QWidget *widget)
  */
 QStringList selectAnalizeData::sortFiles(QStringList List)
 {
-    /* Sort the vector */
+    /* Set the sort criteria */
     QCollator collator;
     collator.setNumericMode(true);
 
@@ -1023,18 +1041,18 @@ void selectAnalizeData::removeItem(void){
 }
 
 /**
- * @brief Left Click Menu
+ * @brief Left Click Menu in lists
  */
 void selectAnalizeData::showContextMenu(const QPoint &pos)
 {
-    // Handle global position
+    /* Handle global position */
     QPoint globalPos = ui->listWidget_Calibration->mapToGlobal(pos);
 
-    // Create menu and insert some actions
+    /* Create menu and insert some actions */
     QMenu LMenu;
     LMenu.addAction("Remove File",  this, SLOT(removeItem()));
 
-    // Show context menu at handling position
+    /* Show context menu at handling position */
     LMenu.exec(globalPos);
 
 }
@@ -1120,6 +1138,8 @@ void selectAnalizeData::writeCalValFiles(void){
 
     /* Write space and wavelength titles for Cal File */
     fprintf(Calfile, "\n");
+
+    /* Add if the logarithm was used */
     if(ui->checkBox_applyLogarithm->isChecked()){
         fprintf(Calfile, "\nWavelength:\tIntensity ln(%s): \n\n", ui->comboBox_DetSignal->currentText().toLatin1().data());
     }else{
@@ -1133,6 +1153,8 @@ void selectAnalizeData::writeCalValFiles(void){
     }
     /* Write space and wavelength titles for Cal File */
     fprintf(Calfile, "\n");
+
+    /* Add if the logarithm was used */
     if(ui->checkBox_applyLogarithm->isChecked()){
         fprintf(Valfile, "\nWavelength:\tIntensity ln(%s): \n\n", ui->comboBox_DetSignal->currentText().toLatin1().data());
     }else{

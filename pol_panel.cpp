@@ -95,6 +95,22 @@ extern QString defaultColors[];
 
 /**
  * @brief Constructor of 'Polarimeter' class
+ *
+ * In this class:   - MASTER CLASS OF POLARIMETRY TAB
+ *                  -
+ *
+ * Uses:    - "pol_ConfigureMeasurement" class (inherits "pol_externConf" class (inherits "pol_configFilesGenerator" class))
+ *          - "pol_fft"
+ *          - "pol_panelHelp"
+ *          - "pol_changeWaveOrFreq"
+ *          - "pol_set_wavelength_ranges"
+ *          - "pol_panelItem"
+ *          - "pol_measurements"
+ *          - "pol_waitingDialog"
+ *          - "pol_analizeData"
+ *          - "pol_temp_connect"
+ *          - "pol_plot"
+ *
  */
 PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     QWidget(parent),

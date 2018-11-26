@@ -24,6 +24,8 @@
 #include "timer.h"
 #include <QElapsedTimer>
 
+/* Header of the Runner Object, helps to rum the measurements */
+
 /**
  * @brief The 'pol_measurements' class
  */
