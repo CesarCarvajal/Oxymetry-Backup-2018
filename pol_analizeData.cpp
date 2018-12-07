@@ -31,6 +31,8 @@
 #include <QMessageBox>
 #include <QCollator>
 #include <QMenu>
+#include <Eigen/Core>
+#include <Eigen/Eigenvalues>
 
 /* Internal includes */
 #include "application.h"
@@ -45,6 +47,9 @@
  */
 extern Spectrometer** ptrSpectrometers;
 extern unsigned int m_NrDevices;
+
+/* Needed for the PLS implementation */
+using namespace Eigen;
 
 /**
  * @brief Constructor of 'Select Analize Data' class
@@ -175,13 +180,21 @@ void selectAnalizeData::selectFileSteps(void){
     FFTFilesCalibration.append(FFTFilesValidation);
     FFTFilesValidation.clear();
 
-    /* Sort file names */
-    FFTFilesCalibration = sortFiles(FFTFilesCalibration);
+    /* Check which substance we want to analize? */
+    if(ui->comboBox_Substance->currentIndex() == 0){
+
+        /* Sort file names according to the first substance */
+        FFTFilesCalibration = sortFiles(FFTFilesCalibration);
+    }else{
+
+        /* Sort file names according to the other substances order */
+        FFTFilesCalibration = sortFiles2(FFTFilesCalibration);
+    }
 
     /* Create temporal lists */
     QStringList FFTFilesCalibration_Temp, FFTFilesValidation_Temp;
 
-    /* For each position, randomly shuffle the vector and get the first position */
+    /* For each position, shuffle the vector and get the first position */
     for(int i = 0; i < FFTFilesCalibration.size(); i++){
 
         /* select the right positions */
@@ -1103,11 +1116,15 @@ void selectAnalizeData::writeCalValFiles(void){
 
     /* Create the path for the files */
     QString pathCal(pathDataM + "/Data_Analysis/" + "/Cal_Data.cal");
+    QString pathCalCounts(pathDataM + "/Data_Analysis/" + "/Cal_Counts.dat");
+    QString pathCalConcentrations(pathDataM + "/Data_Analysis/" + "/Cal_Concentrations.dat");
     QString pathVal(pathDataM + "/Data_Analysis/" + "/Val_Data.val");
 
     /* Save the calibration data to files */
     FILE *Calfile = fopen(pathCal.toLatin1().data(), "wt");
     FILE *Valfile = fopen(pathVal.toLatin1().data(), "wt");
+    FILE *CalfileCounts = fopen(pathCalCounts.toLatin1().data(), "wt");
+    FILE *CalfileConcentrations = fopen(pathCalConcentrations.toLatin1().data(), "wt");
 
     /* Check file handle */
     if (nullptr == Calfile || nullptr == Valfile){
@@ -1134,7 +1151,19 @@ void selectAnalizeData::writeCalValFiles(void){
     fprintf(Calfile, "Concentrations:\t");
     for(int j = 0; j < CalConcentrations.length(); j++){
         fprintf(Calfile, "%.2f\t", CalConcentrations.at(j));
+
+        /* Is that the last value? */
+        if(j+1 >= CalConcentrations.length()){
+            fprintf(CalfileConcentrations, "%.2f", CalConcentrations.at(j));
+        }else{
+            /* Don't print an empty row at the end */
+            fprintf(CalfileConcentrations, "%.2f\n", CalConcentrations.at(j));
+        }
     }
+
+    /* Close the concentrations file */
+    fclose(CalfileConcentrations);
+    CalfileConcentrations = nullptr;
 
     /* Write space and wavelength titles for Cal File */
     fprintf(Calfile, "\n");
@@ -1181,6 +1210,7 @@ void selectAnalizeData::writeCalValFiles(void){
                 if(compare < 0.0001){
                     /* Added to the calibration file */
                     fprintf(Calfile, "%.4f\t", intensity);
+                    fprintf(CalfileCounts, "%.4f\t", intensity);
                     break;
                 }
             }
@@ -1197,18 +1227,24 @@ void selectAnalizeData::writeCalValFiles(void){
             }
         }
 
-        fprintf(Calfile, "\n");
-        fprintf(Valfile, "\n");
+        /* Don't print an empty row at the end */
+        if(m+1 != wavelengths.length()){
+            fprintf(Calfile, "\n");
+            fprintf(CalfileCounts, "\n");
+            fprintf(Valfile, "\n");
+        }
 
     }
 
     /* Close the files */
     fclose(Calfile);
     fclose(Valfile);
+    fclose(CalfileCounts);
 
     /* Free pointers */
     Calfile = nullptr;
     Valfile = nullptr;
+    CalfileCounts = nullptr;
 }
 
 /**

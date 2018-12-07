@@ -219,18 +219,10 @@ public:
     QSpinBox *spinBox_Nrepet;
     QLabel *label_4;
     QHBoxLayout *horizontalLayout_41;
-    QCheckBox *checkBox_crossingMode;
-    QSpacerItem *verticalSpacer_3;
-    QGridLayout *gridLayout_9;
-    QHBoxLayout *horizontalLayout_56;
-    QCheckBox *checkBox_IntervalMode;
-    QHBoxLayout *horizontalLayout_55;
-    QLabel *label_intervalMode;
-    QHBoxLayout *horizontalLayout_57;
     QLabel *label_timebetweenM;
     QDoubleSpinBox *doubleSpinBox_timebetweenM;
     QLabel *label2_timebetweenM;
-    QSpacerItem *verticalSpacer_2;
+    QSpacerItem *verticalSpacer_3;
     QVBoxLayout *verticalLayout_7;
     QHBoxLayout *timeLayout;
     QLabel *label_timeLabel;
@@ -242,6 +234,16 @@ public:
     QDoubleSpinBox *doubleSpinBox_totalTime;
     QLabel *label_BtimeInt2;
     QSpacerItem *horizontalSpacer_7;
+    QSpacerItem *verticalSpacer_2;
+    QLabel *label_specialMeasurments;
+    QGridLayout *gridLayout_8;
+    QHBoxLayout *horizontalLayout_48;
+    QCheckBox *checkBox_crossingMode;
+    QHBoxLayout *horizontalLayout_47;
+    QCheckBox *checkBox_IntervalMode;
+    QGridLayout *gridLayout_9;
+    QHBoxLayout *horizontalLayout_55;
+    QLabel *label_intervalMode;
     QSpacerItem *verticalSpacer;
     QFrame *line_5;
     QHBoxLayout *horizontalLayout_29;
@@ -283,7 +285,7 @@ public:
     {
         if (configurePolMeasure->objectName().isEmpty())
             configurePolMeasure->setObjectName(QStringLiteral("configurePolMeasure"));
-        configurePolMeasure->resize(1413, 851);
+        configurePolMeasure->resize(1413, 871);
         QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -520,6 +522,7 @@ public:
         doubleSpinBox_maxW->setMinimumSize(QSize(80, 0));
         doubleSpinBox_maxW->setMaximumSize(QSize(80, 16777215));
         doubleSpinBox_maxW->setDecimals(1);
+        doubleSpinBox_maxW->setMinimum(0.1);
         doubleSpinBox_maxW->setMaximum(10000);
         doubleSpinBox_maxW->setSingleStep(0.1);
         doubleSpinBox_maxW->setValue(750);
@@ -577,6 +580,7 @@ public:
         spinBox_BFreq->setObjectName(QStringLiteral("spinBox_BFreq"));
         spinBox_BFreq->setMinimumSize(QSize(80, 0));
         spinBox_BFreq->setMaximumSize(QSize(80, 16777215));
+        spinBox_BFreq->setMinimum(1);
         spinBox_BFreq->setMaximum(50000);
         spinBox_BFreq->setValue(7);
 
@@ -605,6 +609,7 @@ public:
         doubleSpinBox_minW->setMinimumSize(QSize(80, 0));
         doubleSpinBox_minW->setMaximumSize(QSize(80, 16777215));
         doubleSpinBox_minW->setDecimals(1);
+        doubleSpinBox_minW->setMinimum(0.1);
         doubleSpinBox_minW->setMaximum(10000);
         doubleSpinBox_minW->setSingleStep(0.1);
         doubleSpinBox_minW->setValue(400);
@@ -794,6 +799,7 @@ public:
         doubleSpinBox_MaxImp2->setMinimumSize(QSize(80, 0));
         doubleSpinBox_MaxImp2->setMaximumSize(QSize(16777215, 16777215));
         doubleSpinBox_MaxImp2->setDecimals(2);
+        doubleSpinBox_MaxImp2->setMinimum(0.01);
         doubleSpinBox_MaxImp2->setMaximum(1e+7);
         doubleSpinBox_MaxImp2->setSingleStep(0.01);
         doubleSpinBox_MaxImp2->setValue(500);
@@ -811,6 +817,7 @@ public:
         sizePolicy5.setHeightForWidth(doubleSpinBox_MaxImp4->sizePolicy().hasHeightForWidth());
         doubleSpinBox_MaxImp4->setSizePolicy(sizePolicy5);
         doubleSpinBox_MaxImp4->setMinimumSize(QSize(80, 0));
+        doubleSpinBox_MaxImp4->setMinimum(0.01);
         doubleSpinBox_MaxImp4->setMaximum(1e+6);
         doubleSpinBox_MaxImp4->setSingleStep(0.01);
         doubleSpinBox_MaxImp4->setValue(500);
@@ -857,6 +864,7 @@ public:
         doubleSpinBox_VolI4->setDecimals(3);
         doubleSpinBox_VolI4->setMaximum(1e+14);
         doubleSpinBox_VolI4->setSingleStep(0.01);
+        doubleSpinBox_VolI4->setValue(100);
 
         horizontalLayout_64->addWidget(doubleSpinBox_VolI4);
 
@@ -888,6 +896,7 @@ public:
         doubleSpinBox_MaxImp1->setMinimumSize(QSize(80, 0));
         doubleSpinBox_MaxImp1->setMaximumSize(QSize(16777215, 16777215));
         doubleSpinBox_MaxImp1->setDecimals(2);
+        doubleSpinBox_MaxImp1->setMinimum(0.01);
         doubleSpinBox_MaxImp1->setMaximum(1e+6);
         doubleSpinBox_MaxImp1->setSingleStep(0.01);
         doubleSpinBox_MaxImp1->setValue(200);
@@ -906,6 +915,7 @@ public:
         doubleSpinBox_MaxGluc->setMinimumSize(QSize(80, 0));
         doubleSpinBox_MaxGluc->setMaximumSize(QSize(16777215, 16777215));
         doubleSpinBox_MaxGluc->setDecimals(2);
+        doubleSpinBox_MaxGluc->setMinimum(0.01);
         doubleSpinBox_MaxGluc->setMaximum(1e+12);
         doubleSpinBox_MaxGluc->setSingleStep(0.01);
         doubleSpinBox_MaxGluc->setValue(500);
@@ -924,6 +934,7 @@ public:
         doubleSpinBox_StockImp2->setMinimumSize(QSize(80, 0));
         doubleSpinBox_StockImp2->setMaximumSize(QSize(16777215, 16777203));
         doubleSpinBox_StockImp2->setDecimals(2);
+        doubleSpinBox_StockImp2->setMinimum(0.1);
         doubleSpinBox_StockImp2->setMaximum(1e+8);
         doubleSpinBox_StockImp2->setSingleStep(0.1);
         doubleSpinBox_StockImp2->setValue(1500);
@@ -952,6 +963,7 @@ public:
         doubleSpinBox_VolI3->setDecimals(3);
         doubleSpinBox_VolI3->setMaximum(1e+14);
         doubleSpinBox_VolI3->setSingleStep(0.01);
+        doubleSpinBox_VolI3->setValue(100);
 
         horizontalLayout_58->addWidget(doubleSpinBox_VolI3);
 
@@ -999,6 +1011,7 @@ public:
         sizePolicy5.setHeightForWidth(doubleSpinBox_MaxImp5->sizePolicy().hasHeightForWidth());
         doubleSpinBox_MaxImp5->setSizePolicy(sizePolicy5);
         doubleSpinBox_MaxImp5->setMinimumSize(QSize(80, 0));
+        doubleSpinBox_MaxImp5->setMinimum(0.01);
         doubleSpinBox_MaxImp5->setMaximum(1e+6);
         doubleSpinBox_MaxImp5->setSingleStep(0.01);
         doubleSpinBox_MaxImp5->setValue(500);
@@ -1075,6 +1088,7 @@ public:
         sizePolicy5.setHeightForWidth(doubleSpinBox_MaxImp3->sizePolicy().hasHeightForWidth());
         doubleSpinBox_MaxImp3->setSizePolicy(sizePolicy5);
         doubleSpinBox_MaxImp3->setMinimumSize(QSize(80, 0));
+        doubleSpinBox_MaxImp3->setMinimum(0.01);
         doubleSpinBox_MaxImp3->setMaximum(1e+6);
         doubleSpinBox_MaxImp3->setSingleStep(0.01);
         doubleSpinBox_MaxImp3->setValue(500);
@@ -1144,8 +1158,10 @@ public:
         sizePolicy5.setHeightForWidth(doubleSpinBox_StockImp5->sizePolicy().hasHeightForWidth());
         doubleSpinBox_StockImp5->setSizePolicy(sizePolicy5);
         doubleSpinBox_StockImp5->setMinimumSize(QSize(80, 0));
+        doubleSpinBox_StockImp5->setMinimum(0.01);
         doubleSpinBox_StockImp5->setMaximum(1e+6);
         doubleSpinBox_StockImp5->setSingleStep(0.01);
+        doubleSpinBox_StockImp5->setValue(1000);
 
         horizontalLayout_68->addWidget(doubleSpinBox_StockImp5);
 
@@ -1187,6 +1203,7 @@ public:
         doubleSpinBox_StockImp1->setMinimumSize(QSize(80, 0));
         doubleSpinBox_StockImp1->setMaximumSize(QSize(16777215, 16777215));
         doubleSpinBox_StockImp1->setDecimals(2);
+        doubleSpinBox_StockImp1->setMinimum(0.1);
         doubleSpinBox_StockImp1->setMaximum(1e+6);
         doubleSpinBox_StockImp1->setSingleStep(0.1);
         doubleSpinBox_StockImp1->setValue(400);
@@ -1237,6 +1254,7 @@ public:
         doubleSpinBox_VolG->setReadOnly(true);
         doubleSpinBox_VolG->setButtonSymbols(QAbstractSpinBox::NoButtons);
         doubleSpinBox_VolG->setDecimals(3);
+        doubleSpinBox_VolG->setMinimum(0);
         doubleSpinBox_VolG->setMaximum(1e+12);
         doubleSpinBox_VolG->setValue(318.75);
 
@@ -1253,8 +1271,10 @@ public:
         sizePolicy5.setHeightForWidth(doubleSpinBox_StockImp3->sizePolicy().hasHeightForWidth());
         doubleSpinBox_StockImp3->setSizePolicy(sizePolicy5);
         doubleSpinBox_StockImp3->setMinimumSize(QSize(80, 0));
+        doubleSpinBox_StockImp3->setMinimum(0.01);
         doubleSpinBox_StockImp3->setMaximum(1e+6);
         doubleSpinBox_StockImp3->setSingleStep(0.01);
+        doubleSpinBox_StockImp3->setValue(1000);
 
         horizontalLayout_54->addWidget(doubleSpinBox_StockImp3);
 
@@ -1280,6 +1300,7 @@ public:
         doubleSpinBox_VolI5->setDecimals(3);
         doubleSpinBox_VolI5->setMaximum(1e+14);
         doubleSpinBox_VolI5->setSingleStep(0.01);
+        doubleSpinBox_VolI5->setValue(100);
 
         horizontalLayout_69->addWidget(doubleSpinBox_VolI5);
 
@@ -1294,8 +1315,10 @@ public:
         sizePolicy5.setHeightForWidth(doubleSpinBox_StockImp4->sizePolicy().hasHeightForWidth());
         doubleSpinBox_StockImp4->setSizePolicy(sizePolicy5);
         doubleSpinBox_StockImp4->setMinimumSize(QSize(80, 0));
+        doubleSpinBox_StockImp4->setMinimum(0.01);
         doubleSpinBox_StockImp4->setMaximum(1e+6);
         doubleSpinBox_StockImp4->setSingleStep(0.01);
+        doubleSpinBox_StockImp4->setValue(1000);
 
         horizontalLayout_63->addWidget(doubleSpinBox_StockImp4);
 
@@ -1335,6 +1358,7 @@ public:
         doubleSpinBox_StockGlucose->setMinimumSize(QSize(80, 0));
         doubleSpinBox_StockGlucose->setMaximumSize(QSize(16777215, 16777215));
         doubleSpinBox_StockGlucose->setDecimals(2);
+        doubleSpinBox_StockGlucose->setMinimum(0.01);
         doubleSpinBox_StockGlucose->setMaximum(1e+8);
         doubleSpinBox_StockGlucose->setSingleStep(0.1);
         doubleSpinBox_StockGlucose->setValue(1000);
@@ -1477,6 +1501,7 @@ public:
         doubleSpinBox_AbsFlow->setSizePolicy(sizePolicy4);
         doubleSpinBox_AbsFlow->setMinimumSize(QSize(80, 0));
         doubleSpinBox_AbsFlow->setMaximumSize(QSize(80, 16777215));
+        doubleSpinBox_AbsFlow->setMinimum(0.05);
         doubleSpinBox_AbsFlow->setMaximum(500);
         doubleSpinBox_AbsFlow->setSingleStep(0.05);
         doubleSpinBox_AbsFlow->setValue(18.75);
@@ -1506,6 +1531,7 @@ public:
         spinBox_AbsVol->setSizePolicy(sizePolicy4);
         spinBox_AbsVol->setMinimumSize(QSize(80, 0));
         spinBox_AbsVol->setMaximumSize(QSize(80, 16777215));
+        spinBox_AbsVol->setMinimum(1);
         spinBox_AbsVol->setMaximum(100000);
         spinBox_AbsVol->setValue(25);
 
@@ -1741,52 +1767,6 @@ public:
 
         horizontalLayout_41 = new QHBoxLayout();
         horizontalLayout_41->setObjectName(QStringLiteral("horizontalLayout_41"));
-        checkBox_crossingMode = new QCheckBox(ConfigurationLayout);
-        checkBox_crossingMode->setObjectName(QStringLiteral("checkBox_crossingMode"));
-        sizePolicy2.setHeightForWidth(checkBox_crossingMode->sizePolicy().hasHeightForWidth());
-        checkBox_crossingMode->setSizePolicy(sizePolicy2);
-        checkBox_crossingMode->setMinimumSize(QSize(220, 0));
-        checkBox_crossingMode->setMaximumSize(QSize(16777215, 16777215));
-
-        horizontalLayout_41->addWidget(checkBox_crossingMode);
-
-
-        gridLayout_5->addLayout(horizontalLayout_41, 2, 3, 1, 1);
-
-
-        verticalLayout_5->addLayout(gridLayout_5);
-
-        verticalSpacer_3 = new QSpacerItem(5, 5, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        verticalLayout_5->addItem(verticalSpacer_3);
-
-        gridLayout_9 = new QGridLayout();
-        gridLayout_9->setObjectName(QStringLiteral("gridLayout_9"));
-        horizontalLayout_56 = new QHBoxLayout();
-        horizontalLayout_56->setObjectName(QStringLiteral("horizontalLayout_56"));
-        checkBox_IntervalMode = new QCheckBox(ConfigurationLayout);
-        checkBox_IntervalMode->setObjectName(QStringLiteral("checkBox_IntervalMode"));
-        sizePolicy2.setHeightForWidth(checkBox_IntervalMode->sizePolicy().hasHeightForWidth());
-        checkBox_IntervalMode->setSizePolicy(sizePolicy2);
-        checkBox_IntervalMode->setMinimumSize(QSize(220, 0));
-
-        horizontalLayout_56->addWidget(checkBox_IntervalMode);
-
-
-        gridLayout_9->addLayout(horizontalLayout_56, 0, 1, 1, 1);
-
-        horizontalLayout_55 = new QHBoxLayout();
-        horizontalLayout_55->setObjectName(QStringLiteral("horizontalLayout_55"));
-        label_intervalMode = new QLabel(ConfigurationLayout);
-        label_intervalMode->setObjectName(QStringLiteral("label_intervalMode"));
-
-        horizontalLayout_55->addWidget(label_intervalMode);
-
-
-        gridLayout_9->addLayout(horizontalLayout_55, 0, 3, 1, 1);
-
-        horizontalLayout_57 = new QHBoxLayout();
-        horizontalLayout_57->setObjectName(QStringLiteral("horizontalLayout_57"));
         label_timebetweenM = new QLabel(ConfigurationLayout);
         label_timebetweenM->setObjectName(QStringLiteral("label_timebetweenM"));
         label_timebetweenM->setMinimumSize(QSize(100, 0));
@@ -1797,7 +1777,7 @@ public:
         palette7.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
         label_timebetweenM->setPalette(palette7);
 
-        horizontalLayout_57->addWidget(label_timebetweenM);
+        horizontalLayout_41->addWidget(label_timebetweenM);
 
         doubleSpinBox_timebetweenM = new QDoubleSpinBox(ConfigurationLayout);
         doubleSpinBox_timebetweenM->setObjectName(QStringLiteral("doubleSpinBox_timebetweenM"));
@@ -1819,7 +1799,7 @@ public:
         doubleSpinBox_timebetweenM->setSingleStep(0.01);
         doubleSpinBox_timebetweenM->setValue(6.32);
 
-        horizontalLayout_57->addWidget(doubleSpinBox_timebetweenM);
+        horizontalLayout_41->addWidget(doubleSpinBox_timebetweenM);
 
         label2_timebetweenM = new QLabel(ConfigurationLayout);
         label2_timebetweenM->setObjectName(QStringLiteral("label2_timebetweenM"));
@@ -1830,17 +1810,17 @@ public:
         palette9.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
         label2_timebetweenM->setPalette(palette9);
 
-        horizontalLayout_57->addWidget(label2_timebetweenM);
+        horizontalLayout_41->addWidget(label2_timebetweenM);
 
 
-        gridLayout_9->addLayout(horizontalLayout_57, 0, 2, 1, 1);
+        gridLayout_5->addLayout(horizontalLayout_41, 2, 3, 1, 1);
 
 
-        verticalLayout_5->addLayout(gridLayout_9);
+        verticalLayout_5->addLayout(gridLayout_5);
 
-        verticalSpacer_2 = new QSpacerItem(5, 5, QSizePolicy::Minimum, QSizePolicy::Fixed);
+        verticalSpacer_3 = new QSpacerItem(5, 5, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-        verticalLayout_5->addItem(verticalSpacer_2);
+        verticalLayout_5->addItem(verticalSpacer_3);
 
         verticalLayout_7 = new QVBoxLayout();
         verticalLayout_7->setObjectName(QStringLiteral("verticalLayout_7"));
@@ -1969,6 +1949,66 @@ public:
 
 
         verticalLayout_5->addLayout(verticalLayout_7);
+
+        verticalSpacer_2 = new QSpacerItem(5, 10, QSizePolicy::Minimum, QSizePolicy::Fixed);
+
+        verticalLayout_5->addItem(verticalSpacer_2);
+
+        label_specialMeasurments = new QLabel(ConfigurationLayout);
+        label_specialMeasurments->setObjectName(QStringLiteral("label_specialMeasurments"));
+        label_specialMeasurments->setFont(font1);
+
+        verticalLayout_5->addWidget(label_specialMeasurments);
+
+        gridLayout_8 = new QGridLayout();
+        gridLayout_8->setObjectName(QStringLiteral("gridLayout_8"));
+        horizontalLayout_48 = new QHBoxLayout();
+        horizontalLayout_48->setObjectName(QStringLiteral("horizontalLayout_48"));
+        checkBox_crossingMode = new QCheckBox(ConfigurationLayout);
+        checkBox_crossingMode->setObjectName(QStringLiteral("checkBox_crossingMode"));
+        sizePolicy2.setHeightForWidth(checkBox_crossingMode->sizePolicy().hasHeightForWidth());
+        checkBox_crossingMode->setSizePolicy(sizePolicy2);
+        checkBox_crossingMode->setMinimumSize(QSize(220, 0));
+        checkBox_crossingMode->setMaximumSize(QSize(16777215, 16777215));
+
+        horizontalLayout_48->addWidget(checkBox_crossingMode);
+
+
+        gridLayout_8->addLayout(horizontalLayout_48, 0, 1, 1, 1);
+
+        horizontalLayout_47 = new QHBoxLayout();
+        horizontalLayout_47->setObjectName(QStringLiteral("horizontalLayout_47"));
+        checkBox_IntervalMode = new QCheckBox(ConfigurationLayout);
+        checkBox_IntervalMode->setObjectName(QStringLiteral("checkBox_IntervalMode"));
+        sizePolicy2.setHeightForWidth(checkBox_IntervalMode->sizePolicy().hasHeightForWidth());
+        checkBox_IntervalMode->setSizePolicy(sizePolicy2);
+        checkBox_IntervalMode->setMinimumSize(QSize(220, 0));
+
+        horizontalLayout_47->addWidget(checkBox_IntervalMode);
+
+
+        gridLayout_8->addLayout(horizontalLayout_47, 0, 0, 1, 1);
+
+
+        verticalLayout_5->addLayout(gridLayout_8);
+
+        gridLayout_9 = new QGridLayout();
+        gridLayout_9->setObjectName(QStringLiteral("gridLayout_9"));
+        horizontalLayout_55 = new QHBoxLayout();
+        horizontalLayout_55->setObjectName(QStringLiteral("horizontalLayout_55"));
+        label_intervalMode = new QLabel(ConfigurationLayout);
+        label_intervalMode->setObjectName(QStringLiteral("label_intervalMode"));
+        sizePolicy2.setHeightForWidth(label_intervalMode->sizePolicy().hasHeightForWidth());
+        label_intervalMode->setSizePolicy(sizePolicy2);
+        label_intervalMode->setMaximumSize(QSize(16777215, 20));
+
+        horizontalLayout_55->addWidget(label_intervalMode);
+
+
+        gridLayout_9->addLayout(horizontalLayout_55, 0, 1, 1, 1);
+
+
+        verticalLayout_5->addLayout(gridLayout_9);
 
 
         horizontalLayout_22->addLayout(verticalLayout_5);
@@ -2558,12 +2598,6 @@ public:
         spinBox_Nrepet->setToolTip(QApplication::translate("configurePolMeasure", "Set number of repetitions", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_4->setText(QString());
-        checkBox_crossingMode->setText(QApplication::translate("configurePolMeasure", "Concentration Crossing Mode", Q_NULLPTR));
-#ifndef QT_NO_TOOLTIP
-        checkBox_IntervalMode->setToolTip(QApplication::translate("configurePolMeasure", "Activate Interval Mode", Q_NULLPTR));
-#endif // QT_NO_TOOLTIP
-        checkBox_IntervalMode->setText(QApplication::translate("configurePolMeasure", "User Interval Mode", Q_NULLPTR));
-        label_intervalMode->setText(QString());
         label_timebetweenM->setText(QApplication::translate("configurePolMeasure", "Intervals:", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         doubleSpinBox_timebetweenM->setToolTip(QApplication::translate("configurePolMeasure", "Time Intervals for the Measurements", Q_NULLPTR));
@@ -2585,6 +2619,16 @@ public:
         doubleSpinBox_totalTime->setToolTip(QApplication::translate("configurePolMeasure", "Total estimated time for the measurements", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_BtimeInt2->setText(QApplication::translate("configurePolMeasure", "hours", Q_NULLPTR));
+        label_specialMeasurments->setText(QApplication::translate("configurePolMeasure", "Special Measurement Modes:", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        checkBox_crossingMode->setToolTip(QApplication::translate("configurePolMeasure", "Matrix Measurement Mode", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        checkBox_crossingMode->setText(QApplication::translate("configurePolMeasure", "Concentration Crossing Mode", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        checkBox_IntervalMode->setToolTip(QApplication::translate("configurePolMeasure", "Custom User Measurement Intervals", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        checkBox_IntervalMode->setText(QApplication::translate("configurePolMeasure", "User Interval Mode", Q_NULLPTR));
+        label_intervalMode->setText(QString());
 #ifndef QT_NO_TOOLTIP
         label_16->setToolTip(QApplication::translate("configurePolMeasure", "Save Settings", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP

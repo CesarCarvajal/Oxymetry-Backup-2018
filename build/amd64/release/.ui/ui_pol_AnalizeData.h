@@ -127,6 +127,10 @@ public:
     QCheckBox *checkBox_applyLogarithm;
     QSpacerItem *horizontalSpacer_22;
     QSpacerItem *horizontalSpacer_21;
+    QHBoxLayout *horizontalLayout_17;
+    QLabel *label_9;
+    QSpinBox *spinBox_PLSComponents;
+    QSpacerItem *horizontalSpacer_23;
     QSpacerItem *verticalSpacer_4;
     QHBoxLayout *horizontalLayout_9;
     QPushButton *pushButton_cancel;
@@ -701,6 +705,29 @@ public:
 
         gridLayout_4->addItem(horizontalSpacer_21, 2, 1, 1, 1);
 
+        horizontalLayout_17 = new QHBoxLayout();
+        horizontalLayout_17->setObjectName(QStringLiteral("horizontalLayout_17"));
+        label_9 = new QLabel(PLS);
+        label_9->setObjectName(QStringLiteral("label_9"));
+        label_9->setMinimumSize(QSize(150, 0));
+
+        horizontalLayout_17->addWidget(label_9);
+
+        spinBox_PLSComponents = new QSpinBox(PLS);
+        spinBox_PLSComponents->setObjectName(QStringLiteral("spinBox_PLSComponents"));
+        spinBox_PLSComponents->setMinimumSize(QSize(150, 0));
+        spinBox_PLSComponents->setMinimum(1);
+        spinBox_PLSComponents->setMaximum(100000);
+
+        horizontalLayout_17->addWidget(spinBox_PLSComponents);
+
+        horizontalSpacer_23 = new QSpacerItem(40, 10, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_17->addItem(horizontalSpacer_23);
+
+
+        gridLayout_4->addLayout(horizontalLayout_17, 2, 2, 1, 1);
+
 
         verticalLayout_5->addLayout(gridLayout_4);
 
@@ -792,7 +819,7 @@ public:
         label_currentPath->setText(QApplication::translate("selectAnalizeData", "Current Data Path:", Q_NULLPTR));
         lineEdit_currentDataPath->setText(QApplication::translate("selectAnalizeData", "Please Select a FFT Data Files Path", Q_NULLPTR));
         label_6->setText(QApplication::translate("selectAnalizeData", "PLS Settings", Q_NULLPTR));
-        label_7->setText(QApplication::translate("selectAnalizeData", "Max. Wavelength:", Q_NULLPTR));
+        label_7->setText(QApplication::translate("selectAnalizeData", "Maximum Wavelength:", Q_NULLPTR));
         label_detsignal->setText(QApplication::translate("selectAnalizeData", "Determination Signal:", Q_NULLPTR));
         comboBox_DetSignal->clear();
         comboBox_DetSignal->insertItems(0, QStringList()
@@ -801,10 +828,11 @@ public:
          << QApplication::translate("selectAnalizeData", "I(2w)", Q_NULLPTR)
          << QApplication::translate("selectAnalizeData", "I(DC)", Q_NULLPTR)
         );
-        label_8->setText(QApplication::translate("selectAnalizeData", "Min. Wavelength:", Q_NULLPTR));
+        label_8->setText(QApplication::translate("selectAnalizeData", "Minimum Wavelength:", Q_NULLPTR));
         label_subs->setText(QApplication::translate("selectAnalizeData", "Substance:", Q_NULLPTR));
-        label_applyLogarithm->setText(QApplication::translate("selectAnalizeData", "Logarithm of Signal:", Q_NULLPTR));
+        label_applyLogarithm->setText(QApplication::translate("selectAnalizeData", "Apply Logarithm Function:", Q_NULLPTR));
         checkBox_applyLogarithm->setText(QString());
+        label_9->setText(QApplication::translate("selectAnalizeData", "Number of PLS Components:", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         pushButton_cancel->setToolTip(QApplication::translate("selectAnalizeData", "Cancel Data Analysis", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP

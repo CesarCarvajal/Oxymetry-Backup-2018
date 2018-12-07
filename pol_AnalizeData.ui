@@ -958,7 +958,7 @@
                </size>
               </property>
               <property name="text">
-               <string>Max. Wavelength:</string>
+               <string>Maximum Wavelength:</string>
               </property>
              </widget>
             </item>
@@ -1089,7 +1089,7 @@
                </size>
               </property>
               <property name="text">
-               <string>Min. Wavelength:</string>
+               <string>Minimum Wavelength:</string>
               </property>
              </widget>
             </item>
@@ -1184,7 +1184,7 @@
                </size>
               </property>
               <property name="text">
-               <string>Logarithm of Signal:</string>
+               <string>Apply Logarithm Function:</string>
               </property>
              </widget>
             </item>
@@ -1234,6 +1234,52 @@
              </size>
             </property>
            </spacer>
+          </item>
+          <item row="2" column="2">
+           <layout class="QHBoxLayout" name="horizontalLayout_17">
+            <item>
+             <widget class="QLabel" name="label_9">
+              <property name="minimumSize">
+               <size>
+                <width>150</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Number of PLS Components:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="spinBox_PLSComponents">
+              <property name="minimumSize">
+               <size>
+                <width>150</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>100000</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_23">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>10</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
           </item>
          </layout>
         </item>

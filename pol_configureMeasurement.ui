@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1413</width>
-    <height>851</height>
+    <height>871</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -526,6 +526,9 @@
                   <property name="decimals">
                    <number>1</number>
                   </property>
+                  <property name="minimum">
+                   <double>0.100000000000000</double>
+                  </property>
                   <property name="maximum">
                    <double>10000.000000000000000</double>
                   </property>
@@ -669,6 +672,9 @@
                   <property name="suffix">
                    <string/>
                   </property>
+                  <property name="minimum">
+                   <number>1</number>
+                  </property>
                   <property name="maximum">
                    <number>50000</number>
                   </property>
@@ -729,6 +735,9 @@
                   </property>
                   <property name="decimals">
                    <number>1</number>
+                  </property>
+                  <property name="minimum">
+                   <double>0.100000000000000</double>
                   </property>
                   <property name="maximum">
                    <double>10000.000000000000000</double>
@@ -1194,6 +1203,9 @@
                     <property name="decimals">
                      <number>2</number>
                     </property>
+                    <property name="minimum">
+                     <double>0.010000000000000</double>
+                    </property>
                     <property name="maximum">
                      <double>10000000.000000000000000</double>
                     </property>
@@ -1228,6 +1240,9 @@
                     </property>
                     <property name="toolTip">
                      <string>Maximum Concentration of Impurity 4</string>
+                    </property>
+                    <property name="minimum">
+                     <double>0.010000000000000</double>
                     </property>
                     <property name="maximum">
                      <double>1000000.000000000000000</double>
@@ -1351,6 +1366,9 @@
                     <property name="singleStep">
                      <double>0.010000000000000</double>
                     </property>
+                    <property name="value">
+                     <double>100.000000000000000</double>
+                    </property>
                    </widget>
                   </item>
                  </layout>
@@ -1415,6 +1433,9 @@
                     <property name="decimals">
                      <number>2</number>
                     </property>
+                    <property name="minimum">
+                     <double>0.010000000000000</double>
+                    </property>
                     <property name="maximum">
                      <double>1000000.000000000000000</double>
                     </property>
@@ -1456,6 +1477,9 @@
                     <property name="decimals">
                      <number>2</number>
                     </property>
+                    <property name="minimum">
+                     <double>0.010000000000000</double>
+                    </property>
                     <property name="maximum">
                      <double>1000000000000.000000000000000</double>
                     </property>
@@ -1496,6 +1520,9 @@
                     </property>
                     <property name="decimals">
                      <number>2</number>
+                    </property>
+                    <property name="minimum">
+                     <double>0.100000000000000</double>
                     </property>
                     <property name="maximum">
                      <double>100000000.000000000000000</double>
@@ -1586,6 +1613,9 @@
                     </property>
                     <property name="singleStep">
                      <double>0.010000000000000</double>
+                    </property>
+                    <property name="value">
+                     <double>100.000000000000000</double>
                     </property>
                    </widget>
                   </item>
@@ -1682,6 +1712,9 @@
                     </property>
                     <property name="toolTip">
                      <string>Maximum Concentration of Impurity 5</string>
+                    </property>
+                    <property name="minimum">
+                     <double>0.010000000000000</double>
                     </property>
                     <property name="maximum">
                      <double>1000000.000000000000000</double>
@@ -1857,6 +1890,9 @@
                     <property name="toolTip">
                      <string>Maximum Concentration of Impurity 3</string>
                     </property>
+                    <property name="minimum">
+                     <double>0.010000000000000</double>
+                    </property>
                     <property name="maximum">
                      <double>1000000.000000000000000</double>
                     </property>
@@ -2021,11 +2057,17 @@
                     <property name="toolTip">
                      <string>Stock Concentration of Impurity 5</string>
                     </property>
+                    <property name="minimum">
+                     <double>0.010000000000000</double>
+                    </property>
                     <property name="maximum">
                      <double>1000000.000000000000000</double>
                     </property>
                     <property name="singleStep">
                      <double>0.010000000000000</double>
+                    </property>
+                    <property name="value">
+                     <double>1000.000000000000000</double>
                     </property>
                    </widget>
                   </item>
@@ -2124,6 +2166,9 @@
                     </property>
                     <property name="decimals">
                      <number>2</number>
+                    </property>
+                    <property name="minimum">
+                     <double>0.100000000000000</double>
                     </property>
                     <property name="maximum">
                      <double>1000000.000000000000000</double>
@@ -2290,6 +2335,9 @@
                     <property name="decimals">
                      <number>3</number>
                     </property>
+                    <property name="minimum">
+                     <double>0.000000000000000</double>
+                    </property>
                     <property name="maximum">
                      <double>1000000000000.000000000000000</double>
                     </property>
@@ -2322,11 +2370,17 @@
                     <property name="toolTip">
                      <string>Stock Concentration of Impurity 3</string>
                     </property>
+                    <property name="minimum">
+                     <double>0.010000000000000</double>
+                    </property>
                     <property name="maximum">
                      <double>1000000.000000000000000</double>
                     </property>
                     <property name="singleStep">
                      <double>0.010000000000000</double>
+                    </property>
+                    <property name="value">
+                     <double>1000.000000000000000</double>
                     </property>
                    </widget>
                   </item>
@@ -2409,6 +2463,9 @@
                     <property name="singleStep">
                      <double>0.010000000000000</double>
                     </property>
+                    <property name="value">
+                     <double>100.000000000000000</double>
+                    </property>
                    </widget>
                   </item>
                  </layout>
@@ -2435,11 +2492,17 @@
                     <property name="toolTip">
                      <string>Stock Concentration of Impurity 4</string>
                     </property>
+                    <property name="minimum">
+                     <double>0.010000000000000</double>
+                    </property>
                     <property name="maximum">
                      <double>1000000.000000000000000</double>
                     </property>
                     <property name="singleStep">
                      <double>0.010000000000000</double>
+                    </property>
+                    <property name="value">
+                     <double>1000.000000000000000</double>
                     </property>
                    </widget>
                   </item>
@@ -2550,6 +2613,9 @@
                     </property>
                     <property name="decimals">
                      <number>2</number>
+                    </property>
+                    <property name="minimum">
+                     <double>0.010000000000000</double>
                     </property>
                     <property name="maximum">
                      <double>100000000.000000000000000</double>
@@ -2893,6 +2959,9 @@
                   <property name="toolTip">
                    <string>Set aboslute flow</string>
                   </property>
+                  <property name="minimum">
+                   <double>0.050000000000000</double>
+                  </property>
                   <property name="maximum">
                    <double>500.000000000000000</double>
                   </property>
@@ -2959,6 +3028,9 @@
                   </property>
                   <property name="toolTip">
                    <string>Set absolute volume</string>
+                  </property>
+                  <property name="minimum">
+                   <number>1</number>
                   </property>
                   <property name="maximum">
                    <number>100000</number>
@@ -3490,89 +3562,6 @@
               <item row="2" column="3">
                <layout class="QHBoxLayout" name="horizontalLayout_41">
                 <item>
-                 <widget class="QCheckBox" name="checkBox_crossingMode">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>220</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>16777215</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>Concentration Crossing Mode</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <spacer name="verticalSpacer_3">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>5</width>
-                <height>5</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
-             <layout class="QGridLayout" name="gridLayout_9">
-              <item row="0" column="1">
-               <layout class="QHBoxLayout" name="horizontalLayout_56">
-                <item>
-                 <widget class="QCheckBox" name="checkBox_IntervalMode">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>220</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string>Activate Interval Mode</string>
-                  </property>
-                  <property name="text">
-                   <string>User Interval Mode</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item row="0" column="3">
-               <layout class="QHBoxLayout" name="horizontalLayout_55">
-                <item>
-                 <widget class="QLabel" name="label_intervalMode">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item row="0" column="2">
-               <layout class="QHBoxLayout" name="horizontalLayout_57">
-                <item>
                  <widget class="QLabel" name="label_timebetweenM">
                   <property name="minimumSize">
                    <size>
@@ -3769,12 +3758,9 @@
              </layout>
             </item>
             <item>
-             <spacer name="verticalSpacer_2">
+             <spacer name="verticalSpacer_3">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::Fixed</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -4271,6 +4257,124 @@
                    </size>
                   </property>
                  </spacer>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Fixed</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>5</width>
+                <height>10</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_specialMeasurments">
+              <property name="font">
+               <font>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>Special Measurement Modes:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QGridLayout" name="gridLayout_8">
+              <item row="0" column="1">
+               <layout class="QHBoxLayout" name="horizontalLayout_48">
+                <item>
+                 <widget class="QCheckBox" name="checkBox_crossingMode">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>220</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Matrix Measurement Mode</string>
+                  </property>
+                  <property name="text">
+                   <string>Concentration Crossing Mode</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item row="0" column="0">
+               <layout class="QHBoxLayout" name="horizontalLayout_47">
+                <item>
+                 <widget class="QCheckBox" name="checkBox_IntervalMode">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>220</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Custom User Measurement Intervals</string>
+                  </property>
+                  <property name="text">
+                   <string>User Interval Mode</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QGridLayout" name="gridLayout_9">
+              <item row="0" column="1">
+               <layout class="QHBoxLayout" name="horizontalLayout_55">
+                <item>
+                 <widget class="QLabel" name="label_intervalMode">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </item>
