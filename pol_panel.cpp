@@ -242,7 +242,6 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     ui->label_remaining->setVisible(false);
     ui->horizontalSpacer_Y->changeSize(20,12,QSizePolicy::Expanding,QSizePolicy::Fixed);
     ui->currentProgressBar_Pol->setVisible(false);
-    ui->Tabs_Plots->setTabEnabled(3,false);
     ui->label_PlotSaturated->setStyleSheet(QString("color: red; font: bold;"));
     ui->label_PlotSaturated->setVisible(false);
     ui->line_pred->setVisible(true);
@@ -445,6 +444,27 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     ui->qwtPlot_Pol_Prediction->setYAxisTitle("Predicted (mg/dL)");
     ui->qwtPlot_Pol_Prediction->setXAxis(0.0, 500);
     ui->qwtPlot_Pol_Prediction->setYAxis(0.0, 500);
+
+    /* Statistics Curve, available after the measurements in tab "Measurement Statistics" */
+    ui->qwtPlot_Pol_DeviationVsMeasurementNumber->setXAxisTitle("Measurement Number");
+    ui->qwtPlot_Pol_DeviationVsMeasurementNumber->setYAxisTitle("Prediction Deviation");
+    ui->qwtPlot_Pol_DeviationVsMeasurementNumber->setYAxis(-1.0, 1.0);
+    ui->qwtPlot_Pol_DeviationVsMeasurementNumber->setXAxis(0.0, 51.0);
+
+    ui->qwtPlot_Pol_DeviationVsAbsoluteConcentration->setXAxisTitle("Concentration (mg/dL)");
+    ui->qwtPlot_Pol_DeviationVsAbsoluteConcentration->setYAxisTitle("Prediction Deviation");
+    ui->qwtPlot_Pol_DeviationVsAbsoluteConcentration->setYAxis(-1.0, 1.0);
+    ui->qwtPlot_Pol_DeviationVsAbsoluteConcentration->setXAxis(0.0, 500);
+
+    ui->qwtPlot_Pol_DeviationVsCountsDeviation->setXAxisTitle("Counts Deviation from Counts Mean");
+    ui->qwtPlot_Pol_DeviationVsCountsDeviation->setYAxisTitle("Prediction Deviation");
+    ui->qwtPlot_Pol_DeviationVsCountsDeviation->setYAxis(-1.0, 1.0);
+    ui->qwtPlot_Pol_DeviationVsCountsDeviation->setXAxis(-1.0, 1.0);
+
+    ui->qwtPlot_Pol_IntensitiesVsConcentrations->setXAxisTitle("Concentration (mg/dL)");
+    ui->qwtPlot_Pol_IntensitiesVsConcentrations->setYAxisTitle("Average FFT Intensity (Counts)");
+    ui->qwtPlot_Pol_IntensitiesVsConcentrations->setYAxis(0.0, ceil(2000*1.1));
+    ui->qwtPlot_Pol_IntensitiesVsConcentrations->setXAxis(0.0, 500);
 
     /* Hide the remaining time label, not necessary at the beginning */
     ui->label_RemainingTime->setVisible(false);
@@ -1639,9 +1659,6 @@ void PanelPolarimeter::adjust_Run_Start(short int typeRun){
         ui->currentProgressBar_Pol->setValue(0);
         ui->TotalProgressBar_Pol->setValue(0);
 
-        /* Hide tabs */
-        ui->Tabs_Plots->setTabEnabled(3,false);
-
         /* Show the remaining label */
         ui->label_remaining->setVisible(true);
 
@@ -2632,6 +2649,8 @@ void PanelPolarimeter::plot_Average(void){
         PolPlotter->AverageDC.resize(0);
         PolPlotter->AverageW.resize(0);
         PolPlotter->Average2W.resize(0);
+        PolPlotter->Temperature_Values.resize(0);
+        PolPlotter->AverageRatio.resize(0);
     }
 }
 
@@ -4678,9 +4697,6 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
         /* Allow to save plots again */
         ui->Button_Save_Graphs_Pol->setVisible(true);
 
-        /* Enable tabs with the calculate information */
-        ui->Tabs_Plots->setTabEnabled(3,false);
-
         /* Get the data from the dialog */
         PolPlotter->series->dataProxy()->resetArray(DataSelector->data3D);
         PolPlotter->series_norm->dataProxy()->resetArray(DataSelector->data3DNormalized);
@@ -4696,10 +4712,13 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
             PolPlotter->surface->axisY()->setTitle(DataSelector->ui->comboBox_DetSignal->currentText());
         }
 
+        /* Add the normalized plot */
         PolPlotter->surface_norm->axisY()->setTitle("Normalized " + DataSelector->ui->comboBox_DetSignal->currentText());
 
+        /* Set the axis name */
         QString concentrationAxis = " Concentration (mg/dl)";
 
+        /* Change the axis name according to the concentrations */
         if(DataSelector->factorConcentration == 1000){
             concentrationAxis = " Concentration x10^-3 (mg/dl)";
         }else if(DataSelector->factorConcentration == 100){
@@ -4708,6 +4727,7 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
             concentrationAxis = " Concentration x10^-1 (mg/dl)";
         }
 
+        /* Change also the Z axis name */
         PolPlotter->surface->axisZ()->setTitle(DataSelector->ui->comboBox_Substance->currentText().remove(0,3) + concentrationAxis);
         PolPlotter->surface_norm->axisZ()->setTitle(DataSelector->ui->comboBox_Substance->currentText().remove(0,3) + concentrationAxis);
 
@@ -4732,6 +4752,9 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
             PolPlotter->predictionSignal->attach(ui->qwtPlot_Pol_Prediction);
             ui->qwtPlot_Pol_Prediction->update();
         }
+
+        /* Add the plot intensites vs concentration to the UI */
+        DataSelector->AverageDetSignalPlotter->attach(ui->qwtPlot_Pol_IntensitiesVsConcentrations);
     }
 
     /* Not loading window automatically anymore */
@@ -4739,6 +4762,7 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
 
     /* Jump to tab */
     ui->Tabs_Plots->setCurrentIndex(2);
+
 }
 
 
@@ -4790,9 +4814,6 @@ void PanelPolarimeter::clean_All_Pol(void){
     ui->label_remaining->setVisible(false);
     ui->horizontalSpacer_Y->changeSize(20,12,QSizePolicy::Expanding,QSizePolicy::Fixed);
     ui->label_RemainingTime->setVisible(false);
-
-    /* Enable tabs with the calculate information */
-    ui->Tabs_Plots->setTabEnabled(3,false);
 
     /* Show current progress bar*/
     ui->currentProgressBar_Pol->setVisible(false);

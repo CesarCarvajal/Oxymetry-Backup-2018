@@ -212,7 +212,53 @@ public:
     QSpacerItem *horizontalSpacer_33;
     QWidget *MeasStadistics;
     QVBoxLayout *verticalLayout_9;
+    QHBoxLayout *horizontalLayout_31;
+    QSpacerItem *horizontalSpacer_47;
+    QHBoxLayout *horizontalLayout_32;
+    ClickableLabel *label_HideDeviationVsMeasNumber;
+    QSpacerItem *horizontalSpacer_41;
+    QFrame *line_11;
+    QSpacerItem *horizontalSpacer_42;
+    QHBoxLayout *horizontalLayout_33;
+    ClickableLabel *label_HideDeviationVsAbsolConcentration;
+    QSpacerItem *horizontalSpacer_48;
     QFrame *line_8;
+    QHBoxLayout *horizontalLayout_34;
+    QSpacerItem *horizontalSpacer_49;
+    QVBoxLayout *verticalLayout_19;
+    QLabel *label_DeviationVsMeasurementNumber;
+    Plot *qwtPlot_Pol_DeviationVsMeasurementNumber;
+    QSpacerItem *horizontalSpacer_43;
+    QFrame *line_12;
+    QSpacerItem *horizontalSpacer_44;
+    QVBoxLayout *verticalLayout_20;
+    QLabel *label_DeviationVsAbsoluteConcentration;
+    Plot *qwtPlot_Pol_DeviationVsAbsoluteConcentration;
+    QSpacerItem *horizontalSpacer_50;
+    QFrame *line_13;
+    QHBoxLayout *horizontalLayout_35;
+    QSpacerItem *horizontalSpacer_51;
+    QVBoxLayout *verticalLayout_21;
+    QLabel *label_DeviaitionVsCountsDeviation;
+    Plot *qwtPlot_Pol_DeviationVsCountsDeviation;
+    QSpacerItem *horizontalSpacer_45;
+    QFrame *line_14;
+    QSpacerItem *horizontalSpacer_46;
+    QVBoxLayout *verticalLayout_22;
+    QLabel *label_IntensitiePerConcentration;
+    Plot *qwtPlot_Pol_IntensitiesVsConcentrations;
+    QSpacerItem *horizontalSpacer_52;
+    QFrame *line_16;
+    QHBoxLayout *horizontalLayout_36;
+    QSpacerItem *horizontalSpacer_55;
+    QHBoxLayout *horizontalLayout_37;
+    ClickableLabel *label_HideDeviationVsCountsDeviation;
+    QSpacerItem *horizontalSpacer_54;
+    QFrame *line_15;
+    QSpacerItem *horizontalSpacer_53;
+    QHBoxLayout *horizontalLayout_38;
+    ClickableLabel *label_HideIntensitiesVsConcentration;
+    QSpacerItem *horizontalSpacer_56;
     QHBoxLayout *horizontalLayout_5;
     QPushButton *button_AnalizeData;
     QPushButton *button_LoadData;
@@ -1679,12 +1725,312 @@ public:
         MeasStadistics->setObjectName(QStringLiteral("MeasStadistics"));
         verticalLayout_9 = new QVBoxLayout(MeasStadistics);
         verticalLayout_9->setObjectName(QStringLiteral("verticalLayout_9"));
+        horizontalLayout_31 = new QHBoxLayout();
+        horizontalLayout_31->setObjectName(QStringLiteral("horizontalLayout_31"));
+        horizontalSpacer_47 = new QSpacerItem(5, 7, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        horizontalLayout_31->addItem(horizontalSpacer_47);
+
+        horizontalLayout_32 = new QHBoxLayout();
+        horizontalLayout_32->setObjectName(QStringLiteral("horizontalLayout_32"));
+        label_HideDeviationVsMeasNumber = new ClickableLabel(MeasStadistics);
+        label_HideDeviationVsMeasNumber->setObjectName(QStringLiteral("label_HideDeviationVsMeasNumber"));
+        label_HideDeviationVsMeasNumber->setFont(font10);
+        label_HideDeviationVsMeasNumber->setCursor(QCursor(Qt::PointingHandCursor));
+
+        horizontalLayout_32->addWidget(label_HideDeviationVsMeasNumber);
+
+
+        horizontalLayout_31->addLayout(horizontalLayout_32);
+
+        horizontalSpacer_41 = new QSpacerItem(2, 7, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        horizontalLayout_31->addItem(horizontalSpacer_41);
+
+        line_11 = new QFrame(MeasStadistics);
+        line_11->setObjectName(QStringLiteral("line_11"));
+        line_11->setFrameShape(QFrame::VLine);
+        line_11->setFrameShadow(QFrame::Sunken);
+
+        horizontalLayout_31->addWidget(line_11);
+
+        horizontalSpacer_42 = new QSpacerItem(2, 7, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        horizontalLayout_31->addItem(horizontalSpacer_42);
+
+        horizontalLayout_33 = new QHBoxLayout();
+        horizontalLayout_33->setObjectName(QStringLiteral("horizontalLayout_33"));
+        label_HideDeviationVsAbsolConcentration = new ClickableLabel(MeasStadistics);
+        label_HideDeviationVsAbsolConcentration->setObjectName(QStringLiteral("label_HideDeviationVsAbsolConcentration"));
+        label_HideDeviationVsAbsolConcentration->setMinimumSize(QSize(100, 0));
+        label_HideDeviationVsAbsolConcentration->setFont(font10);
+        label_HideDeviationVsAbsolConcentration->setCursor(QCursor(Qt::PointingHandCursor));
+        label_HideDeviationVsAbsolConcentration->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+
+        horizontalLayout_33->addWidget(label_HideDeviationVsAbsolConcentration);
+
+
+        horizontalLayout_31->addLayout(horizontalLayout_33);
+
+        horizontalSpacer_48 = new QSpacerItem(5, 7, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        horizontalLayout_31->addItem(horizontalSpacer_48);
+
+
+        verticalLayout_9->addLayout(horizontalLayout_31);
+
         line_8 = new QFrame(MeasStadistics);
         line_8->setObjectName(QStringLiteral("line_8"));
         line_8->setFrameShape(QFrame::HLine);
         line_8->setFrameShadow(QFrame::Sunken);
 
         verticalLayout_9->addWidget(line_8);
+
+        horizontalLayout_34 = new QHBoxLayout();
+        horizontalLayout_34->setObjectName(QStringLiteral("horizontalLayout_34"));
+        horizontalSpacer_49 = new QSpacerItem(5, 10, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        horizontalLayout_34->addItem(horizontalSpacer_49);
+
+        verticalLayout_19 = new QVBoxLayout();
+        verticalLayout_19->setObjectName(QStringLiteral("verticalLayout_19"));
+        label_DeviationVsMeasurementNumber = new QLabel(MeasStadistics);
+        label_DeviationVsMeasurementNumber->setObjectName(QStringLiteral("label_DeviationVsMeasurementNumber"));
+        sizePolicy1.setHeightForWidth(label_DeviationVsMeasurementNumber->sizePolicy().hasHeightForWidth());
+        label_DeviationVsMeasurementNumber->setSizePolicy(sizePolicy1);
+        label_DeviationVsMeasurementNumber->setMinimumSize(QSize(14, 0));
+        label_DeviationVsMeasurementNumber->setMaximumSize(QSize(16777215, 14));
+        QPalette palette18;
+        palette18.setBrush(QPalette::Active, QPalette::WindowText, brush5);
+        palette18.setBrush(QPalette::Inactive, QPalette::WindowText, brush5);
+        palette18.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        label_DeviationVsMeasurementNumber->setPalette(palette18);
+        label_DeviationVsMeasurementNumber->setFont(font12);
+        label_DeviationVsMeasurementNumber->setAlignment(Qt::AlignCenter);
+
+        verticalLayout_19->addWidget(label_DeviationVsMeasurementNumber);
+
+        qwtPlot_Pol_DeviationVsMeasurementNumber = new Plot(MeasStadistics);
+        qwtPlot_Pol_DeviationVsMeasurementNumber->setObjectName(QStringLiteral("qwtPlot_Pol_DeviationVsMeasurementNumber"));
+        sizePolicy7.setHeightForWidth(qwtPlot_Pol_DeviationVsMeasurementNumber->sizePolicy().hasHeightForWidth());
+        qwtPlot_Pol_DeviationVsMeasurementNumber->setSizePolicy(sizePolicy7);
+        qwtPlot_Pol_DeviationVsMeasurementNumber->setFrameShape(QFrame::StyledPanel);
+        qwtPlot_Pol_DeviationVsMeasurementNumber->setFrameShadow(QFrame::Raised);
+
+        verticalLayout_19->addWidget(qwtPlot_Pol_DeviationVsMeasurementNumber);
+
+
+        horizontalLayout_34->addLayout(verticalLayout_19);
+
+        horizontalSpacer_43 = new QSpacerItem(2, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        horizontalLayout_34->addItem(horizontalSpacer_43);
+
+        line_12 = new QFrame(MeasStadistics);
+        line_12->setObjectName(QStringLiteral("line_12"));
+        line_12->setFrameShape(QFrame::VLine);
+        line_12->setFrameShadow(QFrame::Sunken);
+
+        horizontalLayout_34->addWidget(line_12);
+
+        horizontalSpacer_44 = new QSpacerItem(2, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        horizontalLayout_34->addItem(horizontalSpacer_44);
+
+        verticalLayout_20 = new QVBoxLayout();
+        verticalLayout_20->setObjectName(QStringLiteral("verticalLayout_20"));
+        label_DeviationVsAbsoluteConcentration = new QLabel(MeasStadistics);
+        label_DeviationVsAbsoluteConcentration->setObjectName(QStringLiteral("label_DeviationVsAbsoluteConcentration"));
+        sizePolicy1.setHeightForWidth(label_DeviationVsAbsoluteConcentration->sizePolicy().hasHeightForWidth());
+        label_DeviationVsAbsoluteConcentration->setSizePolicy(sizePolicy1);
+        label_DeviationVsAbsoluteConcentration->setMinimumSize(QSize(0, 14));
+        label_DeviationVsAbsoluteConcentration->setMaximumSize(QSize(16777215, 14));
+        QPalette palette19;
+        palette19.setBrush(QPalette::Active, QPalette::WindowText, brush5);
+        palette19.setBrush(QPalette::Inactive, QPalette::WindowText, brush5);
+        palette19.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        label_DeviationVsAbsoluteConcentration->setPalette(palette19);
+        label_DeviationVsAbsoluteConcentration->setFont(font12);
+        label_DeviationVsAbsoluteConcentration->setAlignment(Qt::AlignCenter);
+
+        verticalLayout_20->addWidget(label_DeviationVsAbsoluteConcentration);
+
+        qwtPlot_Pol_DeviationVsAbsoluteConcentration = new Plot(MeasStadistics);
+        qwtPlot_Pol_DeviationVsAbsoluteConcentration->setObjectName(QStringLiteral("qwtPlot_Pol_DeviationVsAbsoluteConcentration"));
+        sizePolicy7.setHeightForWidth(qwtPlot_Pol_DeviationVsAbsoluteConcentration->sizePolicy().hasHeightForWidth());
+        qwtPlot_Pol_DeviationVsAbsoluteConcentration->setSizePolicy(sizePolicy7);
+        qwtPlot_Pol_DeviationVsAbsoluteConcentration->setFrameShape(QFrame::StyledPanel);
+        qwtPlot_Pol_DeviationVsAbsoluteConcentration->setFrameShadow(QFrame::Raised);
+        qwtPlot_Pol_DeviationVsMeasurementNumber->raise();
+
+        verticalLayout_20->addWidget(qwtPlot_Pol_DeviationVsAbsoluteConcentration);
+
+
+        horizontalLayout_34->addLayout(verticalLayout_20);
+
+        horizontalSpacer_50 = new QSpacerItem(5, 10, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        horizontalLayout_34->addItem(horizontalSpacer_50);
+
+
+        verticalLayout_9->addLayout(horizontalLayout_34);
+
+        line_13 = new QFrame(MeasStadistics);
+        line_13->setObjectName(QStringLiteral("line_13"));
+        line_13->setFrameShape(QFrame::HLine);
+        line_13->setFrameShadow(QFrame::Sunken);
+
+        verticalLayout_9->addWidget(line_13);
+
+        horizontalLayout_35 = new QHBoxLayout();
+        horizontalLayout_35->setObjectName(QStringLiteral("horizontalLayout_35"));
+        horizontalSpacer_51 = new QSpacerItem(5, 10, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        horizontalLayout_35->addItem(horizontalSpacer_51);
+
+        verticalLayout_21 = new QVBoxLayout();
+        verticalLayout_21->setObjectName(QStringLiteral("verticalLayout_21"));
+        label_DeviaitionVsCountsDeviation = new QLabel(MeasStadistics);
+        label_DeviaitionVsCountsDeviation->setObjectName(QStringLiteral("label_DeviaitionVsCountsDeviation"));
+        sizePolicy1.setHeightForWidth(label_DeviaitionVsCountsDeviation->sizePolicy().hasHeightForWidth());
+        label_DeviaitionVsCountsDeviation->setSizePolicy(sizePolicy1);
+        label_DeviaitionVsCountsDeviation->setMinimumSize(QSize(0, 14));
+        label_DeviaitionVsCountsDeviation->setMaximumSize(QSize(16777215, 14));
+        QPalette palette20;
+        palette20.setBrush(QPalette::Active, QPalette::WindowText, brush5);
+        palette20.setBrush(QPalette::Inactive, QPalette::WindowText, brush5);
+        palette20.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        label_DeviaitionVsCountsDeviation->setPalette(palette20);
+        label_DeviaitionVsCountsDeviation->setFont(font12);
+        label_DeviaitionVsCountsDeviation->setAlignment(Qt::AlignCenter);
+
+        verticalLayout_21->addWidget(label_DeviaitionVsCountsDeviation);
+
+        qwtPlot_Pol_DeviationVsCountsDeviation = new Plot(MeasStadistics);
+        qwtPlot_Pol_DeviationVsCountsDeviation->setObjectName(QStringLiteral("qwtPlot_Pol_DeviationVsCountsDeviation"));
+        sizePolicy7.setHeightForWidth(qwtPlot_Pol_DeviationVsCountsDeviation->sizePolicy().hasHeightForWidth());
+        qwtPlot_Pol_DeviationVsCountsDeviation->setSizePolicy(sizePolicy7);
+        qwtPlot_Pol_DeviationVsCountsDeviation->setFrameShape(QFrame::StyledPanel);
+        qwtPlot_Pol_DeviationVsCountsDeviation->setFrameShadow(QFrame::Raised);
+
+        verticalLayout_21->addWidget(qwtPlot_Pol_DeviationVsCountsDeviation);
+
+
+        horizontalLayout_35->addLayout(verticalLayout_21);
+
+        horizontalSpacer_45 = new QSpacerItem(2, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        horizontalLayout_35->addItem(horizontalSpacer_45);
+
+        line_14 = new QFrame(MeasStadistics);
+        line_14->setObjectName(QStringLiteral("line_14"));
+        line_14->setFrameShape(QFrame::VLine);
+        line_14->setFrameShadow(QFrame::Sunken);
+
+        horizontalLayout_35->addWidget(line_14);
+
+        horizontalSpacer_46 = new QSpacerItem(2, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        horizontalLayout_35->addItem(horizontalSpacer_46);
+
+        verticalLayout_22 = new QVBoxLayout();
+        verticalLayout_22->setObjectName(QStringLiteral("verticalLayout_22"));
+        label_IntensitiePerConcentration = new QLabel(MeasStadistics);
+        label_IntensitiePerConcentration->setObjectName(QStringLiteral("label_IntensitiePerConcentration"));
+        sizePolicy1.setHeightForWidth(label_IntensitiePerConcentration->sizePolicy().hasHeightForWidth());
+        label_IntensitiePerConcentration->setSizePolicy(sizePolicy1);
+        label_IntensitiePerConcentration->setMinimumSize(QSize(0, 14));
+        label_IntensitiePerConcentration->setMaximumSize(QSize(16777215, 14));
+        QPalette palette21;
+        palette21.setBrush(QPalette::Active, QPalette::WindowText, brush5);
+        palette21.setBrush(QPalette::Inactive, QPalette::WindowText, brush5);
+        palette21.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        label_IntensitiePerConcentration->setPalette(palette21);
+        label_IntensitiePerConcentration->setFont(font12);
+        label_IntensitiePerConcentration->setAlignment(Qt::AlignCenter);
+
+        verticalLayout_22->addWidget(label_IntensitiePerConcentration);
+
+        qwtPlot_Pol_IntensitiesVsConcentrations = new Plot(MeasStadistics);
+        qwtPlot_Pol_IntensitiesVsConcentrations->setObjectName(QStringLiteral("qwtPlot_Pol_IntensitiesVsConcentrations"));
+        sizePolicy7.setHeightForWidth(qwtPlot_Pol_IntensitiesVsConcentrations->sizePolicy().hasHeightForWidth());
+        qwtPlot_Pol_IntensitiesVsConcentrations->setSizePolicy(sizePolicy7);
+        qwtPlot_Pol_IntensitiesVsConcentrations->setFrameShape(QFrame::StyledPanel);
+        qwtPlot_Pol_IntensitiesVsConcentrations->setFrameShadow(QFrame::Raised);
+
+        verticalLayout_22->addWidget(qwtPlot_Pol_IntensitiesVsConcentrations);
+
+
+        horizontalLayout_35->addLayout(verticalLayout_22);
+
+        horizontalSpacer_52 = new QSpacerItem(5, 10, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        horizontalLayout_35->addItem(horizontalSpacer_52);
+
+
+        verticalLayout_9->addLayout(horizontalLayout_35);
+
+        line_16 = new QFrame(MeasStadistics);
+        line_16->setObjectName(QStringLiteral("line_16"));
+        line_16->setFrameShape(QFrame::HLine);
+        line_16->setFrameShadow(QFrame::Sunken);
+
+        verticalLayout_9->addWidget(line_16);
+
+        horizontalLayout_36 = new QHBoxLayout();
+        horizontalLayout_36->setObjectName(QStringLiteral("horizontalLayout_36"));
+        horizontalSpacer_55 = new QSpacerItem(5, 7, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        horizontalLayout_36->addItem(horizontalSpacer_55);
+
+        horizontalLayout_37 = new QHBoxLayout();
+        horizontalLayout_37->setObjectName(QStringLiteral("horizontalLayout_37"));
+        label_HideDeviationVsCountsDeviation = new ClickableLabel(MeasStadistics);
+        label_HideDeviationVsCountsDeviation->setObjectName(QStringLiteral("label_HideDeviationVsCountsDeviation"));
+        label_HideDeviationVsCountsDeviation->setMinimumSize(QSize(100, 0));
+        label_HideDeviationVsCountsDeviation->setFont(font10);
+        label_HideDeviationVsCountsDeviation->setCursor(QCursor(Qt::PointingHandCursor));
+
+        horizontalLayout_37->addWidget(label_HideDeviationVsCountsDeviation);
+
+
+        horizontalLayout_36->addLayout(horizontalLayout_37);
+
+        horizontalSpacer_54 = new QSpacerItem(2, 7, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        horizontalLayout_36->addItem(horizontalSpacer_54);
+
+        line_15 = new QFrame(MeasStadistics);
+        line_15->setObjectName(QStringLiteral("line_15"));
+        line_15->setFrameShape(QFrame::VLine);
+        line_15->setFrameShadow(QFrame::Sunken);
+
+        horizontalLayout_36->addWidget(line_15);
+
+        horizontalSpacer_53 = new QSpacerItem(2, 7, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        horizontalLayout_36->addItem(horizontalSpacer_53);
+
+        horizontalLayout_38 = new QHBoxLayout();
+        horizontalLayout_38->setObjectName(QStringLiteral("horizontalLayout_38"));
+        label_HideIntensitiesVsConcentration = new ClickableLabel(MeasStadistics);
+        label_HideIntensitiesVsConcentration->setObjectName(QStringLiteral("label_HideIntensitiesVsConcentration"));
+        label_HideIntensitiesVsConcentration->setMinimumSize(QSize(100, 0));
+        label_HideIntensitiesVsConcentration->setFont(font10);
+        label_HideIntensitiesVsConcentration->setCursor(QCursor(Qt::PointingHandCursor));
+        label_HideIntensitiesVsConcentration->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+
+        horizontalLayout_38->addWidget(label_HideIntensitiesVsConcentration);
+
+
+        horizontalLayout_36->addLayout(horizontalLayout_38);
+
+        horizontalSpacer_56 = new QSpacerItem(5, 7, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        horizontalLayout_36->addItem(horizontalSpacer_56);
+
+
+        verticalLayout_9->addLayout(horizontalLayout_36);
 
         QIcon icon5;
         icon5.addFile(QStringLiteral(":/polarimeter/PC.ico"), QSize(), QIcon::Normal, QIcon::Off);
@@ -1890,7 +2236,7 @@ public:
         retranslateUi(PanelPolarimeter);
 
         list_devices_Pol->setCurrentRow(-1);
-        Tabs_Plots->setCurrentIndex(0);
+        Tabs_Plots->setCurrentIndex(3);
 
 
         QMetaObject::connectSlotsByName(PanelPolarimeter);
@@ -2080,6 +2426,14 @@ public:
         label_P1->setText(QString());
         label_P2->setText(QString());
         Tabs_Plots->setTabText(Tabs_Plots->indexOf(MeasResults), QApplication::translate("PanelPolarimeter", "Measurement Results", Q_NULLPTR));
+        label_HideDeviationVsMeasNumber->setText(QApplication::translate("PanelPolarimeter", "<< Hide Deviation Vs Measurement Number Plot", Q_NULLPTR));
+        label_HideDeviationVsAbsolConcentration->setText(QApplication::translate("PanelPolarimeter", "Hide Deviation Vs Absolute Concentration Plot >>", Q_NULLPTR));
+        label_DeviationVsMeasurementNumber->setText(QApplication::translate("PanelPolarimeter", "Deviation Vs Measurement Number", Q_NULLPTR));
+        label_DeviationVsAbsoluteConcentration->setText(QApplication::translate("PanelPolarimeter", "Deviation Vs Absolute Concentration", Q_NULLPTR));
+        label_DeviaitionVsCountsDeviation->setText(QApplication::translate("PanelPolarimeter", "Deviation Vs Counts Deviation from Counts Mean", Q_NULLPTR));
+        label_IntensitiePerConcentration->setText(QApplication::translate("PanelPolarimeter", "Intensities per Concentration", Q_NULLPTR));
+        label_HideDeviationVsCountsDeviation->setText(QApplication::translate("PanelPolarimeter", "<< Hide Deviation Vs Counts Deviation Plot", Q_NULLPTR));
+        label_HideIntensitiesVsConcentration->setText(QApplication::translate("PanelPolarimeter", "Hide Intensities per Concentration Plot >>", Q_NULLPTR));
         Tabs_Plots->setTabText(Tabs_Plots->indexOf(MeasStadistics), QApplication::translate("PanelPolarimeter", "Measurement Stadistics", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         button_AnalizeData->setToolTip(QApplication::translate("PanelPolarimeter", "Analize Data", Q_NULLPTR));

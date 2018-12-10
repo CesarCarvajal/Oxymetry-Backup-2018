@@ -49,7 +49,7 @@ extern Spectrometer** ptrSpectrometers;
 extern unsigned int m_NrDevices;
 
 /* Needed for the PLS implementation */
-using namespace Eigen;
+//using namespace Eigen;
 
 /**
  * @brief Constructor of 'Select Analize Data' class
@@ -153,6 +153,11 @@ selectAnalizeData::selectAnalizeData(QWidget *parent) :
 
     /* Overall factor for plotting purposes */
     factorConcentration = 1;
+
+    /* Create statistics plots */
+    AverageDetSignalPlotter= new QwtPlotCurve("");
+    AverageDetSignalPlotter->setPen(QPen("red"));
+    AverageDetSignalPlotter->setItemAttribute(QwtPlotItem::Legend, false);
 
 }
 
@@ -453,6 +458,13 @@ void selectAnalizeData::readFiles(void)
     dataArray->reserve(allFiles.length());
     dataArray_norm->reserve(allFiles.length());
 
+    /* Restart vectors */
+    ConcentrationsPlot.resize(0);
+    AverageDetSignal.resize(0);
+
+    /* Get the average of the actual determination signal */
+    double AverageDetSignalT;
+
     /* Iterate through the file names */
     for(int index = 0; index < allFiles.length(); index++){
 
@@ -461,6 +473,9 @@ void selectAnalizeData::readFiles(void)
 
         /* This vector saves the information per file or per concentration */
         signal.resize(0);
+
+        /* Restart the average value */
+        AverageDetSignalT = 0;
 
         /* Open the file to get the Nr of Spectra and Average Nr. */
         QFile file(pathDataM + "/" + allFiles.at(index));
@@ -570,8 +585,20 @@ void selectAnalizeData::readFiles(void)
             ValConcentrations.append(QString(concentrationsList.at(ui->comboBox_Substance->currentIndex())).toDouble());
         } /*else (the file was removed by the user) */
 
+        /* Calculate the average of the determination signal */
+        for(int k=0; k < signal.length(); k++){
+            AverageDetSignalT = AverageDetSignalT + signal.at(k);
+        }
+
+        double average = AverageDetSignalT/signal.length();
+
+        /* Added the plot vector */
+        AverageDetSignal.append(average);
+        ConcentrationsPlot.append(QString(concentrationsList.at(ui->comboBox_Substance->currentIndex())).toDouble());
+
         /* Restart the vector */
         concentrationsList.clear();
+
     }
 
     /* Get the maximum concentration and check if its not aorund 100 to 1000, problems with Qt */
@@ -614,6 +641,9 @@ void selectAnalizeData::readFiles(void)
             data3DNormalized ->replace(k, newRow_norm);
         }
     }
+
+    /* Add values to the intensities Vs concentrations plot */
+    AverageDetSignalPlotter->setSamples(ConcentrationsPlot, AverageDetSignal);
 
 }
 

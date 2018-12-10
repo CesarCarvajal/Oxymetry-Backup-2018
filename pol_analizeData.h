@@ -27,6 +27,9 @@
 #include <QDir>
 #include <QtDataVisualization>
 
+/* Qwt library */
+#include "qwt_plot_curve.h"
+
 using namespace QtDataVisualization;
 
 /* Header of Analize Data Object */
@@ -66,6 +69,13 @@ public:
 
     /* Overall factor for plotting purposes */
     int factorConcentration;
+
+    /* Plot some statistics */
+    QwtPlotCurve *AverageDetSignalPlotter;
+
+    /* Signal vector */
+    QVector<double> AverageDetSignal;
+    QVector<double> ConcentrationsPlot;
 
 private:
 
