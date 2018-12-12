@@ -83,6 +83,9 @@ Pol_Measurements::Pol_Measurements()
 
     /* Start the  vector index in -1 */
     vectorIndex = -1;
+
+    /* The user isn't loading a summary */
+    UserLoadSummary = true;
 }
 
 /**

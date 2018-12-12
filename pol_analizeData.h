@@ -70,9 +70,6 @@ public:
     /* Overall factor for plotting purposes */
     int factorConcentration;
 
-    /* Plot some statistics */
-    QwtPlotCurve *AverageDetSignalPlotter;
-
     /* Signal vector */
     QVector<double> AverageDetSignal;
     QVector<double> ConcentrationsPlot;

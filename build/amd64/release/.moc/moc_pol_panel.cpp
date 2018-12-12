@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_PanelPolarimeter_t {
-    QByteArrayData data[67];
-    char stringdata0[1120];
+    QByteArrayData data[68];
+    char stringdata0[1125];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -45,59 +45,60 @@ QT_MOC_LITERAL(10, 150, 25), // "change_Number_Spectra_Pol"
 QT_MOC_LITERAL(11, 176, 25), // "change_Wavelength_FFT_Pol"
 QT_MOC_LITERAL(12, 202, 32), // "change_Auto_Integration_Time_Pol"
 QT_MOC_LITERAL(13, 235, 12), // "Load_Summary"
-QT_MOC_LITERAL(14, 248, 13), // "write_Summary"
-QT_MOC_LITERAL(15, 262, 27), // "change_Integration_Time_Pol"
-QT_MOC_LITERAL(16, 290, 12), // "showAllPlots"
-QT_MOC_LITERAL(17, 303, 13), // "clean_All_Pol"
-QT_MOC_LITERAL(18, 317, 22), // "initialize_Calibration"
-QT_MOC_LITERAL(19, 340, 24), // "pol_Measurement_Progress"
-QT_MOC_LITERAL(20, 365, 1), // "i"
-QT_MOC_LITERAL(21, 367, 13), // "pol_Calibrate"
-QT_MOC_LITERAL(22, 381, 11), // "pol_Measure"
-QT_MOC_LITERAL(23, 393, 30), // "initialize_Default_Calibration"
-QT_MOC_LITERAL(24, 424, 24), // "adjust_Average_Plot_Time"
-QT_MOC_LITERAL(25, 449, 27), // "adjust_Integration_Time_Pol"
-QT_MOC_LITERAL(26, 477, 18), // "handle_Click_Event"
-QT_MOC_LITERAL(27, 496, 8), // "QWidget*"
-QT_MOC_LITERAL(28, 505, 6), // "widget"
-QT_MOC_LITERAL(29, 512, 16), // "receive_Data_Pol"
-QT_MOC_LITERAL(30, 529, 6), // "WParam"
-QT_MOC_LITERAL(31, 536, 6), // "LParam"
-QT_MOC_LITERAL(32, 543, 22), // "toggle_Pol_Measurement"
-QT_MOC_LITERAL(33, 566, 16), // "change_File_Name"
-QT_MOC_LITERAL(34, 583, 13), // "write_To_File"
-QT_MOC_LITERAL(35, 597, 5), // "FILE*"
-QT_MOC_LITERAL(36, 603, 4), // "file"
-QT_MOC_LITERAL(37, 608, 7), // "double*"
-QT_MOC_LITERAL(38, 616, 11), // "a_pSpectrum"
-QT_MOC_LITERAL(39, 628, 13), // "quit_Oxymetry"
-QT_MOC_LITERAL(40, 642, 13), // "Load_From_FFT"
-QT_MOC_LITERAL(41, 656, 18), // "Load_From_Raw_Data"
-QT_MOC_LITERAL(42, 675, 26), // "conf_Setup_Pol_Measurement"
-QT_MOC_LITERAL(43, 702, 30), // "select_Analize_Pol_Measurement"
-QT_MOC_LITERAL(44, 733, 22), // "toggle_Pol_Calibration"
-QT_MOC_LITERAL(45, 756, 15), // "run_Polarimetry"
-QT_MOC_LITERAL(46, 772, 7), // "runType"
-QT_MOC_LITERAL(47, 780, 20), // "stop_Run_Polarimetry"
-QT_MOC_LITERAL(48, 801, 16), // "toggle_Load_Data"
-QT_MOC_LITERAL(49, 818, 8), // "plot_FFT"
-QT_MOC_LITERAL(50, 827, 10), // "clear_Plot"
-QT_MOC_LITERAL(51, 838, 14), // "save_Graph_Pol"
-QT_MOC_LITERAL(52, 853, 12), // "plot_Average"
-QT_MOC_LITERAL(53, 866, 16), // "adjust_Run_Start"
-QT_MOC_LITERAL(54, 883, 9), // "short int"
-QT_MOC_LITERAL(55, 893, 7), // "typeRun"
-QT_MOC_LITERAL(56, 901, 14), // "adjust_Run_End"
-QT_MOC_LITERAL(57, 916, 33), // "adjust_Measurements_Saving_Fo..."
-QT_MOC_LITERAL(58, 950, 25), // "process_Received_Data_Pol"
-QT_MOC_LITERAL(59, 976, 4), // "Path"
-QT_MOC_LITERAL(60, 981, 22), // "delay_Pol_Measurements"
-QT_MOC_LITERAL(61, 1004, 23), // "update_Wavelength_Range"
-QT_MOC_LITERAL(62, 1028, 23), // "adjust_Wavelength_Range"
-QT_MOC_LITERAL(63, 1052, 15), // "normalizeCounts"
-QT_MOC_LITERAL(64, 1068, 18), // "saveFFTcalibration"
-QT_MOC_LITERAL(65, 1087, 15), // "enable_Help_Pol"
-QT_MOC_LITERAL(66, 1103, 16) // "setConfiguration"
+QT_MOC_LITERAL(14, 248, 4), // "path"
+QT_MOC_LITERAL(15, 253, 13), // "write_Summary"
+QT_MOC_LITERAL(16, 267, 27), // "change_Integration_Time_Pol"
+QT_MOC_LITERAL(17, 295, 12), // "showAllPlots"
+QT_MOC_LITERAL(18, 308, 13), // "clean_All_Pol"
+QT_MOC_LITERAL(19, 322, 22), // "initialize_Calibration"
+QT_MOC_LITERAL(20, 345, 24), // "pol_Measurement_Progress"
+QT_MOC_LITERAL(21, 370, 1), // "i"
+QT_MOC_LITERAL(22, 372, 13), // "pol_Calibrate"
+QT_MOC_LITERAL(23, 386, 11), // "pol_Measure"
+QT_MOC_LITERAL(24, 398, 30), // "initialize_Default_Calibration"
+QT_MOC_LITERAL(25, 429, 24), // "adjust_Average_Plot_Time"
+QT_MOC_LITERAL(26, 454, 27), // "adjust_Integration_Time_Pol"
+QT_MOC_LITERAL(27, 482, 18), // "handle_Click_Event"
+QT_MOC_LITERAL(28, 501, 8), // "QWidget*"
+QT_MOC_LITERAL(29, 510, 6), // "widget"
+QT_MOC_LITERAL(30, 517, 16), // "receive_Data_Pol"
+QT_MOC_LITERAL(31, 534, 6), // "WParam"
+QT_MOC_LITERAL(32, 541, 6), // "LParam"
+QT_MOC_LITERAL(33, 548, 22), // "toggle_Pol_Measurement"
+QT_MOC_LITERAL(34, 571, 16), // "change_File_Name"
+QT_MOC_LITERAL(35, 588, 13), // "write_To_File"
+QT_MOC_LITERAL(36, 602, 5), // "FILE*"
+QT_MOC_LITERAL(37, 608, 4), // "file"
+QT_MOC_LITERAL(38, 613, 7), // "double*"
+QT_MOC_LITERAL(39, 621, 11), // "a_pSpectrum"
+QT_MOC_LITERAL(40, 633, 13), // "quit_Oxymetry"
+QT_MOC_LITERAL(41, 647, 13), // "Load_From_FFT"
+QT_MOC_LITERAL(42, 661, 18), // "Load_From_Raw_Data"
+QT_MOC_LITERAL(43, 680, 26), // "conf_Setup_Pol_Measurement"
+QT_MOC_LITERAL(44, 707, 30), // "select_Analize_Pol_Measurement"
+QT_MOC_LITERAL(45, 738, 22), // "toggle_Pol_Calibration"
+QT_MOC_LITERAL(46, 761, 15), // "run_Polarimetry"
+QT_MOC_LITERAL(47, 777, 7), // "runType"
+QT_MOC_LITERAL(48, 785, 20), // "stop_Run_Polarimetry"
+QT_MOC_LITERAL(49, 806, 16), // "toggle_Load_Data"
+QT_MOC_LITERAL(50, 823, 8), // "plot_FFT"
+QT_MOC_LITERAL(51, 832, 10), // "clear_Plot"
+QT_MOC_LITERAL(52, 843, 14), // "save_Graph_Pol"
+QT_MOC_LITERAL(53, 858, 12), // "plot_Average"
+QT_MOC_LITERAL(54, 871, 16), // "adjust_Run_Start"
+QT_MOC_LITERAL(55, 888, 9), // "short int"
+QT_MOC_LITERAL(56, 898, 7), // "typeRun"
+QT_MOC_LITERAL(57, 906, 14), // "adjust_Run_End"
+QT_MOC_LITERAL(58, 921, 33), // "adjust_Measurements_Saving_Fo..."
+QT_MOC_LITERAL(59, 955, 25), // "process_Received_Data_Pol"
+QT_MOC_LITERAL(60, 981, 4), // "Path"
+QT_MOC_LITERAL(61, 986, 22), // "delay_Pol_Measurements"
+QT_MOC_LITERAL(62, 1009, 23), // "update_Wavelength_Range"
+QT_MOC_LITERAL(63, 1033, 23), // "adjust_Wavelength_Range"
+QT_MOC_LITERAL(64, 1057, 15), // "normalizeCounts"
+QT_MOC_LITERAL(65, 1073, 18), // "saveFFTcalibration"
+QT_MOC_LITERAL(66, 1092, 15), // "enable_Help_Pol"
+QT_MOC_LITERAL(67, 1108, 16) // "setConfiguration"
 
     },
     "PanelPolarimeter\0updateTabs\0\0"
@@ -107,7 +108,7 @@ QT_MOC_LITERAL(66, 1103, 16) // "setConfiguration"
     "change_Frequency_Pol\0change_Number_Spectra_Pol\0"
     "change_Wavelength_FFT_Pol\0"
     "change_Auto_Integration_Time_Pol\0"
-    "Load_Summary\0write_Summary\0"
+    "Load_Summary\0path\0write_Summary\0"
     "change_Integration_Time_Pol\0showAllPlots\0"
     "clean_All_Pol\0initialize_Calibration\0"
     "pol_Measurement_Progress\0i\0pol_Calibrate\0"
@@ -161,47 +162,47 @@ static const uint qt_meta_data_PanelPolarimeter[] = {
       10,    0,  280,    2, 0x08 /* Private */,
       11,    0,  281,    2, 0x08 /* Private */,
       12,    0,  282,    2, 0x08 /* Private */,
-      13,    0,  283,    2, 0x08 /* Private */,
-      14,    0,  284,    2, 0x08 /* Private */,
-      15,    0,  285,    2, 0x08 /* Private */,
-      16,    0,  286,    2, 0x08 /* Private */,
-      17,    0,  287,    2, 0x08 /* Private */,
-      18,    0,  288,    2, 0x08 /* Private */,
-      19,    1,  289,    2, 0x08 /* Private */,
-      21,    0,  292,    2, 0x08 /* Private */,
-      22,    0,  293,    2, 0x08 /* Private */,
-      23,    0,  294,    2, 0x08 /* Private */,
-      24,    0,  295,    2, 0x08 /* Private */,
-      25,    0,  296,    2, 0x08 /* Private */,
-      26,    1,  297,    2, 0x08 /* Private */,
-      29,    2,  300,    2, 0x08 /* Private */,
-      32,    0,  305,    2, 0x08 /* Private */,
-      33,    0,  306,    2, 0x08 /* Private */,
-      34,    3,  307,    2, 0x08 /* Private */,
-      39,    0,  314,    2, 0x08 /* Private */,
-      40,    0,  315,    2, 0x08 /* Private */,
-      41,    0,  316,    2, 0x08 /* Private */,
-      42,    0,  317,    2, 0x08 /* Private */,
-      43,    0,  318,    2, 0x08 /* Private */,
-      44,    0,  319,    2, 0x08 /* Private */,
-      45,    1,  320,    2, 0x08 /* Private */,
-      47,    0,  323,    2, 0x08 /* Private */,
-      48,    0,  324,    2, 0x08 /* Private */,
-      49,    0,  325,    2, 0x08 /* Private */,
-      50,    0,  326,    2, 0x08 /* Private */,
-      51,    0,  327,    2, 0x08 /* Private */,
-      52,    0,  328,    2, 0x08 /* Private */,
-      53,    1,  329,    2, 0x08 /* Private */,
-      56,    0,  332,    2, 0x08 /* Private */,
-      57,    0,  333,    2, 0x08 /* Private */,
-      58,    1,  334,    2, 0x08 /* Private */,
-      60,    0,  337,    2, 0x08 /* Private */,
-      61,    0,  338,    2, 0x08 /* Private */,
-      62,    0,  339,    2, 0x08 /* Private */,
-      63,    0,  340,    2, 0x08 /* Private */,
-      64,    0,  341,    2, 0x08 /* Private */,
-      65,    0,  342,    2, 0x0a /* Public */,
-      66,    0,  343,    2, 0x0a /* Public */,
+      13,    1,  283,    2, 0x08 /* Private */,
+      15,    0,  286,    2, 0x08 /* Private */,
+      16,    0,  287,    2, 0x08 /* Private */,
+      17,    0,  288,    2, 0x08 /* Private */,
+      18,    0,  289,    2, 0x08 /* Private */,
+      19,    0,  290,    2, 0x08 /* Private */,
+      20,    1,  291,    2, 0x08 /* Private */,
+      22,    0,  294,    2, 0x08 /* Private */,
+      23,    0,  295,    2, 0x08 /* Private */,
+      24,    0,  296,    2, 0x08 /* Private */,
+      25,    0,  297,    2, 0x08 /* Private */,
+      26,    0,  298,    2, 0x08 /* Private */,
+      27,    1,  299,    2, 0x08 /* Private */,
+      30,    2,  302,    2, 0x08 /* Private */,
+      33,    0,  307,    2, 0x08 /* Private */,
+      34,    0,  308,    2, 0x08 /* Private */,
+      35,    3,  309,    2, 0x08 /* Private */,
+      40,    0,  316,    2, 0x08 /* Private */,
+      41,    0,  317,    2, 0x08 /* Private */,
+      42,    0,  318,    2, 0x08 /* Private */,
+      43,    0,  319,    2, 0x08 /* Private */,
+      44,    0,  320,    2, 0x08 /* Private */,
+      45,    0,  321,    2, 0x08 /* Private */,
+      46,    1,  322,    2, 0x08 /* Private */,
+      48,    0,  325,    2, 0x08 /* Private */,
+      49,    0,  326,    2, 0x08 /* Private */,
+      50,    0,  327,    2, 0x08 /* Private */,
+      51,    0,  328,    2, 0x08 /* Private */,
+      52,    0,  329,    2, 0x08 /* Private */,
+      53,    0,  330,    2, 0x08 /* Private */,
+      54,    1,  331,    2, 0x08 /* Private */,
+      57,    0,  334,    2, 0x08 /* Private */,
+      58,    0,  335,    2, 0x08 /* Private */,
+      59,    1,  336,    2, 0x08 /* Private */,
+      61,    0,  339,    2, 0x08 /* Private */,
+      62,    0,  340,    2, 0x08 /* Private */,
+      63,    0,  341,    2, 0x08 /* Private */,
+      64,    0,  342,    2, 0x08 /* Private */,
+      65,    0,  343,    2, 0x08 /* Private */,
+      66,    0,  344,    2, 0x0a /* Public */,
+      67,    0,  345,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void,
@@ -216,40 +217,40 @@ static const uint qt_meta_data_PanelPolarimeter[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void, QMetaType::QString,   14,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::UInt,   21,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 28,   29,
+    QMetaType::Void, QMetaType::Int, QMetaType::Int,   31,   32,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 36, 0x80000000 | 38, QMetaType::Int,   37,   39,   31,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::UInt,   20,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void, 0x80000000 | 27,   28,
-    QMetaType::Void, QMetaType::Int, QMetaType::Int,   30,   31,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void, 0x80000000 | 35, 0x80000000 | 37, QMetaType::Int,   36,   38,   30,
+    QMetaType::Void, QMetaType::Short,   47,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::Short,   46,
+    QMetaType::Void, 0x80000000 | 55,   56,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void, 0x80000000 | 54,   55,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void, QMetaType::QString,   59,
+    QMetaType::Void, QMetaType::QString,   60,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -277,7 +278,7 @@ void PanelPolarimeter::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         case 7: _t->change_Number_Spectra_Pol(); break;
         case 8: _t->change_Wavelength_FFT_Pol(); break;
         case 9: _t->change_Auto_Integration_Time_Pol(); break;
-        case 10: _t->Load_Summary(); break;
+        case 10: _t->Load_Summary((*reinterpret_cast< QString(*)>(_a[1]))); break;
         case 11: _t->write_Summary(); break;
         case 12: _t->change_Integration_Time_Pol(); break;
         case 13: _t->showAllPlots(); break;

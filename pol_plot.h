@@ -46,6 +46,9 @@ public:
     QwtPlotCurve *Compensation_Signal, *Average_Ratio_Signal;
     QwtPlotCurve *Average_DC_Signal, *Average_W_Signal, *Average_2W_Signal, *Temperature_Plot;
 
+    /* Plot some statistics */
+    QwtPlotCurve *AverageDetSignalPlotter;
+
     /* Vectors for live Plotting */
     QVector<double> averaged_Signal_time;
     QVector<double> AverageDC, AverageW, Average2W, AverageRatio, Temperature_Values;
@@ -65,6 +68,9 @@ public:
 
     /* Reference prediction */
     QVector<double> linearR;
+
+    /* Standar deviation of the temperature */
+    double TempStandardDev;
 
     /* Averages Plot time */
     int counts_average_time;

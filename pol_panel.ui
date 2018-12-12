@@ -1978,7 +1978,7 @@
             <enum>QTabWidget::Rounded</enum>
            </property>
            <property name="currentIndex">
-            <number>3</number>
+            <number>1</number>
            </property>
            <property name="iconSize">
             <size>
@@ -3058,6 +3058,71 @@
             </attribute>
             <layout class="QVBoxLayout" name="verticalLayout_16">
              <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_39">
+               <item>
+                <spacer name="horizontalSpacer_57">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeType">
+                  <enum>QSizePolicy::Fixed</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>5</width>
+                   <height>7</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_41">
+                 <item>
+                  <widget class="ClickableLabel" name="label_hideTemperature">
+                   <property name="font">
+                    <font>
+                     <pointsize>7</pointsize>
+                    </font>
+                   </property>
+                   <property name="cursor">
+                    <cursorShape>PointingHandCursor</cursorShape>
+                   </property>
+                   <property name="text">
+                    <string>&gt;&gt; Hide Temperature Plot</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_58">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeType">
+                  <enum>QSizePolicy::Fixed</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>5</width>
+                   <height>7</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="Line" name="line_18">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
               <layout class="QHBoxLayout" name="horizontalLayout_29">
                <item>
                 <spacer name="horizontalSpacer_37">
@@ -3398,6 +3463,71 @@
                   <size>
                    <width>5</width>
                    <height>10</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="Line" name="line_19">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_40">
+               <item>
+                <spacer name="horizontalSpacer_60">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeType">
+                  <enum>QSizePolicy::Fixed</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>5</width>
+                   <height>7</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_42">
+                 <item>
+                  <widget class="ClickableLabel" name="label_hideFFTIntensityPlot">
+                   <property name="font">
+                    <font>
+                     <pointsize>7</pointsize>
+                    </font>
+                   </property>
+                   <property name="cursor">
+                    <cursorShape>PointingHandCursor</cursorShape>
+                   </property>
+                   <property name="text">
+                    <string>&gt;&gt; Hide FFT Intensities Plot</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_59">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeType">
+                  <enum>QSizePolicy::Fixed</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>5</width>
+                   <height>7</height>
                   </size>
                  </property>
                 </spacer>
@@ -4013,6 +4143,13 @@
               </layout>
              </item>
              <item>
+              <widget class="Line" name="line_17">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
               <layout class="QHBoxLayout" name="horizontalLayout_21">
                <item>
                 <spacer name="horizontalSpacer_34">
@@ -4532,9 +4669,6 @@
                    <property name="frameShadow">
                     <enum>QFrame::Raised</enum>
                    </property>
-                   <zorder>horizontalLayoutWidget</zorder>
-                   <zorder>horizontalLayoutWidget</zorder>
-                   <zorder>qwtPlot_Pol_DeviationVsMeasurementNumber</zorder>
                   </widget>
                  </item>
                 </layout>
@@ -4780,7 +4914,7 @@
                     </font>
                    </property>
                    <property name="text">
-                    <string>Intensities per Concentration</string>
+                    <string>Average Determination Signal per Concentration</string>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignCenter</set>

@@ -776,7 +776,7 @@ public:
 
         pushButton_Analize = new QPushButton(selectAnalizeData);
         pushButton_Analize->setObjectName(QStringLiteral("pushButton_Analize"));
-        pushButton_Analize->setEnabled(false);
+        pushButton_Analize->setEnabled(true);
         sizePolicy4.setHeightForWidth(pushButton_Analize->sizePolicy().hasHeightForWidth());
         pushButton_Analize->setSizePolicy(sizePolicy4);
         pushButton_Analize->setMinimumSize(QSize(150, 30));
@@ -840,7 +840,7 @@ public:
 #ifndef QT_NO_TOOLTIP
         pushButton_select->setToolTip(QApplication::translate("selectAnalizeData", "Load a Configuration File", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        pushButton_select->setText(QApplication::translate("selectAnalizeData", "Load Data", Q_NULLPTR));
+        pushButton_select->setText(QApplication::translate("selectAnalizeData", "Select Data", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         pushButton_Analize->setToolTip(QApplication::translate("selectAnalizeData", "Generate Configuration File", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP

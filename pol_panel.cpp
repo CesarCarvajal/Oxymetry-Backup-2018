@@ -2601,7 +2601,7 @@ void PanelPolarimeter::plot_Average(void){
 
     /* Adjust the plots */
     if(maxYTemperature < *std::max_element(PolPlotter->Temperature_Values.begin(), PolPlotter->Temperature_Values.end()) + 1 ||
-        minYTemperature > *std::min_element(PolPlotter->Temperature_Values.begin(), PolPlotter->Temperature_Values.end()) - 1){
+            minYTemperature > *std::min_element(PolPlotter->Temperature_Values.begin(), PolPlotter->Temperature_Values.end()) - 1){
         maxYTemperature = *std::max_element(PolPlotter->Temperature_Values.begin(), PolPlotter->Temperature_Values.end()) + 1;
         minYTemperature = *std::min_element(PolPlotter->Temperature_Values.begin(), PolPlotter->Temperature_Values.end()) - 1;
         ui->qwtPlot_Pol_Temperature->setYAxis(minYTemperature, maxYTemperature);
@@ -2792,6 +2792,12 @@ void PanelPolarimeter::showAllPlots() {
     ui->label_hideNSpectra->setText("<< Hide Normalized Spectra");
     ui->label_hideNSpectra->setStyleSheet("QLabel { color: blue; }");
     ui->label_hideNSpectra->setFrameShape(QFrame::NoFrame);
+    ui->label_hideTemperature->setText(">> Hide Temperature Plot");
+    ui->label_hideTemperature->setStyleSheet("QLabel { color: blue; }");
+    ui->label_hideTemperature->setFrameShape(QFrame::NoFrame);
+    ui->label_hideFFTIntensityPlot->setText(">> Hide FFT Intensities Plot");
+    ui->label_hideFFTIntensityPlot->setStyleSheet("QLabel { color: blue; }");
+    ui->label_hideFFTIntensityPlot->setFrameShape(QFrame::NoFrame);
 }
 
 
@@ -3405,13 +3411,13 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
 
     /* This is another condition to change the spacing so it looks nice */
     //if((ui->Table_Measurements_Pol->isVisible())
-          //  && Runner->PolConfigured){
-        //ui->verticalSpacerX->changeSize(20,13,QSizePolicy::Fixed,QSizePolicy::Fixed);
-   // }else{
+    //  && Runner->PolConfigured){
+    //ui->verticalSpacerX->changeSize(20,13,QSizePolicy::Fixed,QSizePolicy::Fixed);
+    // }else{
 
-        /* In case some elements from the lateral panel are hidden or shown again, change the spacing so they look good */
-        ui->verticalSpacerX->changeSize(20,13,QSizePolicy::Fixed,QSizePolicy::Expanding);
-  //  }
+    /* In case some elements from the lateral panel are hidden or shown again, change the spacing so they look good */
+    ui->verticalSpacerX->changeSize(20,13,QSizePolicy::Fixed,QSizePolicy::Expanding);
+    //  }
 
     /* Catch check box event */
     if(Checkbox == PolarimetrySpectrometer->ui->checkBox_normalize && !Runner->doingLiveFFT && Runner->PolCalibrating){
@@ -3912,8 +3918,11 @@ void PanelPolarimeter::toggle_Load_Data(void)
             clean_All_Pol();
         }
 
+        /* The user is loading the summary */
+        Runner->UserLoadSummary = true;
+
         /* Load and analyze raw data */
-        Load_Summary();
+        Load_Summary("");
         ui->Button_Save_Graphs_Pol->setVisible(true);
 
     }
@@ -3980,19 +3989,44 @@ void PanelPolarimeter::toggle_Load_Data(void)
 /**
  * @brief Load Summary of the measurements. Load the average values of the signals
  */
-void PanelPolarimeter::Load_Summary(void) {
+void PanelPolarimeter::Load_Summary(QString path) {
 
-    /* Update information bar */
-    ui->info->setText("Loading Measurement Summary...");
+    /* Path for the summary? */
+    QString DataPath = "";
 
-    /* Load Data Path */
-    QString DataPath = QFileDialog::getOpenFileName(this, QString("Open Measurement Summary"), ".", QString("*.sum"));
+    /* Is the user loading the summary? */
+    if(Runner->UserLoadSummary){
+
+        /* Update information bar */
+        ui->info->setText("Loading Measurement Summary...");
+
+        /* Load Data Path */
+        DataPath = QFileDialog::getOpenFileName(this, QString("Open Measurement Summary"), ".", QString("*.sum"));
+
+    }else{
+
+        /* Get the groung path */
+        QFileInfo summaryPath = QFileInfo(path);
+
+        /* The analize data is loading this summary */
+        DataPath = summaryPath.canonicalPath().remove("/FFT Data") + "/Measurement_Summary.sum";
+    }
 
     /* File selected by user? */
     if (NULL == DataPath)
     {
         /* No file selected. Dialog aborted. */
         ui->info->setText("");
+        return;
+    }
+
+    /* Enroute File */
+    QFile file(DataPath);
+
+    /* Does the File exists? */
+    if(!file.exists()){
+        /* If not, tell the user that it coulnd't be found */
+        showWarning("Measurement Summary File couldn't be found. Please make sure this file exists in the same directory as the \"FFT Data\".", "");
         return;
     }
 
@@ -4003,16 +4037,6 @@ void PanelPolarimeter::Load_Summary(void) {
     PolPlotter->Average2W.resize(0);
     PolPlotter->AverageRatio.resize(0);
     PolPlotter->Temperature_Values.resize(0);
-
-    /* Enroute File */
-    QFile file(DataPath);
-
-    /* Does the File exists? */
-    if(!file.exists()){
-        /* If not, tell the user that it coulnd't be found */
-        showWarning("File not Found!", "");
-        return;
-    }
 
     /* Create the readed row */
     QString Row;
@@ -4117,6 +4141,37 @@ void PanelPolarimeter::Load_Summary(void) {
     /* Add temperature plot */
     PolPlotter->Temperature_Plot->setSamples(PolPlotter->averaged_Signal_time, PolPlotter->Temperature_Values);
 
+    /* Calculate the actual standard deviation */
+    double meanTemp = 0;
+
+    /* Get the mean value */
+    for(int k = 0; k < PolPlotter->Temperature_Values.length(); k++){
+
+        meanTemp = meanTemp + PolPlotter->Temperature_Values.at(k);
+
+        /* Handle events and update UI */
+        Application::processEvents();
+    }
+
+    /* Mean temperature */
+    meanTemp = meanTemp/PolPlotter->Temperature_Values.length();
+    double squareTempDif = 0;
+
+    /* Get the square difference */
+    for(int k = 0; k < PolPlotter->Temperature_Values.length(); k++){
+
+        squareTempDif = squareTempDif + ((PolPlotter->Temperature_Values.at(k)-meanTemp)*(PolPlotter->Temperature_Values.at(k)-meanTemp));
+
+        /* Handle events and update UI */
+        Application::processEvents();
+    }
+
+    /* Get the std */
+    PolPlotter->TempStandardDev = sqrt(squareTempDif/PolPlotter->Temperature_Values.length());
+
+    /* Show the actual temperature STD */
+    PolPlotter->Temperature_Plot->setTitle("Mean ± STD = " + QString().setNum(meanTemp, 'f', 2) + " ± " + QString().setNum(PolPlotter->TempStandardDev, 'f', 6) + " °C");
+
     /* Attach graphs */
     PolPlotter->Average_DC_Signal->attach(ui->qwtPlot_Pol_Average);
     PolPlotter->Average_W_Signal->attach(ui->qwtPlot_Pol_Average);
@@ -4152,6 +4207,7 @@ void PanelPolarimeter::Load_Summary(void) {
     /* Update plots */
     ui->qwtPlot_Pol_Average->update();
     ui->qwtPlot_Pol_Temperature->update();
+    ui->qwtPlot_Pol_Temperature->updateLayout();
 
     /* Resize vectors */
     PolPlotter->averaged_Signal_time.resize(0);
@@ -4163,6 +4219,12 @@ void PanelPolarimeter::Load_Summary(void) {
 
     /* Update information bar */
     ui->info->setText("");
+
+    /* Jump to tab with the information */
+    if(Runner->UserLoadSummary){
+        /* Jump to tab */
+        ui->Tabs_Plots->setCurrentIndex(0);
+    }
 }
 
 /**
@@ -4202,9 +4264,9 @@ void PanelPolarimeter::Load_From_FFT(void) {
 
     /* Contains a temperature value to show? */
     if(FFTL.TemperatureSetup > 0){
-       ui->label_Temperature->setText(QString::number(FFTL.TemperatureSetup) + " °C");
-       ui->Pol_Thermo->setValue(FFTL.TemperatureSetup);
-       ui->label_hum->setText("- %");
+        ui->label_Temperature->setText(QString::number(FFTL.TemperatureSetup) + " °C");
+        ui->Pol_Thermo->setValue(FFTL.TemperatureSetup);
+        ui->label_hum->setText("- %");
     }
 
     /* Remember that there was data loaded */
@@ -4263,9 +4325,9 @@ void PanelPolarimeter::Load_From_Raw_Data(void) {
 
     /* Contains a temperature value to show? */
     if(FFTL.TemperatureSetup > 0){
-       ui->label_Temperature->setText(QString::number(FFTL.TemperatureSetup) + " °C");
-       ui->Pol_Thermo->setValue(FFTL.TemperatureSetup);
-       ui->label_hum->setText("- %");
+        ui->label_Temperature->setText(QString::number(FFTL.TemperatureSetup) + " °C");
+        ui->Pol_Thermo->setValue(FFTL.TemperatureSetup);
+        ui->label_hum->setText("- %");
     }
 
     /* Remember that there was data loaded */
@@ -4512,6 +4574,7 @@ void PanelPolarimeter::write_Summary() {
     fprintf(file, "Nr. of Spectra: %i\n", ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->NrSpectra);
     fprintf(file, "Nr. of Averages: %i\n", ptrSpectrometers[SpectrometerNumber]->getNumberOfAverages());
     fprintf(file, "Frequency: %.2f\n\n", FFTL.FrequencyF);
+    fprintf(file, "Temperature STD: %.6f\n\n", PolPlotter->TempStandardDev);
 
     /* Loop through the time */
     for (int z = 0; z < PolPlotter->averaged_Signal_time.length(); z++){
@@ -4694,6 +4757,13 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
     /* If the user canceled the data analysis */
     if(!DataSelector->canceled){
 
+        /* Is the user loading data? */
+        if(!Runner->automaticData){
+
+            /* Restart all */
+            clean_All_Pol();
+        }
+
         /* Allow to save plots again */
         ui->Button_Save_Graphs_Pol->setVisible(true);
 
@@ -4753,15 +4823,43 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
             ui->qwtPlot_Pol_Prediction->update();
         }
 
+        /* Add values to the intensities Vs concentrations plot */
+        PolPlotter->AverageDetSignalPlotter->setSamples(DataSelector->ConcentrationsPlot, DataSelector->AverageDetSignal);
+
         /* Add the plot intensites vs concentration to the UI */
-        DataSelector->AverageDetSignalPlotter->attach(ui->qwtPlot_Pol_IntensitiesVsConcentrations);
+        PolPlotter->AverageDetSignalPlotter->attach(ui->qwtPlot_Pol_IntensitiesVsConcentrations);
+
+        /* Adjust the plots axes */
+        double maximumConcentration = *std::max_element(DataSelector->ConcentrationsPlot.begin(), DataSelector->ConcentrationsPlot.end());
+        double maximumIntensity = *std::max_element(DataSelector->AverageDetSignal.begin(), DataSelector->AverageDetSignal.end());
+
+        /* Set axes limits */
+        ui->qwtPlot_Pol_IntensitiesVsConcentrations->setXAxis(*std::min_element(DataSelector->ConcentrationsPlot.begin(), DataSelector->ConcentrationsPlot.end()),
+                                                              maximumConcentration + maximumConcentration*0.05);
+
+        ui->qwtPlot_Pol_IntensitiesVsConcentrations->setYAxis(*std::min_element(DataSelector->AverageDetSignal.begin(), DataSelector->AverageDetSignal.end()),
+                                                              maximumIntensity + maximumIntensity*0.05);
+
+        /* Adjust axis title according to the determination signal */
+        ui->qwtPlot_Pol_IntensitiesVsConcentrations->setYAxisTitle("Average " + DataSelector->ui->comboBox_DetSignal->currentText() + " Intensity (Counts)");
+        ui->qwtPlot_Pol_IntensitiesVsConcentrations->setXAxisTitle(DataSelector->ui->comboBox_Substance->currentText().remove(0,3) + " Concentration (mg/dL)");
+
+        /* If the user loads the analize data, then load the summary */
+        if(!Runner->automaticData && !DataSelector->pathDataM.isEmpty()){
+
+            /* Load the measuremnt summary too, if it is available */
+            Runner->UserLoadSummary = false;
+
+            /* Load the summary too */
+            Load_Summary(DataSelector->pathDataM);
+        }
+
+        /* Jump to tab */
+        ui->Tabs_Plots->setCurrentIndex(2);
     }
 
     /* Not loading window automatically anymore */
     Runner->automaticData = false;
-
-    /* Jump to tab */
-    ui->Tabs_Plots->setCurrentIndex(2);
 
 }
 
@@ -4872,6 +4970,7 @@ void PanelPolarimeter::clean_All_Pol(void){
     ui->qwtPlot_Pol_Average->update();
     ui->qwtPlot_Pol_Average->updateLayout();
     ui->qwtPlot_Pol_Temperature->update();
+    ui->qwtPlot_Pol_IntensitiesVsConcentrations->update();
     ui->qwtPlot_Pol->update();
 
     /* Time busy with FFT */

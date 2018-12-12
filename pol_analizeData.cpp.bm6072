@@ -1119,10 +1119,12 @@ void selectAnalizeData::analizeData(void){
 
     }else{
 
-        /* Analysis can't be performed */
-        showCritical("Please first select the measurement data.  Then, divide the file names in calibration and validation for further data analysis.","No files were selected as calibration and validation. \n Select files for calibration "
-                                                                                                       "and validation.");
+        /* Analisys can't be performed */
+        showCritical("Please load measurement data as calibration and validation for further data analysis.","No files were selected as calibration and validation. \n Select files for calibration "
+                                                                                                             "and validation.");
+
     }
+
 }
 
 /**

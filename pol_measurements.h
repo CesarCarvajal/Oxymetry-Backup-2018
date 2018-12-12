@@ -89,6 +89,9 @@ public:
     /* Index of configured waiting time in measurements */
     unsigned int vectorIndex;
 
+    /* Is the user loading a summary file? */
+    bool UserLoadSummary;
+
 public:
 
     /* Is the measurement running? */

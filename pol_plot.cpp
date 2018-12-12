@@ -21,6 +21,9 @@
 /* Internal includes */
 #include "pol_plot.h"
 #include <QtDataVisualization>
+#include <QApplication>
+
+#include "application.h"
 
 using namespace QtDataVisualization;
 
@@ -68,7 +71,6 @@ Pol_Plot::Pol_Plot()
     /* Temperature plot curve  */
     Temperature_Plot = new QwtPlotCurve("");
     Temperature_Plot->setPen(QPen("red"));
-    Temperature_Plot->setItemAttribute(QwtPlotItem::Legend, false);
 
     /* Create the DC, W and 2W plots */
     FFT_DC = new QwtPlotCurve("I(DC)");
@@ -93,6 +95,14 @@ Pol_Plot::Pol_Plot()
     predictionSignal = new QwtPlotCurve("");
     predictionSignal->setPen(QPen("black"));
     predictionSignal->setItemAttribute(QwtPlotItem::Legend, false);
+
+    /* Create statistics plots */
+    AverageDetSignalPlotter= new QwtPlotCurve("");
+    AverageDetSignalPlotter->setPen(QPen("red"));
+    AverageDetSignalPlotter->setItemAttribute(QwtPlotItem::Legend, false);
+
+    /* Inital Temperature STD */
+    TempStandardDev = 0;
 }
 
 
@@ -284,6 +294,37 @@ void Pol_Plot::plotAverages(bool dataloaded, QVector<double> FFTLfft_DC, QVector
     /* Add temperature plot */
     Temperature_Plot->setSamples(averaged_Signal_time, Temperature_Values);
 
+    /* Calculate the actual standard deviation */
+    double meanTemp = 0;
+
+    /* Get the mean value */
+    for(int k = 0; k < Temperature_Values.length(); k++){
+
+        meanTemp = meanTemp + Temperature_Values.at(k);
+
+        /* Handle events and update UI */
+        Application::processEvents();
+    }
+
+    /* Mean temperature */
+    meanTemp = meanTemp/Temperature_Values.length();
+    double squareTempDif = 0;
+
+    /* Get the square difference */
+    for(int k = 0; k < Temperature_Values.length(); k++){
+
+        squareTempDif = squareTempDif + ((Temperature_Values.at(k)-meanTemp)*(Temperature_Values.at(k)-meanTemp));
+
+        /* Handle events and update UI */
+        Application::processEvents();
+    }
+
+    /* Get the std */
+    TempStandardDev = sqrt(squareTempDif/Temperature_Values.length());
+
+    /* Show the actual temperature STD */
+    Temperature_Plot->setTitle("Mean ± STD = " + QString().setNum(meanTemp, 'f', 2) + " ± " + QString().setNum(TempStandardDev, 'f', 6) + " °C");
+
     /* Whats the maximum time reached on the vector until now? */
     maxXtime = *std::max_element(averaged_Signal_time.begin(), averaged_Signal_time.end());
 }
@@ -310,6 +351,13 @@ void Pol_Plot::clean_AllPlots(void){
         Temperature_Plot->detach();
     }
 
+    /* Is there any information ploted already? */
+    if(AverageDetSignalPlotter!=nullptr)
+    {
+        /* Detach live curves */
+        AverageDetSignalPlotter->detach();
+    }
+
     /* Set all vectors to zero */
     averaged_Signal_time.resize(0);
     AverageDC.resize(0);
@@ -318,6 +366,8 @@ void Pol_Plot::clean_AllPlots(void){
     AverageRatio.resize(0);
     Temperature_Values.resize(0);
     counts_average_time = 0;
+
+    TempStandardDev=0;
 }
 
 /**

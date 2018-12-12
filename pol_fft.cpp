@@ -564,6 +564,10 @@ void fft::CalculateFFT(int N, QVector<double> Data)
 */
 void fft::saveFFTtoFile(QFileInfo FileDetails, bool userSaving, QStringList substancesNames, double Temperature)
 {
+
+    /* Use comas instead of dots */
+    setlocale(LC_NUMERIC, "French_Canada.1252");
+
     /* Create the path and file name for the FFT file */
     QString path;
     QString fileN = FileDetails.completeBaseName();

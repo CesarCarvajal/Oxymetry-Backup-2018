@@ -309,8 +309,9 @@ void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFil
                     /* is there a float presicion? */
                     double num = (*std::max_element(GlucoseConcentration.begin(), GlucoseConcentration.end()))/(NConcentrations-1);
                     int num2 = (int)num;
+                    double compared = (num - num2) < 0 ? (num - num2)*(-1):(num - num2);
 
-                    if(num - num2 == 0){
+                    if(compared < 0.0001){
                         /* Add C1 to the file name */
                         line.append(QString::number(GlucoseConcentration.at(j)) + "C1_");
                     }else{
@@ -324,8 +325,9 @@ void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFil
                     /* is there a float presicion? */
                     double num = (*std::max_element(Impurity1Concentration.begin(), Impurity1Concentration.end()))/(NConcentrations-1);
                     int num2 = (int)num;
+                    double compared = (num - num2) < 0 ? (num - num2)*(-1):(num - num2);
 
-                    if(num - num2 == 0){
+                    if(compared < 0.0001){
                         /* Add C2 to the file name */
                         line.append(QString::number(Impurity1Concentration.at(j)) + "C2_");
                     }else{
@@ -340,8 +342,9 @@ void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFil
                     /* is there a float presicion? */
                     double num = (*std::max_element(Impurity2Concentration.begin(), Impurity2Concentration.end()))/(NConcentrations-1);
                     int num2 = (int)num;
+                    double compared = (num - num2) < 0 ? (num - num2)*(-1):(num - num2);
 
-                    if(num - num2 == 0){
+                    if(compared < 0.0001){
                         /* Add C3 to the file name */
                         line.append(QString::number(Impurity2Concentration.at(j)) + "C3_");
                     }else{
@@ -356,8 +359,9 @@ void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFil
                     /* is there a float presicion? */
                     double num = (*std::max_element(Impurity3Concentration.begin(), Impurity3Concentration.end()))/(NConcentrations-1);
                     int num2 = (int)num;
+                    double compared = (num - num2) < 0 ? (num - num2)*(-1):(num - num2);
 
-                    if(num - num2 == 0){
+                    if(compared < 0.0001){
                         /* Add C4 to the file name */
                         line.append(QString::number(Impurity3Concentration.at(j)) + "C4_");
                     }else{
@@ -372,8 +376,9 @@ void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFil
                     /* is there a float presicion? */
                     double num = (*std::max_element(Impurity4Concentration.begin(), Impurity4Concentration.end()))/(NConcentrations-1);
                     int num2 = (int)num;
+                    double compared = (num - num2) < 0 ? (num - num2)*(-1):(num - num2);
 
-                    if(num - num2 == 0){
+                    if(compared < 0.0001){
                         /* Add C5 to the file name */
                         line.append(QString::number(Impurity4Concentration.at(j)) + "C5_");
                     }else{
@@ -388,8 +393,9 @@ void Pol_configFilesGenerator::GenerateSpectrometerConfiguration(QString pathFil
                     /* is there a float presicion? */
                     double num = (*std::max_element(Impurity5Concentration.begin(), Impurity5Concentration.end()))/(NConcentrations-1);
                     int num2 = (int)num;
+                    double compared = (num - num2) < 0 ? (num - num2)*(-1):(num - num2);
 
-                    if(num - num2 == 0){
+                    if(compared < 0.0001){
                         /* Add C6 to the file name */
                         line.append(QString::number(Impurity5Concentration.at(j)) + "C6_");
                     }else{

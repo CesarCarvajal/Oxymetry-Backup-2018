@@ -205,7 +205,7 @@ private slots:
     void change_Auto_Integration_Time_Pol(void);
 
     /* Load measurement summary */
-    void Load_Summary(void);
+    void Load_Summary(QString path);
 
     /* Write measurement summary */
     void write_Summary();

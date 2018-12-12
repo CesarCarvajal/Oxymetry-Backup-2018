@@ -1382,7 +1382,7 @@
           <string>Load a Configuration File</string>
          </property>
          <property name="text">
-          <string>Load Data</string>
+          <string>Select Data</string>
          </property>
          <property name="autoDefault">
           <bool>false</bool>
@@ -1411,7 +1411,7 @@
        <item>
         <widget class="QPushButton" name="pushButton_Analize">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
