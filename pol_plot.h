@@ -44,14 +44,14 @@ public:
     QwtPlotCurve *FFT_oneWave, *predictionSignal;
     QwtPlotCurve *FFT_DC, *FFT_W, *FFT_2W;
     QwtPlotCurve *Compensation_Signal, *Average_Ratio_Signal;
-    QwtPlotCurve *Average_DC_Signal, *Average_W_Signal, *Average_2W_Signal, *Temperature_Plot;
+    QwtPlotCurve *Average_DC_Signal, *Average_W_Signal, *Average_2W_Signal, *Temperature_Plot, *Humidity_Plot;
 
     /* Plot some statistics */
     QwtPlotCurve *AverageDetSignalPlotter;
 
     /* Vectors for live Plotting */
     QVector<double> averaged_Signal_time;
-    QVector<double> AverageDC, AverageW, Average2W, AverageRatio, Temperature_Values;
+    QVector<double> AverageDC, AverageW, Average2W, AverageRatio, Temperature_Values, Humidity_Values;
 
     /* Maximum value on Y axis */
     double maxYValue;
@@ -78,7 +78,7 @@ public:
 public:
 
     /* Plot the real time averages of the frequency components DC, W, and 2W */
-    void plotAverages(bool dataloaded, QVector<double> FFTLfft_DC, QVector<double> FFTLfft_W, QVector<double> FFTLfft_2W, QVector<double> FFTLwavelengths, bool measuring, int time, double temperature);
+    void plotAverages(bool dataloaded, QVector<double> FFTLfft_DC, QVector<double> FFTLfft_W, QVector<double> FFTLfft_2W, QVector<double> FFTLwavelengths, bool measuring, int time, double temperature, double humidity);
 
     /* Adjust 3D plots */
     void adjust3DPlot(void);
@@ -92,6 +92,12 @@ public:
 
     /* Clean all the plots */
     void clean_AllPlots(void);
+
+    /* Clean 3D plots */
+    void restart3DPlots(void);
+
+    /* Further adjust of plots */
+    void adjustSet3DPlots(void);
 
     /* Plot the prediction line */
     void plotPredictionLine(double minConcentration, double maxConcentration);

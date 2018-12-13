@@ -72,6 +72,11 @@ Pol_Plot::Pol_Plot()
     Temperature_Plot = new QwtPlotCurve("");
     Temperature_Plot->setPen(QPen("red"));
 
+    /* Humidity plot curve  */
+    Humidity_Plot = new QwtPlotCurve("");
+    Humidity_Plot->setPen(QPen("Blue"));
+    Humidity_Plot->setItemAttribute(QwtPlotItem::Legend, false);
+
     /* Create the DC, W and 2W plots */
     FFT_DC = new QwtPlotCurve("I(DC)");
     FFT_W = new QwtPlotCurve("I(ω)");
@@ -139,38 +144,21 @@ void Pol_Plot::adjust3DPlot(void){
     surface->axisX()->setAutoAdjustRange(true);
     surface->axisY()->setAutoAdjustRange(true);
     surface->axisZ()->setAutoAdjustRange(true);
-    surface->axisX()->setLabelFormat("%d");
-    surface->axisY()->setLabelFormat("%.1f ");
-    surface->axisZ()->setLabelFormat("%.1f");
     surface->axisX()->setTitle(QStringLiteral("Wavelength (nm)"));
     surface->axisX()->setTitleVisible(true);
     surface->axisY()->setTitleVisible(true);
     surface->axisZ()->setTitleVisible(true);
-    surface->scene()->activeCamera()->setCameraPosition(45, 45, 80); // horizontal in °, vertikal in °, zoom in %
-    surface->setSelectionMode(QAbstract3DGraph::SelectionItemAndRow
-                              | QAbstract3DGraph::SelectionSlice);
 
     surface_norm->axisX()->setAutoAdjustRange(true);
     surface_norm->axisY()->setAutoAdjustRange(true);
     surface_norm->axisZ()->setAutoAdjustRange(true);
-    surface_norm->axisX()->setLabelFormat("%d");
-    surface_norm->axisY()->setLabelFormat("%.3f ");
-    surface_norm->axisZ()->setLabelFormat("%.1f");
     surface_norm->axisX()->setTitle(QStringLiteral("Wavelength (nm)"));
     surface_norm->axisX()->setTitleVisible(true);
     surface_norm->axisY()->setTitleVisible(true);
     surface_norm->axisZ()->setTitleVisible(true);
-    surface_norm->scene()->activeCamera()->setCameraPosition(45, 45, 80); // horizontal in °, vertikal in °, zoom in %
-    surface_norm->setSelectionMode(QAbstract3DGraph::SelectionItemAndRow
-                              | QAbstract3DGraph::SelectionSlice);
 
-    surface->activeTheme()->setLabelBorderEnabled(false);
-    surface->activeTheme()->setLabelTextColor(QColor(QRgb(Qt::black)));
-    surface->activeTheme()->setFont(QFont(QStringLiteral("Arial"), 40));
+    adjustSet3DPlots();
 
-    surface_norm->activeTheme()->setLabelBorderEnabled(false);
-    surface_norm->activeTheme()->setLabelTextColor(QColor(QRgb(Qt::black)));
-    surface_norm->activeTheme()->setFont(QFont(QStringLiteral("Arial"), 40));
 }
 
 /**
@@ -225,7 +213,7 @@ void Pol_Plot::plotPredictionLine(double minConcentration, double maxConcentrati
  * @param[in] Vectors with the DC, W, 2W and ratio W/2W components, also the wavelengths. The parameter dataloaded prevents mixing of data.
  */
 void Pol_Plot::plotAverages(bool dataloaded, QVector<double> FFTLfft_DC, QVector<double> FFTLfft_W, QVector<double> FFTLfft_2W, QVector<double> FFTLwavelengths,
-                            bool measuring, int time, double temperature){
+                            bool measuring, int time, double temperature, double humidity){
 
     /* Initialize the average variables */
     double average_DC=0, average_W=0, average_2W = 0;
@@ -291,8 +279,12 @@ void Pol_Plot::plotAverages(bool dataloaded, QVector<double> FFTLfft_DC, QVector
     /* Temperature plot */
     Temperature_Values.append(temperature);
 
-    /* Add temperature plot */
+    /* Humidity plot */
+    Humidity_Values.append(humidity);
+
+    /* Add temperature and Humidity plot */
     Temperature_Plot->setSamples(averaged_Signal_time, Temperature_Values);
+    Humidity_Plot->setSamples(averaged_Signal_time, Humidity_Values);
 
     /* Calculate the actual standard deviation */
     double meanTemp = 0;
@@ -349,12 +341,7 @@ void Pol_Plot::clean_AllPlots(void){
         FFT_2W->detach();
         predictionSignal->detach();
         Temperature_Plot->detach();
-    }
-
-    /* Is there any information ploted already? */
-    if(AverageDetSignalPlotter!=nullptr)
-    {
-        /* Detach live curves */
+        Humidity_Plot->detach();
         AverageDetSignalPlotter->detach();
     }
 
@@ -365,9 +352,70 @@ void Pol_Plot::clean_AllPlots(void){
     Average2W.resize(0);
     AverageRatio.resize(0);
     Temperature_Values.resize(0);
+    Humidity_Values.resize(0);
     counts_average_time = 0;
 
     TempStandardDev=0;
+}
+
+/**
+ * @brief Clean the 3D plots.
+ */
+void Pol_Plot::restart3DPlots(void){
+
+    surface->removeSeries(series);
+    surface_norm->removeSeries(series_norm);
+    surface->seriesList().clear();
+    surface_norm->seriesList().clear();
+
+    surface->axisX()->setTitle(QStringLiteral(""));
+    surface_norm->axisX()->setTitle(QStringLiteral(""));
+    surface->axisY()->setTitle(QStringLiteral(""));
+    surface_norm->axisY()->setTitle(QStringLiteral(""));
+    surface->axisZ()->setTitle(QStringLiteral(""));
+    surface_norm->axisZ()->setTitle(QStringLiteral(""));
+
+    surface_norm->axisX()->setRange(0,10);
+    surface_norm->axisY()->setRange(0,10);
+    surface_norm->axisZ()->setRange(0,10);
+
+    surface->axisX()->setRange(0,10);
+    surface->axisY()->setRange(0,10);
+    surface->axisZ()->setRange(0,10);
+
+    adjustSet3DPlots();
+
+}
+
+
+/**
+ * @brief Adjust some axes and titles appearance
+ */
+void Pol_Plot::adjustSet3DPlots(void){
+
+    surface->scene()->activeCamera()->setCameraPosition(45, 45, 80); // horizontal in °, vertikal in °, zoom in %
+    surface->setSelectionMode(QAbstract3DGraph::SelectionItemAndRow
+                              | QAbstract3DGraph::SelectionSlice);
+
+    surface_norm->scene()->activeCamera()->setCameraPosition(45, 45, 80); // horizontal in °, vertikal in °, zoom in %
+    surface_norm->setSelectionMode(QAbstract3DGraph::SelectionItemAndRow
+                                   | QAbstract3DGraph::SelectionSlice);
+
+    surface->axisX()->setLabelFormat("%d");
+    surface->axisY()->setLabelFormat("%.1f ");
+    surface->axisZ()->setLabelFormat("%.1f");
+
+    surface_norm->axisX()->setLabelFormat("%d");
+    surface_norm->axisY()->setLabelFormat("%.3f ");
+    surface_norm->axisZ()->setLabelFormat("%.1f");
+
+    surface->activeTheme()->setLabelBorderEnabled(false);
+    surface->activeTheme()->setLabelTextColor(QColor(QRgb(Qt::black)));
+    surface->activeTheme()->setFont(QFont(QStringLiteral("Arial"), 40));
+
+    surface_norm->activeTheme()->setLabelBorderEnabled(false);
+    surface_norm->activeTheme()->setLabelTextColor(QColor(QRgb(Qt::black)));
+    surface_norm->activeTheme()->setFont(QFont(QStringLiteral("Arial"), 40));
 }
 
 /**
@@ -396,6 +444,11 @@ Pol_Plot::~Pol_Plot(void)
         Temperature_Plot->detach();
         delete Temperature_Plot;
         Temperature_Plot = nullptr;
+
+        Humidity_Plot->detach();
+        delete Humidity_Plot;
+        Humidity_Plot = nullptr;
+
     }
 
     /* Delete all the existing data ploted on the interface */
@@ -416,5 +469,20 @@ Pol_Plot::~Pol_Plot(void)
 
     delete predictionSignal;
     predictionSignal = nullptr;
+
+    delete AverageDetSignalPlotter;
+    AverageDetSignalPlotter = nullptr;
+
+    delete series;
+    series = nullptr;
+
+    delete series_norm;
+    series_norm = nullptr;
+
+    delete surface;
+    surface = nullptr;
+
+    delete surface_norm;
+    surface_norm = nullptr;
 
 }

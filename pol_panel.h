@@ -156,7 +156,7 @@ private:
     QFileInfo fileInfoLoad;
 
     /* Temperature values measured from Teensy */
-    float Temperature, Humidity, minYTemperature, maxYTemperature;
+    float Temperature, Humidity, minYTemperature, maxYTemperature, minYHumidity, maxYHumidity;
 
     /* Path given by the user to load files */
     QString UserLoadDataPath;

@@ -201,6 +201,9 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     /* Object pointing to all functions related with plots */
     PolPlotter = new Pol_Plot();
 
+    /* Initialize 3D plots */
+    PolPlotter->restart3DPlots();
+
     /* Connect to the Teensy board */
     teensyTemperature = new ConnectTemperature(this);
 
@@ -215,8 +218,9 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
         ui->label_NoComTeensy->setVisible(false);
     }
 
-    /* Initialize temperature in 0 degrees */
+    /* Initialize temperature in 0 degrees and humidity in 0 % */
     Temperature = 0;
+    Humidity = 0;
 
     /* Create signal mapper for panel */
     signalMapper = new QSignalMapper(this);
@@ -343,6 +347,10 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
         signalMapper->setMapping(ui->label_hidePrediction, ui->label_hidePrediction);
         signalMapper->setMapping(ui->label_hideNSpectra, ui->label_hideNSpectra);
         signalMapper->setMapping(ui->label_temp1, ui->label_temp1);
+        signalMapper->setMapping(ui->label_hum1, ui->label_hum1);
+        signalMapper->setMapping(ui->label_hideTemperature, ui->label_hideTemperature);
+        signalMapper->setMapping(ui->label_hideFFTIntensityPlot, ui->label_hideFFTIntensityPlot);
+        signalMapper->setMapping(ui->label_hideHumidity, ui->label_hideHumidity);
 
         /* Connect event handler */
         connect(qApp, SIGNAL(DataPolIsHere(int, int)), this, SLOT(receive_Data_Pol(int, int)));
@@ -374,6 +382,10 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     connect(ui->label_hideNSpectra, SIGNAL(clicked()), signalMapper, SLOT(map()));
     connect(ui->label_hidePrediction, SIGNAL(clicked()), signalMapper, SLOT(map()));
     connect(ui->label_temp1, SIGNAL(clicked()), signalMapper, SLOT(map()));
+    connect(ui->label_hum1, SIGNAL(clicked()), signalMapper, SLOT(map()));
+    connect(ui->label_hideTemperature, SIGNAL(clicked()), signalMapper, SLOT(map()));
+    connect(ui->label_hideFFTIntensityPlot, SIGNAL(clicked()), signalMapper, SLOT(map()));
+    connect(ui->label_hideHumidity, SIGNAL(clicked()), signalMapper, SLOT(map()));
 
     /* Set button styles */
     ui->button_Start_Meas_Pol->setStyleSheet(greenButton);
@@ -426,6 +438,14 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     ui->qwtPlot_Pol_Temperature->setYAxisTitle("Temperature (°C)");
     ui->qwtPlot_Pol_Temperature->setYAxis(minYTemperature, maxYTemperature);
     ui->qwtPlot_Pol_Temperature->setXAxis(minXAverage, maxXAverage);
+
+    /* Humidity plot */
+    maxYHumidity = 1;
+    minYHumidity = 0;
+    ui->qwtPlot_Pol_Humidity->setXAxisTitle("Time (s)");
+    ui->qwtPlot_Pol_Humidity->setYAxisTitle("Humidity (%)");
+    ui->qwtPlot_Pol_Humidity->setYAxis(minYHumidity, maxYHumidity);
+    ui->qwtPlot_Pol_Humidity->setXAxis(minXAverage, maxXAverage);
 
     /* FFT Curve at a certain Wavelength */
     ui->qwtPlot_Pol_FFT->setXAxis(0.0, 21);
@@ -503,6 +523,9 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     container_norm = QWidget::createWindowContainer(PolPlotter->surface_norm);
     ui->VLP->addWidget(container);
     ui->VLP_norm->addWidget(container_norm);
+
+    /* Jump to tab */
+    ui->Tabs_Plots->setCurrentIndex(0);
 
 }
 
@@ -1293,9 +1316,16 @@ void PanelPolarimeter::selected_Spectrometer_Pol(void){
 void PanelPolarimeter::update_Wavelength_Range(void){
 
     /* Update x-axis of graphs depending on Wavelengths */
-    ui->qwtPlot_Pol->setXAxis(PolarimetrySpectrometer->getMinimumWavelength(), PolarimetrySpectrometer->getMaximumWavelength());
-    ui->qwtPlot_Pol_Compensation->setXAxis(PolarimetrySpectrometer->getMinimumWavelength(), PolarimetrySpectrometer->getMaximumWavelength());
-    ui->qwtPlot_Pol_w_2w->setXAxis(PolarimetrySpectrometer->getMinimumWavelength(), PolarimetrySpectrometer->getMaximumWavelength());
+    if(m_NrDevices > 0){
+        ui->qwtPlot_Pol->setXAxis(PolarimetrySpectrometer->getMinimumWavelength(), PolarimetrySpectrometer->getMaximumWavelength());
+        ui->qwtPlot_Pol_Compensation->setXAxis(PolarimetrySpectrometer->getMinimumWavelength(), PolarimetrySpectrometer->getMaximumWavelength());
+        ui->qwtPlot_Pol_w_2w->setXAxis(PolarimetrySpectrometer->getMinimumWavelength(), PolarimetrySpectrometer->getMaximumWavelength());
+    }else{
+
+        ui->qwtPlot_Pol->setXAxis(277.299, 1100.23);
+        ui->qwtPlot_Pol_Compensation->setXAxis(277.299, 1100.23);
+        ui->qwtPlot_Pol_w_2w->setXAxis(277.299, 1100.23);
+    }
 }
 
 /**
@@ -1504,7 +1534,14 @@ void PanelPolarimeter::run_Polarimetry(short int runType) {
             ui->Pol_Thermo->setValue(Temperature);
             ui->Pol_Thermo->setLowerBound(Temperature - 5);
             ui->Pol_Thermo->setUpperBound(Temperature + 5);
-            ui->label_Temperature->setText(QString::number(Temperature) + " °C");
+
+            /* Can we add already a std of the temperature? */
+            if(PolPlotter->TempStandardDev > 0){
+
+                ui->label_Temperature->setText(QString::number(Temperature) + " ± " + QString().setNum(PolPlotter->TempStandardDev, 'f', 3) + " °C");
+            }else{
+                ui->label_Temperature->setText(QString::number(Temperature) + " °C");
+            }
             ui->label_hum->setText(QString::number(Humidity) + " %");
 
             /* Is the setup too hot or too cold? */
@@ -1630,6 +1667,17 @@ void PanelPolarimeter::adjust_Run_Start(short int typeRun){
     Runner->Calibration_Progress = 0;
     ui->currentProgressBar_Pol->setValue(0);
 
+    /* Initialize some other plots */
+    QVector<double> initial;
+    initial.append(0);
+
+    /* Clean this plot too */
+    PolPlotter->AverageDetSignalPlotter->setSamples(initial, initial);
+    ui->qwtPlot_Pol_IntensitiesVsConcentrations->update();
+
+    /* Remove series from plot */
+    PolPlotter->restart3DPlots();
+
     /* runType == 0 means Calibration and runType == 1 means Measuring */
     if(typeRun == 0){
 
@@ -1689,6 +1737,7 @@ void PanelPolarimeter::adjust_Run_Start(short int typeRun){
         maxXAverage = measurementLength + measurementLength*0.1;
         ui->qwtPlot_Pol_Average->setXAxis(minXAverage, maxXAverage);
         ui->qwtPlot_Pol_Temperature->setXAxis(minXAverage, maxXAverage);
+        ui->qwtPlot_Pol_Humidity->setXAxis(minXAverage, maxXAverage);
 
         /* Adjust the measurement number plot in the averages */
         double lengthMeasNumber = 0;
@@ -1918,6 +1967,7 @@ void PanelPolarimeter::initialize_Calibration(void){
     PolPlotter->maxXtime = 0;
     ui->qwtPlot_Pol_Average->setXAxis(0.0, PolPlotter->time_plot);
     ui->qwtPlot_Pol_Temperature->setXAxis(0.0, PolPlotter->time_plot);
+    ui->qwtPlot_Pol_Humidity->setXAxis(0.0, PolPlotter->time_plot);
 
     /* Update plots */
     ui->qwtPlot_Pol_Average->updateLayout();
@@ -1953,6 +2003,7 @@ void PanelPolarimeter::initialize_Default_Calibration(void){
     ui->qwtPlot_Pol_Average->setYAxis(0.0, ceil(2000*1.1));
     ui->qwtPlot_Pol_Average->setXAxis(0.0, PolPlotter->time_plot);
     ui->qwtPlot_Pol_Temperature->setXAxis(0.0, PolPlotter->time_plot);
+    ui->qwtPlot_Pol_Humidity->setXAxis(0.0, PolPlotter->time_plot);
 
     /* If there is a value in the spectrometer, then adjust the frequency according to the resolution */
     double Freqresolution = 1000/ptrSpectrometers[SpectrometerNumber]->getIntegrationTime();
@@ -2032,6 +2083,12 @@ void PanelPolarimeter::pol_Calibrate(void){
 
         /* Time in seconds */
         Runner->Timer_In_Seconds = Runner->Timer_In_Seconds + 1;
+
+        if(Runner->Timer_In_Seconds % 2 == 0){
+            ui->button_calibrate->setStyleSheet("black");
+        }else{
+            ui->button_calibrate->setStyleSheet(RedButton);
+        }
 
         /* Plot the Live averages */
         plot_Average();
@@ -2366,7 +2423,7 @@ void PanelPolarimeter::adjust_Run_End(){
     /* If the measurement stopped by its own, then save the summary */
     if(!Runner->Stopped && !abort_everything){
 
-        /* Save the summary: save the average signals and temperature */
+        /* Save the summary: save the average signals, temperature and humidity */
         write_Summary();
     }
 
@@ -2555,6 +2612,7 @@ void PanelPolarimeter::adjust_Average_Plot_Time(void){
     maxXAverage = PolPlotter->averaged_Signal_time.at(0)+ PolPlotter->time_plot;
     ui->qwtPlot_Pol_Average->setXAxis(minXAverage,maxXAverage);
     ui->qwtPlot_Pol_Temperature->setXAxis(minXAverage,maxXAverage);
+    ui->qwtPlot_Pol_Humidity->setXAxis(minXAverage,maxXAverage);
 }
 
 /**
@@ -2588,7 +2646,7 @@ void PanelPolarimeter::clear_Plot(void) {
 void PanelPolarimeter::plot_Average(void){
 
     /* Plot Averages */
-    PolPlotter->plotAverages(dataloaded, FFTL.fft_DC, FFTL.fft_W, FFTL.fft_2W, FFTL.wavelengths, Runner->PolMeasuring, Runner->measurementPlotTimeInterval, Temperature);
+    PolPlotter->plotAverages(dataloaded, FFTL.fft_DC, FFTL.fft_W, FFTL.fft_2W, FFTL.wavelengths, Runner->PolMeasuring, Runner->measurementPlotTimeInterval, Temperature, Humidity);
 
     /* Attach graphs */
     PolPlotter->Average_DC_Signal->attach(ui->qwtPlot_Pol_Average);
@@ -2598,8 +2656,9 @@ void PanelPolarimeter::plot_Average(void){
 
     /* Plot the measured temperatures */
     PolPlotter->Temperature_Plot->attach(ui->qwtPlot_Pol_Temperature);
+    PolPlotter->Humidity_Plot->attach(ui->qwtPlot_Pol_Humidity);
 
-    /* Adjust the plots */
+    /* Adjust the temperature plot */
     if(maxYTemperature < *std::max_element(PolPlotter->Temperature_Values.begin(), PolPlotter->Temperature_Values.end()) + 1 ||
             minYTemperature > *std::min_element(PolPlotter->Temperature_Values.begin(), PolPlotter->Temperature_Values.end()) - 1){
         maxYTemperature = *std::max_element(PolPlotter->Temperature_Values.begin(), PolPlotter->Temperature_Values.end()) + 1;
@@ -2607,6 +2666,14 @@ void PanelPolarimeter::plot_Average(void){
         ui->qwtPlot_Pol_Temperature->setYAxis(minYTemperature, maxYTemperature);
         ui->qwtPlot_Pol_Temperature->setXAxis(minXAverage, maxXAverage);
     }
+
+    /* Adjust humidty plot */
+    maxYHumidity = *std::max_element(PolPlotter->Humidity_Values.begin(), PolPlotter->Humidity_Values.end());
+    maxYHumidity = maxYHumidity + (0.1*maxYHumidity);
+    minYHumidity = *std::min_element(PolPlotter->Humidity_Values.begin(), PolPlotter->Humidity_Values.end());
+    minYHumidity = minYHumidity - (0.1*minYHumidity);
+    ui->qwtPlot_Pol_Humidity->setYAxis(minYHumidity, maxYHumidity);
+    ui->qwtPlot_Pol_Humidity->setXAxis(minXAverage, maxXAverage);
 
     /* Is there a new maximum value for the Y axis to resize it? Usually DC is the largest of all three */
     if(maxYAverage < ceil((PolPlotter->maxYValue)*1.1)){
@@ -2616,11 +2683,13 @@ void PanelPolarimeter::plot_Average(void){
         ui->qwtPlot_Pol_Average->setYAxis(0.0, maxYAverage);
         ui->qwtPlot_Pol_Average->setXAxis(minXAverage, maxXAverage);
         ui->qwtPlot_Pol_Temperature->setXAxis(minXAverage, maxXAverage);
+        ui->qwtPlot_Pol_Humidity->setXAxis(minXAverage, maxXAverage);
     }
 
     /* Update plots */
     ui->qwtPlot_Pol_Average->update();
     ui->qwtPlot_Pol_Temperature->update();
+    ui->qwtPlot_Pol_Humidity->update();
 
     /* If we have more than certain amount of values in the plot, change the X axis */
     if(PolPlotter->averaged_Signal_time.length() > PolPlotter->time_plot){
@@ -2635,6 +2704,7 @@ void PanelPolarimeter::plot_Average(void){
             /* Just add a certain time to the plot */
             ui->qwtPlot_Pol_Average->setXAxis(minXAverage, maxXAverage);
             ui->qwtPlot_Pol_Temperature->setXAxis(minXAverage, maxXAverage);
+            ui->qwtPlot_Pol_Humidity->setXAxis(minXAverage, maxXAverage);
 
             /* Get the actual maximum average value */
             PolPlotter->maxYValue = PolPlotter->AverageDC.at(PolPlotter->AverageDC.length()-1);
@@ -2650,6 +2720,7 @@ void PanelPolarimeter::plot_Average(void){
         PolPlotter->AverageW.resize(0);
         PolPlotter->Average2W.resize(0);
         PolPlotter->Temperature_Values.resize(0);
+        PolPlotter->Humidity_Values.resize(0);
         PolPlotter->AverageRatio.resize(0);
     }
 }
@@ -2749,26 +2820,27 @@ void PanelPolarimeter::showAllPlots() {
     ui->qwtPlot_Pol_Prediction->setVisible(true);
     ui->widget_NormSpectra->setVisible(true);
     ui->widget_Spectra->setVisible(true);
+    ui->qwtPlot_Pol_Humidity->setVisible(true);
+    ui->qwtPlot_Pol_Temperature->setVisible(true);
+    ui->qwtPlot_Pol_FFT->setVisible(true);
+
+    /* Hide or show labels */
     ui->label_raw->setVisible(true);
     ui->label_average->setVisible(true);
     ui->label_compensation->setVisible(true);
     ui->label_fftprofile->setVisible(true);
     ui->label_spectra->setVisible(true);
-    ui->label_SP->setVisible(true);
     ui->label_Nspectra->setVisible(true);
-    ui->label_NSP->setVisible(true);
     ui->label_prediction->setVisible(true);
     ui->widget_errorBar->setVisible(true);
-    ui->label_P2->setVisible(true);
-    ui->label_PSNS->setVisible(true);
-    ui->label_RS->setVisible(true);
-    ui->label_HAver->setVisible(true);
-    ui->label_HProf->setVisible(true);
-    ui->label_Rat->setVisible(true);
     ui->line_rawratio->setVisible(true);
     ui->line_FFT->setVisible(true);
     ui->line_HLiveRatio->setVisible(true);
     ui->line_HFFTAverage->setVisible(true);
+    ui->label_TemperaturePlot->setVisible(true);
+    ui->label_humidityPlot->setVisible(true);
+    ui->waveToPlotFFT->setVisible(true);
+    ui->line_FFTHum->setVisible(true);
 
     /* Change labels text */
     ui->label_HideFFTProfile->setText("<< Hide FFT Profile");
@@ -2795,9 +2867,12 @@ void PanelPolarimeter::showAllPlots() {
     ui->label_hideTemperature->setText(">> Hide Temperature Plot");
     ui->label_hideTemperature->setStyleSheet("QLabel { color: blue; }");
     ui->label_hideTemperature->setFrameShape(QFrame::NoFrame);
-    ui->label_hideFFTIntensityPlot->setText(">> Hide FFT Intensities Plot");
+    ui->label_hideFFTIntensityPlot->setText("<< Hide FFT Intensities Plot");
     ui->label_hideFFTIntensityPlot->setStyleSheet("QLabel { color: blue; }");
     ui->label_hideFFTIntensityPlot->setFrameShape(QFrame::NoFrame);
+    ui->label_hideHumidity->setText(">> Hide Humidity Plot");
+    ui->label_hideHumidity->setStyleSheet("QLabel { color: blue; }");
+    ui->label_hideHumidity->setFrameShape(QFrame::NoFrame);
 }
 
 
@@ -2950,6 +3025,7 @@ void PanelPolarimeter::receive_Data_Pol(int WParam, int LParam)
             ui->qwtPlot_Pol->update();
             ui->qwtPlot_Pol_Average->update();
             ui->qwtPlot_Pol_Temperature->update();
+            ui->qwtPlot_Pol_Humidity->update();
         }
     }
 
@@ -3017,7 +3093,7 @@ void PanelPolarimeter::process_Received_Data_Pol(QString Path)
     /* Is there an automatic saving of FFT Data selected by the user? */
     if(ConfigureMeasurement->ui->checkBox_saveFFT->isChecked() && Runner->PolMeasuring && !Runner->PolCalibrating){
         /* Save FFT value to file */
-        FFTL.saveFFTtoFile(fileInfoSaving, false, ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->substancesNames, Temperature);
+        FFTL.saveFFTtoFile(fileInfoSaving, false, ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->substancesNames, Temperature, Humidity);
     }
 
     /* Is there an automatic saving of Raw Data?, if not just remove the file with the Raw Data */
@@ -3087,8 +3163,8 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
         change_Frequency_Pol();
     }
 
-    /* Temperature label clicked */
-    if(label== ui->label_temp1){
+    /* Temperature or humidty label clicked */
+    else if(label== ui->label_temp1 || label==ui->label_hum1){
 
         /* Show the tab with the temperature */
         ui->Tabs_Plots->setCurrentIndex(1);
@@ -3143,7 +3219,6 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
 
         /* Show or Hide labels */
         ui->label_raw->setVisible(!ui->qwtPlot_Pol->isVisible());
-        ui->label_RS->setVisible(!ui->qwtPlot_Pol->isVisible());
 
         /*  Show or Hide plot */
         ui->qwtPlot_Pol->setVisible(!ui->qwtPlot_Pol->isVisible());
@@ -3174,7 +3249,6 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
 
         /* Show or Hide labels */
         ui->label_compensation->setVisible(!ui->qwtPlot_Pol_Compensation->isVisible());
-        ui->label_Rat->setVisible(!ui->qwtPlot_Pol_Compensation->isVisible());
 
         /* Show or Hide plot */
         ui->qwtPlot_Pol_Compensation->setVisible(!ui->qwtPlot_Pol_Compensation->isVisible());
@@ -3204,7 +3278,6 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
 
         /* Show or Hide labels */
         ui->label_fftprofile->setVisible(!ui->qwtPlot_Pol_w_2w->isVisible());
-        ui->label_HProf->setVisible(!ui->qwtPlot_Pol_w_2w->isVisible());
 
         /* Show or Hide Plot */
         ui->qwtPlot_Pol_w_2w->setVisible(!ui->qwtPlot_Pol_w_2w->isVisible());
@@ -3235,7 +3308,6 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
 
         /* Show or hide labels */
         ui->label_average->setVisible(!ui->qwtPlot_Pol_Average->isVisible());
-        ui->label_HAver->setVisible(!ui->qwtPlot_Pol_Average->isVisible());
 
         /* Show or Hide plot */
         ui->qwtPlot_Pol_Average->setVisible(!ui->qwtPlot_Pol_Average->isVisible());
@@ -3318,10 +3390,15 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
 
         /* Show or Hide labels */
         ui->label_spectra->setVisible(!ui->widget_Spectra->isVisible());
-        ui->label_SP->setVisible(!ui->widget_Spectra->isVisible());
 
         /*  Show or Hide plot */
         ui->widget_Spectra->setVisible(!ui->widget_Spectra->isVisible());
+
+        /* Hide line */
+        ui->line_SpeNormSpec->setVisible((ui->widget_NormSpectra->isVisible() && ui->widget_Spectra->isVisible()));
+
+        /* Hide line */
+        ui->line_pred->setVisible(ui->qwtPlot_Pol_Prediction->isVisible()&&(ui->widget_NormSpectra->isVisible() || ui->widget_Spectra->isVisible()));
 
     }
     /* Show/Hide Prediction Plot */
@@ -3347,11 +3424,14 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
 
         /* Show or Hide labels */
         ui->label_prediction->setVisible(!ui->qwtPlot_Pol_Prediction->isVisible());
-        ui->label_PSNS->setVisible(!ui->qwtPlot_Pol_Prediction->isVisible());
         ui->widget_errorBar->setVisible(!ui->qwtPlot_Pol_Prediction->isVisible());
 
         /*  Show or Hide plot */
         ui->qwtPlot_Pol_Prediction->setVisible(!ui->qwtPlot_Pol_Prediction->isVisible());
+
+        /* Hide line */
+        ui->line_pred->setVisible(ui->qwtPlot_Pol_Prediction->isVisible()&&(ui->widget_NormSpectra->isVisible() || ui->widget_Spectra->isVisible()));
+
     }
     /* Show/Hide Normalized Spectra */
     else if(label == ui->label_hideNSpectra){
@@ -3376,11 +3456,132 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
 
         /* Show or Hide labels */
         ui->label_Nspectra->setVisible(!ui->widget_NormSpectra->isVisible());
-        ui->label_NSP->setVisible(!ui->widget_NormSpectra->isVisible());
-        ui->label_P2->setVisible(!ui->widget_NormSpectra->isVisible()&& !ui->qwtPlot_Pol_Prediction->isVisible());
 
         /*  Show or Hide plot */
         ui->widget_NormSpectra->setVisible(!ui->widget_NormSpectra->isVisible());
+
+        /* Hide line */
+        ui->line_SpeNormSpec->setVisible((ui->widget_NormSpectra->isVisible() && ui->widget_Spectra->isVisible()));
+
+        /* Hide line */
+        ui->line_pred->setVisible(ui->qwtPlot_Pol_Prediction->isVisible()&&(ui->widget_NormSpectra->isVisible() || ui->widget_Spectra->isVisible()));
+    }
+
+    /* hide Temperature Plot in tab Setup status */
+    if(label == ui->label_hideTemperature){
+
+        /* Is the temperature plot visible? */
+        if(ui->qwtPlot_Pol_Temperature->isVisible()){
+
+            /* Hide temperature plot if clicked */
+            ui->label_hideTemperature->setToolTip("Show Temperature Plot");
+            ui->label_hideTemperature->setText("<< Show Temperature Plot");
+            ui->label_hideTemperature->setFrameShape(QFrame::Box);
+            ui->label_hideTemperature->setStyleSheet("QLabel { color: red; }");
+
+        }else{
+
+            /* Show temperature plot again */
+            ui->label_hideTemperature->setToolTip("Hide Temperature Plot");
+            ui->label_hideTemperature->setText(">> Hide Temperature Plot");
+            ui->label_hideTemperature->setStyleSheet("QLabel { color: blue; }");
+            ui->label_hideTemperature->setFrameShape(QFrame::NoFrame);
+        }
+
+        /* Show no connection with teensy */
+        if(!teensyTemperature->TeensyConnected){
+
+            /* Teensy isn't connected */
+            ui->label_Temperature->setText("No COM");
+            ui->label_Temperature->setStyleSheet("color:red");
+            ui->label_NoComTeensy->setVisible(true);
+        }
+
+        /* Show or Hide labels */
+        ui->label_TemperaturePlot->setVisible(!ui->qwtPlot_Pol_Temperature->isVisible());
+
+        /*  Show or Hide plot */
+        ui->qwtPlot_Pol_Temperature->setVisible(!ui->qwtPlot_Pol_Temperature->isVisible());
+
+        /* Hide line to make it look better in tab Setup status */
+        if(!ui->qwtPlot_Pol_Humidity->isVisible() && !ui->qwtPlot_Pol_FFT->isVisible() && !ui->qwtPlot_Pol_Temperature->isVisible()){
+
+            ui->line_FFTHum->setVisible(false);
+        }else{
+            ui->line_FFTHum->setVisible(true);
+        }
+    }
+
+    /* Hide FFT values in tab Setup status */
+    else if(label == ui->label_hideFFTIntensityPlot){
+
+        /* Is the FFT value plot visible? */
+        if(ui->qwtPlot_Pol_FFT->isVisible()){
+
+            /* Hide FFT intensities plot if clicked */
+            ui->label_hideFFTIntensityPlot->setToolTip("Show FFT Intensities Plot");
+            ui->label_hideFFTIntensityPlot->setText(">> Show FFT Intensities Plot");
+            ui->label_hideFFTIntensityPlot->setFrameShape(QFrame::Box);
+            ui->label_hideFFTIntensityPlot->setStyleSheet("QLabel { color: red; }");
+
+        }else{
+
+            /* Show  FFT intensities plot again */
+            ui->label_hideFFTIntensityPlot->setToolTip("Hide FFT Intensities Plot");
+            ui->label_hideFFTIntensityPlot->setText("<< Hide FFT Intensities Plot");
+            ui->label_hideFFTIntensityPlot->setStyleSheet("QLabel { color: blue; }");
+            ui->label_hideFFTIntensityPlot->setFrameShape(QFrame::NoFrame);
+        }
+
+        /* Show or Hide labels */
+        ui->waveToPlotFFT->setVisible(!ui->qwtPlot_Pol_FFT->isVisible());
+
+        /*  Show or Hide plot */
+        ui->qwtPlot_Pol_FFT->setVisible(!ui->qwtPlot_Pol_FFT->isVisible());
+
+        /* Hide line to make it look better in tab Setup status */
+        if(!ui->qwtPlot_Pol_Humidity->isVisible() && !ui->qwtPlot_Pol_FFT->isVisible() && !ui->qwtPlot_Pol_Temperature->isVisible()){
+
+            ui->line_FFTHum->setVisible(false);
+        }else{
+            ui->line_FFTHum->setVisible(true);
+        }
+    }
+
+    /* Hide Humidity plot in tab Setup status */
+    else if(label == ui->label_hideHumidity){
+
+        /* Is the FFT value plot visible? */
+        if(ui->qwtPlot_Pol_Humidity->isVisible()){
+
+            /* Hide FFT intensities plot if clicked */
+            ui->label_hideHumidity->setToolTip("Show Humidity Plot");
+            ui->label_hideHumidity->setText("<< Show Humidity Plot");
+            ui->label_hideHumidity->setFrameShape(QFrame::Box);
+            ui->label_hideHumidity->setStyleSheet("QLabel { color: red; }");
+
+        }else{
+
+            /* Show  FFT intensities plot again */
+            ui->label_hideHumidity->setToolTip("Hide Humidity Plot");
+            ui->label_hideHumidity->setText(">> Hide Humidity Plot");
+            ui->label_hideHumidity->setStyleSheet("QLabel { color: blue; }");
+            ui->label_hideHumidity->setFrameShape(QFrame::NoFrame);
+        }
+
+        /* Show or Hide labels */
+        ui->label_humidityPlot->setVisible(!ui->qwtPlot_Pol_Humidity->isVisible());
+
+        /*  Show or Hide plot */
+        ui->qwtPlot_Pol_Humidity->setVisible(!ui->qwtPlot_Pol_Humidity->isVisible());
+
+        /* Hide line to make it look better in tab Setup status */
+        if(!ui->qwtPlot_Pol_Humidity->isVisible() && !ui->qwtPlot_Pol_FFT->isVisible() && !ui->qwtPlot_Pol_Temperature->isVisible()){
+
+            ui->line_FFTHum->setVisible(false);
+        }else{
+            ui->line_FFTHum->setVisible(true);
+        }
     }
 
     /* Hide Horizontal lines */
@@ -3388,12 +3589,6 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
 
     /* Hide line */
     ui->line_HFFTAverage->setVisible(!(!ui->qwtPlot_Pol_w_2w->isVisible() && !ui->qwtPlot_Pol_Average->isVisible()));
-
-    /* Hide line */
-    ui->line_SpeNormSpec->setVisible((ui->widget_NormSpectra->isVisible() && ui->widget_Spectra->isVisible()));
-
-    /* Hide line */
-    ui->line_pred->setVisible(ui->qwtPlot_Pol_Prediction->isVisible()&&(ui->widget_NormSpectra->isVisible() || ui->widget_Spectra->isVisible()));
 
     /* Change the Spectrometer name */
     if(LineLabel == PolarimetrySpectrometer->ui->lineEdit_name){
@@ -3409,15 +3604,8 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
         }
     }
 
-    /* This is another condition to change the spacing so it looks nice */
-    //if((ui->Table_Measurements_Pol->isVisible())
-    //  && Runner->PolConfigured){
-    //ui->verticalSpacerX->changeSize(20,13,QSizePolicy::Fixed,QSizePolicy::Fixed);
-    // }else{
-
     /* In case some elements from the lateral panel are hidden or shown again, change the spacing so they look good */
     ui->verticalSpacerX->changeSize(20,13,QSizePolicy::Fixed,QSizePolicy::Expanding);
-    //  }
 
     /* Catch check box event */
     if(Checkbox == PolarimetrySpectrometer->ui->checkBox_normalize && !Runner->doingLiveFFT && Runner->PolCalibrating){
@@ -3842,7 +4030,7 @@ void PanelPolarimeter::toggle_Load_Data(void)
             }
 
             /* Button 'yes' pressed; Save the FFT data where the user decides */
-            FFTL.saveFFTtoFile(fileInfoLoad, true, substancesNames, Temperature);
+            FFTL.saveFFTtoFile(fileInfoLoad, true, substancesNames, Temperature, Humidity);
         }
     }
 
@@ -4037,6 +4225,7 @@ void PanelPolarimeter::Load_Summary(QString path) {
     PolPlotter->Average2W.resize(0);
     PolPlotter->AverageRatio.resize(0);
     PolPlotter->Temperature_Values.resize(0);
+    PolPlotter->Humidity_Values.resize(0);
 
     /* Create the readed row */
     QString Row;
@@ -4091,8 +4280,29 @@ void PanelPolarimeter::Load_Summary(QString path) {
                 /* Save 2W - Position 3 */
                 PolPlotter->Average2W.append(Readed_Row.at(3).toDouble());
 
-                /* Save Temperature - Position 4 */
-                PolPlotter->Temperature_Values.append(Readed_Row.at(4).toDouble());
+                /* Are there more values to plot? */
+                if(Readed_Row.length() > 5){
+
+                    /* Validate if the temperature exists */
+                    bool TemperatureExist = false;
+                    QString temperatureValue = Readed_Row.at(4);
+                    double temperatureVal = temperatureValue.toDouble(&TemperatureExist);
+
+                    /* Save Temperature - Position 4 */
+                    if(TemperatureExist){
+                        PolPlotter->Temperature_Values.append(temperatureVal);
+                    }
+
+                    /* Validate if the humidity exists */
+                    bool HumidityExist = false;
+                    QString humidityValue = Readed_Row.at(5);
+                    double humidityVal = humidityValue.toDouble(&HumidityExist);
+
+                    /* Save Humidity - Position 5 */
+                    if(HumidityExist){
+                        PolPlotter->Humidity_Values.append(humidityVal);
+                    }
+                }
 
                 /* Get the actual value */
                 value = Readed_Row.at(1).toDouble();
@@ -4106,9 +4316,65 @@ void PanelPolarimeter::Load_Summary(QString path) {
     int maxiYAverage = ceil((ceil(*std::max_element(PolPlotter->AverageDC.begin(), PolPlotter->AverageDC.end())))*1.1);
     ui->qwtPlot_Pol_Average->setYAxis(0.0, maxiYAverage);
 
-    double maxiYTemp = ceil((ceil(*std::max_element(PolPlotter->Temperature_Values.begin(), PolPlotter->Temperature_Values.end())))+1);
-    double minYTemp = ceil((ceil(*std::min_element(PolPlotter->Temperature_Values.begin(), PolPlotter->Temperature_Values.end())))-1);
-    ui->qwtPlot_Pol_Temperature->setYAxis(minYTemp, maxiYTemp);
+    /* Are there temperature value? */
+    if(PolPlotter->Temperature_Values.length() > 0){
+
+        double maxiYTemp = ceil((ceil(*std::max_element(PolPlotter->Temperature_Values.begin(), PolPlotter->Temperature_Values.end())))+1);
+        double minYTemp = ceil((ceil(*std::min_element(PolPlotter->Temperature_Values.begin(), PolPlotter->Temperature_Values.end())))-1);
+        ui->qwtPlot_Pol_Temperature->setYAxis(minYTemp, maxiYTemp);
+
+        /* Calculate the actual standard deviation */
+        double meanTemp = 0;
+
+        /* Get the mean value */
+        for(int k = 0; k < PolPlotter->Temperature_Values.length(); k++){
+
+            meanTemp = meanTemp + PolPlotter->Temperature_Values.at(k);
+
+            /* Handle events and update UI */
+            Application::processEvents();
+        }
+
+        /* Mean temperature */
+        meanTemp = meanTemp/PolPlotter->Temperature_Values.length();
+        double squareTempDif = 0;
+
+        /* Get the square difference */
+        for(int k = 0; k < PolPlotter->Temperature_Values.length(); k++){
+
+            squareTempDif = squareTempDif + ((PolPlotter->Temperature_Values.at(k)-meanTemp)*(PolPlotter->Temperature_Values.at(k)-meanTemp));
+
+            /* Handle events and update UI */
+            Application::processEvents();
+        }
+
+        /* Get the std */
+        PolPlotter->TempStandardDev = sqrt(squareTempDif/PolPlotter->Temperature_Values.length());
+
+        /* Show the actual temperature STD */
+        PolPlotter->Temperature_Plot->setTitle("Mean ± STD = " + QString().setNum(meanTemp, 'f', 2) + " ± " + QString().setNum(PolPlotter->TempStandardDev, 'f', 6) + " °C");
+
+    }else{
+
+        /* Show that there wasn't actual temperature STD */
+        PolPlotter->Temperature_Plot->setTitle("Mean ± STD = - ± - °C");
+
+    }
+
+    /* Add temperature plot */
+    PolPlotter->Temperature_Plot->setSamples(PolPlotter->averaged_Signal_time, PolPlotter->Temperature_Values);
+
+    /* Are there temperature value? */
+    if(PolPlotter->Humidity_Values.length() > 0){
+
+        double maxiYHumidity = ceil((ceil(*std::max_element(PolPlotter->Humidity_Values.begin(), PolPlotter->Humidity_Values.end())))+1);
+        double miniYHumidity = ceil((ceil(*std::min_element(PolPlotter->Humidity_Values.begin(), PolPlotter->Humidity_Values.end())))-1);
+        ui->qwtPlot_Pol_Humidity->setYAxis(miniYHumidity, maxiYHumidity);
+
+    }
+
+    /* Humidity plot */
+    PolPlotter->Humidity_Plot->setSamples(PolPlotter->averaged_Signal_time, PolPlotter->Humidity_Values);
 
     /* Add signals to the plots */
     PolPlotter->Average_DC_Signal->setSamples(PolPlotter->averaged_Signal_time, PolPlotter->AverageDC);
@@ -4138,51 +4404,19 @@ void PanelPolarimeter::Load_Summary(QString path) {
     PolPlotter->Average_Ratio_Signal->setSamples(PolPlotter->averaged_Signal_time, AverageRatio);
     PolPlotter->Average_Ratio_Signal->setTitle(" Ī(DC)/Ī(2ω)");
 
-    /* Add temperature plot */
-    PolPlotter->Temperature_Plot->setSamples(PolPlotter->averaged_Signal_time, PolPlotter->Temperature_Values);
-
-    /* Calculate the actual standard deviation */
-    double meanTemp = 0;
-
-    /* Get the mean value */
-    for(int k = 0; k < PolPlotter->Temperature_Values.length(); k++){
-
-        meanTemp = meanTemp + PolPlotter->Temperature_Values.at(k);
-
-        /* Handle events and update UI */
-        Application::processEvents();
-    }
-
-    /* Mean temperature */
-    meanTemp = meanTemp/PolPlotter->Temperature_Values.length();
-    double squareTempDif = 0;
-
-    /* Get the square difference */
-    for(int k = 0; k < PolPlotter->Temperature_Values.length(); k++){
-
-        squareTempDif = squareTempDif + ((PolPlotter->Temperature_Values.at(k)-meanTemp)*(PolPlotter->Temperature_Values.at(k)-meanTemp));
-
-        /* Handle events and update UI */
-        Application::processEvents();
-    }
-
-    /* Get the std */
-    PolPlotter->TempStandardDev = sqrt(squareTempDif/PolPlotter->Temperature_Values.length());
-
-    /* Show the actual temperature STD */
-    PolPlotter->Temperature_Plot->setTitle("Mean ± STD = " + QString().setNum(meanTemp, 'f', 2) + " ± " + QString().setNum(PolPlotter->TempStandardDev, 'f', 6) + " °C");
-
     /* Attach graphs */
     PolPlotter->Average_DC_Signal->attach(ui->qwtPlot_Pol_Average);
     PolPlotter->Average_W_Signal->attach(ui->qwtPlot_Pol_Average);
     PolPlotter->Average_2W_Signal->attach(ui->qwtPlot_Pol_Average);
     PolPlotter->Average_Ratio_Signal->attach(ui->qwtPlot_Pol_Average);
     PolPlotter->Temperature_Plot->attach(ui->qwtPlot_Pol_Temperature);
+    PolPlotter->Humidity_Plot->attach(ui->qwtPlot_Pol_Humidity);
 
     /* Just add a certain time to the plot */
     int maximal = *std::max_element(PolPlotter->averaged_Signal_time.begin(), PolPlotter->averaged_Signal_time.end());
     ui->qwtPlot_Pol_Average->setXAxis(0.0, maximal + maximal*0.1);
     ui->qwtPlot_Pol_Temperature->setXAxis(0.0, maximal + maximal*0.1);
+    ui->qwtPlot_Pol_Humidity->setXAxis(0.0, maximal + maximal*0.1);
 
     /* Adjust the measurement number plot in the averages */
     double lengthMeasNumber = NrMeas + NrMeas*0.1;
@@ -4207,6 +4441,7 @@ void PanelPolarimeter::Load_Summary(QString path) {
     /* Update plots */
     ui->qwtPlot_Pol_Average->update();
     ui->qwtPlot_Pol_Temperature->update();
+    ui->qwtPlot_Pol_Humidity->update();
     ui->qwtPlot_Pol_Temperature->updateLayout();
 
     /* Resize vectors */
@@ -4216,6 +4451,7 @@ void PanelPolarimeter::Load_Summary(QString path) {
     PolPlotter->Average2W.resize(0);
     PolPlotter->AverageRatio.resize(0);
     PolPlotter->Temperature_Values.resize(0);
+    PolPlotter->Humidity_Values.resize(0);
 
     /* Update information bar */
     ui->info->setText("");
@@ -4237,6 +4473,10 @@ void PanelPolarimeter::Load_From_FFT(void) {
 
     /* What kind of data are we loading? In this case FFT */
     isFFTData = true;
+
+    /* Restart the temperature and humidity values */
+    FFTL.TemperatureSetup = 0;
+    FFTL.HumiditySetup = 0;
 
     /* Load Data Path */
     UserLoadDataPath = QFileDialog::getOpenFileName(this, QString("Open FFT Data file"), ".", QString("*.FFT"));
@@ -4266,7 +4506,11 @@ void PanelPolarimeter::Load_From_FFT(void) {
     if(FFTL.TemperatureSetup > 0){
         ui->label_Temperature->setText(QString::number(FFTL.TemperatureSetup) + " °C");
         ui->Pol_Thermo->setValue(FFTL.TemperatureSetup);
-        ui->label_hum->setText("- %");
+    }
+
+    /* Contains a humidity value to show? */
+    if(FFTL.HumiditySetup > 0){
+        ui->label_hum->setText(QString::number(FFTL.HumiditySetup) + " %");
     }
 
     /* Remember that there was data loaded */
@@ -4292,6 +4536,10 @@ void PanelPolarimeter::Load_From_Raw_Data(void) {
 
     /* Load Data Path */
     UserLoadDataPath = QFileDialog::getOpenFileName(this, QString("Open Raw Data file"), ".", QString("*.CS;*.TXT"));
+
+    /* Restart the temperature and humidity values */
+    FFTL.TemperatureSetup = 0;
+    FFTL.HumiditySetup = 0;
 
     /* File selected by user? */
     if (NULL == UserLoadDataPath)
@@ -4327,7 +4575,11 @@ void PanelPolarimeter::Load_From_Raw_Data(void) {
     if(FFTL.TemperatureSetup > 0){
         ui->label_Temperature->setText(QString::number(FFTL.TemperatureSetup) + " °C");
         ui->Pol_Thermo->setValue(FFTL.TemperatureSetup);
-        ui->label_hum->setText("- %");
+    }
+
+    /* Contains a humidity value to show? */
+    if(FFTL.HumiditySetup > 0){
+        ui->label_hum->setText(QString::number(FFTL.HumiditySetup) + " %");
     }
 
     /* Remember that there was data loaded */
@@ -4370,6 +4622,7 @@ void PanelPolarimeter::write_To_File(FILE *file, double *a_pSpectrum, int WParam
         fprintf(file, "Nr. of Averages: %i\n", ptrSpectrometers[SpectrometerNumber]->getNumberOfAverages());
         fprintf(file, "Frequency: %.2f Hz\n", FFTL.FrequencyF);
         fprintf(file, "Temperature: %.2f °C\n", Temperature);
+        fprintf(file, "Humidity: %.2f %s\n", Humidity, "%");
 
         /* Include the concentrations in the file */
         QString concentrations, conc = "";
@@ -4573,8 +4826,8 @@ void PanelPolarimeter::write_Summary() {
     fprintf(file, "Integration Time: %.2f ms\n", ptrSpectrometers[SpectrometerNumber]->getIntegrationTime());
     fprintf(file, "Nr. of Spectra: %i\n", ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->NrSpectra);
     fprintf(file, "Nr. of Averages: %i\n", ptrSpectrometers[SpectrometerNumber]->getNumberOfAverages());
-    fprintf(file, "Frequency: %.2f\n\n", FFTL.FrequencyF);
-    fprintf(file, "Temperature STD: %.6f\n\n", PolPlotter->TempStandardDev);
+    fprintf(file, "Frequency: %.2f\n", FFTL.FrequencyF);
+    fprintf(file, "Temperature Standard Deviation (±): %.6f\n\n", PolPlotter->TempStandardDev);
 
     /* Loop through the time */
     for (int z = 0; z < PolPlotter->averaged_Signal_time.length(); z++){
@@ -4585,7 +4838,8 @@ void PanelPolarimeter::write_Summary() {
             fprintf(file, "Average DC Amplitude \t \t");
             fprintf(file, "Average W Amplitude \t");
             fprintf(file, "Average 2W Amplitude \t");
-            fprintf(file, "Temperature \n");
+            fprintf(file, "Temperature \t");
+            fprintf(file, "Humidity \n");
         }
 
         /* Write wavelengths and amplitudes */
@@ -4594,6 +4848,7 @@ void PanelPolarimeter::write_Summary() {
         fprintf(file, "%.4f\t\t", PolPlotter->AverageW.at(z));
         fprintf(file, "%.4f\t\t", PolPlotter->Average2W.at(z));
         fprintf(file, "%.4f\t\t", PolPlotter->Temperature_Values.at(z));
+        fprintf(file, "%.4f\t\t", PolPlotter->Humidity_Values.at(z));
 
         fprintf(file, "\n");
     }
@@ -4620,7 +4875,7 @@ void PanelPolarimeter::saveFFTcalibration(){
         if(ConfigureMeasurement->configured){
 
             /* Then save the FFT with the actual information */
-            FFTL.saveFFTtoFile(text, true, ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->substancesNames, Temperature);
+            FFTL.saveFFTtoFile(text, true, ConfigureMeasurement->externSoftware->ConfigurationFileGenerator->substancesNames, Temperature, Humidity);
 
         }else{
 
@@ -4648,7 +4903,7 @@ void PanelPolarimeter::saveFFTcalibration(){
             FFTL.normalizeCounts = PolarimetrySpectrometer->ui->checkBox_normalize->isChecked();
 
             /* Save the actual FFT shown in the calibration */
-            FFTL.saveFFTtoFile(text, true, substancesNames, Temperature);
+            FFTL.saveFFTtoFile(text, true, substancesNames, Temperature, Humidity);
 
         }
     }
@@ -4743,13 +4998,26 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
         DataSelector->automaticAnalize(PathAuto);
     }
 
-    /* Adjust the wavelengths range for the PLS */
-    DataSelector->ui->doubleSpinBox_minWavel->setMinimum(ptrSpectrometers[SpectrometerNumber]->getStartWavelength());
-    DataSelector->ui->doubleSpinBox_minWavel->setMaximum(ptrSpectrometers[SpectrometerNumber]->getStopWavelength());
-    DataSelector->ui->doubleSpinBox_maxWavel->setMinimum(ptrSpectrometers[SpectrometerNumber]->getStartWavelength());
-    DataSelector->ui->doubleSpinBox_maxWavel->setMaximum(ptrSpectrometers[SpectrometerNumber]->getStopWavelength());
-    DataSelector->ui->doubleSpinBox_maxWavel->setValue(PolarimetrySpectrometer->getMaximumWavelength());
-    DataSelector->ui->doubleSpinBox_minWavel->setValue(PolarimetrySpectrometer->getMinimumWavelength());
+    /* If we have at least one device selected from the list or available */
+    if (m_NrDevices > 0)
+    {
+        /* Adjust the wavelengths range for the PLS */
+        DataSelector->ui->doubleSpinBox_minWavel->setMinimum(ptrSpectrometers[SpectrometerNumber]->getStartWavelength());
+        DataSelector->ui->doubleSpinBox_minWavel->setMaximum(ptrSpectrometers[SpectrometerNumber]->getStopWavelength());
+        DataSelector->ui->doubleSpinBox_maxWavel->setMinimum(ptrSpectrometers[SpectrometerNumber]->getStartWavelength());
+        DataSelector->ui->doubleSpinBox_maxWavel->setMaximum(ptrSpectrometers[SpectrometerNumber]->getStopWavelength());
+        DataSelector->ui->doubleSpinBox_maxWavel->setValue(PolarimetrySpectrometer->getMaximumWavelength());
+        DataSelector->ui->doubleSpinBox_minWavel->setValue(PolarimetrySpectrometer->getMinimumWavelength());
+    }else{
+
+        /* Adjust default wavelengths range for the PLS */
+        DataSelector->ui->doubleSpinBox_minWavel->setMinimum(277.299);
+        DataSelector->ui->doubleSpinBox_minWavel->setMaximum(1100.23);
+        DataSelector->ui->doubleSpinBox_maxWavel->setMinimum(277.299);
+        DataSelector->ui->doubleSpinBox_maxWavel->setMaximum(1100.23);
+        DataSelector->ui->doubleSpinBox_maxWavel->setValue(1100.23);
+        DataSelector->ui->doubleSpinBox_minWavel->setValue(277.299);
+    }
 
     /* Show the window */
     DataSelector->exec();
@@ -4882,7 +5150,7 @@ void PanelPolarimeter::clean_All_Pol(void){
     totalMeasuretime = 0;
 
     /* Is there any information ploted already? */
-    if(PolPlotter->Average_DC_Signal!=nullptr)
+    if(PolPlotter->Average_DC_Signal!=nullptr && m_NrDevices > 0)
     {
         curve_Pol->detach();
     }
@@ -4890,8 +5158,22 @@ void PanelPolarimeter::clean_All_Pol(void){
     /* To run clear_Plot function */
     dataloaded = true;
 
-    /* Clear all other plots too */
-    PolPlotter->clean_AllPlots();
+    if(m_NrDevices >0){
+        /* Clear all other plots too */
+        PolPlotter->clean_AllPlots();
+    }else{
+
+        PolPlotter->restart3DPlots();
+
+        /* Initialize some other plots */
+        QVector<double> initial;
+        initial.append(0);
+
+        /* Clean this plot too */
+        PolPlotter->AverageDetSignalPlotter->setSamples(initial, initial);
+        ui->qwtPlot_Pol_IntensitiesVsConcentrations->update();
+
+    }
 
     ui->label_Temperature->setText("- °C");
     ui->Pol_Thermo->setValue(32);
@@ -4900,8 +5182,12 @@ void PanelPolarimeter::clean_All_Pol(void){
     /* Clean the configuration */
     ConfigureMeasurement->cleanAll();
 
-    /* Clear FFT plots */
-    clear_Plot();
+    /* Are there any spectrometers connected? */
+    if (m_NrDevices > 0)
+    {
+        /* Clear FFT plots */
+        clear_Plot();
+    }
 
     /* Remove some items from the GUI loaded when needed */
     showUI_Item(false);
@@ -4958,6 +5244,7 @@ void PanelPolarimeter::clean_All_Pol(void){
     ui->qwtPlot_Pol_Average->setXAxis(minXAverage, maxXAverage);
     ui->qwtPlot_Pol_Average->setXAxisTop(-0.8 , 40.3, 2);
     ui->qwtPlot_Pol_Temperature->setXAxis(minXAverage, maxXAverage);
+    ui->qwtPlot_Pol_Humidity->setXAxis(minXAverage, maxXAverage);
 
     /* Nothing is running, so restart the object */
     Runner = new Pol_Measurements();
@@ -4970,6 +5257,7 @@ void PanelPolarimeter::clean_All_Pol(void){
     ui->qwtPlot_Pol_Average->update();
     ui->qwtPlot_Pol_Average->updateLayout();
     ui->qwtPlot_Pol_Temperature->update();
+    ui->qwtPlot_Pol_Humidity->update();
     ui->qwtPlot_Pol_IntensitiesVsConcentrations->update();
     ui->qwtPlot_Pol->update();
 
@@ -4997,6 +5285,8 @@ void PanelPolarimeter::clean_All_Pol(void){
     /* Update x-axis of graphs depending on Wavelengths */
     update_Wavelength_Range();
 
+    qDebug() << "hi, here i'm dude!";
+
     /* Restart configurations */
     ConfigureMeasurement = new configurePolMeasure();
 
@@ -5017,12 +5307,10 @@ void PanelPolarimeter::clean_All_Pol(void){
     ui->qwtPlot_Pol_Prediction->update();
 
     /* Remove series from plot */
-    PolPlotter->surface->removeSeries(PolPlotter->series);
-    PolPlotter->surface_norm->removeSeries(PolPlotter->series_norm);
-    PolPlotter->surface->seriesList().clear();
-    PolPlotter->surface_norm->seriesList().clear();
-    PolPlotter->surface->scene()->activeCamera()->setCameraPosition(45, 45, 80); // horizontal in °, vertikal in °, zoom in %
-    PolPlotter->surface_norm->scene()->activeCamera()->setCameraPosition(45, 45, 80); // horizontal in °, vertikal in °, zoom in %
+    PolPlotter->restart3DPlots();
+
+    /* Jump to tab */
+    ui->Tabs_Plots->setCurrentIndex(0);
 
     /* Update information bar */
     ui->info->setText("");

@@ -136,6 +136,7 @@ The user interface will provide some GUI elements when they are required accordi
 + Check the 3D plots for the loaded information
 + Check the folder Analyze Data in the folder FFT Data of the measurements for the files Cal_Data.cal and Val_Data.val. 
 
++ Data can be loaded and analized also when there is any spectrometer connected.
 
 -&gt;  2. CONFIGURATION
 

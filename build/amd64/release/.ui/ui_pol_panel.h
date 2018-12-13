@@ -50,7 +50,7 @@ public:
     QwtThermo *Pol_Thermo;
     QSpacerItem *verticalSpacer_9;
     QHBoxLayout *horizontalLayout_30;
-    QLabel *label_hum1;
+    ClickableLabel *label_hum1;
     QLabel *label_hum;
     QSpacerItem *verticalSpacer_6;
     QFrame *line_10;
@@ -91,12 +91,10 @@ public:
     QSpacerItem *horizontalSpacer_22;
     QHBoxLayout *horizontalLayout_8;
     ClickableLabel *label_hideLiveRaw;
-    QLabel *label_RS;
     QSpacerItem *horizontalSpacer_26;
     QFrame *line_3;
     QSpacerItem *horizontalSpacer_27;
     QHBoxLayout *horizontalLayout_11;
-    QLabel *label_Rat;
     ClickableLabel *label_HideRatio;
     QSpacerItem *horizontalSpacer_24;
     QFrame *line_HLiveRatio;
@@ -131,12 +129,10 @@ public:
     QSpacerItem *horizontalSpacer_16;
     QHBoxLayout *horizontalLayout_15;
     ClickableLabel *label_HideFFTProfile;
-    QLabel *label_HProf;
     QSpacerItem *horizontalSpacer_21;
     QFrame *line_9;
     QSpacerItem *horizontalSpacer_23;
     QHBoxLayout *horizontalLayout_14;
-    QLabel *label_HAver;
     ClickableLabel *label_HIdeLiveAverage;
     QSpacerItem *horizontalSpacer_25;
     QWidget *tab;
@@ -160,12 +156,23 @@ public:
     QVBoxLayout *verticalLayout_18;
     ClickableLabel *waveToPlotFFT;
     Plot *qwtPlot_Pol_FFT;
+    QSpacerItem *horizontalSpacer_61;
+    QFrame *line_FFTHum;
+    QSpacerItem *horizontalSpacer_62;
+    QVBoxLayout *verticalLayout_23;
+    QLabel *label_humidityPlot;
+    Plot *qwtPlot_Pol_Humidity;
     QSpacerItem *horizontalSpacer_40;
     QFrame *line_19;
     QHBoxLayout *horizontalLayout_40;
     QSpacerItem *horizontalSpacer_60;
     QHBoxLayout *horizontalLayout_42;
     ClickableLabel *label_hideFFTIntensityPlot;
+    QSpacerItem *horizontalSpacer_63;
+    QFrame *line_21;
+    QSpacerItem *horizontalSpacer_64;
+    QHBoxLayout *horizontalLayout_43;
+    ClickableLabel *label_hideHumidity;
     QSpacerItem *horizontalSpacer_59;
     QWidget *MeasResults;
     QVBoxLayout *verticalLayout_4;
@@ -173,12 +180,10 @@ public:
     QSpacerItem *horizontalSpacer_17;
     QHBoxLayout *horizontalLayout_16;
     ClickableLabel *label_hideSpectra;
-    QLabel *label_SP;
     QSpacerItem *horizontalSpacer_28;
     QFrame *line_7;
     QSpacerItem *horizontalSpacer_29;
     QHBoxLayout *horizontalLayout_18;
-    QLabel *label_PSNS;
     ClickableLabel *label_hidePrediction;
     QSpacerItem *horizontalSpacer_30;
     QFrame *line;
@@ -215,13 +220,11 @@ public:
     QSpacerItem *horizontalSpacer_34;
     QHBoxLayout *horizontalLayout_24;
     ClickableLabel *label_hideNSpectra;
-    QLabel *label_NSP;
     QSpacerItem *horizontalSpacer_36;
     QFrame *line_6;
     QSpacerItem *horizontalSpacer_35;
     QHBoxLayout *horizontalLayout_25;
     QLabel *label_P1;
-    QLabel *label_P2;
     QSpacerItem *horizontalSpacer_33;
     QWidget *MeasStadistics;
     QVBoxLayout *verticalLayout_9;
@@ -455,12 +458,13 @@ public:
 
         horizontalLayout_30 = new QHBoxLayout();
         horizontalLayout_30->setObjectName(QStringLiteral("horizontalLayout_30"));
-        label_hum1 = new QLabel(PanelPolarimeter);
+        label_hum1 = new ClickableLabel(PanelPolarimeter);
         label_hum1->setObjectName(QStringLiteral("label_hum1"));
         sizePolicy1.setHeightForWidth(label_hum1->sizePolicy().hasHeightForWidth());
         label_hum1->setSizePolicy(sizePolicy1);
         label_hum1->setMaximumSize(QSize(100, 16777215));
         label_hum1->setFont(font1);
+        label_hum1->setCursor(QCursor(Qt::PointingHandCursor));
 
         horizontalLayout_30->addWidget(label_hum1);
 
@@ -891,18 +895,6 @@ public:
 
         horizontalLayout_8->addWidget(label_hideLiveRaw);
 
-        label_RS = new QLabel(liveData);
-        label_RS->setObjectName(QStringLiteral("label_RS"));
-        QSizePolicy sizePolicy6(QSizePolicy::Expanding, QSizePolicy::Preferred);
-        sizePolicy6.setHorizontalStretch(0);
-        sizePolicy6.setVerticalStretch(0);
-        sizePolicy6.setHeightForWidth(label_RS->sizePolicy().hasHeightForWidth());
-        label_RS->setSizePolicy(sizePolicy6);
-        label_RS->setMinimumSize(QSize(0, 0));
-        label_RS->setMaximumSize(QSize(16777215, 16777215));
-
-        horizontalLayout_8->addWidget(label_RS);
-
 
         horizontalLayout_7->addLayout(horizontalLayout_8);
 
@@ -923,19 +915,12 @@ public:
 
         horizontalLayout_11 = new QHBoxLayout();
         horizontalLayout_11->setObjectName(QStringLiteral("horizontalLayout_11"));
-        label_Rat = new QLabel(liveData);
-        label_Rat->setObjectName(QStringLiteral("label_Rat"));
-        sizePolicy6.setHeightForWidth(label_Rat->sizePolicy().hasHeightForWidth());
-        label_Rat->setSizePolicy(sizePolicy6);
-
-        horizontalLayout_11->addWidget(label_Rat);
-
         label_HideRatio = new ClickableLabel(liveData);
         label_HideRatio->setObjectName(QStringLiteral("label_HideRatio"));
         label_HideRatio->setMinimumSize(QSize(100, 0));
         label_HideRatio->setFont(font);
         label_HideRatio->setCursor(QCursor(Qt::PointingHandCursor));
-        label_HideRatio->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
+        label_HideRatio->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         horizontalLayout_11->addWidget(label_HideRatio);
 
@@ -1021,11 +1006,11 @@ public:
 
         qwtPlot_Pol = new Plot(liveData);
         qwtPlot_Pol->setObjectName(QStringLiteral("qwtPlot_Pol"));
-        QSizePolicy sizePolicy7(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        sizePolicy7.setHorizontalStretch(0);
-        sizePolicy7.setVerticalStretch(0);
-        sizePolicy7.setHeightForWidth(qwtPlot_Pol->sizePolicy().hasHeightForWidth());
-        qwtPlot_Pol->setSizePolicy(sizePolicy7);
+        QSizePolicy sizePolicy6(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        sizePolicy6.setHorizontalStretch(0);
+        sizePolicy6.setVerticalStretch(0);
+        sizePolicy6.setHeightForWidth(qwtPlot_Pol->sizePolicy().hasHeightForWidth());
+        qwtPlot_Pol->setSizePolicy(sizePolicy6);
         qwtPlot_Pol->setMinimumSize(QSize(0, 0));
         qwtPlot_Pol->setFrameShape(QFrame::StyledPanel);
         qwtPlot_Pol->setFrameShadow(QFrame::Raised);
@@ -1069,8 +1054,8 @@ public:
 
         qwtPlot_Pol_Compensation = new Plot(liveData);
         qwtPlot_Pol_Compensation->setObjectName(QStringLiteral("qwtPlot_Pol_Compensation"));
-        sizePolicy7.setHeightForWidth(qwtPlot_Pol_Compensation->sizePolicy().hasHeightForWidth());
-        qwtPlot_Pol_Compensation->setSizePolicy(sizePolicy7);
+        sizePolicy6.setHeightForWidth(qwtPlot_Pol_Compensation->sizePolicy().hasHeightForWidth());
+        qwtPlot_Pol_Compensation->setSizePolicy(sizePolicy6);
         qwtPlot_Pol_Compensation->setMinimumSize(QSize(0, 0));
         qwtPlot_Pol_Compensation->setMaximumSize(QSize(16777215, 16777215));
         qwtPlot_Pol_Compensation->setFrameShape(QFrame::StyledPanel);
@@ -1122,8 +1107,8 @@ public:
 
         qwtPlot_Pol_w_2w = new Plot(liveData);
         qwtPlot_Pol_w_2w->setObjectName(QStringLiteral("qwtPlot_Pol_w_2w"));
-        sizePolicy7.setHeightForWidth(qwtPlot_Pol_w_2w->sizePolicy().hasHeightForWidth());
-        qwtPlot_Pol_w_2w->setSizePolicy(sizePolicy7);
+        sizePolicy6.setHeightForWidth(qwtPlot_Pol_w_2w->sizePolicy().hasHeightForWidth());
+        qwtPlot_Pol_w_2w->setSizePolicy(sizePolicy6);
         qwtPlot_Pol_w_2w->setMinimumSize(QSize(0, 0));
         qwtPlot_Pol_w_2w->setFrameShape(QFrame::StyledPanel);
         qwtPlot_Pol_w_2w->setFrameShadow(QFrame::Raised);
@@ -1172,8 +1157,8 @@ public:
 
         qwtPlot_Pol_Average = new Plot(liveData);
         qwtPlot_Pol_Average->setObjectName(QStringLiteral("qwtPlot_Pol_Average"));
-        sizePolicy7.setHeightForWidth(qwtPlot_Pol_Average->sizePolicy().hasHeightForWidth());
-        qwtPlot_Pol_Average->setSizePolicy(sizePolicy7);
+        sizePolicy6.setHeightForWidth(qwtPlot_Pol_Average->sizePolicy().hasHeightForWidth());
+        qwtPlot_Pol_Average->setSizePolicy(sizePolicy6);
         qwtPlot_Pol_Average->setMinimumSize(QSize(0, 0));
         qwtPlot_Pol_Average->setMaximumSize(QSize(16777215, 16777215));
         qwtPlot_Pol_Average->setFrameShape(QFrame::StyledPanel);
@@ -1218,13 +1203,6 @@ public:
 
         horizontalLayout_15->addWidget(label_HideFFTProfile);
 
-        label_HProf = new QLabel(liveData);
-        label_HProf->setObjectName(QStringLiteral("label_HProf"));
-        sizePolicy6.setHeightForWidth(label_HProf->sizePolicy().hasHeightForWidth());
-        label_HProf->setSizePolicy(sizePolicy6);
-
-        horizontalLayout_15->addWidget(label_HProf);
-
 
         horizontalLayout_12->addLayout(horizontalLayout_15);
 
@@ -1245,20 +1223,13 @@ public:
 
         horizontalLayout_14 = new QHBoxLayout();
         horizontalLayout_14->setObjectName(QStringLiteral("horizontalLayout_14"));
-        label_HAver = new QLabel(liveData);
-        label_HAver->setObjectName(QStringLiteral("label_HAver"));
-        sizePolicy6.setHeightForWidth(label_HAver->sizePolicy().hasHeightForWidth());
-        label_HAver->setSizePolicy(sizePolicy6);
-
-        horizontalLayout_14->addWidget(label_HAver);
-
         label_HIdeLiveAverage = new ClickableLabel(liveData);
         label_HIdeLiveAverage->setObjectName(QStringLiteral("label_HIdeLiveAverage"));
         label_HIdeLiveAverage->setMinimumSize(QSize(100, 0));
         label_HIdeLiveAverage->setFont(font);
         label_HIdeLiveAverage->setCursor(QCursor(Qt::PointingHandCursor));
         label_HIdeLiveAverage->setLayoutDirection(Qt::LeftToRight);
-        label_HIdeLiveAverage->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
+        label_HIdeLiveAverage->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         horizontalLayout_14->addWidget(label_HIdeLiveAverage);
 
@@ -1324,10 +1295,10 @@ public:
         verticalLayout_17->setObjectName(QStringLiteral("verticalLayout_17"));
         label_TemperaturePlot = new QLabel(tab);
         label_TemperaturePlot->setObjectName(QStringLiteral("label_TemperaturePlot"));
-        sizePolicy1.setHeightForWidth(label_TemperaturePlot->sizePolicy().hasHeightForWidth());
-        label_TemperaturePlot->setSizePolicy(sizePolicy1);
-        label_TemperaturePlot->setMinimumSize(QSize(0, 14));
-        label_TemperaturePlot->setMaximumSize(QSize(16777215, 14));
+        sizePolicy.setHeightForWidth(label_TemperaturePlot->sizePolicy().hasHeightForWidth());
+        label_TemperaturePlot->setSizePolicy(sizePolicy);
+        label_TemperaturePlot->setMinimumSize(QSize(0, 0));
+        label_TemperaturePlot->setMaximumSize(QSize(16777215, 16777215));
         QPalette palette12;
         palette12.setBrush(QPalette::Active, QPalette::WindowText, brush5);
         palette12.setBrush(QPalette::Inactive, QPalette::WindowText, brush5);
@@ -1362,8 +1333,8 @@ public:
 
         qwtPlot_Pol_Temperature = new Plot(tab);
         qwtPlot_Pol_Temperature->setObjectName(QStringLiteral("qwtPlot_Pol_Temperature"));
-        sizePolicy7.setHeightForWidth(qwtPlot_Pol_Temperature->sizePolicy().hasHeightForWidth());
-        qwtPlot_Pol_Temperature->setSizePolicy(sizePolicy7);
+        sizePolicy6.setHeightForWidth(qwtPlot_Pol_Temperature->sizePolicy().hasHeightForWidth());
+        qwtPlot_Pol_Temperature->setSizePolicy(sizePolicy6);
 
         verticalLayout_17->addWidget(qwtPlot_Pol_Temperature);
 
@@ -1394,10 +1365,10 @@ public:
         verticalLayout_18->setObjectName(QStringLiteral("verticalLayout_18"));
         waveToPlotFFT = new ClickableLabel(tab);
         waveToPlotFFT->setObjectName(QStringLiteral("waveToPlotFFT"));
-        sizePolicy1.setHeightForWidth(waveToPlotFFT->sizePolicy().hasHeightForWidth());
-        waveToPlotFFT->setSizePolicy(sizePolicy1);
-        waveToPlotFFT->setMinimumSize(QSize(0, 14));
-        waveToPlotFFT->setMaximumSize(QSize(16777215, 14));
+        sizePolicy.setHeightForWidth(waveToPlotFFT->sizePolicy().hasHeightForWidth());
+        waveToPlotFFT->setSizePolicy(sizePolicy);
+        waveToPlotFFT->setMinimumSize(QSize(0, 0));
+        waveToPlotFFT->setMaximumSize(QSize(16777215, 16777215));
         QPalette palette14;
         palette14.setBrush(QPalette::Active, QPalette::WindowText, brush5);
         palette14.setBrush(QPalette::Inactive, QPalette::WindowText, brush5);
@@ -1411,8 +1382,8 @@ public:
 
         qwtPlot_Pol_FFT = new Plot(tab);
         qwtPlot_Pol_FFT->setObjectName(QStringLiteral("qwtPlot_Pol_FFT"));
-        sizePolicy7.setHeightForWidth(qwtPlot_Pol_FFT->sizePolicy().hasHeightForWidth());
-        qwtPlot_Pol_FFT->setSizePolicy(sizePolicy7);
+        sizePolicy6.setHeightForWidth(qwtPlot_Pol_FFT->sizePolicy().hasHeightForWidth());
+        qwtPlot_Pol_FFT->setSizePolicy(sizePolicy6);
         qwtPlot_Pol_FFT->setMinimumSize(QSize(0, 0));
         qwtPlot_Pol_FFT->setMaximumSize(QSize(16777215, 16777215));
         qwtPlot_Pol_FFT->setFrameShape(QFrame::StyledPanel);
@@ -1422,6 +1393,51 @@ public:
 
 
         horizontalLayout_28->addLayout(verticalLayout_18);
+
+        horizontalSpacer_61 = new QSpacerItem(2, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        horizontalLayout_28->addItem(horizontalSpacer_61);
+
+        line_FFTHum = new QFrame(tab);
+        line_FFTHum->setObjectName(QStringLiteral("line_FFTHum"));
+        line_FFTHum->setFrameShape(QFrame::VLine);
+        line_FFTHum->setFrameShadow(QFrame::Sunken);
+
+        horizontalLayout_28->addWidget(line_FFTHum);
+
+        horizontalSpacer_62 = new QSpacerItem(2, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        horizontalLayout_28->addItem(horizontalSpacer_62);
+
+        verticalLayout_23 = new QVBoxLayout();
+        verticalLayout_23->setObjectName(QStringLiteral("verticalLayout_23"));
+        label_humidityPlot = new QLabel(tab);
+        label_humidityPlot->setObjectName(QStringLiteral("label_humidityPlot"));
+        sizePolicy.setHeightForWidth(label_humidityPlot->sizePolicy().hasHeightForWidth());
+        label_humidityPlot->setSizePolicy(sizePolicy);
+        label_humidityPlot->setMinimumSize(QSize(0, 0));
+        label_humidityPlot->setMaximumSize(QSize(16777215, 16777215));
+        QPalette palette15;
+        palette15.setBrush(QPalette::Active, QPalette::WindowText, brush5);
+        palette15.setBrush(QPalette::Inactive, QPalette::WindowText, brush5);
+        palette15.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        label_humidityPlot->setPalette(palette15);
+        label_humidityPlot->setFont(font9);
+        label_humidityPlot->setAlignment(Qt::AlignCenter);
+
+        verticalLayout_23->addWidget(label_humidityPlot);
+
+        qwtPlot_Pol_Humidity = new Plot(tab);
+        qwtPlot_Pol_Humidity->setObjectName(QStringLiteral("qwtPlot_Pol_Humidity"));
+        sizePolicy6.setHeightForWidth(qwtPlot_Pol_Humidity->sizePolicy().hasHeightForWidth());
+        qwtPlot_Pol_Humidity->setSizePolicy(sizePolicy6);
+        qwtPlot_Pol_Humidity->setFrameShape(QFrame::StyledPanel);
+        qwtPlot_Pol_Humidity->setFrameShadow(QFrame::Raised);
+
+        verticalLayout_23->addWidget(qwtPlot_Pol_Humidity);
+
+
+        horizontalLayout_28->addLayout(verticalLayout_23);
 
         horizontalSpacer_40 = new QSpacerItem(5, 10, QSizePolicy::Fixed, QSizePolicy::Minimum);
 
@@ -1449,12 +1465,40 @@ public:
         label_hideFFTIntensityPlot->setObjectName(QStringLiteral("label_hideFFTIntensityPlot"));
         label_hideFFTIntensityPlot->setFont(font8);
         label_hideFFTIntensityPlot->setCursor(QCursor(Qt::PointingHandCursor));
-        label_hideFFTIntensityPlot->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        label_hideFFTIntensityPlot->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
 
         horizontalLayout_42->addWidget(label_hideFFTIntensityPlot);
 
 
         horizontalLayout_40->addLayout(horizontalLayout_42);
+
+        horizontalSpacer_63 = new QSpacerItem(2, 7, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        horizontalLayout_40->addItem(horizontalSpacer_63);
+
+        line_21 = new QFrame(tab);
+        line_21->setObjectName(QStringLiteral("line_21"));
+        line_21->setFrameShape(QFrame::VLine);
+        line_21->setFrameShadow(QFrame::Sunken);
+
+        horizontalLayout_40->addWidget(line_21);
+
+        horizontalSpacer_64 = new QSpacerItem(2, 7, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        horizontalLayout_40->addItem(horizontalSpacer_64);
+
+        horizontalLayout_43 = new QHBoxLayout();
+        horizontalLayout_43->setObjectName(QStringLiteral("horizontalLayout_43"));
+        label_hideHumidity = new ClickableLabel(tab);
+        label_hideHumidity->setObjectName(QStringLiteral("label_hideHumidity"));
+        label_hideHumidity->setFont(font8);
+        label_hideHumidity->setCursor(QCursor(Qt::PointingHandCursor));
+        label_hideHumidity->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+
+        horizontalLayout_43->addWidget(label_hideHumidity);
+
+
+        horizontalLayout_40->addLayout(horizontalLayout_43);
 
         horizontalSpacer_59 = new QSpacerItem(5, 7, QSizePolicy::Fixed, QSizePolicy::Minimum);
 
@@ -1484,13 +1528,6 @@ public:
 
         horizontalLayout_16->addWidget(label_hideSpectra);
 
-        label_SP = new QLabel(MeasResults);
-        label_SP->setObjectName(QStringLiteral("label_SP"));
-        sizePolicy6.setHeightForWidth(label_SP->sizePolicy().hasHeightForWidth());
-        label_SP->setSizePolicy(sizePolicy6);
-
-        horizontalLayout_16->addWidget(label_SP);
-
 
         horizontalLayout->addLayout(horizontalLayout_16);
 
@@ -1511,18 +1548,12 @@ public:
 
         horizontalLayout_18 = new QHBoxLayout();
         horizontalLayout_18->setObjectName(QStringLiteral("horizontalLayout_18"));
-        label_PSNS = new QLabel(MeasResults);
-        label_PSNS->setObjectName(QStringLiteral("label_PSNS"));
-        sizePolicy6.setHeightForWidth(label_PSNS->sizePolicy().hasHeightForWidth());
-        label_PSNS->setSizePolicy(sizePolicy6);
-
-        horizontalLayout_18->addWidget(label_PSNS);
-
         label_hidePrediction = new ClickableLabel(MeasResults);
         label_hidePrediction->setObjectName(QStringLiteral("label_hidePrediction"));
         label_hidePrediction->setMinimumSize(QSize(70, 0));
         label_hidePrediction->setFont(font8);
         label_hidePrediction->setCursor(QCursor(Qt::PointingHandCursor));
+        label_hidePrediction->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         horizontalLayout_18->addWidget(label_hidePrediction);
 
@@ -1555,18 +1586,13 @@ public:
         verticalLayout_12->setObjectName(QStringLiteral("verticalLayout_12"));
         label_spectra = new QLabel(MeasResults);
         label_spectra->setObjectName(QStringLiteral("label_spectra"));
-        label_spectra->setMinimumSize(QSize(0, 14));
-        QPalette palette15;
-        palette15.setBrush(QPalette::Active, QPalette::WindowText, brush5);
-        palette15.setBrush(QPalette::Inactive, QPalette::WindowText, brush5);
-        palette15.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        label_spectra->setPalette(palette15);
-        QFont font11;
-        font11.setPointSize(9);
-        font11.setBold(true);
-        font11.setUnderline(false);
-        font11.setWeight(75);
-        label_spectra->setFont(font11);
+        label_spectra->setMinimumSize(QSize(0, 0));
+        QPalette palette16;
+        palette16.setBrush(QPalette::Active, QPalette::WindowText, brush5);
+        palette16.setBrush(QPalette::Inactive, QPalette::WindowText, brush5);
+        palette16.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        label_spectra->setPalette(palette16);
+        label_spectra->setFont(font5);
         label_spectra->setCursor(QCursor(Qt::ArrowCursor));
         label_spectra->setAlignment(Qt::AlignCenter);
 
@@ -1574,8 +1600,8 @@ public:
 
         widget_Spectra = new QWidget(MeasResults);
         widget_Spectra->setObjectName(QStringLiteral("widget_Spectra"));
-        sizePolicy7.setHeightForWidth(widget_Spectra->sizePolicy().hasHeightForWidth());
-        widget_Spectra->setSizePolicy(sizePolicy7);
+        sizePolicy6.setHeightForWidth(widget_Spectra->sizePolicy().hasHeightForWidth());
+        widget_Spectra->setSizePolicy(sizePolicy6);
         horizontalLayout_22 = new QHBoxLayout(widget_Spectra);
         horizontalLayout_22->setObjectName(QStringLiteral("horizontalLayout_22"));
         VLP = new QHBoxLayout();
@@ -1600,25 +1626,21 @@ public:
         verticalLayout_15->setObjectName(QStringLiteral("verticalLayout_15"));
         label_Nspectra = new QLabel(MeasResults);
         label_Nspectra->setObjectName(QStringLiteral("label_Nspectra"));
-        label_Nspectra->setMinimumSize(QSize(0, 14));
-        QPalette palette16;
-        palette16.setBrush(QPalette::Active, QPalette::WindowText, brush5);
-        palette16.setBrush(QPalette::Inactive, QPalette::WindowText, brush5);
-        palette16.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        label_Nspectra->setPalette(palette16);
-        QFont font12;
-        font12.setPointSize(9);
-        font12.setBold(true);
-        font12.setWeight(75);
-        label_Nspectra->setFont(font12);
+        label_Nspectra->setMinimumSize(QSize(0, 0));
+        QPalette palette17;
+        palette17.setBrush(QPalette::Active, QPalette::WindowText, brush5);
+        palette17.setBrush(QPalette::Inactive, QPalette::WindowText, brush5);
+        palette17.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        label_Nspectra->setPalette(palette17);
+        label_Nspectra->setFont(font9);
         label_Nspectra->setAlignment(Qt::AlignCenter);
 
         verticalLayout_15->addWidget(label_Nspectra);
 
         widget_NormSpectra = new QWidget(MeasResults);
         widget_NormSpectra->setObjectName(QStringLiteral("widget_NormSpectra"));
-        sizePolicy7.setHeightForWidth(widget_NormSpectra->sizePolicy().hasHeightForWidth());
-        widget_NormSpectra->setSizePolicy(sizePolicy7);
+        sizePolicy6.setHeightForWidth(widget_NormSpectra->sizePolicy().hasHeightForWidth());
+        widget_NormSpectra->setSizePolicy(sizePolicy6);
         horizontalLayout_23 = new QHBoxLayout(widget_NormSpectra);
         horizontalLayout_23->setObjectName(QStringLiteral("horizontalLayout_23"));
         VLP_norm = new QHBoxLayout();
@@ -1654,13 +1676,13 @@ public:
         verticalLayout_5->setObjectName(QStringLiteral("verticalLayout_5"));
         label_prediction = new QLabel(MeasResults);
         label_prediction->setObjectName(QStringLiteral("label_prediction"));
-        label_prediction->setMinimumSize(QSize(0, 14));
-        QPalette palette17;
-        palette17.setBrush(QPalette::Active, QPalette::WindowText, brush5);
-        palette17.setBrush(QPalette::Inactive, QPalette::WindowText, brush5);
-        palette17.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        label_prediction->setPalette(palette17);
-        label_prediction->setFont(font11);
+        label_prediction->setMinimumSize(QSize(0, 0));
+        QPalette palette18;
+        palette18.setBrush(QPalette::Active, QPalette::WindowText, brush5);
+        palette18.setBrush(QPalette::Inactive, QPalette::WindowText, brush5);
+        palette18.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        label_prediction->setPalette(palette18);
+        label_prediction->setFont(font5);
         label_prediction->setCursor(QCursor(Qt::ArrowCursor));
         label_prediction->setAlignment(Qt::AlignCenter);
 
@@ -1683,8 +1705,11 @@ public:
 
         label_PError = new QLabel(widget_errorBar);
         label_PError->setObjectName(QStringLiteral("label_PError"));
-        sizePolicy6.setHeightForWidth(label_PError->sizePolicy().hasHeightForWidth());
-        label_PError->setSizePolicy(sizePolicy6);
+        QSizePolicy sizePolicy7(QSizePolicy::Expanding, QSizePolicy::Preferred);
+        sizePolicy7.setHorizontalStretch(0);
+        sizePolicy7.setVerticalStretch(0);
+        sizePolicy7.setHeightForWidth(label_PError->sizePolicy().hasHeightForWidth());
+        label_PError->setSizePolicy(sizePolicy7);
         label_PError->setMinimumSize(QSize(100, 0));
 
         horizontalLayout_26->addWidget(label_PError);
@@ -1698,8 +1723,8 @@ public:
 
         label_R2 = new QLabel(widget_errorBar);
         label_R2->setObjectName(QStringLiteral("label_R2"));
-        sizePolicy6.setHeightForWidth(label_R2->sizePolicy().hasHeightForWidth());
-        label_R2->setSizePolicy(sizePolicy6);
+        sizePolicy7.setHeightForWidth(label_R2->sizePolicy().hasHeightForWidth());
+        label_R2->setSizePolicy(sizePolicy7);
         label_R2->setMinimumSize(QSize(100, 0));
 
         horizontalLayout_26->addWidget(label_R2);
@@ -1713,8 +1738,8 @@ public:
         qwtPlot_Pol_Prediction = new Plot(MeasResults);
         qwtPlot_Pol_Prediction->setObjectName(QStringLiteral("qwtPlot_Pol_Prediction"));
         qwtPlot_Pol_Prediction->setEnabled(true);
-        sizePolicy7.setHeightForWidth(qwtPlot_Pol_Prediction->sizePolicy().hasHeightForWidth());
-        qwtPlot_Pol_Prediction->setSizePolicy(sizePolicy7);
+        sizePolicy6.setHeightForWidth(qwtPlot_Pol_Prediction->sizePolicy().hasHeightForWidth());
+        qwtPlot_Pol_Prediction->setSizePolicy(sizePolicy6);
         qwtPlot_Pol_Prediction->setMinimumSize(QSize(0, 0));
         qwtPlot_Pol_Prediction->setFrameShape(QFrame::StyledPanel);
         qwtPlot_Pol_Prediction->setFrameShadow(QFrame::Raised);
@@ -1754,13 +1779,6 @@ public:
 
         horizontalLayout_24->addWidget(label_hideNSpectra);
 
-        label_NSP = new QLabel(MeasResults);
-        label_NSP->setObjectName(QStringLiteral("label_NSP"));
-        sizePolicy6.setHeightForWidth(label_NSP->sizePolicy().hasHeightForWidth());
-        label_NSP->setSizePolicy(sizePolicy6);
-
-        horizontalLayout_24->addWidget(label_NSP);
-
 
         horizontalLayout_21->addLayout(horizontalLayout_24);
 
@@ -1786,13 +1804,6 @@ public:
         label_P1->setMinimumSize(QSize(100, 0));
 
         horizontalLayout_25->addWidget(label_P1);
-
-        label_P2 = new QLabel(MeasResults);
-        label_P2->setObjectName(QStringLiteral("label_P2"));
-        sizePolicy6.setHeightForWidth(label_P2->sizePolicy().hasHeightForWidth());
-        label_P2->setSizePolicy(sizePolicy6);
-
-        horizontalLayout_25->addWidget(label_P2);
 
 
         horizontalLayout_21->addLayout(horizontalLayout_25);
@@ -1882,24 +1893,24 @@ public:
         verticalLayout_19->setObjectName(QStringLiteral("verticalLayout_19"));
         label_DeviationVsMeasurementNumber = new QLabel(MeasStadistics);
         label_DeviationVsMeasurementNumber->setObjectName(QStringLiteral("label_DeviationVsMeasurementNumber"));
-        sizePolicy1.setHeightForWidth(label_DeviationVsMeasurementNumber->sizePolicy().hasHeightForWidth());
-        label_DeviationVsMeasurementNumber->setSizePolicy(sizePolicy1);
-        label_DeviationVsMeasurementNumber->setMinimumSize(QSize(14, 0));
-        label_DeviationVsMeasurementNumber->setMaximumSize(QSize(16777215, 14));
-        QPalette palette18;
-        palette18.setBrush(QPalette::Active, QPalette::WindowText, brush5);
-        palette18.setBrush(QPalette::Inactive, QPalette::WindowText, brush5);
-        palette18.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        label_DeviationVsMeasurementNumber->setPalette(palette18);
-        label_DeviationVsMeasurementNumber->setFont(font12);
+        sizePolicy.setHeightForWidth(label_DeviationVsMeasurementNumber->sizePolicy().hasHeightForWidth());
+        label_DeviationVsMeasurementNumber->setSizePolicy(sizePolicy);
+        label_DeviationVsMeasurementNumber->setMinimumSize(QSize(0, 0));
+        label_DeviationVsMeasurementNumber->setMaximumSize(QSize(16777215, 16777215));
+        QPalette palette19;
+        palette19.setBrush(QPalette::Active, QPalette::WindowText, brush5);
+        palette19.setBrush(QPalette::Inactive, QPalette::WindowText, brush5);
+        palette19.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        label_DeviationVsMeasurementNumber->setPalette(palette19);
+        label_DeviationVsMeasurementNumber->setFont(font9);
         label_DeviationVsMeasurementNumber->setAlignment(Qt::AlignCenter);
 
         verticalLayout_19->addWidget(label_DeviationVsMeasurementNumber);
 
         qwtPlot_Pol_DeviationVsMeasurementNumber = new Plot(MeasStadistics);
         qwtPlot_Pol_DeviationVsMeasurementNumber->setObjectName(QStringLiteral("qwtPlot_Pol_DeviationVsMeasurementNumber"));
-        sizePolicy7.setHeightForWidth(qwtPlot_Pol_DeviationVsMeasurementNumber->sizePolicy().hasHeightForWidth());
-        qwtPlot_Pol_DeviationVsMeasurementNumber->setSizePolicy(sizePolicy7);
+        sizePolicy6.setHeightForWidth(qwtPlot_Pol_DeviationVsMeasurementNumber->sizePolicy().hasHeightForWidth());
+        qwtPlot_Pol_DeviationVsMeasurementNumber->setSizePolicy(sizePolicy6);
         qwtPlot_Pol_DeviationVsMeasurementNumber->setFrameShape(QFrame::StyledPanel);
         qwtPlot_Pol_DeviationVsMeasurementNumber->setFrameShadow(QFrame::Raised);
 
@@ -1927,24 +1938,24 @@ public:
         verticalLayout_20->setObjectName(QStringLiteral("verticalLayout_20"));
         label_DeviationVsAbsoluteConcentration = new QLabel(MeasStadistics);
         label_DeviationVsAbsoluteConcentration->setObjectName(QStringLiteral("label_DeviationVsAbsoluteConcentration"));
-        sizePolicy1.setHeightForWidth(label_DeviationVsAbsoluteConcentration->sizePolicy().hasHeightForWidth());
-        label_DeviationVsAbsoluteConcentration->setSizePolicy(sizePolicy1);
-        label_DeviationVsAbsoluteConcentration->setMinimumSize(QSize(0, 14));
-        label_DeviationVsAbsoluteConcentration->setMaximumSize(QSize(16777215, 14));
-        QPalette palette19;
-        palette19.setBrush(QPalette::Active, QPalette::WindowText, brush5);
-        palette19.setBrush(QPalette::Inactive, QPalette::WindowText, brush5);
-        palette19.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        label_DeviationVsAbsoluteConcentration->setPalette(palette19);
-        label_DeviationVsAbsoluteConcentration->setFont(font12);
+        sizePolicy.setHeightForWidth(label_DeviationVsAbsoluteConcentration->sizePolicy().hasHeightForWidth());
+        label_DeviationVsAbsoluteConcentration->setSizePolicy(sizePolicy);
+        label_DeviationVsAbsoluteConcentration->setMinimumSize(QSize(0, 0));
+        label_DeviationVsAbsoluteConcentration->setMaximumSize(QSize(16777215, 16777215));
+        QPalette palette20;
+        palette20.setBrush(QPalette::Active, QPalette::WindowText, brush5);
+        palette20.setBrush(QPalette::Inactive, QPalette::WindowText, brush5);
+        palette20.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        label_DeviationVsAbsoluteConcentration->setPalette(palette20);
+        label_DeviationVsAbsoluteConcentration->setFont(font9);
         label_DeviationVsAbsoluteConcentration->setAlignment(Qt::AlignCenter);
 
         verticalLayout_20->addWidget(label_DeviationVsAbsoluteConcentration);
 
         qwtPlot_Pol_DeviationVsAbsoluteConcentration = new Plot(MeasStadistics);
         qwtPlot_Pol_DeviationVsAbsoluteConcentration->setObjectName(QStringLiteral("qwtPlot_Pol_DeviationVsAbsoluteConcentration"));
-        sizePolicy7.setHeightForWidth(qwtPlot_Pol_DeviationVsAbsoluteConcentration->sizePolicy().hasHeightForWidth());
-        qwtPlot_Pol_DeviationVsAbsoluteConcentration->setSizePolicy(sizePolicy7);
+        sizePolicy6.setHeightForWidth(qwtPlot_Pol_DeviationVsAbsoluteConcentration->sizePolicy().hasHeightForWidth());
+        qwtPlot_Pol_DeviationVsAbsoluteConcentration->setSizePolicy(sizePolicy6);
         qwtPlot_Pol_DeviationVsAbsoluteConcentration->setFrameShape(QFrame::StyledPanel);
         qwtPlot_Pol_DeviationVsAbsoluteConcentration->setFrameShadow(QFrame::Raised);
 
@@ -1977,24 +1988,24 @@ public:
         verticalLayout_21->setObjectName(QStringLiteral("verticalLayout_21"));
         label_DeviaitionVsCountsDeviation = new QLabel(MeasStadistics);
         label_DeviaitionVsCountsDeviation->setObjectName(QStringLiteral("label_DeviaitionVsCountsDeviation"));
-        sizePolicy1.setHeightForWidth(label_DeviaitionVsCountsDeviation->sizePolicy().hasHeightForWidth());
-        label_DeviaitionVsCountsDeviation->setSizePolicy(sizePolicy1);
-        label_DeviaitionVsCountsDeviation->setMinimumSize(QSize(0, 14));
-        label_DeviaitionVsCountsDeviation->setMaximumSize(QSize(16777215, 14));
-        QPalette palette20;
-        palette20.setBrush(QPalette::Active, QPalette::WindowText, brush5);
-        palette20.setBrush(QPalette::Inactive, QPalette::WindowText, brush5);
-        palette20.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        label_DeviaitionVsCountsDeviation->setPalette(palette20);
-        label_DeviaitionVsCountsDeviation->setFont(font12);
+        sizePolicy.setHeightForWidth(label_DeviaitionVsCountsDeviation->sizePolicy().hasHeightForWidth());
+        label_DeviaitionVsCountsDeviation->setSizePolicy(sizePolicy);
+        label_DeviaitionVsCountsDeviation->setMinimumSize(QSize(0, 0));
+        label_DeviaitionVsCountsDeviation->setMaximumSize(QSize(16777215, 16777215));
+        QPalette palette21;
+        palette21.setBrush(QPalette::Active, QPalette::WindowText, brush5);
+        palette21.setBrush(QPalette::Inactive, QPalette::WindowText, brush5);
+        palette21.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        label_DeviaitionVsCountsDeviation->setPalette(palette21);
+        label_DeviaitionVsCountsDeviation->setFont(font9);
         label_DeviaitionVsCountsDeviation->setAlignment(Qt::AlignCenter);
 
         verticalLayout_21->addWidget(label_DeviaitionVsCountsDeviation);
 
         qwtPlot_Pol_DeviationVsCountsDeviation = new Plot(MeasStadistics);
         qwtPlot_Pol_DeviationVsCountsDeviation->setObjectName(QStringLiteral("qwtPlot_Pol_DeviationVsCountsDeviation"));
-        sizePolicy7.setHeightForWidth(qwtPlot_Pol_DeviationVsCountsDeviation->sizePolicy().hasHeightForWidth());
-        qwtPlot_Pol_DeviationVsCountsDeviation->setSizePolicy(sizePolicy7);
+        sizePolicy6.setHeightForWidth(qwtPlot_Pol_DeviationVsCountsDeviation->sizePolicy().hasHeightForWidth());
+        qwtPlot_Pol_DeviationVsCountsDeviation->setSizePolicy(sizePolicy6);
         qwtPlot_Pol_DeviationVsCountsDeviation->setFrameShape(QFrame::StyledPanel);
         qwtPlot_Pol_DeviationVsCountsDeviation->setFrameShadow(QFrame::Raised);
 
@@ -2022,24 +2033,24 @@ public:
         verticalLayout_22->setObjectName(QStringLiteral("verticalLayout_22"));
         label_IntensitiePerConcentration = new QLabel(MeasStadistics);
         label_IntensitiePerConcentration->setObjectName(QStringLiteral("label_IntensitiePerConcentration"));
-        sizePolicy1.setHeightForWidth(label_IntensitiePerConcentration->sizePolicy().hasHeightForWidth());
-        label_IntensitiePerConcentration->setSizePolicy(sizePolicy1);
-        label_IntensitiePerConcentration->setMinimumSize(QSize(0, 14));
-        label_IntensitiePerConcentration->setMaximumSize(QSize(16777215, 14));
-        QPalette palette21;
-        palette21.setBrush(QPalette::Active, QPalette::WindowText, brush5);
-        palette21.setBrush(QPalette::Inactive, QPalette::WindowText, brush5);
-        palette21.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
-        label_IntensitiePerConcentration->setPalette(palette21);
-        label_IntensitiePerConcentration->setFont(font12);
+        sizePolicy.setHeightForWidth(label_IntensitiePerConcentration->sizePolicy().hasHeightForWidth());
+        label_IntensitiePerConcentration->setSizePolicy(sizePolicy);
+        label_IntensitiePerConcentration->setMinimumSize(QSize(0, 0));
+        label_IntensitiePerConcentration->setMaximumSize(QSize(16777215, 16777215));
+        QPalette palette22;
+        palette22.setBrush(QPalette::Active, QPalette::WindowText, brush5);
+        palette22.setBrush(QPalette::Inactive, QPalette::WindowText, brush5);
+        palette22.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        label_IntensitiePerConcentration->setPalette(palette22);
+        label_IntensitiePerConcentration->setFont(font9);
         label_IntensitiePerConcentration->setAlignment(Qt::AlignCenter);
 
         verticalLayout_22->addWidget(label_IntensitiePerConcentration);
 
         qwtPlot_Pol_IntensitiesVsConcentrations = new Plot(MeasStadistics);
         qwtPlot_Pol_IntensitiesVsConcentrations->setObjectName(QStringLiteral("qwtPlot_Pol_IntensitiesVsConcentrations"));
-        sizePolicy7.setHeightForWidth(qwtPlot_Pol_IntensitiesVsConcentrations->sizePolicy().hasHeightForWidth());
-        qwtPlot_Pol_IntensitiesVsConcentrations->setSizePolicy(sizePolicy7);
+        sizePolicy6.setHeightForWidth(qwtPlot_Pol_IntensitiesVsConcentrations->sizePolicy().hasHeightForWidth());
+        qwtPlot_Pol_IntensitiesVsConcentrations->setSizePolicy(sizePolicy6);
         qwtPlot_Pol_IntensitiesVsConcentrations->setFrameShape(QFrame::StyledPanel);
         qwtPlot_Pol_IntensitiesVsConcentrations->setFrameShadow(QFrame::Raised);
 
@@ -2147,7 +2158,7 @@ public:
 
         horizontalLayout_5->addWidget(button_LoadData);
 
-        horizontalSpacer_5 = new QSpacerItem(450, 15, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        horizontalSpacer_5 = new QSpacerItem(2, 7, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         horizontalLayout_5->addItem(horizontalSpacer_5);
 
@@ -2209,13 +2220,13 @@ public:
         info->setSizePolicy(sizePolicy5);
         info->setMinimumSize(QSize(200, 0));
         info->setMaximumSize(QSize(16777215, 12));
-        QFont font13;
-        font13.setPointSize(7);
-        font13.setBold(true);
-        font13.setItalic(false);
-        font13.setUnderline(false);
-        font13.setWeight(75);
-        info->setFont(font13);
+        QFont font11;
+        font11.setPointSize(7);
+        font11.setBold(true);
+        font11.setItalic(false);
+        font11.setUnderline(false);
+        font11.setWeight(75);
+        info->setFont(font11);
         info->setScaledContents(true);
 
         horizontalLayout_4->addWidget(info);
@@ -2229,11 +2240,11 @@ public:
         sizePolicy5.setHeightForWidth(label_totalM->sizePolicy().hasHeightForWidth());
         label_totalM->setSizePolicy(sizePolicy5);
         label_totalM->setMaximumSize(QSize(16777215, 15));
-        QFont font14;
-        font14.setPointSize(7);
-        font14.setBold(true);
-        font14.setWeight(75);
-        label_totalM->setFont(font14);
+        QFont font12;
+        font12.setPointSize(7);
+        font12.setBold(true);
+        font12.setWeight(75);
+        label_totalM->setFont(font12);
 
         horizontalLayout_4->addWidget(label_totalM);
 
@@ -2243,7 +2254,7 @@ public:
         TotalProgressBar_Pol->setSizePolicy(sizePolicy5);
         TotalProgressBar_Pol->setMinimumSize(QSize(140, 0));
         TotalProgressBar_Pol->setMaximumSize(QSize(240, 12));
-        TotalProgressBar_Pol->setFont(font14);
+        TotalProgressBar_Pol->setFont(font12);
         TotalProgressBar_Pol->setValue(0);
 
         horizontalLayout_4->addWidget(TotalProgressBar_Pol);
@@ -2256,7 +2267,7 @@ public:
         label_remaining->setObjectName(QStringLiteral("label_remaining"));
         label_remaining->setMinimumSize(QSize(82, 0));
         label_remaining->setMaximumSize(QSize(82, 16777215));
-        label_remaining->setFont(font14);
+        label_remaining->setFont(font12);
 
         horizontalLayout_4->addWidget(label_remaining);
 
@@ -2264,7 +2275,7 @@ public:
         label_RemainingTime->setObjectName(QStringLiteral("label_RemainingTime"));
         label_RemainingTime->setMaximumSize(QSize(100, 12));
         label_RemainingTime->setSizeIncrement(QSize(100, 0));
-        label_RemainingTime->setFont(font14);
+        label_RemainingTime->setFont(font12);
 
         horizontalLayout_4->addWidget(label_RemainingTime);
 
@@ -2278,10 +2289,10 @@ public:
         label_clearAll->setSizePolicy(sizePolicy5);
         label_clearAll->setMinimumSize(QSize(70, 18));
         label_clearAll->setMaximumSize(QSize(70, 18));
-        QFont font15;
-        font15.setPointSize(8);
-        font15.setUnderline(true);
-        label_clearAll->setFont(font15);
+        QFont font13;
+        font13.setPointSize(8);
+        font13.setUnderline(true);
+        label_clearAll->setFont(font13);
         label_clearAll->setCursor(QCursor(Qt::PointingHandCursor));
         label_clearAll->setLayoutDirection(Qt::LeftToRight);
         label_clearAll->setAlignment(Qt::AlignCenter);
@@ -2321,7 +2332,7 @@ public:
         retranslateUi(PanelPolarimeter);
 
         list_devices_Pol->setCurrentRow(-1);
-        Tabs_Plots->setCurrentIndex(1);
+        Tabs_Plots->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(PanelPolarimeter);
@@ -2424,8 +2435,6 @@ public:
         label_hideLiveRaw->setToolTip(QApplication::translate("PanelPolarimeter", "Hide live Raw Signal", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_hideLiveRaw->setText(QApplication::translate("PanelPolarimeter", "<< Hide Live Raw Signal", Q_NULLPTR));
-        label_RS->setText(QString());
-        label_Rat->setText(QString());
 #ifndef QT_NO_TOOLTIP
         label_HideRatio->setToolTip(QApplication::translate("PanelPolarimeter", "Hide Ratio", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
@@ -2463,8 +2472,6 @@ public:
         label_HideFFTProfile->setToolTip(QApplication::translate("PanelPolarimeter", "Hide FFT Profile", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_HideFFTProfile->setText(QApplication::translate("PanelPolarimeter", "<< Hide FFT Profile", Q_NULLPTR));
-        label_HProf->setText(QString());
-        label_HAver->setText(QString());
 #ifndef QT_NO_TOOLTIP
         label_HIdeLiveAverage->setToolTip(QApplication::translate("PanelPolarimeter", "Hide Live Average Signal", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
@@ -2489,11 +2496,11 @@ public:
 #ifndef QT_NO_TOOLTIP
         qwtPlot_Pol_FFT->setToolTip(QApplication::translate("PanelPolarimeter", "FFT Plot", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        label_hideFFTIntensityPlot->setText(QApplication::translate("PanelPolarimeter", ">> Hide FFT Intensities Plot", Q_NULLPTR));
+        label_humidityPlot->setText(QApplication::translate("PanelPolarimeter", "Setup Humidity", Q_NULLPTR));
+        label_hideFFTIntensityPlot->setText(QApplication::translate("PanelPolarimeter", "<< Hide FFT Intensities Plot", Q_NULLPTR));
+        label_hideHumidity->setText(QApplication::translate("PanelPolarimeter", ">> Hide Humidity Plot", Q_NULLPTR));
         Tabs_Plots->setTabText(Tabs_Plots->indexOf(tab), QApplication::translate("PanelPolarimeter", "Setup Status", Q_NULLPTR));
         label_hideSpectra->setText(QApplication::translate("PanelPolarimeter", "<< Hide Spectra", Q_NULLPTR));
-        label_SP->setText(QString());
-        label_PSNS->setText(QString());
         label_hidePrediction->setText(QApplication::translate("PanelPolarimeter", ">> Hide Prediction", Q_NULLPTR));
         label_spectra->setText(QApplication::translate("PanelPolarimeter", "Spectra", Q_NULLPTR));
         label_Nspectra->setText(QApplication::translate("PanelPolarimeter", "Normalized Spectra", Q_NULLPTR));
@@ -2509,19 +2516,17 @@ public:
         qwtPlot_Pol_Prediction->setToolTip(QApplication::translate("PanelPolarimeter", "Prediction Plot", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         label_hideNSpectra->setText(QApplication::translate("PanelPolarimeter", "<< Hide Normalized Spectra", Q_NULLPTR));
-        label_NSP->setText(QString());
         label_P1->setText(QString());
-        label_P2->setText(QString());
         Tabs_Plots->setTabText(Tabs_Plots->indexOf(MeasResults), QApplication::translate("PanelPolarimeter", "Measurement Results", Q_NULLPTR));
         label_HideDeviationVsMeasNumber->setText(QApplication::translate("PanelPolarimeter", "<< Hide Deviation Vs Measurement Number Plot", Q_NULLPTR));
-        label_HideDeviationVsAbsolConcentration->setText(QApplication::translate("PanelPolarimeter", "Hide Deviation Vs Absolute Concentration Plot >>", Q_NULLPTR));
+        label_HideDeviationVsAbsolConcentration->setText(QApplication::translate("PanelPolarimeter", ">> Hide Deviation Vs Absolute Concentration Plot", Q_NULLPTR));
         label_DeviationVsMeasurementNumber->setText(QApplication::translate("PanelPolarimeter", "Deviation Vs Measurement Number", Q_NULLPTR));
         label_DeviationVsAbsoluteConcentration->setText(QApplication::translate("PanelPolarimeter", "Deviation Vs Absolute Concentration", Q_NULLPTR));
         label_DeviaitionVsCountsDeviation->setText(QApplication::translate("PanelPolarimeter", "Deviation Vs Counts Deviation from Counts Mean", Q_NULLPTR));
         label_IntensitiePerConcentration->setText(QApplication::translate("PanelPolarimeter", "Average Determination Signal per Concentration", Q_NULLPTR));
         label_HideDeviationVsCountsDeviation->setText(QApplication::translate("PanelPolarimeter", "<< Hide Deviation Vs Counts Deviation Plot", Q_NULLPTR));
-        label_HideIntensitiesVsConcentration->setText(QApplication::translate("PanelPolarimeter", "Hide Intensities per Concentration Plot >>", Q_NULLPTR));
-        Tabs_Plots->setTabText(Tabs_Plots->indexOf(MeasStadistics), QApplication::translate("PanelPolarimeter", "Measurement Stadistics", Q_NULLPTR));
+        label_HideIntensitiesVsConcentration->setText(QApplication::translate("PanelPolarimeter", ">> Hide Intensities per Concentration Plot", Q_NULLPTR));
+        Tabs_Plots->setTabText(Tabs_Plots->indexOf(MeasStadistics), QApplication::translate("PanelPolarimeter", "Measurement Statistics", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         button_AnalizeData->setToolTip(QApplication::translate("PanelPolarimeter", "Analize Data", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP

@@ -442,12 +442,6 @@ void selectAnalizeData::readFiles(void)
         allFiles = sortFiles2(allFiles);
     }
 
-    /* Create the data arrays for the 3D plots */
-    QSurfaceDataArray *dataArray = new QSurfaceDataArray;
-    QSurfaceDataArray *dataArray_norm = new QSurfaceDataArray;
-    dataArray->reserve(allFiles.length());
-    dataArray_norm->reserve(allFiles.length());
-
     /* Restart vectors */
     ConcentrationsPlot.resize(0);
     AverageDetSignal.resize(0);

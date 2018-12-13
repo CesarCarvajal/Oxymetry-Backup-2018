@@ -432,6 +432,15 @@ void fft::ReadFile(QString FilePath)
                 /* Get the temperature from file */
                 TemperatureSetup = QString(TempF.at(0)).replace(",",".").toDouble();
 
+                /* Humnidity found */
+            }else if(ReadRow.contains("Humidity: ") && HumiditySetup==0){
+
+                /* Separate again the string */
+                QStringList HumS = Readed_Row.at(1).split(" ");
+
+                /* Get the humidity from file */
+                HumiditySetup = QString(HumS.at(0)).replace(",",".").toDouble();
+
                 /* Concentrations found */
             }else if(ReadRow.contains("Concentrations: ") && ConcentrationC1==-1 && ConcentrationC2==-1 && ConcentrationC3==-1 && ConcentrationC4==-1 && ConcentrationC5==-1 && ConcentrationC6==-1){
 
@@ -562,7 +571,7 @@ void fft::CalculateFFT(int N, QVector<double> Data)
 * @brief Save the FFT Data to a File
 * @param[in] Details of the file where the FFT will be saved. Also if the user is saving or the system is saving automatically.
 */
-void fft::saveFFTtoFile(QFileInfo FileDetails, bool userSaving, QStringList substancesNames, double Temperature)
+void fft::saveFFTtoFile(QFileInfo FileDetails, bool userSaving, QStringList substancesNames, double Temperature, double Humidity)
 {
 
     /* Use comas instead of dots */
@@ -609,6 +618,7 @@ void fft::saveFFTtoFile(QFileInfo FileDetails, bool userSaving, QStringList subs
     fprintf(fileFFT, "Nr. of Averages: %i\n", NrAverages);
     fprintf(fileFFT, "Frequency: %.2f Hz\n", FrequencyF);
     fprintf(fileFFT, "Temperature: %.2f °C\n", Temperature);
+    fprintf(fileFFT, "Humidity: %.2f \%\n", Humidity);
 
     /* Include the concentrations in the file */
     QString concentrations, conc = "";
