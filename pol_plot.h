@@ -47,7 +47,7 @@ public:
     QwtPlotCurve *Average_DC_Signal, *Average_W_Signal, *Average_2W_Signal, *Temperature_Plot, *Humidity_Plot;
 
     /* Plot some statistics */
-    QwtPlotCurve *AverageDetSignalPlotter;
+    QwtPlotCurve *AverageDetSignalPlotter, *DeviationVsMeasNumberPlot;
 
     /* Vectors for live Plotting */
     QVector<double> averaged_Signal_time;

@@ -1981,7 +1981,7 @@
             <enum>QTabWidget::Rounded</enum>
            </property>
            <property name="currentIndex">
-            <number>0</number>
+            <number>3</number>
            </property>
            <property name="iconSize">
             <size>
@@ -4599,7 +4599,7 @@
                     </font>
                    </property>
                    <property name="text">
-                    <string>Deviation Vs Measurement Number</string>
+                    <string>Prediction Deviation Vs Measurement Number</string>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignCenter</set>
@@ -4641,7 +4641,7 @@
                 </spacer>
                </item>
                <item>
-                <widget class="Line" name="line_12">
+                <widget class="Line" name="line_MeasNAbsConc">
                  <property name="orientation">
                   <enum>Qt::Vertical</enum>
                  </property>
@@ -4730,7 +4730,7 @@
                     </font>
                    </property>
                    <property name="text">
-                    <string>Deviation Vs Absolute Concentration</string>
+                    <string>Prediction Deviation Vs Absolute Concentration</string>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignCenter</set>
@@ -4865,7 +4865,7 @@
                     </font>
                    </property>
                    <property name="text">
-                    <string>Deviation Vs Counts Deviation from Counts Mean</string>
+                    <string>Prediction Deviation Vs Counts Deviation from Mean</string>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignCenter</set>
@@ -4907,7 +4907,7 @@
                 </spacer>
                </item>
                <item>
-                <widget class="Line" name="line_14">
+                <widget class="Line" name="line_CountDevIntens">
                  <property name="orientation">
                   <enum>Qt::Vertical</enum>
                  </property>

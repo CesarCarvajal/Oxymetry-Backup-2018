@@ -70,9 +70,13 @@ public:
     /* Overall factor for plotting purposes */
     int factorConcentration;
 
-    /* Signal vector */
+    /* Intensity vs concentration plot information */
     QVector<double> AverageDetSignal;
     QVector<double> ConcentrationsPlot;
+
+    /* Deviation vs measurement number plot information */
+    QVector<double> ConcentrationPredictionDeviationVector;
+    QVector<double> MrNumber;
 
 private:
 
@@ -84,6 +88,9 @@ private:
 
     /* The folder with the FFT files */
     QDir Dir;
+
+    /* Save all the file names in one variable */
+    QStringList allFiles;
 
     /* Files for calibration */
     QStringList FFTFilesCalibration, FFTFilesValidation;
@@ -102,6 +109,9 @@ private:
 
     /* How many repetitions are there?  */
     int repetitions;
+
+    /* How many concentrations were measured? */
+    double NrConcentrations;
 
 public:
 

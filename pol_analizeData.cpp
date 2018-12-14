@@ -136,6 +136,9 @@ selectAnalizeData::selectAnalizeData(QWidget *parent) :
     /* Assume no automatic load of data */
     automaticLoading = false;
 
+    /* Number of measured concentrations */
+    NrConcentrations = 0;
+
     /* Hide items */
     ui->label_repselec->hide();
     ui->spinBox_repselec->hide();
@@ -304,6 +307,7 @@ void selectAnalizeData::selectPath(void)
 
             /* Add the FFT files to the list */
             FFTFilesCalibration = Dir.entryList(QStringList() << "*R1.FFT",QDir::Files | QDir::NoSymLinks, QDir::Time | QDir::Reversed);
+
         }else{
 
             /* Add the FFT files to the list */
@@ -320,6 +324,9 @@ void selectAnalizeData::selectPath(void)
 
         /* Add initial files to the list */
         addFilesToList();
+
+        /* Get the total concentrations in this measurement */
+        NrConcentrations = FFTFilesCalibration.length();
 
         /* Read information from files */
         readInitialFile(false, pathDataM + "/" + FFTFilesCalibration.at(0));
@@ -420,10 +427,31 @@ void selectAnalizeData::readInitialFile(bool list, QString path)
  */
 void selectAnalizeData::readFiles(void)
 {
-    /* Save all the file names in one variable */
-    QStringList allFiles;
-    allFiles.append(FFTFilesCalibration);
-    allFiles.append(FFTFilesValidation);
+
+    /* Resize vector with all the file names */
+    allFiles.clear();
+
+    /* Are we using complete sets of data? */
+    bool completeSet = false;
+
+    /* Check if we have repeated values */
+    for(int z =0; z < FFTFilesValidation.length(); z++){
+        completeSet = FFTFilesCalibration.contains(FFTFilesValidation.at(z));
+
+        /* If there is already one repeated, means that there is a complete set */
+        if(completeSet){
+            break;
+        }
+    }
+
+    /* If we are using a complete set, then only add one set of files */
+    if(completeSet){
+
+        allFiles.append(FFTFilesCalibration);
+    }else{
+        allFiles.append(FFTFilesCalibration);
+        allFiles.append(FFTFilesValidation);
+    }
 
     /* Overall factor for plotting purposes */
     factorConcentration = 1;
@@ -445,6 +473,8 @@ void selectAnalizeData::readFiles(void)
     /* Restart vectors */
     ConcentrationsPlot.resize(0);
     AverageDetSignal.resize(0);
+    ConcentrationPredictionDeviationVector.resize(0);
+    MrNumber.resize(0);
 
     /* Get the average of the actual determination signal */
     double AverageDetSignalT;
@@ -454,6 +484,31 @@ void selectAnalizeData::readFiles(void)
 
         /* Read the concentration from the files */
         readInitialFile(true, pathDataM + "/" + allFiles.at(index));
+
+        /* Get the file name to get the measurement number */
+        QString fileName = allFiles.at(index);
+
+        if(FFTFilesValidation.contains(fileName)){
+            /* Remove other information in the file name */
+            fileName = fileName.remove(0,fileName.lastIndexOf("Hz_")+3);
+
+            /* Check if it's a repetition */
+            if(fileName.contains("_R")){
+
+                /* Remove the values */
+                fileName = fileName.remove(fileName.lastIndexOf("_R"), fileName.length()-fileName.lastIndexOf("_R"));
+
+            }
+            /* If it's not a repetition then remove the file extension */
+            else{
+
+                /* Get the measurement number */
+                fileName = fileName.remove(".FFT");
+            }
+
+            /* Save the measurement number */
+            MrNumber.append(fileName.toInt());
+        }
 
         /* This vector saves the information per file or per concentration */
         signal.resize(0);
@@ -565,7 +620,7 @@ void selectAnalizeData::readFiles(void)
         if(FFTFilesCalibration.indexOf(allFiles.at(index))!=-1){
             CalConcentrations.append(QString(concentrationsList.at(ui->comboBox_Substance->currentIndex())).toDouble());
         }
-        else if(FFTFilesValidation.indexOf(allFiles.at(index))!=-1){
+        if(FFTFilesValidation.indexOf(allFiles.at(index))!=-1){
             ValConcentrations.append(QString(concentrationsList.at(ui->comboBox_Substance->currentIndex())).toDouble());
         } /*else (the file was removed by the user) */
 
@@ -583,6 +638,23 @@ void selectAnalizeData::readFiles(void)
         /* Restart the vector */
         concentrationsList.clear();
 
+    }
+
+    /* Is there any repetition to correct the measurement number? */
+    int minMrNumber = *std::min_element(MrNumber.begin(), MrNumber.end());
+
+    /* Check if it is a repetition */
+    if(minMrNumber > NrConcentrations){
+
+        /* Which repetition was that? */
+        int repeated = minMrNumber/NrConcentrations;
+
+        /* Substract the differentce */
+        for(int l =0; l < MrNumber.length(); l++){
+
+            /* This gives the measurement number always from 1 to the maximum amount of measured concentrations */
+            MrNumber.replace(l, MrNumber.at(l)-(NrConcentrations*repeated));
+        }
     }
 
     /* Get the maximum concentration and check if its not aorund 100 to 1000, problems with Qt */
@@ -606,7 +678,7 @@ void selectAnalizeData::readFiles(void)
     if(factorConcentration > 1){
 
         /* Then replace the very small concentrations for the same multiplied by the plot factor */
-        for(int k = 0; k < (FFTFilesCalibration.length() + FFTFilesValidation.length()); k++){
+        for(int k = 0; k < allFiles.length(); k++){
 
             /* Create new rows */
             QSurfaceDataRow *newRow = new QSurfaceDataRow(wavelengths.length());
@@ -951,7 +1023,7 @@ void selectAnalizeData::setDataSets(void)
 void selectAnalizeData::findRepetitions(void)
 {
     /* How many repetitions are there? */
-    for(int i = 1; i < 1000; i++){
+    for(int i = 1; i < 100; i++){
 
         /* Are there R1? */
         QStringList R1 = Dir.entryList(QStringList() << "*R"+QString::number(i)+".FFT",QDir::Files | QDir::NoSymLinks);
@@ -1087,35 +1159,48 @@ void selectAnalizeData::activateLogarithm(void){
  */
 void selectAnalizeData::analizeData(void){
 
+    /* Are there files? */
     if(!FFTFilesCalibration.isEmpty() && !FFTFilesValidation.isEmpty()){
 
-    /* Get the data from files */
-    if(!FFTFilesCalibration.isEmpty()){
+        /* Get the data from files */
+        if(!FFTFilesCalibration.isEmpty()){
 
-        /* resize vectors */
-        wavelengths.resize(0);
-        signal.resize(0);
-        data3D = new QSurfaceDataArray;
-        data3DNormalized = new QSurfaceDataArray;
+            /* resize vectors */
+            wavelengths.resize(0);
+            signal.resize(0);
+            data3D = new QSurfaceDataArray;
+            data3DNormalized = new QSurfaceDataArray;
 
-        /* Create Folder to store the data analysis results */
-        QDir(pathDataM).mkdir("Data_Analysis");
+            /* Create Folder to store the data analysis results */
+            QDir(pathDataM).mkdir("Data_Analysis");
 
-        /* Read File data */
-        readFiles();
-    }
+            /* Read File data */
+            readFiles();
+        }
 
-    /* Write calibration and validation files */
-    writeCalValFiles();
+        /* Write calibration and validation files */
+        writeCalValFiles();
 
-    /* Close the dialog */
-    accept();
+        //************* Here the PLS is performed and an SEP is obtained as result, as well as the other values as the betta etc. //***
+
+        /* How much is the deviation of the predicted values with the validation concentrations? */
+        for(int h = 0; h < ValConcentrations.length(); h++){
+
+            //*********** Here the expression '(ValConcentrations.at(h) - 1)' will be replaced by the actual predicted values vector from the PLS *//
+
+            /* Calculate the deviation of the prediction with the validation concentrations */
+            ConcentrationPredictionDeviationVector.append(ValConcentrations.at(h) - (ValConcentrations.at(h) - 1));  // Simulate the predicted values with an SEP of 1 mg/dl
+
+        }
+
+        /* Close the dialog */
+        accept();
 
     }else{
 
         /* Analysis can't be performed */
         showCritical("Please first select the measurement data.  Then, divide the file names in calibration and validation for further data analysis.","No files were selected as calibration and validation. \n Select files for calibration "
-                                                                                                       "and validation.");
+                                                                                                                                                       "and validation.");
     }
 }
 
@@ -1207,7 +1292,7 @@ void selectAnalizeData::writeCalValFiles(void){
         fprintf(Valfile, "%.4f\t", wavelengths.at(m));
 
         /* Iterate through the (x, y, z) positions to get the information */
-        for(int k = 0; k < (FFTFilesCalibration.length() + FFTFilesValidation.length()); k++){
+        for(int k = 0; k < allFiles.length(); k++){
 
             /* Get the actual concentration and intensity for each wavelength */
             double concentration =data3D->at(k)->at(0).z()/factorConcentration;

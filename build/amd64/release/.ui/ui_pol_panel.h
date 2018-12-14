@@ -245,7 +245,7 @@ public:
     QLabel *label_DeviationVsMeasurementNumber;
     Plot *qwtPlot_Pol_DeviationVsMeasurementNumber;
     QSpacerItem *horizontalSpacer_43;
-    QFrame *line_12;
+    QFrame *line_MeasNAbsConc;
     QSpacerItem *horizontalSpacer_44;
     QVBoxLayout *verticalLayout_20;
     QLabel *label_DeviationVsAbsoluteConcentration;
@@ -258,7 +258,7 @@ public:
     QLabel *label_DeviaitionVsCountsDeviation;
     Plot *qwtPlot_Pol_DeviationVsCountsDeviation;
     QSpacerItem *horizontalSpacer_45;
-    QFrame *line_14;
+    QFrame *line_CountDevIntens;
     QSpacerItem *horizontalSpacer_46;
     QVBoxLayout *verticalLayout_22;
     QLabel *label_IntensitiePerConcentration;
@@ -1923,12 +1923,12 @@ public:
 
         horizontalLayout_34->addItem(horizontalSpacer_43);
 
-        line_12 = new QFrame(MeasStadistics);
-        line_12->setObjectName(QStringLiteral("line_12"));
-        line_12->setFrameShape(QFrame::VLine);
-        line_12->setFrameShadow(QFrame::Sunken);
+        line_MeasNAbsConc = new QFrame(MeasStadistics);
+        line_MeasNAbsConc->setObjectName(QStringLiteral("line_MeasNAbsConc"));
+        line_MeasNAbsConc->setFrameShape(QFrame::VLine);
+        line_MeasNAbsConc->setFrameShadow(QFrame::Sunken);
 
-        horizontalLayout_34->addWidget(line_12);
+        horizontalLayout_34->addWidget(line_MeasNAbsConc);
 
         horizontalSpacer_44 = new QSpacerItem(2, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
 
@@ -2018,12 +2018,12 @@ public:
 
         horizontalLayout_35->addItem(horizontalSpacer_45);
 
-        line_14 = new QFrame(MeasStadistics);
-        line_14->setObjectName(QStringLiteral("line_14"));
-        line_14->setFrameShape(QFrame::VLine);
-        line_14->setFrameShadow(QFrame::Sunken);
+        line_CountDevIntens = new QFrame(MeasStadistics);
+        line_CountDevIntens->setObjectName(QStringLiteral("line_CountDevIntens"));
+        line_CountDevIntens->setFrameShape(QFrame::VLine);
+        line_CountDevIntens->setFrameShadow(QFrame::Sunken);
 
-        horizontalLayout_35->addWidget(line_14);
+        horizontalLayout_35->addWidget(line_CountDevIntens);
 
         horizontalSpacer_46 = new QSpacerItem(2, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
 
@@ -2332,7 +2332,7 @@ public:
         retranslateUi(PanelPolarimeter);
 
         list_devices_Pol->setCurrentRow(-1);
-        Tabs_Plots->setCurrentIndex(0);
+        Tabs_Plots->setCurrentIndex(3);
 
 
         QMetaObject::connectSlotsByName(PanelPolarimeter);
@@ -2520,9 +2520,9 @@ public:
         Tabs_Plots->setTabText(Tabs_Plots->indexOf(MeasResults), QApplication::translate("PanelPolarimeter", "Measurement Results", Q_NULLPTR));
         label_HideDeviationVsMeasNumber->setText(QApplication::translate("PanelPolarimeter", "<< Hide Deviation Vs Measurement Number Plot", Q_NULLPTR));
         label_HideDeviationVsAbsolConcentration->setText(QApplication::translate("PanelPolarimeter", ">> Hide Deviation Vs Absolute Concentration Plot", Q_NULLPTR));
-        label_DeviationVsMeasurementNumber->setText(QApplication::translate("PanelPolarimeter", "Deviation Vs Measurement Number", Q_NULLPTR));
-        label_DeviationVsAbsoluteConcentration->setText(QApplication::translate("PanelPolarimeter", "Deviation Vs Absolute Concentration", Q_NULLPTR));
-        label_DeviaitionVsCountsDeviation->setText(QApplication::translate("PanelPolarimeter", "Deviation Vs Counts Deviation from Counts Mean", Q_NULLPTR));
+        label_DeviationVsMeasurementNumber->setText(QApplication::translate("PanelPolarimeter", "Prediction Deviation Vs Measurement Number", Q_NULLPTR));
+        label_DeviationVsAbsoluteConcentration->setText(QApplication::translate("PanelPolarimeter", "Prediction Deviation Vs Absolute Concentration", Q_NULLPTR));
+        label_DeviaitionVsCountsDeviation->setText(QApplication::translate("PanelPolarimeter", "Prediction Deviation Vs Counts Deviation from Mean", Q_NULLPTR));
         label_IntensitiePerConcentration->setText(QApplication::translate("PanelPolarimeter", "Average Determination Signal per Concentration", Q_NULLPTR));
         label_HideDeviationVsCountsDeviation->setText(QApplication::translate("PanelPolarimeter", "<< Hide Deviation Vs Counts Deviation Plot", Q_NULLPTR));
         label_HideIntensitiesVsConcentration->setText(QApplication::translate("PanelPolarimeter", ">> Hide Intensities per Concentration Plot", Q_NULLPTR));

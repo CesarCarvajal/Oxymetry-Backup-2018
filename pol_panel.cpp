@@ -351,6 +351,10 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
         signalMapper->setMapping(ui->label_hideTemperature, ui->label_hideTemperature);
         signalMapper->setMapping(ui->label_hideFFTIntensityPlot, ui->label_hideFFTIntensityPlot);
         signalMapper->setMapping(ui->label_hideHumidity, ui->label_hideHumidity);
+        signalMapper->setMapping(ui->label_HideDeviationVsMeasNumber, ui->label_HideDeviationVsMeasNumber);
+        signalMapper->setMapping(ui->label_HideDeviationVsAbsolConcentration, ui->label_HideDeviationVsAbsolConcentration);
+        signalMapper->setMapping(ui->label_HideDeviationVsCountsDeviation, ui->label_HideDeviationVsCountsDeviation);
+        signalMapper->setMapping(ui->label_HideIntensitiesVsConcentration, ui->label_HideIntensitiesVsConcentration);
 
         /* Connect event handler */
         connect(qApp, SIGNAL(DataPolIsHere(int, int)), this, SLOT(receive_Data_Pol(int, int)));
@@ -386,6 +390,10 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     connect(ui->label_hideTemperature, SIGNAL(clicked()), signalMapper, SLOT(map()));
     connect(ui->label_hideFFTIntensityPlot, SIGNAL(clicked()), signalMapper, SLOT(map()));
     connect(ui->label_hideHumidity, SIGNAL(clicked()), signalMapper, SLOT(map()));
+    connect(ui->label_HideDeviationVsMeasNumber, SIGNAL(clicked()), signalMapper, SLOT(map()));
+    connect(ui->label_HideDeviationVsAbsolConcentration, SIGNAL(clicked()), signalMapper, SLOT(map()));
+    connect(ui->label_HideDeviationVsCountsDeviation, SIGNAL(clicked()), signalMapper, SLOT(map()));
+    connect(ui->label_HideIntensitiesVsConcentration, SIGNAL(clicked()), signalMapper, SLOT(map()));
 
     /* Set button styles */
     ui->button_Start_Meas_Pol->setStyleSheet(greenButton);
@@ -467,17 +475,17 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
 
     /* Statistics Curve, available after the measurements in tab "Measurement Statistics" */
     ui->qwtPlot_Pol_DeviationVsMeasurementNumber->setXAxisTitle("Measurement Number");
-    ui->qwtPlot_Pol_DeviationVsMeasurementNumber->setYAxisTitle("Prediction Deviation");
+    ui->qwtPlot_Pol_DeviationVsMeasurementNumber->setYAxisTitle("Prediction Deviation (mg/dL)");
     ui->qwtPlot_Pol_DeviationVsMeasurementNumber->setYAxis(-1.0, 1.0);
     ui->qwtPlot_Pol_DeviationVsMeasurementNumber->setXAxis(0.0, 51.0);
 
     ui->qwtPlot_Pol_DeviationVsAbsoluteConcentration->setXAxisTitle("Concentration (mg/dL)");
-    ui->qwtPlot_Pol_DeviationVsAbsoluteConcentration->setYAxisTitle("Prediction Deviation");
+    ui->qwtPlot_Pol_DeviationVsAbsoluteConcentration->setYAxisTitle("Prediction Deviation (mg/dL)");
     ui->qwtPlot_Pol_DeviationVsAbsoluteConcentration->setYAxis(-1.0, 1.0);
     ui->qwtPlot_Pol_DeviationVsAbsoluteConcentration->setXAxis(0.0, 500);
 
     ui->qwtPlot_Pol_DeviationVsCountsDeviation->setXAxisTitle("Counts Deviation from Counts Mean");
-    ui->qwtPlot_Pol_DeviationVsCountsDeviation->setYAxisTitle("Prediction Deviation");
+    ui->qwtPlot_Pol_DeviationVsCountsDeviation->setYAxisTitle("Prediction Deviation (mg/dL)");
     ui->qwtPlot_Pol_DeviationVsCountsDeviation->setYAxis(-1.0, 1.0);
     ui->qwtPlot_Pol_DeviationVsCountsDeviation->setXAxis(-1.0, 1.0);
 
@@ -1673,7 +1681,9 @@ void PanelPolarimeter::adjust_Run_Start(short int typeRun){
 
     /* Clean this plot too */
     PolPlotter->AverageDetSignalPlotter->setSamples(initial, initial);
+    PolPlotter->DeviationVsMeasNumberPlot->setSamples(initial, initial);
     ui->qwtPlot_Pol_IntensitiesVsConcentrations->update();
+    ui->qwtPlot_Pol_DeviationVsMeasurementNumber->update();
 
     /* Remove series from plot */
     PolPlotter->restart3DPlots();
@@ -2873,6 +2883,32 @@ void PanelPolarimeter::showAllPlots() {
     ui->label_hideHumidity->setText(">> Hide Humidity Plot");
     ui->label_hideHumidity->setStyleSheet("QLabel { color: blue; }");
     ui->label_hideHumidity->setFrameShape(QFrame::NoFrame);
+
+    ui->label_HideDeviationVsMeasNumber->setText("<< Hide Deviation Vs Measurement Number Plot");
+    ui->label_HideDeviationVsMeasNumber->setStyleSheet("QLabel { color: blue; }");
+    ui->label_HideDeviationVsMeasNumber->setFrameShape(QFrame::NoFrame);
+    ui->line_MeasNAbsConc->setVisible(true);
+    ui->label_HideDeviationVsAbsolConcentration->setText(">> Hide Deviation Vs Absolute Concentration Plot");
+    ui->label_HideDeviationVsAbsolConcentration->setStyleSheet("QLabel { color: blue; }");
+    ui->label_HideDeviationVsAbsolConcentration->setFrameShape(QFrame::NoFrame);
+
+    ui->label_HideIntensitiesVsConcentration->setText(">> Hide Intensities per Concentration Plot");
+    ui->label_HideIntensitiesVsConcentration->setStyleSheet("QLabel { color: blue; }");
+    ui->label_HideIntensitiesVsConcentration->setFrameShape(QFrame::NoFrame);
+    ui->line_CountDevIntens->setVisible(true);
+    ui->label_HideDeviationVsCountsDeviation->setText("<< Hide Deviation Vs Counts Deviation Plot");
+    ui->label_HideDeviationVsCountsDeviation->setStyleSheet("QLabel { color: blue; }");
+    ui->label_HideDeviationVsCountsDeviation->setFrameShape(QFrame::NoFrame);
+
+    ui->qwtPlot_Pol_DeviationVsAbsoluteConcentration->setVisible(true);
+    ui->label_DeviationVsAbsoluteConcentration->setVisible(true);
+    ui->qwtPlot_Pol_DeviationVsCountsDeviation->setVisible(true);
+    ui->label_DeviaitionVsCountsDeviation->setVisible(true);
+    ui->qwtPlot_Pol_DeviationVsMeasurementNumber->setVisible(true);
+    ui->label_DeviationVsMeasurementNumber->setVisible(true);
+    ui->qwtPlot_Pol_IntensitiesVsConcentrations->setVisible(true);
+    ui->label_IntensitiePerConcentration->setVisible(true);
+
 }
 
 
@@ -3582,6 +3618,138 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
         }else{
             ui->line_FFTHum->setVisible(true);
         }
+    }
+
+    /* Hide/Show Deviation vs Measurement Number plot in tab Measurement Statistics */
+    if(label == ui->label_HideDeviationVsMeasNumber){
+
+        /* Is the Compensation plot visible? */
+        if(ui->qwtPlot_Pol_DeviationVsMeasurementNumber->isVisible()){
+
+            /* Hide Compensation Plot if clicked */
+            ui->label_HideDeviationVsMeasNumber->setToolTip("Show Deviation Vs Measurement Number Plot");
+            ui->label_HideDeviationVsMeasNumber->setText(">> Show Deviation Vs Measurement Number Plot");
+            ui->label_HideDeviationVsMeasNumber->setFrameShape(QFrame::Box);
+            ui->label_HideDeviationVsMeasNumber->setStyleSheet("QLabel { color: red; }");
+            ui->line_MeasNAbsConc->setVisible(false);
+
+        }else{
+
+            /* Show Compensation Plot again */
+            ui->label_HideDeviationVsMeasNumber->setToolTip("Hide Deviation Vs Measurement Number Plot");
+            ui->label_HideDeviationVsMeasNumber->setText("<< Hide Deviation Vs Measurement Number Plot");
+            ui->label_HideDeviationVsMeasNumber->setFrameShape(QFrame::NoFrame);
+            ui->label_HideDeviationVsMeasNumber->setStyleSheet("QLabel { color: blue; }");
+            ui->line_MeasNAbsConc->setVisible(true);
+        }
+
+        /* Show or Hide labels */
+        ui->label_DeviationVsMeasurementNumber->setVisible(!ui->qwtPlot_Pol_DeviationVsMeasurementNumber->isVisible());
+
+        /* Show or Hide plot */
+        ui->qwtPlot_Pol_DeviationVsMeasurementNumber->setVisible(!ui->qwtPlot_Pol_DeviationVsMeasurementNumber->isVisible());
+    }
+
+    /* Hide/Show Deviation vs Absolute concentrations plot in tab Measurement Statistics */
+    else if(label == ui->label_HideDeviationVsAbsolConcentration){
+
+        /* Is the Compensation plot visible? */
+        if(ui->qwtPlot_Pol_DeviationVsAbsoluteConcentration->isVisible()){
+
+            /* Hide Compensation Plot if clicked */
+            ui->label_HideDeviationVsAbsolConcentration->setToolTip("Show Deviation Vs Absolute Concentration Plot");
+            ui->label_HideDeviationVsAbsolConcentration->setText("<< Show Deviation Vs Absolute Concentration Plot");
+            ui->label_HideDeviationVsAbsolConcentration->setFrameShape(QFrame::Box);
+            ui->label_HideDeviationVsAbsolConcentration->setStyleSheet("QLabel { color: red; }");
+            ui->line_MeasNAbsConc->setVisible(false);
+
+        }else{
+
+            /* Show Compensation Plot again */
+            ui->label_HideDeviationVsAbsolConcentration->setToolTip("Hide Deviation Vs Absolute Concentration Plot");
+            ui->label_HideDeviationVsAbsolConcentration->setText(">> Hide Deviation Vs Absolute Concentration Plot");
+            ui->label_HideDeviationVsAbsolConcentration->setFrameShape(QFrame::NoFrame);
+            ui->label_HideDeviationVsAbsolConcentration->setStyleSheet("QLabel { color: blue; }");
+            ui->line_MeasNAbsConc->setVisible(true);
+        }
+
+        /* Show or Hide labels */
+        ui->label_DeviationVsAbsoluteConcentration->setVisible(!ui->qwtPlot_Pol_DeviationVsAbsoluteConcentration->isVisible());
+
+        /* Show or Hide plot */
+        ui->qwtPlot_Pol_DeviationVsAbsoluteConcentration->setVisible(!ui->qwtPlot_Pol_DeviationVsAbsoluteConcentration->isVisible());
+    }
+
+    /* Hide/Show Deviation vs Counts Deviation plot in tab Measurement Statistics */
+    else if(label == ui->label_HideDeviationVsCountsDeviation){
+
+        QString tip, labelTexter = "";
+
+        /* Is the Compensation plot visible? */
+        if(ui->qwtPlot_Pol_DeviationVsCountsDeviation->isVisible()){
+
+            /* Hide Compensation Plot if clicked */
+            tip = "Show Deviation Vs Counts Deviation Plot";
+            labelTexter = ">> Show Deviation Vs Counts Deviation Plot";
+            ui->label_HideDeviationVsCountsDeviation->setFrameShape(QFrame::Box);
+            ui->label_HideDeviationVsCountsDeviation->setStyleSheet("QLabel { color: red; }");
+            ui->line_CountDevIntens->setVisible(false);
+
+        }else{
+
+            /* Show Compensation Plot again */
+            tip = "Hide Deviation Vs Counts Deviation Plot";
+            labelTexter = "<< Hide Deviation Vs Counts Deviation Plot";
+            ui->label_HideDeviationVsCountsDeviation->setFrameShape(QFrame::NoFrame);
+            ui->label_HideDeviationVsCountsDeviation->setStyleSheet("QLabel { color: blue; }");
+            ui->line_CountDevIntens->setVisible(true);
+        }
+
+        /* Change labels text */
+        ui->label_HideDeviationVsCountsDeviation->setToolTip(tip);
+        ui->label_HideDeviationVsCountsDeviation->setText(labelTexter);
+
+        /* Show or Hide labels */
+        ui->label_DeviaitionVsCountsDeviation->setVisible(!ui->qwtPlot_Pol_DeviationVsCountsDeviation->isVisible());
+
+        /* Show or Hide plot */
+        ui->qwtPlot_Pol_DeviationVsCountsDeviation->setVisible(!ui->qwtPlot_Pol_DeviationVsCountsDeviation->isVisible());
+    }
+
+    /* Hide/Show Deviation vs Counts Deviation plot in tab Measurement Statistics */
+    else if(label == ui->label_HideIntensitiesVsConcentration){
+
+        QString tip, labelTexter = "";
+
+        /* Is the Compensation plot visible? */
+        if(ui->qwtPlot_Pol_IntensitiesVsConcentrations->isVisible()){
+
+            /* Hide Compensation Plot if clicked */
+            tip = "Show Intensities per Concentration Plot";
+            labelTexter = "<< Show Intensities per Concentration Plot";
+            ui->label_HideIntensitiesVsConcentration->setFrameShape(QFrame::Box);
+            ui->label_HideIntensitiesVsConcentration->setStyleSheet("QLabel { color: red; }");
+            ui->line_CountDevIntens->setVisible(false);
+
+        }else{
+
+            /* Show Compensation Plot again */
+            tip = "Hide Deviation Vs Counts Deviation Plot";
+            labelTexter = "<< Hide Deviation Vs Counts Deviation Plot";
+            ui->label_HideIntensitiesVsConcentration->setFrameShape(QFrame::NoFrame);
+            ui->label_HideIntensitiesVsConcentration->setStyleSheet("QLabel { color: blue; }");
+            ui->line_CountDevIntens->setVisible(true);
+        }
+
+        /* Change labels text */
+        ui->label_HideIntensitiesVsConcentration->setToolTip(tip);
+        ui->label_HideIntensitiesVsConcentration->setText(labelTexter);
+
+        /* Show or Hide labels */
+        ui->label_IntensitiePerConcentration->setVisible(!ui->qwtPlot_Pol_IntensitiesVsConcentrations->isVisible());
+
+        /* Show or Hide plot */
+        ui->qwtPlot_Pol_IntensitiesVsConcentrations->setVisible(!ui->qwtPlot_Pol_IntensitiesVsConcentrations->isVisible());
     }
 
     /* Hide Horizontal lines */
@@ -5083,6 +5251,9 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
             ui->qwtPlot_Pol_Prediction->setXAxis(minC, maxC);
             ui->qwtPlot_Pol_Prediction->setYAxis(minC, maxC);
 
+            ui->qwtPlot_Pol_Prediction->setXAxisTitle("Reference " + DataSelector->ui->comboBox_Substance->currentText().remove(0,3) + " (mg/dL)");
+            ui->qwtPlot_Pol_Prediction->setYAxisTitle("Predicted " + DataSelector->ui->comboBox_Substance->currentText().remove(0,3) + " (mg/dL)");
+
             /* Draw prediction line */
             PolPlotter->plotPredictionLine(minC, maxC);
 
@@ -5093,9 +5264,13 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
 
         /* Add values to the intensities Vs concentrations plot */
         PolPlotter->AverageDetSignalPlotter->setSamples(DataSelector->ConcentrationsPlot, DataSelector->AverageDetSignal);
+        PolPlotter->DeviationVsMeasNumberPlot->setSamples(DataSelector->MrNumber, DataSelector->ConcentrationPredictionDeviationVector);
 
         /* Add the plot intensites vs concentration to the UI */
         PolPlotter->AverageDetSignalPlotter->attach(ui->qwtPlot_Pol_IntensitiesVsConcentrations);
+
+        /* Add measurement number vs deviation plot */
+        PolPlotter->DeviationVsMeasNumberPlot->attach(ui->qwtPlot_Pol_DeviationVsMeasurementNumber);
 
         /* Adjust the plots axes */
         double maximumConcentration = *std::max_element(DataSelector->ConcentrationsPlot.begin(), DataSelector->ConcentrationsPlot.end());
@@ -5107,6 +5282,21 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
 
         ui->qwtPlot_Pol_IntensitiesVsConcentrations->setYAxis(*std::min_element(DataSelector->AverageDetSignal.begin(), DataSelector->AverageDetSignal.end()),
                                                               maximumIntensity + maximumIntensity*0.05);
+
+        ui->qwtPlot_Pol_IntensitiesVsConcentrations->setXAxisTitle("Concentration " + DataSelector->ui->comboBox_Substance->currentText().remove(0,3) + " (mg/dL)");
+
+        /* Adjust the plots axes */
+        double maximumMeasNumber = *std::max_element(DataSelector->MrNumber.begin(), DataSelector->MrNumber.end());
+        double maximumDeviation = *std::max_element(DataSelector->ConcentrationPredictionDeviationVector.begin(), DataSelector->ConcentrationPredictionDeviationVector.end());
+        double minimumDeviation = *std::min_element(DataSelector->ConcentrationPredictionDeviationVector.begin(), DataSelector->ConcentrationPredictionDeviationVector.end());
+
+        ui->qwtPlot_Pol_DeviationVsMeasurementNumber->setXAxis(*std::min_element(DataSelector->MrNumber.begin(), DataSelector->MrNumber.end())-1,
+                                                               maximumMeasNumber + 1);
+
+        ui->qwtPlot_Pol_DeviationVsMeasurementNumber->setYAxis( minimumDeviation - minimumDeviation*0.05,
+                                                                maximumDeviation + maximumDeviation*0.05);
+
+        ui->qwtPlot_Pol_DeviationVsMeasurementNumber->setYAxisTitle("Prediction Deviation of " + DataSelector->ui->comboBox_Substance->currentText().remove(0,3) + " (mg/dL)");
 
         /* Adjust axis title according to the determination signal */
         ui->qwtPlot_Pol_IntensitiesVsConcentrations->setYAxisTitle("Average " + DataSelector->ui->comboBox_DetSignal->currentText() + " Intensity (Counts)");
@@ -5171,7 +5361,9 @@ void PanelPolarimeter::clean_All_Pol(void){
 
         /* Clean this plot too */
         PolPlotter->AverageDetSignalPlotter->setSamples(initial, initial);
+        PolPlotter->DeviationVsMeasNumberPlot->setSamples(initial, initial);
         ui->qwtPlot_Pol_IntensitiesVsConcentrations->update();
+        ui->qwtPlot_Pol_DeviationVsMeasurementNumber->update();
 
     }
 
@@ -5259,6 +5451,7 @@ void PanelPolarimeter::clean_All_Pol(void){
     ui->qwtPlot_Pol_Temperature->update();
     ui->qwtPlot_Pol_Humidity->update();
     ui->qwtPlot_Pol_IntensitiesVsConcentrations->update();
+    ui->qwtPlot_Pol_DeviationVsMeasurementNumber->update();
     ui->qwtPlot_Pol->update();
 
     /* Time busy with FFT */
@@ -5285,8 +5478,6 @@ void PanelPolarimeter::clean_All_Pol(void){
     /* Update x-axis of graphs depending on Wavelengths */
     update_Wavelength_Range();
 
-    qDebug() << "hi, here i'm dude!";
-
     /* Restart configurations */
     ConfigureMeasurement = new configurePolMeasure();
 
@@ -5305,9 +5496,16 @@ void PanelPolarimeter::clean_All_Pol(void){
 
     /* Update plots */
     ui->qwtPlot_Pol_Prediction->update();
+    ui->qwtPlot_Pol_Prediction->setXAxisTitle("Reference (mg/dL)");
+    ui->qwtPlot_Pol_Prediction->setYAxisTitle("Predicted (mg/dL)");
 
     /* Remove series from plot */
     PolPlotter->restart3DPlots();
+
+    /* Restart axes of statistics plots */
+    ui->qwtPlot_Pol_IntensitiesVsConcentrations->setXAxisTitle("Concentration (mg/dL)");
+    ui->qwtPlot_Pol_IntensitiesVsConcentrations->setYAxisTitle("Average FFT Intensity (Counts)");
+    ui->qwtPlot_Pol_DeviationVsMeasurementNumber->setYAxisTitle("Prediction Deviation (mg/dL)");
 
     /* Jump to tab */
     ui->Tabs_Plots->setCurrentIndex(0);

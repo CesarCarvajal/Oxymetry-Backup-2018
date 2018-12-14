@@ -106,6 +106,11 @@ Pol_Plot::Pol_Plot()
     AverageDetSignalPlotter->setPen(QPen("red"));
     AverageDetSignalPlotter->setItemAttribute(QwtPlotItem::Legend, false);
 
+    /* Create statistics plots */
+    DeviationVsMeasNumberPlot= new QwtPlotCurve("");
+    DeviationVsMeasNumberPlot->setPen(QPen("blue"));
+    DeviationVsMeasNumberPlot->setItemAttribute(QwtPlotItem::Legend, false);
+
     /* Inital Temperature STD */
     TempStandardDev = 0;
 }
@@ -343,6 +348,7 @@ void Pol_Plot::clean_AllPlots(void){
         Temperature_Plot->detach();
         Humidity_Plot->detach();
         AverageDetSignalPlotter->detach();
+        DeviationVsMeasNumberPlot->detach();
     }
 
     /* Set all vectors to zero */
@@ -472,6 +478,9 @@ Pol_Plot::~Pol_Plot(void)
 
     delete AverageDetSignalPlotter;
     AverageDetSignalPlotter = nullptr;
+
+    delete DeviationVsMeasNumberPlot;
+    DeviationVsMeasNumberPlot = nullptr;
 
     delete series;
     series = nullptr;
