@@ -75,7 +75,6 @@ Pol_Plot::Pol_Plot()
     /* Humidity plot curve  */
     Humidity_Plot = new QwtPlotCurve("");
     Humidity_Plot->setPen(QPen("Blue"));
-    Humidity_Plot->setItemAttribute(QwtPlotItem::Legend, false);
 
     /* Create the DC, W and 2W plots */
     FFT_DC = new QwtPlotCurve("I(DC)");
@@ -293,18 +292,21 @@ void Pol_Plot::plotAverages(bool dataloaded, QVector<double> FFTLfft_DC, QVector
 
     /* Calculate the actual standard deviation */
     double meanTemp = 0;
+    double meanHumidity = 0;
 
     /* Get the mean value */
     for(int k = 0; k < Temperature_Values.length(); k++){
 
         meanTemp = meanTemp + Temperature_Values.at(k);
+        meanHumidity = meanHumidity + Humidity_Values.at(k);
 
         /* Handle events and update UI */
         Application::processEvents();
     }
 
-    /* Mean temperature */
+    /* Mean temperature and humidity */
     meanTemp = meanTemp/Temperature_Values.length();
+    meanHumidity = meanHumidity/Humidity_Values.length();
     double squareTempDif = 0;
 
     /* Get the square difference */
@@ -320,7 +322,8 @@ void Pol_Plot::plotAverages(bool dataloaded, QVector<double> FFTLfft_DC, QVector
     TempStandardDev = sqrt(squareTempDif/Temperature_Values.length());
 
     /* Show the actual temperature STD */
-    Temperature_Plot->setTitle("Mean ± STD = " + QString().setNum(meanTemp, 'f', 2) + " ± " + QString().setNum(TempStandardDev, 'f', 6) + " °C");
+    Temperature_Plot->setTitle("Mean ± STD = " + QString().setNum(meanTemp, 'f', 3) + " ± " + QString().setNum(TempStandardDev, 'f', 6) + " °C");
+    Humidity_Plot->setTitle("Mean Humidity = " + QString().setNum(meanHumidity, 'f', 3) + " %");
 
     /* Whats the maximum time reached on the vector until now? */
     maxXtime = *std::max_element(averaged_Signal_time.begin(), averaged_Signal_time.end());

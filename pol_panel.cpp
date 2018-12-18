@@ -1514,67 +1514,6 @@ void PanelPolarimeter::run_Polarimetry(short int runType) {
             break;
         }
 
-        /* Show no connection with teensy */
-        if(!teensyTemperature->TeensyConnected){
-
-            /* Teensy isn't connected */
-            ui->label_Temperature->setText("No COM");
-            ui->label_Temperature->setStyleSheet("color:red");
-            ui->label_NoComTeensy->setVisible(true);
-        }
-
-        /* Process serial buffer until empty */
-        if(serials.bytesAvailable() > 7 && teensyTemperature->TeensyConnected)
-        {
-            /* Adjust the temperature label to normal */
-            ui->label_Temperature->setStyleSheet("color:black");
-            ui->label_NoComTeensy->setVisible(false);
-
-            /* Receive the serial data */
-            QByteArray data1 = serials.read(4);
-            QByteArray data2 = serials.read(4);
-
-            /* Interpret the received value to temperature or humidity (float) */
-            Temperature = *(reinterpret_cast<const float*>(data1.constData()));
-            Humidity = *(reinterpret_cast<const float*>(data2.constData()));
-
-            /* Show in UI the current measured temperature */
-            ui->Pol_Thermo->setValue(Temperature);
-            ui->Pol_Thermo->setLowerBound(Temperature - 5);
-            ui->Pol_Thermo->setUpperBound(Temperature + 5);
-
-            /* Can we add already a std of the temperature? */
-            if(PolPlotter->TempStandardDev > 0){
-
-                ui->label_Temperature->setText(QString::number(Temperature) + " ± " + QString().setNum(PolPlotter->TempStandardDev, 'f', 3) + " °C");
-            }else{
-                ui->label_Temperature->setText(QString::number(Temperature) + " °C");
-            }
-            ui->label_hum->setText(QString::number(Humidity) + " %");
-
-            /* Is the setup too hot or too cold? */
-            QPalette pal= ui->Pol_Thermo->palette();
-
-            /* Change color if its too cold or too hot inside there */
-            if(Temperature > 35){
-
-                /* Is it too hot inside there? */
-                pal.setColor(QPalette::ButtonText, QColor(Qt::red));
-
-            }else if(Temperature < 31){
-
-                /* Is it too cold inside there? */
-                pal.setColor(QPalette::ButtonText, QColor(Qt::blue));
-            }else{
-
-                /* Is it normal inside there? */
-                pal.setColor(QPalette::ButtonText, QColor(Qt::green));
-            }
-
-            /* Change button colors */
-            ui->Pol_Thermo->setPalette(pal);
-        }
-
         /* Calibration */
         if(Runner->PolCalibrating){
 
@@ -1684,6 +1623,8 @@ void PanelPolarimeter::adjust_Run_Start(short int typeRun){
     PolPlotter->DeviationVsMeasNumberPlot->setSamples(initial, initial);
     ui->qwtPlot_Pol_IntensitiesVsConcentrations->update();
     ui->qwtPlot_Pol_DeviationVsMeasurementNumber->update();
+    ui->qwtPlot_Pol_IntensitiesVsConcentrations->updateLayout();
+    ui->qwtPlot_Pol_DeviationVsMeasurementNumber->updateLayout();
 
     /* Remove series from plot */
     PolPlotter->restart3DPlots();
@@ -2100,6 +2041,9 @@ void PanelPolarimeter::pol_Calibrate(void){
             ui->button_calibrate->setStyleSheet(RedButton);
         }
 
+        /* read the temperature */
+        readTemperature();
+
         /* Plot the Live averages */
         plot_Average();
 
@@ -2214,6 +2158,9 @@ void PanelPolarimeter::pol_Measure(void){
 
         /* Show remaining time */
         totalMeasuretime = totalMeasuretime -1;
+
+        /* read the temperature */
+        readTemperature();
 
         /* Change time to the proper units */
         QStringList ConvertedTime = ConfigureMeasurement->externSoftware->TimeConverter(totalMeasuretime);
@@ -2595,6 +2542,7 @@ void PanelPolarimeter::stop_Run_Polarimetry(void) {
     {
         /* Close connection */
         serials.close();
+
     }
 }
 
@@ -3789,6 +3737,73 @@ void PanelPolarimeter::handle_Click_Event(QWidget *widget)
     updateTabs();
 }
 
+/**
+ * @brief Read the temperature from the teensy
+ */
+void PanelPolarimeter::readTemperature(void){
+
+    /* Show no connection with teensy */
+    if(!teensyTemperature->TeensyConnected){
+
+        /* Teensy isn't connected */
+        ui->label_Temperature->setText("No COM");
+        ui->label_Temperature->setStyleSheet("color:red");
+        ui->label_NoComTeensy->setVisible(true);
+    }
+
+    /* Process serial buffer until empty */
+    if(serials.bytesAvailable() > 7 && teensyTemperature->TeensyConnected)
+    {
+        /* Adjust the temperature label to normal */
+        ui->label_Temperature->setStyleSheet("color:black");
+        ui->label_NoComTeensy->setVisible(false);
+
+        /* Receive the serial data */
+        QByteArray data1 = serials.read(4);
+        QByteArray data2 = serials.read(4);
+
+        /* Interpret the received value to temperature or humidity (float) */
+        Temperature = *(reinterpret_cast<const float*>(data1.constData()));
+        Humidity = *(reinterpret_cast<const float*>(data2.constData()));
+
+        /* Show in UI the current measured temperature */
+        ui->Pol_Thermo->setValue(Temperature);
+        ui->Pol_Thermo->setLowerBound(Temperature - 5);
+        ui->Pol_Thermo->setUpperBound(Temperature + 5);
+
+        /* Can we add already a std of the temperature? */
+        if(PolPlotter->TempStandardDev > 0){
+
+            ui->label_Temperature->setText(QString::number(Temperature) + " ± " + QString().setNum(PolPlotter->TempStandardDev, 'f', 3) + " °C");
+        }else{
+            ui->label_Temperature->setText(QString::number(Temperature) + " °C");
+        }
+        ui->label_hum->setText(QString::number(Humidity) + " %");
+
+        /* Is the setup too hot or too cold? */
+        QPalette pal= ui->Pol_Thermo->palette();
+
+        /* Change color if its too cold or too hot inside there */
+        if(Temperature > 35){
+
+            /* Is it too hot inside there? */
+            pal.setColor(QPalette::ButtonText, QColor(Qt::red));
+
+        }else if(Temperature < 31){
+
+            /* Is it too cold inside there? */
+            pal.setColor(QPalette::ButtonText, QColor(Qt::blue));
+        }else{
+
+            /* Is it normal inside there? */
+            pal.setColor(QPalette::ButtonText, QColor(Qt::green));
+        }
+
+        /* Change button colors */
+        ui->Pol_Thermo->setPalette(pal);
+    }
+
+}
 
 
 /* Measurements Configuration */
@@ -4520,14 +4535,14 @@ void PanelPolarimeter::Load_Summary(QString path) {
         PolPlotter->TempStandardDev = sqrt(squareTempDif/PolPlotter->Temperature_Values.length());
 
         /* Show the actual temperature STD */
-        PolPlotter->Temperature_Plot->setTitle("Mean ± STD = " + QString().setNum(meanTemp, 'f', 2) + " ± " + QString().setNum(PolPlotter->TempStandardDev, 'f', 6) + " °C");
+        PolPlotter->Temperature_Plot->setTitle("Mean ± STD = " + QString().setNum(meanTemp, 'f', 3) + " ± " + QString().setNum(PolPlotter->TempStandardDev, 'f', 6) + " °C");
 
     }else{
 
         /* Show that there wasn't actual temperature STD */
         PolPlotter->Temperature_Plot->setTitle("Mean ± STD = - ± - °C");
-
     }
+
 
     /* Add temperature plot */
     PolPlotter->Temperature_Plot->setSamples(PolPlotter->averaged_Signal_time, PolPlotter->Temperature_Values);
@@ -4539,6 +4554,27 @@ void PanelPolarimeter::Load_Summary(QString path) {
         double miniYHumidity = ceil((ceil(*std::min_element(PolPlotter->Humidity_Values.begin(), PolPlotter->Humidity_Values.end())))-1);
         ui->qwtPlot_Pol_Humidity->setYAxis(miniYHumidity, maxiYHumidity);
 
+        /* Calculate the mean of the humidity */
+        double meanHumidity = 0;
+
+        /* Get the mean value */
+        for(int k = 0; k < PolPlotter->Humidity_Values.length(); k++){
+
+            meanHumidity = meanHumidity + PolPlotter->Humidity_Values.at(k);
+
+            /* Handle events and update UI */
+            Application::processEvents();
+        }
+
+        /* Mean temperature */
+        meanHumidity = meanHumidity/PolPlotter->Humidity_Values.length();
+
+        /* Show the average humidity values */
+        PolPlotter->Humidity_Plot->setTitle("Mean Humidty = " + QString().setNum(meanHumidity, 'f', 3) + " %");
+
+    }else{
+        /* Show that there were not humidity values measured */
+        PolPlotter->Humidity_Plot->setTitle("Mean Humidity = - %");
     }
 
     /* Humidity plot */
@@ -5190,6 +5226,7 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
     /* Show the window */
     DataSelector->exec();
 
+
     /* If the user canceled the data analysis */
     if(!DataSelector->canceled){
 
@@ -5262,9 +5299,23 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
             ui->qwtPlot_Pol_Prediction->update();
         }
 
+        /* Sort the measurement number data */
+        QVector<double> MrNumberSorted, ConcentrationPredictionDeviationVectorSorted;
+        MrNumberSorted.resize(0);
+        ConcentrationPredictionDeviationVectorSorted.resize(0);
+        MrNumberSorted.append(DataSelector->MrNumber);
+        qSort(MrNumberSorted.begin(), MrNumberSorted.end());
+
+        /* Get the data from the sorted vector, indexes */
+        for(int k =0; k < MrNumberSorted.length(); k++){
+
+            int indexSorted = DataSelector->MrNumber.indexOf(MrNumberSorted.at(k));
+            ConcentrationPredictionDeviationVectorSorted.append(DataSelector->ConcentrationPredictionDeviationVector.at(indexSorted));
+        }
+
         /* Add values to the intensities Vs concentrations plot */
         PolPlotter->AverageDetSignalPlotter->setSamples(DataSelector->ConcentrationsPlot, DataSelector->AverageDetSignal);
-        PolPlotter->DeviationVsMeasNumberPlot->setSamples(DataSelector->MrNumber, DataSelector->ConcentrationPredictionDeviationVector);
+        PolPlotter->DeviationVsMeasNumberPlot->setSamples(MrNumberSorted, ConcentrationPredictionDeviationVectorSorted);
 
         /* Add the plot intensites vs concentration to the UI */
         PolPlotter->AverageDetSignalPlotter->attach(ui->qwtPlot_Pol_IntensitiesVsConcentrations);
@@ -5293,8 +5344,7 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
         ui->qwtPlot_Pol_DeviationVsMeasurementNumber->setXAxis(*std::min_element(DataSelector->MrNumber.begin(), DataSelector->MrNumber.end())-1,
                                                                maximumMeasNumber + 1);
 
-        ui->qwtPlot_Pol_DeviationVsMeasurementNumber->setYAxis( minimumDeviation - minimumDeviation*0.05,
-                                                                maximumDeviation + maximumDeviation*0.05);
+        ui->qwtPlot_Pol_DeviationVsMeasurementNumber->setYAxis( minimumDeviation, maximumDeviation);
 
         ui->qwtPlot_Pol_DeviationVsMeasurementNumber->setYAxisTitle("Prediction Deviation of " + DataSelector->ui->comboBox_Substance->currentText().remove(0,3) + " (mg/dL)");
 
@@ -5314,6 +5364,12 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
 
         /* Jump to tab */
         ui->Tabs_Plots->setCurrentIndex(2);
+
+        /* Update plots */
+        ui->qwtPlot_Pol_IntensitiesVsConcentrations->update();
+        ui->qwtPlot_Pol_DeviationVsMeasurementNumber->update();
+        ui->qwtPlot_Pol_IntensitiesVsConcentrations->updateLayout();
+        ui->qwtPlot_Pol_DeviationVsMeasurementNumber->updateLayout();
     }
 
     /* Not loading window automatically anymore */
@@ -5364,6 +5420,8 @@ void PanelPolarimeter::clean_All_Pol(void){
         PolPlotter->DeviationVsMeasNumberPlot->setSamples(initial, initial);
         ui->qwtPlot_Pol_IntensitiesVsConcentrations->update();
         ui->qwtPlot_Pol_DeviationVsMeasurementNumber->update();
+        ui->qwtPlot_Pol_IntensitiesVsConcentrations->updateLayout();
+        ui->qwtPlot_Pol_DeviationVsMeasurementNumber->updateLayout();
 
     }
 
@@ -5452,6 +5510,8 @@ void PanelPolarimeter::clean_All_Pol(void){
     ui->qwtPlot_Pol_Humidity->update();
     ui->qwtPlot_Pol_IntensitiesVsConcentrations->update();
     ui->qwtPlot_Pol_DeviationVsMeasurementNumber->update();
+    ui->qwtPlot_Pol_IntensitiesVsConcentrations->updateLayout();
+    ui->qwtPlot_Pol_DeviationVsMeasurementNumber->updateLayout();
     ui->qwtPlot_Pol->update();
 
     /* Time busy with FFT */

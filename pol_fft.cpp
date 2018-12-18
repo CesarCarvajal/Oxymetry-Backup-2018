@@ -296,10 +296,10 @@ void fft::getFFTfromRawData(QFileInfo fileInformation, bool Calibrating, double 
                 f_w = NrSpectra*(IntTime/1000)*FrequencyF*NrAverages;
 
                 /* From the Output array of FFT, save each of the frequency shares amplitude */
-                DCValue = sqrt(fabs((outputFFT[0][0]*outputFFT[0][0])) + fabs((outputFFT[0][1]*outputFFT[0][1])));
+                DCValue = sqrt(fabs(pow(outputFFT[0][0],2)) + fabs(pow(outputFFT[0][1],2)));
                 fft_DC.append(DCValue);
-                fft_W.append(sqrt(fabs((outputFFT[f_w][0]*outputFFT[f_w][0])) + fabs((outputFFT[f_w][1]*outputFFT[f_w][1]))));
-                fft_2W.append(sqrt(fabs((outputFFT[2*f_w][0]*outputFFT[2*f_w][0])) + fabs((outputFFT[2*f_w][1]*outputFFT[2*f_w][1]))));
+                fft_W.append(sqrt(fabs(pow(outputFFT[f_w][0],2)) + fabs(pow(outputFFT[f_w][1],2))));
+                fft_2W.append(sqrt(fabs(pow(outputFFT[2*f_w][0],2)) + fabs(pow(outputFFT[2*f_w][1],2))));
                 fft_Compensation_Signal.append(fft_W.at(rowcounter)/fft_2W.at(rowcounter));
 
                 /* The user haven't selected a wavelength for the FFT plot */
@@ -328,7 +328,7 @@ void fft::getFFTfromRawData(QFileInfo fileInformation, bool Calibrating, double 
                     for(int  i = 0; i < NrSpectra/2; i++)
                     {
                         /* Amplitude at all frequencies */
-                        fft_data.append(sqrt(fabs((outputFFT[i][0]*outputFFT[i][0])) + fabs((outputFFT[i][1]*outputFFT[i][1]))));
+                        fft_data.append(sqrt(fabs(pow(outputFFT[i][0],2)) + fabs(pow(outputFFT[i][1],2))));
 
                         /* Which frequencies are shown in the FFT? */
                         time.append(i/(NrAverages*NrSpectra*(IntTime/1000)));
@@ -442,7 +442,8 @@ void fft::ReadFile(QString FilePath)
                 HumiditySetup = QString(HumS.at(0)).replace(",",".").toDouble();
 
                 /* Concentrations found */
-            }else if(ReadRow.contains("Concentrations: ") && ConcentrationC1==-1 && ConcentrationC2==-1 && ConcentrationC3==-1 && ConcentrationC4==-1 && ConcentrationC5==-1 && ConcentrationC6==-1){
+            }else if(ReadRow.contains("Concentrations: ") && ConcentrationC1==-1 && ConcentrationC2==-1 && ConcentrationC3==-1 && ConcentrationC4==-1
+                     && ConcentrationC5==-1 && ConcentrationC6==-1){
 
                 /* Concentrations */
                 QStringList Concentrations = Readed_Row.at(2).split(",");

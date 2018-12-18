@@ -321,6 +321,9 @@ private slots:
     /* Save instant spectra from calibration */
     void saveFFTcalibration(void);
 
+    /* Read the temperature */
+    void readTemperature(void);
+
 public slots:
 
     /* Enable Help Non Modal Window */

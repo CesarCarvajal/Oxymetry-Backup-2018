@@ -61,6 +61,7 @@ ConnectTemperature::ConnectTemperature(QWidget *parent) :
             serials.setParity(QSerialPort::NoParity);
             serials.setStopBits(QSerialPort::OneStop);
             serials.setFlowControl(QSerialPort::NoFlowControl);
+            serials.setReadBufferSize(8);
 
             /* Try to establish serial connection */
             if (serials.open(QIODevice::ReadWrite))

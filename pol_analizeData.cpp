@@ -1188,8 +1188,11 @@ void selectAnalizeData::analizeData(void){
 
             //*********** Here the expression '(ValConcentrations.at(h) - 1)' will be replaced by the actual predicted values vector from the PLS *//
 
+            /* This value will be the measured SEP */
+            double PredictionSEP = ValConcentrations.at(h) + ((((qrand() % 10)*(pow((-1),(qrand() % 2)))))*(0.001*(*std::max_element(ValConcentrations.begin(), ValConcentrations.end()))));
+
             /* Calculate the deviation of the prediction with the validation concentrations */
-            ConcentrationPredictionDeviationVector.append(ValConcentrations.at(h) - (ValConcentrations.at(h) - 1));  // Simulate the predicted values with an SEP of 1 mg/dl
+            ConcentrationPredictionDeviationVector.append(ValConcentrations.at(h) - PredictionSEP);  // Simulate the predicted values with an SEP of 1 mg/dl
 
         }
 
