@@ -2332,7 +2332,7 @@ public:
         retranslateUi(PanelPolarimeter);
 
         list_devices_Pol->setCurrentRow(-1);
-        Tabs_Plots->setCurrentIndex(3);
+        Tabs_Plots->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(PanelPolarimeter);
@@ -2522,7 +2522,7 @@ public:
         label_HideDeviationVsAbsolConcentration->setText(QApplication::translate("PanelPolarimeter", ">> Hide Deviation Vs Absolute Concentration Plot", Q_NULLPTR));
         label_DeviationVsMeasurementNumber->setText(QApplication::translate("PanelPolarimeter", "Prediction Deviation Vs Measurement Number", Q_NULLPTR));
         label_DeviationVsAbsoluteConcentration->setText(QApplication::translate("PanelPolarimeter", "Prediction Deviation Vs Absolute Concentration", Q_NULLPTR));
-        label_DeviaitionVsCountsDeviation->setText(QApplication::translate("PanelPolarimeter", "Prediction Deviation Vs Counts Deviation from Mean", Q_NULLPTR));
+        label_DeviaitionVsCountsDeviation->setText(QApplication::translate("PanelPolarimeter", "Prediction Deviation Vs Mean Deviation of Counts Mean", Q_NULLPTR));
         label_IntensitiePerConcentration->setText(QApplication::translate("PanelPolarimeter", "Average Determination Signal per Concentration", Q_NULLPTR));
         label_HideDeviationVsCountsDeviation->setText(QApplication::translate("PanelPolarimeter", "<< Hide Deviation Vs Counts Deviation Plot", Q_NULLPTR));
         label_HideIntensitiesVsConcentration->setText(QApplication::translate("PanelPolarimeter", ">> Hide Intensities per Concentration Plot", Q_NULLPTR));

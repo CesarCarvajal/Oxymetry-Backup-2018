@@ -121,7 +121,7 @@ private:
     QWidget *container, *container_norm;
 
     /* Start measurement button color */
-    QString greenButton = "color: rgb(0,128,0)", RedButton = "color: rgb(250,0,0)", grayButton = "color: rgb(211,211,211)";
+    QString greenButton = "color: rgb(0,128,0)", RedButton = "color: rgb(250,0,0)", grayButton = "color: rgb(211,211,211)", darkGrayButton = "color: rgb(53, 50, 47)";
 
     /* The configuration was edited during the calibration? */
     bool editedConf;

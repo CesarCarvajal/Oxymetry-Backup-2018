@@ -484,7 +484,7 @@ PanelPolarimeter::PanelPolarimeter(QWidget *parent) :
     ui->qwtPlot_Pol_DeviationVsAbsoluteConcentration->setYAxis(-1.0, 1.0);
     ui->qwtPlot_Pol_DeviationVsAbsoluteConcentration->setXAxis(0.0, 500);
 
-    ui->qwtPlot_Pol_DeviationVsCountsDeviation->setXAxisTitle("Counts Deviation from Counts Mean");
+    ui->qwtPlot_Pol_DeviationVsCountsDeviation->setXAxisTitle("Counts Mean Deviation from All Counts Mean (Counts)");
     ui->qwtPlot_Pol_DeviationVsCountsDeviation->setYAxisTitle("Prediction Deviation (mg/dL)");
     ui->qwtPlot_Pol_DeviationVsCountsDeviation->setYAxis(-1.0, 1.0);
     ui->qwtPlot_Pol_DeviationVsCountsDeviation->setXAxis(-1.0, 1.0);
@@ -1616,15 +1616,21 @@ void PanelPolarimeter::adjust_Run_Start(short int typeRun){
 
     /* Initialize some other plots */
     QVector<double> initial;
-    initial.append(0);
+    initial.resize(0);
 
     /* Clean this plot too */
     PolPlotter->AverageDetSignalPlotter->setSamples(initial, initial);
     PolPlotter->DeviationVsMeasNumberPlot->setSamples(initial, initial);
+    PolPlotter->DeviationVsConcentration->setSamples(initial, initial);
+    PolPlotter->DeviationVsCountsMeanDeviation->setSamples(initial, initial);
     ui->qwtPlot_Pol_IntensitiesVsConcentrations->update();
     ui->qwtPlot_Pol_DeviationVsMeasurementNumber->update();
+    ui->qwtPlot_Pol_DeviationVsCountsDeviation->update();
     ui->qwtPlot_Pol_IntensitiesVsConcentrations->updateLayout();
     ui->qwtPlot_Pol_DeviationVsMeasurementNumber->updateLayout();
+    ui->qwtPlot_Pol_DeviationVsCountsDeviation->updateLayout();
+    ui->qwtPlot_Pol_DeviationVsAbsoluteConcentration->update();
+    ui->qwtPlot_Pol_DeviationVsAbsoluteConcentration->updateLayout();
 
     /* Remove series from plot */
     PolPlotter->restart3DPlots();
@@ -2035,8 +2041,9 @@ void PanelPolarimeter::pol_Calibrate(void){
         /* Time in seconds */
         Runner->Timer_In_Seconds = Runner->Timer_In_Seconds + 1;
 
+        /* Make the button to blink */
         if(Runner->Timer_In_Seconds % 2 == 0){
-            ui->button_calibrate->setStyleSheet("black");
+            ui->button_calibrate->setStyleSheet(darkGrayButton);
         }else{
             ui->button_calibrate->setStyleSheet(RedButton);
         }
@@ -2155,6 +2162,13 @@ void PanelPolarimeter::pol_Measure(void){
 
         /* Time in seconds */
         Runner->Timer_In_Seconds = Runner->Timer_In_Seconds + 1;
+
+        /* button blinks */
+        if(Runner->Timer_In_Seconds % 2 == 0){
+            ui->button_Start_Meas_Pol->setStyleSheet(darkGrayButton);
+        }else{
+            ui->button_Start_Meas_Pol->setStyleSheet(RedButton);
+        }
 
         /* Show remaining time */
         totalMeasuretime = totalMeasuretime -1;
@@ -2648,6 +2662,8 @@ void PanelPolarimeter::plot_Average(void){
     ui->qwtPlot_Pol_Average->update();
     ui->qwtPlot_Pol_Temperature->update();
     ui->qwtPlot_Pol_Humidity->update();
+    ui->qwtPlot_Pol_Temperature->updateLayout();
+    ui->qwtPlot_Pol_Humidity->updateLayout();
 
     /* If we have more than certain amount of values in the plot, change the X axis */
     if(PolPlotter->averaged_Signal_time.length() > PolPlotter->time_plot){
@@ -4376,7 +4392,7 @@ void PanelPolarimeter::Load_Summary(QString path) {
 
     }else{
 
-        /* Get the groung path */
+        /* Get the ground path */
         QFileInfo summaryPath = QFileInfo(path);
 
         /* The analize data is loading this summary */
@@ -4647,6 +4663,7 @@ void PanelPolarimeter::Load_Summary(QString path) {
     ui->qwtPlot_Pol_Temperature->update();
     ui->qwtPlot_Pol_Humidity->update();
     ui->qwtPlot_Pol_Temperature->updateLayout();
+    ui->qwtPlot_Pol_Humidity->updateLayout();
 
     /* Resize vectors */
     PolPlotter->averaged_Signal_time.resize(0);
@@ -4665,6 +4682,55 @@ void PanelPolarimeter::Load_Summary(QString path) {
         /* Jump to tab */
         ui->Tabs_Plots->setCurrentIndex(0);
     }
+
+    /* Remove some items from the GUI loaded when needed */
+    showUI_Item(false);
+
+    /* Don't show total measurement bar and hide some unnecessary plots */
+    ui->TotalProgressBar_Pol->setVisible(false);
+    ui->label_totalM->setVisible(false);
+    ui->label_remaining->setVisible(false);
+    ui->horizontalSpacer_Y->changeSize(20,12,QSizePolicy::Expanding,QSizePolicy::Fixed);
+    ui->label_RemainingTime->setVisible(false);
+
+    ui->qwtPlot_Pol->setVisible(false);
+    ui->label_raw->setVisible(false);
+    ui->label_hideLiveRaw->setText(">> Show Live Raw Signal");
+    ui->label_hideLiveRaw->setFrameShape(QFrame::Box);
+    ui->label_hideLiveRaw->setStyleSheet("QLabel { color: red; }");
+    ui->line_rawratio->setVisible(false);
+
+    ui->qwtPlot_Pol_Average->setVisible(true);
+    ui->label_average->setVisible(true);
+    ui->label_HIdeLiveAverage->setText(">> Hide Live Average");
+    ui->label_HIdeLiveAverage->setFrameShape(QFrame::NoFrame);
+    ui->label_HIdeLiveAverage->setStyleSheet("QLabel { color: blue; }");
+    ui->line_HLiveRatio->setVisible(true);
+
+    ui->qwtPlot_Pol_Compensation->setVisible(false);
+    ui->label_compensation->setVisible(false);
+    ui->label_HideRatio->setText("<< Show Ratio I(ω)/I(2ω)");
+    ui->label_HideRatio->setFrameShape(QFrame::Box);
+    ui->label_HideRatio->setStyleSheet("QLabel { color: red; }");
+
+    ui->qwtPlot_Pol_w_2w->setVisible(false);
+    ui->label_fftprofile->setVisible(false);
+    ui->label_HideFFTProfile->setText(">> Show FFT Profile");
+    ui->label_HideFFTProfile->setFrameShape(QFrame::Box);
+    ui->label_HideFFTProfile->setStyleSheet("QLabel { color: red; }");
+
+    ui->qwtPlot_Pol_FFT->setVisible(false);
+    ui->waveToPlotFFT->setVisible(false);
+    ui->label_hideFFTIntensityPlot->setText(">> Show FFT Intensities Plot");
+    ui->label_hideFFTIntensityPlot->setFrameShape(QFrame::Box);
+    ui->label_hideFFTIntensityPlot->setStyleSheet("QLabel { color: red; }");
+
+    ui->line_HLiveRatio->setVisible(true);
+    ui->line_HFFTAverage->setVisible(true);
+
+    /* Show current progress bar*/
+    ui->currentProgressBar_Pol->setVisible(false);
+    ui->Button_Save_Graphs_Pol->setVisible(true);
 }
 
 /**
@@ -5198,14 +5264,14 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
         /* Automatic loading of the data from here */
         QString PathAuto = fileInfoSaving.absolutePath() + "/FFT Data/";
 
-        /* Analize data after finishing the measurements */
+        /* Analize data window opens automatically after finishing the measurements */
         DataSelector->automaticAnalize(PathAuto);
     }
 
     /* If we have at least one device selected from the list or available */
     if (m_NrDevices > 0)
     {
-        /* Adjust the wavelengths range for the PLS */
+        /* Adjust the wavelengths range for the PLS according to the range offered by the spectrometer */
         DataSelector->ui->doubleSpinBox_minWavel->setMinimum(ptrSpectrometers[SpectrometerNumber]->getStartWavelength());
         DataSelector->ui->doubleSpinBox_minWavel->setMaximum(ptrSpectrometers[SpectrometerNumber]->getStopWavelength());
         DataSelector->ui->doubleSpinBox_maxWavel->setMinimum(ptrSpectrometers[SpectrometerNumber]->getStartWavelength());
@@ -5214,7 +5280,7 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
         DataSelector->ui->doubleSpinBox_minWavel->setValue(PolarimetrySpectrometer->getMinimumWavelength());
     }else{
 
-        /* Adjust default wavelengths range for the PLS */
+        /* Adjust default wavelengths range for the PLS when there is no spectroemter connected */
         DataSelector->ui->doubleSpinBox_minWavel->setMinimum(277.299);
         DataSelector->ui->doubleSpinBox_minWavel->setMaximum(1100.23);
         DataSelector->ui->doubleSpinBox_maxWavel->setMinimum(277.299);
@@ -5223,14 +5289,13 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
         DataSelector->ui->doubleSpinBox_minWavel->setValue(277.299);
     }
 
-    /* Show the window */
+    /* Show the analize data window */
     DataSelector->exec();
 
-
-    /* If the user canceled the data analysis */
+    /* If the user didn't canceled the data analysis */
     if(!DataSelector->canceled){
 
-        /* Is the user loading data? */
+        /* Is the user loading data?, then clean all because that's new information */
         if(!Runner->automaticData){
 
             /* Restart all */
@@ -5240,25 +5305,25 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
         /* Allow to save plots again */
         ui->Button_Save_Graphs_Pol->setVisible(true);
 
-        /* Get the data from the dialog */
+        /* Get the data counts, wavelengths and concentrations structure from the dialog */
         PolPlotter->series->dataProxy()->resetArray(DataSelector->data3D);
         PolPlotter->series_norm->dataProxy()->resetArray(DataSelector->data3DNormalized);
 
-        /* Add the data series */
+        /* Add the data series for the 3D plots */
         PolPlotter->surface->addSeries(PolPlotter->series);
         PolPlotter->surface_norm->addSeries(PolPlotter->series_norm);
 
-        /* Name axes */
+        /* Name axes of the 3D plot Spectra */
         if(DataSelector->ui->checkBox_applyLogarithm->isChecked()){
             PolPlotter->surface->axisY()->setTitle("Log("+DataSelector->ui->comboBox_DetSignal->currentText()+")");
         }else{
             PolPlotter->surface->axisY()->setTitle(DataSelector->ui->comboBox_DetSignal->currentText());
         }
 
-        /* Add the normalized plot */
+        /* Add the normalized plot axis name */
         PolPlotter->surface_norm->axisY()->setTitle("Normalized " + DataSelector->ui->comboBox_DetSignal->currentText());
 
-        /* Set the axis name */
+        /* Set the axis name for the concentrations */
         QString concentrationAxis = " Concentration (mg/dl)";
 
         /* Change the axis name according to the concentrations */
@@ -5274,7 +5339,7 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
         PolPlotter->surface->axisZ()->setTitle(DataSelector->ui->comboBox_Substance->currentText().remove(0,3) + concentrationAxis);
         PolPlotter->surface_norm->axisZ()->setTitle(DataSelector->ui->comboBox_Substance->currentText().remove(0,3) + concentrationAxis);
 
-        /* Configure the 3D plot */
+        /* Configure the 3D plots, add specific properties to make them look nice */
         PolPlotter->adjust3DPlot();
 
         /* Adjust prediction plot to data */
@@ -5288,6 +5353,7 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
             ui->qwtPlot_Pol_Prediction->setXAxis(minC, maxC);
             ui->qwtPlot_Pol_Prediction->setYAxis(minC, maxC);
 
+            /* Add the name of the substance to the plot axes name */
             ui->qwtPlot_Pol_Prediction->setXAxisTitle("Reference " + DataSelector->ui->comboBox_Substance->currentText().remove(0,3) + " (mg/dL)");
             ui->qwtPlot_Pol_Prediction->setYAxisTitle("Predicted " + DataSelector->ui->comboBox_Substance->currentText().remove(0,3) + " (mg/dL)");
 
@@ -5299,60 +5365,109 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
             ui->qwtPlot_Pol_Prediction->update();
         }
 
-        /* Sort the measurement number data */
-        QVector<double> MrNumberSorted, ConcentrationPredictionDeviationVectorSorted;
-        MrNumberSorted.resize(0);
-        ConcentrationPredictionDeviationVectorSorted.resize(0);
-        MrNumberSorted.append(DataSelector->MrNumber);
-        qSort(MrNumberSorted.begin(), MrNumberSorted.end());
-
-        /* Get the data from the sorted vector, indexes */
-        for(int k =0; k < MrNumberSorted.length(); k++){
-
-            int indexSorted = DataSelector->MrNumber.indexOf(MrNumberSorted.at(k));
-            ConcentrationPredictionDeviationVectorSorted.append(DataSelector->ConcentrationPredictionDeviationVector.at(indexSorted));
-        }
-
         /* Add values to the intensities Vs concentrations plot */
         PolPlotter->AverageDetSignalPlotter->setSamples(DataSelector->ConcentrationsPlot, DataSelector->AverageDetSignal);
-        PolPlotter->DeviationVsMeasNumberPlot->setSamples(MrNumberSorted, ConcentrationPredictionDeviationVectorSorted);
 
         /* Add the plot intensites vs concentration to the UI */
         PolPlotter->AverageDetSignalPlotter->attach(ui->qwtPlot_Pol_IntensitiesVsConcentrations);
 
-        /* Add measurement number vs deviation plot */
-        PolPlotter->DeviationVsMeasNumberPlot->attach(ui->qwtPlot_Pol_DeviationVsMeasurementNumber);
-
-        /* Adjust the plots axes */
+        /* Adjust the plot of concentration vs intensities axes */
         double maximumConcentration = *std::max_element(DataSelector->ConcentrationsPlot.begin(), DataSelector->ConcentrationsPlot.end());
         double maximumIntensity = *std::max_element(DataSelector->AverageDetSignal.begin(), DataSelector->AverageDetSignal.end());
 
-        /* Set axes limits */
-        ui->qwtPlot_Pol_IntensitiesVsConcentrations->setXAxis(*std::min_element(DataSelector->ConcentrationsPlot.begin(), DataSelector->ConcentrationsPlot.end()),
-                                                              maximumConcentration + maximumConcentration*0.05);
+        /* Set the axes limits */
+        ui->qwtPlot_Pol_IntensitiesVsConcentrations->setXAxis((*std::min_element(DataSelector->ConcentrationsPlot.begin(), DataSelector->ConcentrationsPlot.end()))*0.95,
+                                                              maximumConcentration*1.05);
 
-        ui->qwtPlot_Pol_IntensitiesVsConcentrations->setYAxis(*std::min_element(DataSelector->AverageDetSignal.begin(), DataSelector->AverageDetSignal.end()),
-                                                              maximumIntensity + maximumIntensity*0.05);
-
-        ui->qwtPlot_Pol_IntensitiesVsConcentrations->setXAxisTitle("Concentration " + DataSelector->ui->comboBox_Substance->currentText().remove(0,3) + " (mg/dL)");
-
-        /* Adjust the plots axes */
-        double maximumMeasNumber = *std::max_element(DataSelector->MrNumber.begin(), DataSelector->MrNumber.end());
-        double maximumDeviation = *std::max_element(DataSelector->ConcentrationPredictionDeviationVector.begin(), DataSelector->ConcentrationPredictionDeviationVector.end());
-        double minimumDeviation = *std::min_element(DataSelector->ConcentrationPredictionDeviationVector.begin(), DataSelector->ConcentrationPredictionDeviationVector.end());
-
-        ui->qwtPlot_Pol_DeviationVsMeasurementNumber->setXAxis(*std::min_element(DataSelector->MrNumber.begin(), DataSelector->MrNumber.end())-1,
-                                                               maximumMeasNumber + 1);
-
-        ui->qwtPlot_Pol_DeviationVsMeasurementNumber->setYAxis( minimumDeviation, maximumDeviation);
-
-        ui->qwtPlot_Pol_DeviationVsMeasurementNumber->setYAxisTitle("Prediction Deviation of " + DataSelector->ui->comboBox_Substance->currentText().remove(0,3) + " (mg/dL)");
+        ui->qwtPlot_Pol_IntensitiesVsConcentrations->setYAxis((*std::min_element(DataSelector->AverageDetSignal.begin(), DataSelector->AverageDetSignal.end())*0.95),
+                                                              maximumIntensity*1.02);
 
         /* Adjust axis title according to the determination signal */
         ui->qwtPlot_Pol_IntensitiesVsConcentrations->setYAxisTitle("Average " + DataSelector->ui->comboBox_DetSignal->currentText() + " Intensity (Counts)");
         ui->qwtPlot_Pol_IntensitiesVsConcentrations->setXAxisTitle(DataSelector->ui->comboBox_Substance->currentText().remove(0,3) + " Concentration (mg/dL)");
 
-        /* If the user loads the analize data, then load the summary */
+        /* Add the values to the prediction deviation vs absolute concentration plot */
+        PolPlotter->DeviationVsConcentration->setSamples(DataSelector->ValConcentrations, DataSelector->ConcentrationPredictionDeviationVector);
+
+        /* Add measurement number vs deviation plot to the UI */
+        PolPlotter->DeviationVsConcentration->attach(ui->qwtPlot_Pol_DeviationVsAbsoluteConcentration);
+
+        /* Recalculate the maximum concentration for the plot */
+        maximumConcentration = *std::max_element(DataSelector->ValConcentrations.begin(), DataSelector->ValConcentrations.end());
+
+        /* Set the axes limits */
+        ui->qwtPlot_Pol_DeviationVsAbsoluteConcentration->setXAxis(*std::min_element(DataSelector->ValConcentrations.begin(), DataSelector->ValConcentrations.end()),
+                                                                   maximumConcentration*1.05);
+
+        /* Change axes titles */
+        ui->qwtPlot_Pol_DeviationVsAbsoluteConcentration->setXAxisTitle(DataSelector->ui->comboBox_Substance->currentText().remove(0,3) + " Concentration (mg/dL)");
+
+        /* Sort the measurement number vector, it comes organized by concentration */
+        QVector<double> MrNumberSorted, ConcentrationPredictionDeviationVectorSorted;
+
+        /* Resize temporal vectors with the sorted x and y of the plots */
+        MrNumberSorted.resize(0);
+        ConcentrationPredictionDeviationVectorSorted.resize(0);
+
+        /* Sort the measurement number vector */
+        MrNumberSorted.append(DataSelector->MrNumber);
+        qSort(MrNumberSorted.begin(), MrNumberSorted.end());
+
+        /* Get the data from the sorted vector, with the indexes of x then sort y. */
+        for(int k =0; k < MrNumberSorted.length(); k++){
+
+            /* Get the index position of a certain X value, and look for its corresponding Y value. */
+            int indexSorted = DataSelector->MrNumber.indexOf(MrNumberSorted.at(k));
+            ConcentrationPredictionDeviationVectorSorted.append(DataSelector->ConcentrationPredictionDeviationVector.at(indexSorted));
+        }
+
+        /* Add the values to the prediction deviation Vs Measurement number plot */
+        PolPlotter->DeviationVsMeasNumberPlot->setSamples(MrNumberSorted, ConcentrationPredictionDeviationVectorSorted);
+
+        /* Add measurement number vs deviation plot to the UI */
+        PolPlotter->DeviationVsMeasNumberPlot->attach(ui->qwtPlot_Pol_DeviationVsMeasurementNumber);
+
+        /* Adjust the measurement number vs prediction deviation plots axes */
+        double maximumMeasNumber = *std::max_element(DataSelector->MrNumber.begin(), DataSelector->MrNumber.end());
+        double maximumDeviation = *std::max_element(DataSelector->ConcentrationPredictionDeviationVector.begin(), DataSelector->ConcentrationPredictionDeviationVector.end());
+        double minimumDeviation = *std::min_element(DataSelector->ConcentrationPredictionDeviationVector.begin(), DataSelector->ConcentrationPredictionDeviationVector.end());
+
+        /* Add the axes limits */
+        ui->qwtPlot_Pol_DeviationVsMeasurementNumber->setXAxis(*std::min_element(DataSelector->MrNumber.begin(), DataSelector->MrNumber.end())-1,
+                                                               maximumMeasNumber + 1);
+
+        ui->qwtPlot_Pol_DeviationVsMeasurementNumber->setYAxis( minimumDeviation*1.5, maximumDeviation*1.5);
+
+        /* Also adjust Y title of the plot concentration vs deviation */
+        ui->qwtPlot_Pol_DeviationVsAbsoluteConcentration->setYAxis( minimumDeviation*1.5, maximumDeviation*1.5);
+
+        /* Adjust axes titles according to the predicted substance */
+        ui->qwtPlot_Pol_DeviationVsMeasurementNumber->setYAxisTitle("Prediction Deviation of " + DataSelector->ui->comboBox_Substance->currentText().remove(0,3) + " (mg/dL)");
+        ui->qwtPlot_Pol_DeviationVsAbsoluteConcentration->setYAxisTitle("Prediction Deviation of " + DataSelector->ui->comboBox_Substance->currentText().remove(0,3) + " (mg/dL)");
+
+        /* Add data to the prediction deviation Vs Deviation from mean counts */
+        PolPlotter->DeviationVsCountsMeanDeviation->setSamples(DataSelector->CountsMeanDifferences, DataSelector->ConcentrationPredictionDeviationVector);
+
+        /* Attach the plot prediction deviation Vs Deviation from mean counts */
+        PolPlotter->DeviationVsCountsMeanDeviation->attach(ui->qwtPlot_Pol_DeviationVsCountsDeviation);
+
+        /* Set Y title of the plot prediction deviation Vs Deviation from mean counts */
+        ui->qwtPlot_Pol_DeviationVsCountsDeviation->setYAxisTitle("Prediction Deviation of " + DataSelector->ui->comboBox_Substance->currentText().remove(0,3) + " (mg/dL)");
+
+        /* Change X axis title */
+        ui->qwtPlot_Pol_DeviationVsCountsDeviation->setXAxisTitle(DataSelector->ui->comboBox_DetSignal->currentText() + " Counts Mean Deviation from All Counts Mean (Counts)");
+
+        /* Also adjust Y title of the plot prediction deviation Vs Deviation from mean counts */
+        ui->qwtPlot_Pol_DeviationVsCountsDeviation->setYAxis( minimumDeviation*1.5, maximumDeviation*1.5);
+
+        /* Calculate the maximum and minimum deviations in X for the plot prediction deviation Vs Deviation from mean counts */
+        double maximumXDeviation = *std::max_element(DataSelector->CountsMeanDifferences.begin(), DataSelector->CountsMeanDifferences.end());
+        double minimumXDeviation = *std::min_element(DataSelector->CountsMeanDifferences.begin(), DataSelector->CountsMeanDifferences.end());
+
+        /* Also adjust X title of the plot prediction deviation Vs Deviation from mean counts */
+        ui->qwtPlot_Pol_DeviationVsCountsDeviation->setXAxis( minimumXDeviation*1.2, maximumXDeviation*1.2);
+
+        /* If the user loads the analize data, then load the summary too */
         if(!Runner->automaticData && !DataSelector->pathDataM.isEmpty()){
 
             /* Load the measuremnt summary too, if it is available */
@@ -5362,14 +5477,18 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
             Load_Summary(DataSelector->pathDataM);
         }
 
-        /* Jump to tab */
+        /* Jump to the measurement results tab */
         ui->Tabs_Plots->setCurrentIndex(2);
 
         /* Update plots */
         ui->qwtPlot_Pol_IntensitiesVsConcentrations->update();
         ui->qwtPlot_Pol_DeviationVsMeasurementNumber->update();
+        ui->qwtPlot_Pol_DeviationVsAbsoluteConcentration->update();
+        ui->qwtPlot_Pol_DeviationVsCountsDeviation->update();
         ui->qwtPlot_Pol_IntensitiesVsConcentrations->updateLayout();
         ui->qwtPlot_Pol_DeviationVsMeasurementNumber->updateLayout();
+        ui->qwtPlot_Pol_DeviationVsAbsoluteConcentration->updateLayout();
+        ui->qwtPlot_Pol_DeviationVsCountsDeviation->updateLayout();
     }
 
     /* Not loading window automatically anymore */
@@ -5413,16 +5532,21 @@ void PanelPolarimeter::clean_All_Pol(void){
 
         /* Initialize some other plots */
         QVector<double> initial;
-        initial.append(0);
+        initial.resize(0);
 
         /* Clean this plot too */
         PolPlotter->AverageDetSignalPlotter->setSamples(initial, initial);
         PolPlotter->DeviationVsMeasNumberPlot->setSamples(initial, initial);
+        PolPlotter->DeviationVsConcentration->setSamples(initial, initial);
+        PolPlotter->DeviationVsCountsMeanDeviation->setSamples(initial, initial);
         ui->qwtPlot_Pol_IntensitiesVsConcentrations->update();
+        ui->qwtPlot_Pol_DeviationVsCountsDeviation->update();
         ui->qwtPlot_Pol_DeviationVsMeasurementNumber->update();
+        ui->qwtPlot_Pol_DeviationVsAbsoluteConcentration->update();
+        ui->qwtPlot_Pol_DeviationVsCountsDeviation->updateLayout();
         ui->qwtPlot_Pol_IntensitiesVsConcentrations->updateLayout();
         ui->qwtPlot_Pol_DeviationVsMeasurementNumber->updateLayout();
-
+        ui->qwtPlot_Pol_DeviationVsAbsoluteConcentration->updateLayout();
     }
 
     ui->label_Temperature->setText("- °C");
@@ -5509,9 +5633,15 @@ void PanelPolarimeter::clean_All_Pol(void){
     ui->qwtPlot_Pol_Temperature->update();
     ui->qwtPlot_Pol_Humidity->update();
     ui->qwtPlot_Pol_IntensitiesVsConcentrations->update();
+    ui->qwtPlot_Pol_DeviationVsCountsDeviation->update();
     ui->qwtPlot_Pol_DeviationVsMeasurementNumber->update();
+    ui->qwtPlot_Pol_DeviationVsAbsoluteConcentration->update();
     ui->qwtPlot_Pol_IntensitiesVsConcentrations->updateLayout();
+    ui->qwtPlot_Pol_DeviationVsCountsDeviation->updateLayout();
     ui->qwtPlot_Pol_DeviationVsMeasurementNumber->updateLayout();
+    ui->qwtPlot_Pol_DeviationVsAbsoluteConcentration->updateLayout();
+    ui->qwtPlot_Pol_Temperature->updateLayout();
+    ui->qwtPlot_Pol_Humidity->updateLayout();
     ui->qwtPlot_Pol->update();
 
     /* Time busy with FFT */
@@ -5566,9 +5696,13 @@ void PanelPolarimeter::clean_All_Pol(void){
     ui->qwtPlot_Pol_IntensitiesVsConcentrations->setXAxisTitle("Concentration (mg/dL)");
     ui->qwtPlot_Pol_IntensitiesVsConcentrations->setYAxisTitle("Average FFT Intensity (Counts)");
     ui->qwtPlot_Pol_DeviationVsMeasurementNumber->setYAxisTitle("Prediction Deviation (mg/dL)");
+    ui->qwtPlot_Pol_DeviationVsAbsoluteConcentration->setXAxisTitle("Concentration (mg/dL)");
+    ui->qwtPlot_Pol_DeviationVsAbsoluteConcentration->setYAxisTitle("Prediction Deviation (mg/dL)");
+    ui->qwtPlot_Pol_DeviationVsCountsDeviation->setYAxisTitle("Prediction Deviation (mg/dL)");
+    ui->qwtPlot_Pol_DeviationVsCountsDeviation->setXAxisTitle("Counts Mean Deviation from All Counts Mean (Counts)");
 
-    /* Jump to tab */
-    ui->Tabs_Plots->setCurrentIndex(0);
+            /* Jump to tab */
+            ui->Tabs_Plots->setCurrentIndex(0);
 
     /* Update information bar */
     ui->info->setText("");

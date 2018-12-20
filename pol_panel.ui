@@ -1981,7 +1981,7 @@
             <enum>QTabWidget::Rounded</enum>
            </property>
            <property name="currentIndex">
-            <number>3</number>
+            <number>1</number>
            </property>
            <property name="iconSize">
             <size>
@@ -4865,7 +4865,7 @@
                     </font>
                    </property>
                    <property name="text">
-                    <string>Prediction Deviation Vs Counts Deviation from Mean</string>
+                    <string>Prediction Deviation Vs Mean Deviation of Counts Mean</string>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignCenter</set>

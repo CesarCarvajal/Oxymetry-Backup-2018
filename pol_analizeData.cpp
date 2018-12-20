@@ -119,7 +119,7 @@ selectAnalizeData::selectAnalizeData(QWidget *parent) :
     connect(signalMapperC, SIGNAL(mapped(QWidget *)), this, SLOT(handleClickEvent(QWidget *)));
 
     /* Set window flags */
-    this->setWindowFlags(Qt::Window | Qt::WindowMaximizeButtonHint | Qt::WindowCloseButtonHint);
+    this->setWindowFlags(Qt::Window | Qt::WindowMaximizeButtonHint);
 
     /* Set restart label color */
     ui->label_restart->setStyleSheet("QLabel { color: blue; }");
@@ -475,6 +475,7 @@ void selectAnalizeData::readFiles(void)
     AverageDetSignal.resize(0);
     ConcentrationPredictionDeviationVector.resize(0);
     MrNumber.resize(0);
+    CountsMeanDifferences.resize(0);
 
     /* Get the average of the actual determination signal */
     double AverageDetSignalT;
@@ -1193,7 +1194,78 @@ void selectAnalizeData::analizeData(void){
 
             /* Calculate the deviation of the prediction with the validation concentrations */
             ConcentrationPredictionDeviationVector.append(ValConcentrations.at(h) - PredictionSEP);  // Simulate the predicted values with an SEP of 1 mg/dl
+        }
 
+        /* Calculate the Counts deviation from the counts mean */
+        double allSpektra = 0;
+        QVector<double> allSpectraVectorMean;
+        allSpectraVectorMean.resize(0);
+
+        /* Get the all spectrum average */
+        for(int k = 0; k < wavelengths.length(); k++){
+            for(int i=0; i < allFiles.length(); i++){
+
+                /* Sum up all the counts pero wavelength per concentration */
+                allSpektra = allSpektra + data3D->at(i)->at(k).y();
+            }
+
+            /* Get the mean of all the spectrum */
+            allSpectraVectorMean.append(allSpektra/allFiles.length());
+
+            /* Restart the sum variable */
+            allSpektra=0;
+        }
+
+        /* Calculate the counts deviation mean */
+        double CountsDeviationFromMean=0;
+
+        /* Select the concentration in the validation list only */
+        bool addConcentrationCounts = false;
+
+        /* Save the index in the general data */
+        int indexConcentration = -1;
+
+        /* Get the counts per wavelength per concentration to perform the difference */
+        for(int j=0; j < ValConcentrations.length(); j++){
+
+            /* Because QT can not handle comparisson between double, then this long process should be done to check if the current concentration belongs to the validation */
+            for(int in = 0; in < allFiles.length(); in++){
+
+                /* Get the actual concentration in the large data list */
+                double concentration = data3D->at(in)->at(0).z()/factorConcentration;
+
+                /* Is the actual concentration in the validation concentrations vector? */
+                double compare = (ValConcentrations.at(j) - concentration) < 0 ? (ValConcentrations.at(j) - concentration)*(-1):(ValConcentrations.at(j) - concentration);
+                if(compare < 0.0001){
+
+                    addConcentrationCounts = true;
+                    indexConcentration = in;
+                    break;
+                }
+            }
+
+            /* This concentration in the validation is needed then */
+            if(addConcentrationCounts){
+
+                /* For each concentration get the count deviation from mean counts */
+                CountsDeviationFromMean=0;
+
+                /* Run along the wavelengths */
+                for(int k = 0; k < wavelengths.length(); k++){
+
+                    /* Sum up all the counts pero wavelength per concentration */
+                    CountsDeviationFromMean = CountsDeviationFromMean + (allSpectraVectorMean.at(k)-data3D->at(indexConcentration)->at(k).y());
+                }
+
+                /* Get the mean counts deviation from the average counts value */
+                CountsMeanDifferences.append(CountsDeviationFromMean/wavelengths.length());
+
+                /* Restart the index */
+                indexConcentration = -1;
+            }
+
+            /* Don't add any concentration to the list, just those in the validation */
+            addConcentrationCounts = false;
         }
 
         /* Close the dialog */

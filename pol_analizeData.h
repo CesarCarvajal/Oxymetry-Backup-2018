@@ -76,7 +76,10 @@ public:
 
     /* Deviation vs measurement number plot information */
     QVector<double> ConcentrationPredictionDeviationVector;
-    QVector<double> MrNumber;
+    QVector<double> MrNumber, CountsMeanDifferences;
+
+    /* Validation concentrations */
+    QVector<double> ValConcentrations;
 
 private:
 
@@ -104,9 +107,6 @@ private:
     /* Calibration concentrations */
     QVector<double> CalConcentrations;
 
-    /* Validation concentrations */
-    QVector<double> ValConcentrations;
-
     /* How many repetitions are there?  */
     int repetitions;
 
@@ -119,9 +119,6 @@ public:
     ~selectAnalizeData(void);
 
 private slots:
-
-    /* The user decide to cancel the data analysis */
-    void cancel(void);
 
     /* Handle click events */
     void handleClickEvent(QWidget *widget);
@@ -181,6 +178,9 @@ public slots:
 
     /* Adjust the automatic loading of data */
     void automaticAnalize(QString PathAuto);
+
+    /* The user decide to cancel the data analysis */
+    void cancel(void);
 
 };
 

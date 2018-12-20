@@ -22,6 +22,7 @@
 #include "pol_plot.h"
 #include <QtDataVisualization>
 #include <QApplication>
+#include <qwt_symbol.h>
 
 #include "application.h"
 
@@ -40,13 +41,13 @@ using namespace QtDataVisualization;
  */
 Pol_Plot::Pol_Plot()
 {
-    /* Plot Average, range of time plotting */
+    /* Plot Average, range of time plotting for live, refresh after (+ 450 points) */
     time_plot=450;
 
-    /* Running time of Averages */
+    /* Running time of Averages, timer in seconds */
     counts_average_time = 0;
 
-    /* 3D Surface */
+    /* 3D Surfaces and their data series */
     surface = new Q3DSurface();
     series = new QSurface3DSeries();
     surface_norm = new Q3DSurface();
@@ -100,15 +101,34 @@ Pol_Plot::Pol_Plot()
     predictionSignal->setPen(QPen("black"));
     predictionSignal->setItemAttribute(QwtPlotItem::Legend, false);
 
+    /* Paint a symbol in the plot */
+    QwtSymbol *symbolHexag = new QwtSymbol(QwtSymbol::Hexagon,QBrush("red", Qt::SolidPattern), QPen("red"),QSize(7,7));
+    QwtSymbol *symbolCircle = new QwtSymbol(QwtSymbol::Ellipse,QBrush("magenta", Qt::SolidPattern), QPen("magenta"),QSize(7,7));
+    QwtSymbol *symbolRect = new QwtSymbol(QwtSymbol::Rect,QBrush("blue", Qt::SolidPattern), QPen("blue"),QSize(7,7));
+    QwtSymbol *symbolTrian = new QwtSymbol(QwtSymbol::DTriangle,QBrush("green", Qt::SolidPattern), QPen("green"),QSize(8,8));
+
     /* Create statistics plots */
     AverageDetSignalPlotter= new QwtPlotCurve("");
     AverageDetSignalPlotter->setPen(QPen("red"));
+    AverageDetSignalPlotter->setSymbol(symbolHexag);
     AverageDetSignalPlotter->setItemAttribute(QwtPlotItem::Legend, false);
 
     /* Create statistics plots */
     DeviationVsMeasNumberPlot= new QwtPlotCurve("");
-    DeviationVsMeasNumberPlot->setPen(QPen("blue"));
+    DeviationVsMeasNumberPlot->setStyle(QwtPlotCurve::Dots);
+    DeviationVsMeasNumberPlot->setSymbol(symbolRect);
     DeviationVsMeasNumberPlot->setItemAttribute(QwtPlotItem::Legend, false);
+
+    /* Create statistics plots */
+    DeviationVsConcentration= new QwtPlotCurve("");
+    DeviationVsConcentration->setStyle(QwtPlotCurve::Dots);
+    DeviationVsConcentration->setSymbol(symbolCircle);
+    DeviationVsConcentration->setItemAttribute(QwtPlotItem::Legend, false);
+
+    DeviationVsCountsMeanDeviation = new QwtPlotCurve("");
+    DeviationVsCountsMeanDeviation->setSymbol(symbolTrian);
+    DeviationVsCountsMeanDeviation->setStyle(QwtPlotCurve::Dots);
+    DeviationVsCountsMeanDeviation->setItemAttribute(QwtPlotItem::Legend, false);
 
     /* Inital Temperature STD */
     TempStandardDev = 0;
@@ -352,6 +372,8 @@ void Pol_Plot::clean_AllPlots(void){
         Humidity_Plot->detach();
         AverageDetSignalPlotter->detach();
         DeviationVsMeasNumberPlot->detach();
+        DeviationVsConcentration->detach();
+        DeviationVsCountsMeanDeviation->detach();
     }
 
     /* Set all vectors to zero */
@@ -484,6 +506,12 @@ Pol_Plot::~Pol_Plot(void)
 
     delete DeviationVsMeasNumberPlot;
     DeviationVsMeasNumberPlot = nullptr;
+
+    delete DeviationVsConcentration;
+    DeviationVsConcentration = nullptr;
+
+    delete DeviationVsCountsMeanDeviation;
+    DeviationVsCountsMeanDeviation = nullptr;
 
     delete series;
     series = nullptr;
