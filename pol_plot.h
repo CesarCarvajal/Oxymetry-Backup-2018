@@ -41,6 +41,7 @@ public:
     explicit Pol_Plot();
 
     /* Polarimetry curves */
+    QwtPlotCurve * curve_Pol;
     QwtPlotCurve *FFT_oneWave, *predictionSignal;
     QwtPlotCurve *FFT_DC, *FFT_W, *FFT_2W;
     QwtPlotCurve *Compensation_Signal, *Average_Ratio_Signal;

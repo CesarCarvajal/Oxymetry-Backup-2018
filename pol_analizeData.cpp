@@ -1189,7 +1189,7 @@ void selectAnalizeData::analizeData(void){
 
             //*********** Here the expression '(ValConcentrations.at(h) - 1)' will be replaced by the actual predicted values vector from the PLS *//
 
-            /* This value will be the measured SEP */
+            /* This value will be the measured SEP - simulated */
             double PredictionSEP = ValConcentrations.at(h) + ((((qrand() % 10)*(pow((-1),(qrand() % 2)))))*(0.001*(*std::max_element(ValConcentrations.begin(), ValConcentrations.end()))));
 
             /* Calculate the deviation of the prediction with the validation concentrations */
@@ -1253,7 +1253,7 @@ void selectAnalizeData::analizeData(void){
                 /* Run along the wavelengths */
                 for(int k = 0; k < wavelengths.length(); k++){
 
-                    /* Sum up all the counts pero wavelength per concentration */
+                    /* Sum up all the counts per wavelength per concentration */
                     CountsDeviationFromMean = CountsDeviationFromMean + (allSpectraVectorMean.at(k)-data3D->at(indexConcentration)->at(k).y());
                 }
 

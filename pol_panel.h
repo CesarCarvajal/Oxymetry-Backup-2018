@@ -103,7 +103,6 @@ private:
 
     /* Spectrometer Settings and Plots Objects */
     PanelItem_Pol * PolarimetrySpectrometer;
-    QwtPlotCurve * curve_Pol;
 
     /* Teensy Temperature Object */
     ConnectTemperature *teensyTemperature;

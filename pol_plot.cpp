@@ -27,6 +27,7 @@
 #include "application.h"
 
 using namespace QtDataVisualization;
+extern unsigned int m_NrDevices;
 
 /**
  * @brief Constructor of 'Pol_Plot' class
@@ -68,6 +69,10 @@ Pol_Plot::Pol_Plot()
     Average_2W_Signal->setPen(QPen(QColor( 230,92,0 )));
     Average_Ratio_Signal = new QwtPlotCurve("I(ω)/I(2ω)");
     Average_Ratio_Signal->setPen(QPen(QColor( 0,0,0 )));
+
+    /* Raw signal plot */
+    curve_Pol = new QwtPlotCurve("");
+    curve_Pol->setItemAttribute(QwtPlotItem::Legend, false);
 
     /* Temperature plot curve  */
     Temperature_Plot = new QwtPlotCurve("");
@@ -358,6 +363,7 @@ void Pol_Plot::clean_AllPlots(void){
     if(Average_DC_Signal!=nullptr)
     {
         /* Detach live curves */
+        curve_Pol->detach();
         Average_DC_Signal->detach();
         Average_W_Signal->detach();
         Average_2W_Signal->detach();
@@ -524,5 +530,16 @@ Pol_Plot::~Pol_Plot(void)
 
     delete surface_norm;
     surface_norm = nullptr;
+
+    /* Check handle */
+    if (nullptr != curve_Pol)
+    {
+        /* Detach curve */
+        curve_Pol->detach();
+
+        /* Free memory */
+        delete curve_Pol;
+        curve_Pol = nullptr;
+    }
 
 }
