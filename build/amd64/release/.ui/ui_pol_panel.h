@@ -2332,7 +2332,7 @@ public:
         retranslateUi(PanelPolarimeter);
 
         list_devices_Pol->setCurrentRow(-1);
-        Tabs_Plots->setCurrentIndex(1);
+        Tabs_Plots->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(PanelPolarimeter);

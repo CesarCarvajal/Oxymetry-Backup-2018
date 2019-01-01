@@ -1,6 +1,6 @@
 /*
  * Hemoxymetrie in non-hemolyzed human whole blood
- * Copyright (C) 2016-2017 Benjamin Redmer
+ * Copyright (C) 2016-2017 Benjamin Redmer, Cesar Andres Carvajal Arieta, ... ?
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -151,6 +151,7 @@ extern QString defaultColors[];
  *                  - Analize Data:
  *                                              * This function is preparation for the final phase of the software with the PLS implementation.
  *                                              * Prepares the UI and shows the dialog for the user data analisys.
+ *                                              **** GO TO THE ANALIZE DATA FUNCTION ***
  *
  *                  - Internal Settings:
  *                                              * Cleaning the complete user interface from older settings.
@@ -5281,7 +5282,7 @@ void PanelPolarimeter::update()
 
 
 
-/*  Analize Data */
+/*  Analize Data - HERE CONTINUE -> */
 
 
 /**
@@ -5289,23 +5290,23 @@ void PanelPolarimeter::update()
  */
 void PanelPolarimeter::select_Analize_Pol_Measurement() {
 
-    /* Create the analize data window */
+    /* Create the Analize Data dialog -> Class pol_analizeData.cpp */
     selectAnalizeData *DataSelector = new selectAnalizeData();
 
-    /* After the measurement, open the analize data window automatically */
+    /* After the a measurement is completed, then open the analize data dialog automatically */
     if(Runner->automaticData && !fileInfoSaving.absolutePath().isEmpty()){
 
-        /* Automatic loading of the data from here */
+        /* Yes. Get the path where all the FFT files are located, automatically from the just finished measurement */
         QString PathAuto = fileInfoSaving.absolutePath() + "/FFT Data/";
 
-        /* Analize data window opens automatically after finishing the measurements */
+        /* Analize data window opens automatically after finishing the long term measurements (If doubts ask Christian what a long term measrement means.) */
         DataSelector->automaticAnalize(PathAuto);
-    }
+    } /* No. The user will select the path of the folder with the FFT files by its own. */
 
-    /* If we have at least one device selected from the list or available */
+    /* Is there a spectrometer connected? */
     if (m_NrDevices > 0)
     {
-        /* Adjust the wavelengths range for the PLS according to the range offered by the spectrometer */
+        /* Yes. Adjust the dialog of analize data according to the corresponding spectrometer. */
         DataSelector->ui->doubleSpinBox_minWavel->setMinimum(ptrSpectrometers[SpectrometerNumber]->getStartWavelength());
         DataSelector->ui->doubleSpinBox_minWavel->setMaximum(ptrSpectrometers[SpectrometerNumber]->getStopWavelength());
         DataSelector->ui->doubleSpinBox_maxWavel->setMinimum(ptrSpectrometers[SpectrometerNumber]->getStartWavelength());
@@ -5314,7 +5315,7 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
         DataSelector->ui->doubleSpinBox_minWavel->setValue(PolarimetrySpectrometer->getMinimumWavelength());
     }else{
 
-        /* Adjust default wavelengths range for the PLS when there is no spectroemter connected */
+        /* No. Set some values per default so the analize data dialog can also perform without any spectrometer connected. */
         DataSelector->ui->doubleSpinBox_minWavel->setMinimum(277.299);
         DataSelector->ui->doubleSpinBox_minWavel->setMaximum(1100.23);
         DataSelector->ui->doubleSpinBox_maxWavel->setMinimum(277.299);
@@ -5323,44 +5324,44 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
         DataSelector->ui->doubleSpinBox_minWavel->setValue(277.299);
     }
 
-    /* Show the analize data window */
+    /* Show the analize data dialog */
     DataSelector->exec();
 
-    /* If the user didn't canceled the data analysis */
+    /* If the user didn't canceled the data analysis dialog */
     if(!DataSelector->canceled){
 
         /* Is the user loading data?, then clean all because that's new information */
         if(!Runner->automaticData){
 
-            /* Restart all */
+            /* Restart all the UI */
             clean_All_Pol();
-        }
+        } /* No. Means there was some information in the UI from a just finished measurement that we want to keep. */
 
-        /* Allow to save plots again */
+        /* Allow the save plots  button again -> Only shown when there are plots plotted. Otherwise doesn't make sense. */
         ui->Button_Save_Graphs_Pol->setVisible(true);
 
-        /* Get the data counts, wavelengths and concentrations structure from the dialog */
+        /* data3D is a special structure that allows to save massive information -> Needed for the 3D plots */
         PolPlotter->series->dataProxy()->resetArray(DataSelector->data3D);
         PolPlotter->series_norm->dataProxy()->resetArray(DataSelector->data3DNormalized);
 
-        /* Add the data series for the 3D plots */
+        /* Add the data series containing the massive information for the 3D plots */
         PolPlotter->surface->addSeries(PolPlotter->series);
         PolPlotter->surface_norm->addSeries(PolPlotter->series_norm);
 
-        /* Name axes of the 3D plot Spectra */
+        /* Name axes of the 3D plot Spectra, depending if the logarithm was activated or not in the dialog of analize data. */
         if(DataSelector->ui->checkBox_applyLogarithm->isChecked()){
             PolPlotter->surface->axisY()->setTitle("Log("+DataSelector->ui->comboBox_DetSignal->currentText()+")");
         }else{
             PolPlotter->surface->axisY()->setTitle(DataSelector->ui->comboBox_DetSignal->currentText());
         }
 
-        /* Add the normalized plot axis name */
+        /* Add the normalized plot axis name, includes the substance name into the axes, it depends of which substance are you evaluating, glucose? albumin? ink?.. */
         PolPlotter->surface_norm->axisY()->setTitle("Normalized " + DataSelector->ui->comboBox_DetSignal->currentText());
 
-        /* Set the axis name for the concentrations */
+        /* Set the axis name for the concentrations, this was a trick to plot nice the 3D plots */
         QString concentrationAxis = " Concentration (mg/dl)";
 
-        /* Change the axis name according to the concentrations */
+        /* Change the axis name according to the concentrations, change the scale of the numbers according to a plotting factor. */
         if(DataSelector->factorConcentration == 1000){
             concentrationAxis = " Concentration x10^-3 (mg/dl)";
         }else if(DataSelector->factorConcentration == 100){
@@ -5369,32 +5370,32 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
             concentrationAxis = " Concentration x10^-1 (mg/dl)";
         }
 
-        /* Change also the Z axis name */
+        /* Add the substance name to the axis of the concentrations */
         PolPlotter->surface->axisZ()->setTitle(DataSelector->ui->comboBox_Substance->currentText().remove(0,3) + concentrationAxis);
         PolPlotter->surface_norm->axisZ()->setTitle(DataSelector->ui->comboBox_Substance->currentText().remove(0,3) + concentrationAxis);
 
         /* Configure the 3D plots, add specific properties to make them look nice */
         PolPlotter->adjust3DPlot();
 
-        /* Adjust prediction plot to data */
+        /* Adjust prediction plot of the data, the plot result of the PLS, so ui->qwtPlot_Pol_Prediction should plot the predicted concentration vs the reference concentration. */
         if(!DataSelector->data3D->isEmpty()){
 
-            /* Get minimum and maximum concentrations */
+            /* Get minimum and maximum concentrations that were measured, get that information from the massive data variable data3D */
             double minC = DataSelector->data3D->constFirst()->constFirst().z();
             double maxC = DataSelector->data3D->constLast()->constFirst().z();
 
-            /* Adjust prediction plot axes */
+            /* Adjust prediction plot axes acording to the maximum and minimum concentrations */
             ui->qwtPlot_Pol_Prediction->setXAxis(minC, maxC);
             ui->qwtPlot_Pol_Prediction->setYAxis(minC, maxC);
 
-            /* Add the name of the substance to the plot axes name */
+            /* Add the name of the substance to the prediction plot axes name */
             ui->qwtPlot_Pol_Prediction->setXAxisTitle("Reference " + DataSelector->ui->comboBox_Substance->currentText().remove(0,3) + " (mg/dL)");
             ui->qwtPlot_Pol_Prediction->setYAxisTitle("Predicted " + DataSelector->ui->comboBox_Substance->currentText().remove(0,3) + " (mg/dL)");
 
-            /* Draw prediction line */
+            /* Draw prediction line, just the reference, if the prediction works perfectly, all the points should be in this line. */
             PolPlotter->plotPredictionLine(minC, maxC);
 
-            /* Add expected concentration prediction */
+            /* Add the expected concentration prediction plot and update it */
             PolPlotter->predictionSignal->attach(ui->qwtPlot_Pol_Prediction);
             ui->qwtPlot_Pol_Prediction->update();
         }
@@ -5409,7 +5410,7 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
         double maximumConcentration = *std::max_element(DataSelector->ConcentrationsPlot.begin(), DataSelector->ConcentrationsPlot.end());
         double maximumIntensity = *std::max_element(DataSelector->AverageDetSignal.begin(), DataSelector->AverageDetSignal.end());
 
-        /* Set the axes limits */
+        /* Set the axes limits for the plot intensities vs concentrations */
         ui->qwtPlot_Pol_IntensitiesVsConcentrations->setXAxis((*std::min_element(DataSelector->ConcentrationsPlot.begin(), DataSelector->ConcentrationsPlot.end()))*0.95,
                                                               maximumConcentration*1.05);
 
@@ -5426,7 +5427,7 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
         /* Add measurement number vs deviation plot to the UI */
         PolPlotter->DeviationVsConcentration->attach(ui->qwtPlot_Pol_DeviationVsAbsoluteConcentration);
 
-        /* Recalculate the maximum concentration for the plot */
+        /* Recalculate the maximum concentration for the plot deviation (SEP) vs absolute concentration */
         maximumConcentration = *std::max_element(DataSelector->ValConcentrations.begin(), DataSelector->ValConcentrations.end());
 
         /* Set the axes limits */
@@ -5500,6 +5501,36 @@ void PanelPolarimeter::select_Analize_Pol_Measurement() {
 
         /* Also adjust X title of the plot prediction deviation Vs Deviation from mean counts */
         ui->qwtPlot_Pol_DeviationVsCountsDeviation->setXAxis( minimumXDeviation*1.2, maximumXDeviation*1.2);
+
+        /*  -----  CONTINUE  ---- */
+
+        /* Add the qwtplotcurve to the UI plot for the predictions z.B. */
+        //PolPlotter->PredictedConcentrations->setSamples(DataSelector->ValConcentrations, DataSelector->PredictedConcentrationsVector);
+
+        /* Add the calcualted from the PLS predictions to the plot of predictions vs reference */
+        //PolPlotter->PredictedConcentrations->attach(ui->qwtPlot_Pol_Prediction);
+        //ui->qwtPlot_Pol_Prediction->update();
+
+        // Adjust axes if necessary, check maximum and minimum Y (predicted values) and set the axis limits. The X axis should remain the same.
+        // Variable "PredictedConcentrations" should be created in the class pol_plot.cpp
+        // Variable "PredictedConcentrationsVector" should be created in the class pol_analizeData.cpp
+        // Set the plot of prediction as dotted, not as a line curve. See deviation plots.
+
+        // Take as an example the plot of deviation vs absolute concentration, the variables and functions should be very similar for both plots.
+
+        /* Update the SEP labels of the UI for the prediction plot */
+        //ui->label_PError->setText(QString::number(DataSelector->SEP));
+
+        /* Update the R2 labels of the UI for the prediction plot */
+        //ui->label_R2->setText(QString::number(DataSelector->RSquare));
+
+        // Create RSquare and SEP variables in the class pol_analizeData.cpp
+
+        //...
+
+        // From here the programmer can make use of all the information available to play with them as needed.
+
+        /*  ----- END  ---------- */
 
         /* If the user loads the analize data, then load the summary too */
         if(!Runner->automaticData && !DataSelector->pathDataM.isEmpty()){

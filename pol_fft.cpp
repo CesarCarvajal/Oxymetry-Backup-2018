@@ -1,6 +1,6 @@
 /*
  * Hemoxymetrie in non-hemolyzed human whole blood
- * Copyright (C) 2016-2017 Benjamin Redmer
+ * Copyright (C) 2016-2017 Benjamin Redmer, ... ?
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -619,7 +619,7 @@ void fft::saveFFTtoFile(QFileInfo FileDetails, bool userSaving, QStringList subs
     fprintf(fileFFT, "Nr. of Averages: %i\n", NrAverages);
     fprintf(fileFFT, "Frequency: %.2f Hz\n", FrequencyF);
     fprintf(fileFFT, "Temperature: %.2f °C\n", Temperature);
-    fprintf(fileFFT, "Humidity: %.2f \%\n", Humidity);
+    fprintf(fileFFT, "Humidity: %.2f %s\n", Humidity, "%");
 
     /* Include the concentrations in the file */
     QString concentrations, conc = "";

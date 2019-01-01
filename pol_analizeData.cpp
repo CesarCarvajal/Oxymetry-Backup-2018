@@ -1,6 +1,6 @@
 /*
  * Hemoxymetrie in non-hemolyzed human whole blood
- * Copyright (C) 2016-2017 Benjamin Redmer
+ * Copyright (C) 2016-2017 Benjamin Redmer, ... ?
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -68,6 +68,8 @@ extern unsigned int m_NrDevices;
  *                  - The file validation "Val_Data.val" contains the information for the PLSR validation.
  *                  - A block of data as repetitions, can be used for calibration and validation too.
  *                  - Calibration and validation files can be sorted automatically or manually.
+ *
+ *                  GO TO THE FUNCTION ANALIZE DATA ...
  *
  */
 selectAnalizeData::selectAnalizeData(QWidget *parent) :
@@ -1160,36 +1162,66 @@ void selectAnalizeData::activateLogarithm(void){
  */
 void selectAnalizeData::analizeData(void){
 
-    /* Are there files? */
+    /* After pressing the button of Analize, this function checks if there are files to open */
     if(!FFTFilesCalibration.isEmpty() && !FFTFilesValidation.isEmpty()){
 
-        /* Get the data from files */
+        /* Yes. Get the FFT data from the .FFT files */
         if(!FFTFilesCalibration.isEmpty()){
 
-            /* resize vectors */
+            /* Resize reading vectors */
             wavelengths.resize(0);
             signal.resize(0);
             data3D = new QSurfaceDataArray;
             data3DNormalized = new QSurfaceDataArray;
 
-            /* Create Folder to store the data analysis results */
+            /* Create Folder to store the data analysis results, in this folder the files .cal and .val can be found. This folder is created in the same folder than the .FFT files are located */
             QDir(pathDataM).mkdir("Data_Analysis");
 
-            /* Read File data */
+            /* Read Files data -> Complex function, for more details floow the code lines to it */
             readFiles();
         }
 
-        /* Write calibration and validation files */
+        /* Write calibration and validation files. The .cal and .val files are created according to what the user decided for both. */
         writeCalValFiles();
 
-        //************* Here the PLS is performed and an SEP is obtained as result, as well as the other values as the betta etc. //***
+        /* ----- CONTINUE ----- */
+
+        // The vector "PredictedConcentrationsVector" should be created in this class. It will save all the predicted values of the substance concentrations.
+
+        // Create a function to read the data from the .cal and .val files. -> Depends on the PLSR library: The .dat files might be needed, depends in the library.
+
+        // Once the information is available as needed for the PLS, a vector? a matrix (observe that it might be a matrix of 1500 x Nr of concentrations usually 51)? a file? how does the PLS need the data?
+
+        // Create here a function that calls the PLS regression
+        // This function should haveinside variables that save the values:
+        // [PLS.Xloadings,PLS.Yloadings,PLS.Xscores,PLS.Yscores,PLS.betaPLS,PLS.PctVar,PLS.mse,PLS.stats] = plsregress(cal.counts',cal.conc,adjust.optimum_PLS_komponenten);
+
+        // Note that here the extracted function of matlab requires a bit more of work...
+        // The variable cal.counts is the counts comming from the .cal file
+        // The variable cal.conc are in the vector CalConcentrations or can be also read from the .cal file.
+        // TAKE EXTREME CARE OF THE SORTING OF THE VECTORS! THAT REQUIRES A BIT OF THINKING BEFORE USING THE VARIABLES.
+        // The variable adjust.optimum_PLS_komponenten can be given by the user in the UI with the spin box: spinBox_PLSComponents
+
+        // return here the SEP, the R2 and some other parameters that could be still ploted -- MORE INFO ASK CHRISTIAN: THIS PART REQUIRES MORE DEEP KNOWLEDGE OF THE PROJECT.
+
+        // The variable SEP will replace what i simulate as the double variable "PredictionSEP".
+
+        // FROM HERE AHEAD THE PROGRAMMER CAN MAKE FREE USE OF THE INFORMATION. FOLLOW SIMILAR PLOTS FOR GETTING THE IDEA.
+
+        // DON'T FORGET TO READ THE SECTION "HELP" IN THE UI FOR MORE INFORMATION.
+
+        // REMEBER: LEARNING THE CODE AND 1 YEAR WORK OF SOMEONE ELSE MIGHT REQUIRE SOME PATIENCE AND GOOD LOGICAL SKILLS!
+
+        // GOOD LUCK, AND CONTACT ME IN CASE THAT IT BECOMES TOO DIFICULT, REMEMBER THAT IT MIGHT TAKE ME ONLY A MINUTE TO UNDERSTAND WHAT COULD BE GIVING YOU SEVERAL HOURS OF PROBLEMS :)
+
+        /*  ----- END --------- */
 
         /* How much is the deviation of the predicted values with the validation concentrations? */
         for(int h = 0; h < ValConcentrations.length(); h++){
 
             //*********** Here the expression '(ValConcentrations.at(h) - 1)' will be replaced by the actual predicted values vector from the PLS *//
 
-            /* This value will be the measured SEP - simulated */
+            /* This value will be the measured SEP - simulated CHANGE HERE THE SEP */
             double PredictionSEP = ValConcentrations.at(h) + ((((qrand() % 10)*(pow((-1),(qrand() % 2)))))*(0.001*(*std::max_element(ValConcentrations.begin(), ValConcentrations.end()))));
 
             /* Calculate the deviation of the prediction with the validation concentrations */
